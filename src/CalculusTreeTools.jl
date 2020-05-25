@@ -46,33 +46,36 @@ end # module
 using .CalculusTreeTools
 using JuMP, MathOptInterface, BenchmarkTools
 
-e1 = :(x[1] + x[2])
-et1 = CalculusTreeTools.transform_to_expr_tree(e1)
-# @show et1
-x = ones(2)
-res_e1 = CalculusTreeTools.evaluate_expr_tree(e1, x)
-res_et1 = CalculusTreeTools.evaluate_expr_tree(et1, x)
-@show res_e1, res_et1
-res_grad_e1 = CalculusTreeTools.calcul_gradient_expr_tree(e1,x)
-res_grad_et1 = CalculusTreeTools.calcul_gradient_expr_tree(et1,x)
-@show res_grad_e1, res_grad_et1
 
 
-m = Model()
-n = 1000
-@variable(m, x[1:n])
-@NLobjective(m, Min, sum( x[j] * x[j+1] for j in 1:n-1 ) + (sin(x[1]))^2 + x[n-1]^3  + 5 )
-eval_test = JuMP.NLPEvaluator(m)
-MathOptInterface.initialize(eval_test, [:ExprGraph])
-obj = MathOptInterface.objective_expr(eval_test)
-t_obj = CalculusTreeTools.transform_to_expr_tree(obj)
-type_obj = CalculusTreeTools.get_type_tree(obj)
-type_tobj = CalculusTreeTools.get_type_tree(t_obj)
-@show type_obj, type_tobj
-
-x = ones(n)
-
-# @show @benchmark CalculusTreeTools.get_type_tree(obj)
-# @show @benchmark CalculusTreeTools.get_type_tree(t_obj)
-b_eval1 = @benchmark CalculusTreeTools.evaluate_expr_tree(obj, x)
-b_eval2 = @benchmark CalculusTreeTools.evaluate_expr_tree(t_obj, x)
+# 
+# e1 = :(x[1] + x[2])
+# et1 = CalculusTreeTools.transform_to_expr_tree(e1)
+# # @show et1
+# x = ones(2)
+# res_e1 = CalculusTreeTools.evaluate_expr_tree(e1, x)
+# res_et1 = CalculusTreeTools.evaluate_expr_tree(et1, x)
+# @show res_e1, res_et1
+# res_grad_e1 = CalculusTreeTools.calcul_gradient_expr_tree(e1,x)
+# res_grad_et1 = CalculusTreeTools.calcul_gradient_expr_tree(et1,x)
+# @show res_grad_e1, res_grad_et1
+#
+#
+# m = Model()
+# n = 1000
+# @variable(m, x[1:n])
+# @NLobjective(m, Min, sum( x[j] * x[j+1] for j in 1:n-1 ) + (sin(x[1]))^2 + x[n-1]^3  + 5 )
+# eval_test = JuMP.NLPEvaluator(m)
+# MathOptInterface.initialize(eval_test, [:ExprGraph])
+# obj = MathOptInterface.objective_expr(eval_test)
+# t_obj = CalculusTreeTools.transform_to_expr_tree(obj)
+# type_obj = CalculusTreeTools.get_type_tree(obj)
+# type_tobj = CalculusTreeTools.get_type_tree(t_obj)
+# @show type_obj, type_tobj
+#
+# x = ones(n)
+#
+# # @show @benchmark CalculusTreeTools.get_type_tree(obj)
+# # @show @benchmark CalculusTreeTools.get_type_tree(t_obj)
+# b_eval1 = @benchmark CalculusTreeTools.evaluate_expr_tree(obj, x)
+# b_eval2 = @benchmark CalculusTreeTools.evaluate_expr_tree(t_obj, x)
