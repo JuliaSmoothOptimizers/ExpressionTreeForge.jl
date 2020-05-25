@@ -3,4 +3,4 @@ using CalculusTreeTools
 
 
 @test true
-@test return2 == 2
+@test CalculusTreeTools.return2() == 2
