@@ -8,7 +8,7 @@ include("expr_tree/ordered_include.jl")
 
 using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree
 
-# Fonction trait_expr_tree
+# trait_expr_tree's functions
 """
     transform_to_Expr(expr_tree)
 Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree
@@ -21,7 +21,10 @@ Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait 
 """
 transform_to_expr_tree(e :: Any) = trait_expr_tree.transform_to_expr_tree(e)
 
-#Fonction de algo_expr_tree
+
+
+
+# algo_expr_tree's functions
 """
     delete_imbricated_plus(e)
 If e represent a calculus tree, delete_imbricated_plus(e) will split that function into element function if it is possible.
@@ -35,8 +38,6 @@ x[3] * x[4]
 ]
 """
 delete_imbricated_plus(a :: Any) = algo_expr_tree.delete_imbricated_plus(a)
-
-
 
 """
     get_type_tree(t)
@@ -75,7 +76,9 @@ Cast the constant of the Calculus tree expr_tree to the type t.
 """
 cast_type_of_constant(a :: Any ,v :: AbstractVector) = algo_expr_tree.cast_type_of_constant(a, v)
 
-#fonction de M_evaluation_expr_tree
+
+
+# M_evaluation_expr_tree's functions
 """
     evaluate_expr_tree(t, x)
 evaluate the Calculus tree t using the vector x as value for the variables in t.
@@ -112,6 +115,8 @@ calcul_Hessian_expr_tree( :(x[1]^2 + x[2]), ones(2))
 """
 calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_Hessian_expr_tree(e,x)
 
-export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant, transform_to_Expr
 
+export transform_to_Expr, transform_to_expr_tree
+export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant
+export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 end # module
