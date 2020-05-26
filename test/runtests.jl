@@ -1,8 +1,5 @@
 using Test
 using CalculusTreeTools
 
-
-@test true
-@test CalculusTreeTools.return2() == 2
-
+include("unitary_test/ordered_include.jl")
 include("premier_test.jl")
