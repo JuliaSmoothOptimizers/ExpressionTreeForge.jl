@@ -2,4 +2,4 @@ using Documenter
 using CalculusTreeTools
 
 
-makedocs(sitename="My Documentation")
+makedocs(modeule= [CalculusTreeTools], sitename="CalculusTreeTool.jl")
