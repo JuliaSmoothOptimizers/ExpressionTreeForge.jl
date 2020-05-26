@@ -67,6 +67,13 @@ get_elemental_variable( :(x[1]^2 + x[6] + x[2]) )
 """
 get_elemental_variable(a :: Any) = algo_expr_tree.get_elemental_variable(a)
 
+"""
+    get_Ui(index_new_var, n)
+Create a the matrix U associated to the variable appearing in index_new_var.
+This function create a sparse matrix of size length(index_new_var)×n.
+"""
+get_Ui(a :: Vector{Int}, n :: Int) = algo_expr_tree.get_Ui(a,n)
+
 
 """
     element_fun_from_N_to_Ni!(expr_tree, v)
