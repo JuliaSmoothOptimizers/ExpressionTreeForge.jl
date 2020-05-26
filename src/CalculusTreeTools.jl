@@ -6,7 +6,14 @@ include("node_expr_tree/ordered_include.jl")
 include("tree/ordered_include.jl")
 include("expr_tree/ordered_include.jl")
 
-using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree
+using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .implementation_type_expr
+
+type_calculus_tree = implementation_type_expr.t_type_expr_basic
+is_constant(t :: type_calculus_tree) = t == type_calculus_tree(0)
+is_linear(t :: type_calculus_tree) = t == type_calculus_tree(1)
+is_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(2)
+is_cubic(t :: type_calculus_tree) = t == type_calculus_tree(3)
+is_more_than_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(4)
 
 # trait_expr_tree's functions
 """
@@ -115,6 +122,8 @@ calcul_Hessian_expr_tree( :(x[1]^2 + x[2]), ones(2))
 """
 calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_Hessian_expr_tree(e,x)
 
+
+export type_calculus_tree, is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
 
 export transform_to_Expr, transform_to_expr_tree
 export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant
