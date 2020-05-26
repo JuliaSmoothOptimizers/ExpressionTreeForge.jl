@@ -82,7 +82,7 @@ This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,
 element_fun_from_N_to_Ni!( :(x[4] + x[5]), [1,2])
 > :(x[1] + x[2])
 """
-element_fun_from_N_to_Ni(a :: Any) = algo_expr_tree.element_fun_from_N_to_Ni(a)
+element_fun_from_N_to_Ni!(a :: Any) = algo_expr_tree.element_fun_from_N_to_Ni!(a)
 
 """
     cast_type_of_constant(expr_tree, t)
