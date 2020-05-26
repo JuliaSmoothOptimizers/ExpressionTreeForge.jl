@@ -10,5 +10,4 @@ include(root_src*"tree/ordered_include.jl")
 include(root_src*"expr_tree/ordered_include.jl")
 
 include("unitary_test/ordered_include.jl")
-include("test_on_tree")
 include("premier_test.jl")
