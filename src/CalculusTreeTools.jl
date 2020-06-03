@@ -1,6 +1,6 @@
 module CalculusTreeTools
 
-using Revise 
+using Revise
 
 include("type_expr/ordered_include.jl")
 include("node_expr_tree/ordered_include.jl")
@@ -8,6 +8,14 @@ include("tree/ordered_include.jl")
 include("expr_tree/ordered_include.jl")
 
 using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .implementation_type_expr
+
+using .bound_propagations
+create_bound_tree(t) = bound_propagations.create_bound_tree(t)
+set_bound(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
+export create_bound_tree
+
+using .algo_tree
+print_tree(t) = algo_tree.printer_tree(t)
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
 is_constant(t :: type_calculus_tree) = t == type_calculus_tree(0)

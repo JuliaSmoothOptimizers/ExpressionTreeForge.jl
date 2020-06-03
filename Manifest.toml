@@ -27,6 +27,12 @@ git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
 uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
 version = "0.5.1"
 
+[[CodeTracking]]
+deps = ["InteractiveUtils", "UUIDs"]
+git-tree-sha1 = "cab4da992adc0a64f63fa30d2db2fd8bec40cab4"
+uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
+version = "0.5.11"
+
 [[CodecBzip2]]
 deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
 git-tree-sha1 = "2e62a725210ce3c3c2e1a3080190e7ca491f18d7"
@@ -89,6 +95,9 @@ git-tree-sha1 = "395fa1554c69735802bba37d9e7d9586fd44326c"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.24.11"
 
+[[FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+
 [[ForwardDiff]]
 deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "NaNMath", "Random", "SpecialFunctions", "StaticArrays"]
 git-tree-sha1 = "869540e4367122fbffaace383a5bdc34d6e5e5ac"
@@ -102,9 +111,9 @@ version = "1.1.1"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "MbedTLS", "Sockets"]
-git-tree-sha1 = "fe31f4ff144392ad8176f5c7c03cca6ba320271c"
+git-tree-sha1 = "ec87d5e2acbe1693789efbbe14f5ea7525758f71"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.8.14"
+version = "0.8.15"
 
 [[IniFile]]
 deps = ["Test"]
@@ -134,6 +143,12 @@ git-tree-sha1 = "84c1cf8bec4729b8b2ef4dfc4e1db1b892ad0d30"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
 version = "0.21.2"
 
+[[JuliaInterpreter]]
+deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
+git-tree-sha1 = "b1a4b3782a0c2e4d3a9d97f2e0e19f69c8d1d948"
+uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
+version = "0.7.19"
+
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
@@ -146,6 +161,12 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[LoweredCodeUtils]]
+deps = ["JuliaInterpreter"]
+git-tree-sha1 = "225f0035f01c24858c0884f38bb519e22b0a5150"
+uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
+version = "0.4.5"
 
 [[MacroTools]]
 deps = ["Markdown", "Random"]
@@ -227,6 +248,12 @@ deps = ["DiffResults", "DiffRules", "ForwardDiff", "FunctionWrappers", "LinearAl
 git-tree-sha1 = "1d4a01bc6fe181e4fef376affb3f90bad584b0f4"
 uuid = "37e2e3b7-166d-5795-8a7a-e32c996b4267"
 version = "1.2.0"
+
+[[Revise]]
+deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "UUIDs", "Unicode"]
+git-tree-sha1 = "e61c1167fcf0bc1604b052c6b49a07861fa6092b"
+uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
+version = "2.7.1"
 
 [[SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"

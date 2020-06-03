@@ -14,12 +14,20 @@ module plus_operators
 
     import  ..interface_expr_node._evaluate_node2
 
+    import ..interface_expr_node._node_bound
+
+
     import Base.==
 
     mutable struct plus_operator <: ab_ex_nd
 
     end
 
+    function _node_bound(op :: plus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
+        vector_inf_bound = [p[1] for p in son_bound]
+        vector_sup_bound = [p[2] for p in son_bound]
+        return (sum(vector_inf_bound), sum(vector_sup_bound))
+    end
 
     function create_node_expr(  op :: plus_operator )
         return plus_operator()

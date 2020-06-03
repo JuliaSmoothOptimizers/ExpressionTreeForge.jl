@@ -15,7 +15,11 @@ module variables
 
     import  ..interface_expr_node._evaluate_node2
 
+    import ..interface_expr_node._node_bound
+
+
     using ..implementation_type_expr
+
 
     import Base.(==)
 
@@ -23,6 +27,8 @@ module variables
         name :: Symbol
         index :: Int
     end
+
+    _node_bound(v :: variable, t :: DataType) = (floatmin(t), floatmax(t))
 
     function create_node_expr(n :: Symbol, id :: Int)
         return variable(n, id)

@@ -13,9 +13,18 @@ module trait_expr_node
 
     import  ..interface_expr_node._evaluate_node2
 
+    import ..interface_expr_node._node_bound
 
     struct type_expr_node end
     struct type_not_expr_node end
+
+
+    node_bound(a, t :: DataType) = _node_bound(a, is_expr_node(a),t)
+    _node_bound(a, ::type_expr_node, t :: DataType ) = _node_bound(a, t)
+    _node_bound(a, ::type_not_expr_node, t :: DataType ) =  error("This node is not a expr node; node_bound function")
+    node_bound(a, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number = _node_bound(a, son_bound, is_expr_node(a),t)
+    _node_bound(a,  son_bound :: AbstractVector{Tuple{T,T}}, ::type_expr_node, t :: DataType ) where T <: Number = _node_bound(a, son_bound, t)
+    _node_bound(a, son_bound :: AbstractVector{Tuple{T,T}}, ::type_not_expr_node, t :: DataType ) where T <: Number =  error("This node is not a expr node; node_bound function")
 
 """ partie sur les opérateurs """
 
@@ -130,7 +139,6 @@ module trait_expr_node
     _evaluate_node2(a :: abstract_expr_node.ab_ex_nd) = ( (x :: T where T <: Number, y :: T where T <: Number) -> _evaluate_node2(a, [x,y]) )
 
 
-    # change_from_N_to_Ni!(a :: , dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, is_expr_node(a), dic_new_var)
     change_from_N_to_Ni!(a, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, is_expr_node(a), dic_new_var)
     _change_from_N_to_Ni!(a, ::type_expr_node, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, dic_new_var)
     _change_from_N_to_Ni!(a, ::type_not_expr_node, dic_new_var :: Dict{Int,Int}) = error("This node is not a expr node")
@@ -150,49 +158,3 @@ module trait_expr_node
     _cast_constant!(a, ::type_not_expr_node, t :: DataType) = error("This node is not a expr node")
 
 end  # module trait_expr_node
-
-
-
-
-#
-# f6(x ) = ( (y::T,z::T) where T <: Number -> x+y+z )
-# f6(5)
-#
-#
-# f7(x) = ( (y:: T where T <: Number, z :: T where T <: Number) -> x + y + z )
-# f7(4)
-#
-# mapreduce(x -> x+1, f7(2), rand(5))
-#
-
-
-
-
-
-
-
-""" old version of function """
-
-# function _get_type_node(a, :: type_expr_node, b :: Array)
-#     if length(b) == 1
-#         if trait_type_expr.is_trait_type_expr(b[1]) == trait_type_expr.type_type_expr()
-#             temp = _get_type_node(a,b)
-#             return temp
-#         else
-#             error("erreur")
-#         end
-#     else
-#         # nous voulons vérifier que chaque élément du tableau vérifie bien le trait type_expr
-#         # application de la fonction à chauqe élement vérifiant si ils satisfassent le trait.
-#          trait_array = trait_type_expr.is_trait_type_expr.(b)
-#          #une fois cela fait, on vérifie qu'il satisfasse chacun le trait
-#          preparation_cond = isa.(trait_array, trait_type_expr.type_type_expr)
-#          # on réalise un ⋂ sur le tableau vérifiant leurs appartenance au trait
-#          cond = foldl(&, preparation_cond) == true
-#          if cond
-#              return _get_type_node(a,b)
-#          else
-#              error("nous n'avons pas que des types expr")
-#          end
-#     end
-# end

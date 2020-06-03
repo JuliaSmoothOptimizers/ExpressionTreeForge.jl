@@ -14,10 +14,33 @@ module power_operators
 
     import  ..interface_expr_node._evaluate_node2
 
+
+    import ..interface_expr_node._node_bound
+
     import Base.==
 
     mutable struct power_operator{T <: Number} <: ab_ex_nd
         index :: T
+    end
+
+    function _node_bound(op :: power_operator{Y} , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number
+        vector_inf_bound = [p[1] for p in son_bound]
+        vector_sup_bound = [p[1] for p in son_bound]
+        length(vector_inf_bound) == 1 || error("")
+        length(vector_sup_bound) == 1 || error("")
+        bi = vector_inf_bound[1]
+        bs = vector_sup_bound[1]
+        if op.index % 2 == 0
+            if bi > 0  # bs aussi
+                return (bi^(op.index),bs^(op.index))
+            elseif bs < 0 #bi aussi
+                return (bs^(op.index), bi^(op.index))
+            else
+                return ((t)(0) , max( abs(bi), abs(bs))^(op.index) )
+            end
+        else
+            return (bi^(op.index),bs^(op.index))
+        end
     end
 
 

@@ -15,12 +15,21 @@ module sinus_operators
     import  ..interface_expr_node._evaluate_node2
 
     using ..implementation_type_expr
+    import ..interface_expr_node._node_bound
+
 
 
     import Base.==
 
     mutable struct sinus_operator <: ab_ex_nd
 
+    end
+
+    function _node_bound(op :: sinus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
+        # vector_inf_bound = [p[1] for p in son_bound]
+        # vector_sup_bound = [p[1] for p in son_bound]
+        # return (sum(vector_inf_bound), sum(vector_sup_bound))
+        return (-1,1)
     end
 
 

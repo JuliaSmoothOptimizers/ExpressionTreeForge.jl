@@ -11,12 +11,17 @@ module constants
     using ..implementation_type_expr
 
     import  ..interface_expr_node._evaluate_node2
+    import ..interface_expr_node._node_bound
+
 
     import Base.==
 
     mutable struct constant{T <: Number} <: ab_ex_nd
         value :: T
     end
+
+
+    _node_bound(c :: constant{T}, t :: DataType) where T <: Number = ((t)(c.value), (t)(c.value))
 
     function create_node_expr(x :: T ) where T <: Number
         return constant{T}(x)
