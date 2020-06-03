@@ -28,7 +28,7 @@ module variables
         index :: Int
     end
 
-    _node_bound(v :: variable, t :: DataType) = (floatmin(t), floatmax(t))
+    _node_bound(v :: variable, t :: DataType) = ((t)(-Inf), (t)(Inf))
 
     function create_node_expr(n :: Symbol, id :: Int)
         return variable(n, id)

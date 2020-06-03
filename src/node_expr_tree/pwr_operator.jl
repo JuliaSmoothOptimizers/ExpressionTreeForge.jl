@@ -23,23 +23,25 @@ module power_operators
         index :: T
     end
 
+    # on est sensé avoir en paramètre le liste des bornes des fils. dans le cas de l'opération puissance il n'y a qu'un seul fils.
+    # les 6 premières lignes de la fonction ont pour objectif de récupérer ces 2 bornes
     function _node_bound(op :: power_operator{Y} , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]
-        vector_sup_bound = [p[1] for p in son_bound]
-        length(vector_inf_bound) == 1 || error("")
-        length(vector_sup_bound) == 1 || error("")
+        vector_sup_bound = [p[2] for p in son_bound]
+        length(vector_inf_bound) == 1 || error("puissance non unaire")
+        length(vector_sup_bound) == 1 || error("puissance non unaire")
         bi = vector_inf_bound[1]
         bs = vector_sup_bound[1]
         if op.index % 2 == 0
             if bi > 0  # bs aussi
-                return (bi^(op.index),bs^(op.index))
+                return (bi^(op.index), bs^(op.index))
             elseif bs < 0 #bi aussi
                 return (bs^(op.index), bi^(op.index))
             else
                 return ((t)(0) , max( abs(bi), abs(bs))^(op.index) )
             end
         else
-            return (bi^(op.index),bs^(op.index))
+            return (bi^(op.index), bs^(op.index))
         end
     end
 
