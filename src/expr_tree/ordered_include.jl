@@ -10,3 +10,5 @@ include("tr_expr_tree.jl")
 include("algorithm_expr_tree.jl")
 
 include("eval_expr_tree.jl")
+
+include("bound_propagation.jl")

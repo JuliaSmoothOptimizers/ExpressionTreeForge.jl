@@ -1,5 +1,6 @@
 module CalculusTreeTools
 
+using Revise 
 
 include("type_expr/ordered_include.jl")
 include("node_expr_tree/ordered_include.jl")

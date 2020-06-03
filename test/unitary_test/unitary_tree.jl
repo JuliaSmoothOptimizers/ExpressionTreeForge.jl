@@ -6,8 +6,6 @@ using Test
 using MathOptInterface
 
 @testset "test sur les arbre Expr" begin
-
-
     @test abstract_tree.create_tree( :(x[2] + 5*x[3]) ) == :(x[2] + 5*x[3])
     @test trait_tree.get_children( :(x[2] + 5*x[3]) ) == [ :(x[2]) , :(5 * x[3])]
     @test trait_tree.get_node( :(x[2] + 5*x[3]) ) == :+

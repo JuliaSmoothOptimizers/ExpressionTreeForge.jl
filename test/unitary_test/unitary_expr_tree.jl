@@ -32,5 +32,4 @@ using ..implementation_expr_tree
     @test trait_expr_tree.inverse_expr_tree(bree) == m_bree
     @test trait_expr_tree.inverse_expr_tree(:(x[5] + 4)) == :( -(x[5] + 4) )
 
-
 end
