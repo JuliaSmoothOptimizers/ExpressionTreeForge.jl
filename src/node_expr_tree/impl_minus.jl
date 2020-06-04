@@ -11,7 +11,7 @@ module minus_operators
     using ..trait_type_expr
 
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
-
+    import ..interface_expr_node._node_bound
     import ..interface_expr_node._evaluate_node2
 
     import Base.==
@@ -20,6 +20,14 @@ module minus_operators
 
     end
 
+
+
+    function _node_bound(op :: minus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
+        vector_inf_bound = [p[1] for p in son_bound]
+        vector_sup_bound = [p[2] for p in son_bound]
+        length(vector_inf_bound) == length(vector_sup_bound) || error("error bound minus operator")
+
+    end
 
     function create_node_expr( op :: minus_operator)
         return minus_operator()

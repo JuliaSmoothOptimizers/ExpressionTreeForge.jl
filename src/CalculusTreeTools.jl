@@ -12,6 +12,7 @@ using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .implementatio
 using .bound_propagations
 create_bound_tree(t) = bound_propagations.create_bound_tree(t)
 set_bound(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
+get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 export create_bound_tree
 
 using .algo_tree

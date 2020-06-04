@@ -37,7 +37,7 @@ module times_operators
     function bound_binary_times(bi1 :: T, bs1 :: T, bi2 :: T, bs2 :: T) where T <: Number
         products = [bi1 * bi2, bi1 * bs2, bs1 * bi2, bs1 * bs2]
         filtered_products = filter( (x -> isnan(x) == false), products)
-        @show filtered_products, products, bi1,bs1,bi2,bs2
+        # @show filtered_products, products, bi1,bs1,bi2,bs2
         bi = min(filtered_products...)
         bs = max(filtered_products...)
         return (bi,bs)

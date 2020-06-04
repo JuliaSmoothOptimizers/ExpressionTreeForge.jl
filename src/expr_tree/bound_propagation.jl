@@ -43,4 +43,6 @@ module bound_propagations
 
     bound_to_tuple(b :: bounds{T}) where T <: Number = (b.inf_bound, b.sup_bound)
 
+    get_bound(b :: bound_tree{T}) where T <: Number = bound_to_tuple(trait_tree.get_node(b))
+
 end

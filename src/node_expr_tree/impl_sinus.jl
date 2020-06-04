@@ -26,11 +26,43 @@ module sinus_operators
     end
 
     function _node_bound(op :: sinus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
-        # vector_inf_bound = [p[1] for p in son_bound]
-        # vector_sup_bound = [p[1] for p in son_bound]
-        # return (sum(vector_inf_bound), sum(vector_sup_bound))
-        return (-1,1)
+        vector_inf_bound = [p[1] for p in son_bound]
+        vector_sup_bound = [p[2] for p in son_bound]
+        length(vector_inf_bound) == 1 || error("sinus non unaire")
+        length(vector_sup_bound) == 1 || error("sinus non unaire")
+        bi = vector_inf_bound[1]
+        bs = vector_sup_bound[1]
+        if abs(bs - bi) > 2 * π ||  isinf(bi) ||  isinf(bs)
+            return (-1,1)
+        else
+            bs_π = max(bs % (2*π), bi % (2*π))
+            bi_π = min(bs % (2*π), bi % (2*π))
+            @show "sinus", bi, bs, bi_π, bs_π, inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π)
+            return (inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π))
+        end
     end
+
+    function sup_bound_sin(bi , bs )
+        if belong(bi, bs, π/2)
+            return 1
+        elseif bs < π/2 #bi également
+            return sin(bs)
+        else
+            return max(sin(bs), sin(bi))
+        end
+    end
+
+    function inf_bound_sin(bi , bs )
+        if belong(bi, bs, -π/2)
+            return -1
+        elseif bi > -π/2 #bs également
+            return sin(bi) # sin(bs) plus grand
+        else
+            return min(sin(bs), sin(bi)) #cas bi=0 et bs = 3π/4
+        end
+    end
+
+    belong(bi ,bs, x ) = (bi<= x) && (bs >= x)
 
 
     function create_node_expr( op :: sinus_operator)
