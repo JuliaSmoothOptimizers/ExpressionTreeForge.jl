@@ -25,7 +25,7 @@ module times_operators
     function _node_bound(op :: time_operator , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]
         vector_sup_bound = [p[2] for p in son_bound]
-        bi = - (T)(vector_inf_bound[1]) :: T
+        bi = (T)(vector_inf_bound[1]) :: T
         bs = (T)(vector_sup_bound[1]) :: T
         n = length(vector_inf_bound)
         for i in 2:n

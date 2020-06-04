@@ -37,7 +37,7 @@ module sinus_operators
         else
             bs_π = max(bs % (2*π), bi % (2*π))
             bi_π = min(bs % (2*π), bi % (2*π))
-            @show "sinus", bi, bs, bi_π, bs_π, inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π)
+            # @show "sinus", bi, bs, bi_π, bs_π, inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π)
             return (inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π))
         end
     end

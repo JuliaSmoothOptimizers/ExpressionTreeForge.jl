@@ -25,8 +25,15 @@ module minus_operators
     function _node_bound(op :: minus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]
         vector_sup_bound = [p[2] for p in son_bound]
-        length(vector_inf_bound) == length(vector_sup_bound) || error("error bound minus operator")
-
+        (length(vector_inf_bound) == length(vector_sup_bound) || length(vector_sup_bound) <= 2 ) || error("error bound minus operator")
+        if length(vector_inf_bound) == 1
+            (bi,bs) = (vector_inf_bound[1], vector_sup_bound[1])
+             return (-bs,-bi)
+        else #binary minus
+            (bi1,bs1) = (vector_inf_bound[1], vector_sup_bound[1])
+            (bi2,bs2) = (vector_inf_bound[2], vector_sup_bound[2])
+            return ( bi1 - bs2, bs1 - bi2)
+        end
     end
 
     function create_node_expr( op :: minus_operator)

@@ -13,6 +13,8 @@ module exp_operators
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 
     import  ..interface_expr_node._evaluate_node2
+    import ..interface_expr_node._node_bound
+
 
     using ..implementation_type_expr
 
@@ -57,7 +59,7 @@ module exp_operators
 
     function _evaluate_node(op :: exp_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for exp")
-        @fastmath return exp(value_ch[1]) 
+        @fastmath return exp(value_ch[1])
     end
 
     function _evaluate_node2(op :: exp_operator, value_ch :: AbstractVector{T}) where T <: Number
