@@ -26,6 +26,17 @@ module exp_operators
     end
 
 
+    function _node_bound(op :: exp_operator , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number
+        vector_inf_bound = [p[1] for p in son_bound]
+        vector_sup_bound = [p[2] for p in son_bound]
+        length(vector_inf_bound) == 1 || error("puissance non unaire")
+        length(vector_sup_bound) == 1 || error("puissance non unaire")
+        bi = vector_inf_bound[1]
+        bs = vector_sup_bound[1]
+        return (exp(bi), exp(bs))
+    end
+
+
     function create_node_expr( op :: exp_operator)
         return exp_operator()
     end
