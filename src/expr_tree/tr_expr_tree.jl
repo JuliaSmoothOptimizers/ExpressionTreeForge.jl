@@ -1,6 +1,6 @@
 module trait_expr_tree
 
-    using ..abstract_expr_tree, ..implementation_expr_tree
+    using ..abstract_expr_tree, ..implementation_expr_tree, ..implementation_complete_expr_tree
 
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_node
@@ -17,6 +17,7 @@ module trait_expr_tree
     is_expr_tree(a :: t_expr_tree )= type_expr_tree()
     is_expr_tree(a :: Expr) = type_expr_tree()
     is_expr_tree(a :: Number) = type_expr_tree()
+    is_expr_tree(a :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = type_expr_tree()
     is_expr_tree(a :: Any) = type_not_expr_tree()
     function is_expr_tree(t :: DataType)
         if t == abstract_expr_tree.ab_ex_tr || t == t_expr_tree || t == Expr || t == Number
@@ -94,12 +95,6 @@ This function is usefull in our algorithms to synchronise all the types satisfyi
     end
 
 
-    transform_to_Expr2(ex) = _transform_to_Expr2( trait_expr_tree.is_expr_tree(ex), ex)
-    _transform_to_Expr2( :: trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr2(ex)
-    _transform_to_Expr2( :: trait_expr_tree.type_not_expr_tree, ex) = error("notre parametre n'est pas un arbre d'expression")
-    function _transform_to_Expr2(ex)
-        return abstract_expr_tree.create_Expr2(ex)
-    end
 
 """
     expr_tree_to_create(arbre créé, arbre d'origine)

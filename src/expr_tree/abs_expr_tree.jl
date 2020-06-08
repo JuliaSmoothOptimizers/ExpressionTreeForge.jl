@@ -4,6 +4,11 @@ module abstract_expr_tree
 
     abstract type ab_ex_tr <: ab_tree end
 
+    mutable struct bounds{T <: Number}
+        inf_bound :: T
+        sup_bound :: T
+    end
+
     create_expr_tree() = ()
 
     create_Expr() = ()

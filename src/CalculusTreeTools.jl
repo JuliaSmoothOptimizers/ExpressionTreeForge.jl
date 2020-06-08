@@ -15,6 +15,9 @@ set_bound(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
 get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 export create_bound_tree
 
+using .implementation_complete_expr_tree
+create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
+
 using .algo_tree
 print_tree(t) = algo_tree.printer_tree(t)
 
