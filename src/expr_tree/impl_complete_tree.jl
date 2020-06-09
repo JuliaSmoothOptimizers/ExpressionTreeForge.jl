@@ -3,6 +3,7 @@ module implementation_complete_expr_tree
     using ..abstract_expr_node, ..trait_expr_node
     using ..abstract_expr_tree
     using ..trait_tree
+    using ..implementation_convexity_type
 
     import ..abstract_expr_tree.create_expr_tree, ..abstract_expr_tree.create_Expr, ..abstract_expr_tree.create_Expr2
     import ..interface_expr_tree._inverse_expr_tree
@@ -13,13 +14,16 @@ module implementation_complete_expr_tree
     import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
 
 
+
     mutable struct complete_node{ T <: Number}
         op :: abstract_expr_node.ab_ex_nd
         bounds  :: abstract_expr_tree.bounds{T}
+        convexity_status :: implementation_convexity_type.convexity_wrapper
     end
 
-    create_complete_node(op :: ab_ex_nd, bounds :: abstract_expr_tree.bounds{T}) where T <: Number = complete_node{T}(op,bounds)
-    create_complete_node(op :: ab_ex_nd, bi :: T, bs :: T) where T <: Number = complete_node{T}(op,abstract_expr_tree.bounds{T}(bi,bs))
+    create_complete_node(op :: ab_ex_nd, bounds :: abstract_expr_tree.bounds{T}, cvx_st :: implementation_convexity_type.convexity_wrapper) where T <: Number = complete_node{T}(op,bounds, cvx_st)
+    create_complete_node(op :: ab_ex_nd, bounds :: abstract_expr_tree.bounds{T}) where T <: Number = create_complete_node(op, bounds, implementation_convexity_type.init_conv_status())
+    create_complete_node(op :: ab_ex_nd, bi :: T, bs :: T) where T <: Number = create_complete_node(op, abstract_expr_tree.bounds{T}(bi,bs))
     create_complete_node(op :: ab_ex_nd) = create_complete_node(op, (Float64)(-Inf), (Float64)(Inf))
 
     get_op_from_node(cmp_nope :: complete_node) = cmp_nope.op

@@ -31,6 +31,7 @@ module interface_expr_node
     _node_to_Expr2() = ()
 
     _node_bound() = ()
+    _node_convexity() = ()
 
 
 end

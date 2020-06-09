@@ -11,7 +11,8 @@ module constants
     using ..implementation_type_expr
 
     import  ..interface_expr_node._evaluate_node2
-    import ..interface_expr_node._node_bound
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
 
     import Base.==
@@ -25,6 +26,9 @@ module constants
     Base.convert(::Type{constant{T}}, x :: constant{Y}) where T <: Number where Y <: Number = constant{T}(T(x.value))
 
     _node_bound(c :: constant{T}, t :: DataType) where T <: Number = ((t)(c.value), (t)(c.value))
+
+    _node_convexity(c :: constant{T}) where T <: Number = implementation_convexity_type.linear_type()
+
 
     function create_node_expr(x :: T ) where T <: Number
         return constant{T}(x)
@@ -84,7 +88,6 @@ module constants
     end
 
     function _cast_constant!(c :: Number, t :: DataType)
-        @show "tadaa2"
         return (t)(c)
     end
 

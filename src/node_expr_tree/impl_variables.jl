@@ -15,8 +15,8 @@ module variables
 
     import  ..interface_expr_node._evaluate_node2
 
-    import ..interface_expr_node._node_bound
-
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
     using ..implementation_type_expr
 
@@ -29,6 +29,8 @@ module variables
     end
 
     _node_bound(v :: variable, t :: DataType) = ((t)(-Inf), (t)(Inf))
+
+    _node_convexity(v :: variable) = implementation_convexity_type.linear_type()
 
     function create_node_expr(n :: Symbol, id :: Int)
         return variable(n, id)

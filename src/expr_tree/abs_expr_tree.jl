@@ -18,10 +18,6 @@ module abstract_expr_tree
     end
 
 
-
-
-
-
     create_expr_tree() = ()
 
     create_Expr() = ()

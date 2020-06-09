@@ -16,6 +16,10 @@ set_bounds!(tree) = bound_propagations.set_bounds!(tree)
 get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
 
+using .convexity_detection
+create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
+set_convexity!(tree,cvx_tree) = convexity_detection.set_convexity!(tree,cvx_tree)
+
 using .implementation_complete_expr_tree
 create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
