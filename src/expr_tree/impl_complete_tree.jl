@@ -1,4 +1,3 @@
-
 module implementation_complete_expr_tree
 
     using ..abstract_expr_node, ..trait_expr_node
@@ -22,8 +21,12 @@ module implementation_complete_expr_tree
     create_complete_node(op :: ab_ex_nd, bounds :: abstract_expr_tree.bounds{T}) where T <: Number = complete_node{T}(op,bounds)
     create_complete_node(op :: ab_ex_nd, bi :: T, bs :: T) where T <: Number = complete_node{T}(op,abstract_expr_tree.bounds{T}(bi,bs))
     create_complete_node(op :: ab_ex_nd) = create_complete_node(op, (Float64)(-Inf), (Float64)(Inf))
+
     get_op_from_node(cmp_nope :: complete_node) = cmp_nope.op
+
     get_bounds_from_node(cmp_nope :: complete_node) = cmp_nope.bounds
+    set_bound!(node :: complete_node{T}, bi :: T, bs :: T) where T <: Number = abstract_expr_tree.set_bound!(node.bounds,bi,bs)
+    get_bounds(node :: complete_node{T}) where T <: Number = abstract_expr_tree.get_bounds(node.bounds)
 
     complete_expr_tree{T <: Number}  = type_node{complete_node{T}}
 
@@ -42,6 +45,19 @@ module implementation_complete_expr_tree
         end
     end
 
+    create_expr_tree(field :: complete_node, children :: Vector{ type_node{complete_expr_tree}} ) = create_complete_node(field,children)
+
+    create_expr_tree(field :: complete_node ) = t_expr_tree(get_op_from_node(field), [])
+
+    _get_expr_node(t :: complete_expr_tree) = get_op_from_node(trait_tree.get_node(t))
+
+    _get_expr_children(t :: complete_expr_tree) = trait_tree.get_children(t)
+
+    _get_real_node(ex :: complete_expr_tree{T}) where T <: Number = _get_expr_node(ex)
+
+    tuple_bound_from_tree(ex :: complete_expr_tree{T} ) where T <: Number = get_bounds(trait_tree._get_node(ex))
+
+    _transform_to_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = abstract_expr_tree.create_expr_tree(get_op_from_node(trait_tree.get_node(ex)), _transform_to_expr_tree.(trait_tree.get_children(ex)) )
 
     function create_Expr(t :: complete_expr_tree)
         nd = trait_tree.get_node(t)
@@ -66,27 +82,12 @@ module implementation_complete_expr_tree
     end
 
 
-
-
-    create_expr_tree(field :: complete_node, children :: Vector{ type_node{complete_expr_tree}} ) = create_complete_node(field,children)
-
-    create_expr_tree(field :: complete_node ) = t_expr_tree(get_op_from_node(field), [])
-
-    _get_expr_node(t :: complete_expr_tree) = get_op_from_node(trait_tree.get_node(t))
-
-    _get_expr_children(t :: complete_expr_tree) = trait_tree.get_children(t)
-
     function _inverse_expr_tree(t :: complete_expr_tree{T}) where T <: Number
         op_minus = abstract_expr_node.create_node_expr(:-)
         bounds = abstract_expr_tree.create_empty_bounds(T)
         node = create_complete_node(op_minus, bounds)
         return create_complete_expr_tree(node,[t])
     end
-
-    _get_real_node(ex :: complete_expr_tree{T}) where T <: Number = _get_expr_node(ex)
-
-    _transform_to_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = abstract_expr_tree.create_expr_tree(get_op_from_node(trait_tree.get_node(ex)), _transform_to_expr_tree.(trait_tree.get_children(ex)) )
-
 
     function Base.copy(ex :: complete_expr_tree{T}) where T <: Number
         nd = trait_tree.get_node(ex)

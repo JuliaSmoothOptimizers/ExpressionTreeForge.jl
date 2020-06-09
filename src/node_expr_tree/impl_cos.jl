@@ -32,18 +32,18 @@ module cos_operators
         bi = vector_inf_bound[1]
         bs = vector_sup_bound[1]
         if abs(bs - bi) > 2 * π ||  isinf(bi) ||  isinf(bs)
-            return (-1,1)
+            return (t(-1),t(1))
         else
             bs_π = max(bs % (2*π), bi % (2*π))
             bi_π = min(bs % (2*π), bi % (2*π))
             # @show "sinus", bi, bs, bi_π, bs_π, inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π)
-            return (inf_bound_cos(bi_π, bs_π), sup_bound_cos(bi_π, bs_π))
+            return (inf_bound_cos(bi_π, bs_π, t), sup_bound_cos(bi_π, bs_π, t))
         end
     end
 
-    function sup_bound_cos(bi , bs )
+    function sup_bound_cos(bi , bs, t :: DataType )
         if belong(bi, bs, 0)
-            return 1
+            return t(1)
         elseif bi > 0 #bi également
             return cos(bi)
         else
@@ -51,9 +51,9 @@ module cos_operators
         end
     end
 
-    function inf_bound_cos(bi , bs )
+    function inf_bound_cos(bi , bs, t :: DataType )
         if belong(bi, bs, π)
-            return -1
+            return t(-1)
         elseif bs < π #bs également
             return cos(bs) # sin(bs) plus grand
         else

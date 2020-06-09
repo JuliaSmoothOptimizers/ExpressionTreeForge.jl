@@ -2,9 +2,9 @@ module bound_propagations
 
 
     using ..abstract_expr_tree
-    using ..trait_tree
-    using ..implementation_tree
-    using ..trait_expr_node
+    using ..trait_tree, ..trait_expr_tree, ..trait_expr_node
+    using ..implementation_tree, ..implementation_complete_expr_tree
+
 
 
     using ..abstract_expr_tree
@@ -40,8 +40,25 @@ module bound_propagations
         end
     end
 
+
+        function set_bounds!( tree :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number
+            node = trait_tree.get_node(tree)
+            op = trait_expr_tree._get_expr_node(tree)
+            if trait_expr_node.node_is_operator(op) == false
+                (inf_bound_node ,sup_bound_node) = trait_expr_node.node_bound(op,T)
+                implementation_complete_expr_tree.set_bound!(node, inf_bound_node ,sup_bound_node)
+            else
+                ch = trait_tree.get_children(tree)
+                set_bounds!.(ch)
+                son_bounds = (x :: implementation_complete_expr_tree.complete_expr_tree{T} -> implementation_complete_expr_tree.get_bounds(trait_tree.get_node(x))).(ch)
+                (inf_bound_node ,sup_bound_node) = trait_expr_node.node_bound(op, son_bounds, T)                
+                implementation_complete_expr_tree.set_bound!(node, inf_bound_node ,sup_bound_node)
+            end
+        end
+
     bound_to_tuple(b :: abstract_expr_tree.bounds{T}) where T <: Number = (b.inf_bound, b.sup_bound)
 
     get_bound(b :: bound_tree{T}) where T <: Number = bound_to_tuple(trait_tree.get_node(b))
+    get_bound(ex :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = implementation_complete_expr_tree.tuple_bound_from_tree(ex)
 
 end

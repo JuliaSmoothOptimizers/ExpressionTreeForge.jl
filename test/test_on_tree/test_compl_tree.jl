@@ -13,13 +13,13 @@ using Test
     evaluator = JuMP.NLPEvaluator(m)
     MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
 
-    x = ones(n)
+    v = ones(n)
     Expr_j = MathOptInterface.objective_expr(evaluator)
     expr_tree_j = CalculusTreeTools.transform_to_expr_tree(Expr_j)
     complete_tree = CalculusTreeTools.create_complete_tree(expr_tree_j)
 
     @test CalculusTreeTools.evaluate_expr_tree(complete_tree, v) == CalculusTreeTools.evaluate_expr_tree(expr_tree_j, v)
-    @test CalculusTreeTools.evaluate_expr_tree(complete_tree, v) == MathOptInterface.eval_objective(evaluator, x)
+    @test CalculusTreeTools.evaluate_expr_tree(complete_tree, v) == MathOptInterface.eval_objective(evaluator, v)
 
     deleted_comp_expr_tree = CalculusTreeTools.delete_imbricated_plus(complete_tree)
     deleted_expr_tree = CalculusTreeTools.delete_imbricated_plus(expr_tree_j)
@@ -39,15 +39,22 @@ using Test
     MOI_pattern = MathOptInterface.hessian_lagrangian_structure(evaluator)
     column = [x[1] for x in MOI_pattern]
     row = [x[2]  for x in MOI_pattern]
-    MOI_value_Hessian = Vector{ typeof(x[1]) }(undef,length(MOI_pattern))
-    MathOptInterface.eval_hessian_lagrangian(evaluator, MOI_value_Hessian, x, 1.0, zeros(0))
+    MOI_value_Hessian = Vector{ typeof(v[1]) }(undef,length(MOI_pattern))
+    MathOptInterface.eval_hessian_lagrangian(evaluator, MOI_value_Hessian, v, 1.0, zeros(0))
     values = [x for x in MOI_value_Hessian]
 
     MOI_half_hessian_en_x = sparse(row,column,values,n,n)
     MOI_hessian_en_x = Symmetric(MOI_half_hessian_en_x)
 
-    H = CalculusTreeTools.calcul_Hessian_expr_tree(complete_tree, x)
+    H = CalculusTreeTools.calcul_Hessian_expr_tree(complete_tree, v)
     @test (norm(MOI_hessian_en_x) - norm(H)) < θ
+
+
+
+    CalculusTreeTools.set_bounds!(complete_tree)
+    bound_tree = CalculusTreeTools.create_bound_tree(expr_tree_j)
+    CalculusTreeTools.set_bounds!(expr_tree_j, bound_tree)
+    @test CalculusTreeTools.get_bound(complete_tree) == CalculusTreeTools.get_bound(bound_tree)
 
 
 
