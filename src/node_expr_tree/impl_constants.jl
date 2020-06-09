@@ -21,6 +21,9 @@ module constants
     end
 
 
+    # Base.convert(::Type{constant{T}}, x :: constant{Y}) where T <: Number where Y <: Number = constant{T}(T(x.value))
+    Base.convert(::Type{constant{T}}, x :: constant{Y}) where T <: Number where Y <: Number = constant{T}(T(x.value))
+
     _node_bound(c :: constant{T}, t :: DataType) where T <: Number = ((t)(c.value), (t)(c.value))
 
     function create_node_expr(x :: T ) where T <: Number
@@ -73,10 +76,15 @@ module constants
 
 
     function _cast_constant!(c :: constant{Y}, t :: DataType) where Y <: Number
-        c.value = (t)(c.value)
+        # @show "tadaa_", c.value, typeof(c.value), (t)(c.value), t, convert(t, c.value), convert(constant{t},c)
+        # c.value = (t)(c.value)
+        # c.value = convert(t, c.value)/
+        # @show "_tadaa", c.value, typeof(c.value),c ,typeof(c)
+        return convert(constant{t},c)
     end
 
     function _cast_constant!(c :: Number, t :: DataType)
+        @show "tadaa2"
         return (t)(c)
     end
 

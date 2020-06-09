@@ -19,7 +19,7 @@ module implementation_complete_expr_tree
         bounds  :: abstract_expr_tree.bounds{T}
     end
 
-    create_complete_node(op :: ab_ex_nd, bouds :: abstract_expr_tree.bounds{T}) where T <: Number = complete_node{T}(op,bounds)
+    create_complete_node(op :: ab_ex_nd, bounds :: abstract_expr_tree.bounds{T}) where T <: Number = complete_node{T}(op,bounds)
     create_complete_node(op :: ab_ex_nd, bi :: T, bs :: T) where T <: Number = complete_node{T}(op,abstract_expr_tree.bounds{T}(bi,bs))
     create_complete_node(op :: ab_ex_nd) = create_complete_node(op, (Float64)(-Inf), (Float64)(Inf))
     get_op_from_node(cmp_nope :: complete_node) = cmp_nope.op
@@ -29,6 +29,7 @@ module implementation_complete_expr_tree
 
     create_complete_expr_tree(cn :: complete_node{T}, ch :: AbstractVector{complete_expr_tree{T}}) where T <: Number = complete_expr_tree{T}(cn,ch)
     create_complete_expr_tree(cn :: complete_node{T}) where T <: Number = create_complete_expr_tree(cn, Vector{complete_expr_tree{T}}(undef,0) )
+    create_complete_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = ex
     function create_complete_expr_tree(t :: type_node{ab_ex_nd})
         nd = trait_tree.get_node(t)
         ch = trait_tree.get_children(t)

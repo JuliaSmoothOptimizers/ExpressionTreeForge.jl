@@ -94,7 +94,8 @@ module power_operators
     end
 
     function _cast_constant!(op :: power_operator{T}, t :: DataType) where T <: Number
-        return op.index = (t)(op.index)
+        op.index = (t)(op.index)
+        return power_operator{t}(t(op.index))
     end
 
     export operator

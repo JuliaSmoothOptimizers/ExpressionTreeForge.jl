@@ -76,6 +76,7 @@ module variables
     function _change_from_N_to_Ni!(v :: variable, dic_new_var :: Dict{Int,Int})
         v.index = dic_new_var[v.index]
     end
+
     function _change_from_N_to_Ni!(v :: Expr, dic_new_var :: Dict{Int,Int})
         hd = v.head
         if hd != :ref
@@ -101,7 +102,7 @@ module variables
         return Expr(:ref, v.name,  v.index)
     end
 
-    _cast_constant!(v :: variable, t :: DataType) = ()
+    _cast_constant!(v :: variable, t :: DataType) = v
 
 
     export variable

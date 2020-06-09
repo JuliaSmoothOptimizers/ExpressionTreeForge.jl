@@ -13,7 +13,7 @@ using .bound_propagations
 create_bound_tree(t) = bound_propagations.create_bound_tree(t)
 set_bound(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
 get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
-export create_bound_tree
+
 
 using .implementation_complete_expr_tree
 create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
@@ -101,7 +101,7 @@ element_fun_from_N_to_Ni!(a :: Any, v :: AbstractVector{Int}) = algo_expr_tree.e
     cast_type_of_constant(expr_tree, t)
 Cast the constant of the Calculus tree expr_tree to the type t.
 """
-cast_type_of_constant(a :: Any ,v :: AbstractVector) = algo_expr_tree.cast_type_of_constant(a, v)
+cast_type_of_constant(ex :: Any ,t :: DataType) = algo_expr_tree.cast_type_of_constant!(ex, t)
 
 
 
@@ -149,6 +149,6 @@ calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree
 export type_calculus_tree, is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
 
 export transform_to_Expr, transform_to_expr_tree
-export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant
+export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
 export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 end # module

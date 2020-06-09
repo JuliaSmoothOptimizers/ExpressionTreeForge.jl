@@ -8,6 +8,7 @@ module abstract_expr_tree
         inf_bound :: T
         sup_bound :: T
     end
+    create_empty_bounds(t :: DataType) = bounds{t}((t)(-Inf), (t)(Inf))
 
     create_expr_tree() = ()
 
