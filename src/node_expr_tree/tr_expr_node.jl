@@ -30,9 +30,9 @@ module trait_expr_node
     node_convexity(a) = _node_convexity(a, is_expr_node(a))
     _node_convexity(a, ::type_expr_node) = _node_convexity(a)
     _node_convexity(a, ::type_not_expr_node) =  error("This node is not a expr node; node_convexity function")
-    node_convexity(a, son_convexity :: AbstractVector{implementation_convexity_type.convexity_wrapper}) = _node_convexity(a, son_convexity, is_expr_node(a))
-    _node_convexity(a, son_convexity :: AbstractVector{implementation_convexity_type.convexity_wrapper}, ::type_expr_node) = _node_bound(a, son_convexity)
-    _node_convexity(a, son_convexity :: AbstractVector{implementation_convexity_type.convexity_wrapper}, ::type_not_expr_node) =  error("This node is not a expr node; node_convexity function")
+    node_convexity(a, son_convexity :: AbstractVector{implementation_convexity_type.convexity_type}, son_bound :: AbstractVector{Tuple{T,T}}) where T <: Number = _node_convexity(a, son_convexity, son_bound, is_expr_node(a))
+    _node_convexity(a, son_convexity :: AbstractVector{implementation_convexity_type.convexity_type}, son_bound :: AbstractVector{Tuple{T,T}}, ::type_expr_node) where T <: Number = _node_convexity(a, son_convexity, son_bound)
+    _node_convexity(a, son_convexity :: AbstractVector{implementation_convexity_type.convexity_type}, son_bound :: AbstractVector{Tuple{T,T}}, ::type_not_expr_node) where T <: Number =  error("This node is not a expr node; node_convexity function")
 
 """ partie sur les opérateurs """
 

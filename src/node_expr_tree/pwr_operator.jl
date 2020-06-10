@@ -15,12 +15,64 @@ module power_operators
     import  ..interface_expr_node._evaluate_node2
 
 
-    import ..interface_expr_node._node_bound
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
     import Base.==
 
     mutable struct power_operator{T <: Number} <: ab_ex_nd
         index :: T
+    end
+
+    my_and(a :: Bool, b :: Bool) = (a && b)
+    function _node_convexity(op :: power_operator{Y},
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where Y <: Number where T <: Number
+        (length(son_cvx) == 1 && length(son_bound) == 1) || error("non-valide length of argument _node_convexity power operator")
+        st_ch = son_cvx[1]
+        (bi,bs) = son_bound[1]
+        if (op.index == 0 || implementation_convexity_type.is_constant(st_ch))
+            return implementation_convexity_type.constant_type()
+        elseif op.index == 1
+            return st_ch
+        elseif op.index %2 == 0
+            if implementation_convexity_type.is_linear(st_ch)
+                return implementation_convexity_type.convex_type()
+            elseif op.index > 0
+                if (implementation_convexity_type.is_convex(st_ch) && bi >= 0) || (implementation_convexity_type.is_concave(st_ch) && bs <= 0)
+                    return implementation_convexity_type.convex_type()
+                else
+                    return implementation_convexity_type.unknown_type()
+                end
+            else # op.index < 0
+                if (implementation_convexity_type.is_convex(st_ch) && bs <= 0) || (implementation_convexity_type.is_concave(st_ch) && bi >= 0)
+                    return implementation_convexity_type.convex_type()
+                elseif (implementation_convexity_type.is_convex(st_ch) && bi >= 0) || (implementation_convexity_type.is_concave(st_ch) && bs <= 0)
+                    return implementation_convexity_type.concave_type()
+                else
+                    return implementation_convexity_type.unknown_type()
+                end
+            end
+        else #op.indxx is odd
+            if op.index > 0
+                if implementation_convexity_type.is_convex(st_ch) && bi >= 0
+                    return implementation_convexity_type.convex_type()
+                elseif implementation_convexity_type.is_concave(st_ch) && bs <= 0
+                    return implementation_convexity_type.concave_type()
+                else
+                    return implementation_convexity_type.unknown_type()
+                end
+            else #op.indxx is odd and <0
+                if implementation_convexity_type.is_concave(st_ch) && bi >= 0
+                    return implementation_convexity_type.convex_type()
+                elseif implementation_convexity_type.is_convex(st_ch) && bs <= 0
+                    return implementation_convexity_type.concave_type()
+                else
+                    return implementation_convexity_type.unknown_type()
+                end
+            end
+        end
     end
 
     # on est sensé avoir en paramètre le liste des bornes des fils. dans le cas de l'opération puissance il n'y a qu'un seul fils.

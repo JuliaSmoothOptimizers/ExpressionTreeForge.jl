@@ -14,13 +14,36 @@ module plus_operators
 
     import  ..interface_expr_node._evaluate_node2
 
-    import ..interface_expr_node._node_bound
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
 
     import Base.==
 
     mutable struct plus_operator <: ab_ex_nd
 
+    end
+
+    my_and(a :: Bool, b :: Bool) = (a && b)
+    function _node_convexity(op :: plus_operator,
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where T <: Number
+        all_constant = mapreduce(x :: implementation_convexity_type.convexity_type -> implementation_convexity_type.is_constant(x), my_and, son_cvx)
+        all_linear = mapreduce(x :: implementation_convexity_type.convexity_type -> implementation_convexity_type.is_linear(x), my_and, son_cvx)
+        all_convex = mapreduce(x :: implementation_convexity_type.convexity_type -> implementation_convexity_type.is_convex(x), my_and, son_cvx)
+        all_concave = mapreduce(x :: implementation_convexity_type.convexity_type -> implementation_convexity_type.is_concave(x), my_and, son_cvx)
+        if all_constant
+            return implementation_convexity_type.constant_type()
+        elseif all_linear
+            return implementation_convexity_type.linear_type()
+        elseif all_convex
+            return implementation_convexity_type.convex_type()
+        elseif all_concave
+            return implementation_convexity_type.concave_type()
+        else
+            return implementation_convexity_type.unknown_type()
+        end
     end
 
     function _node_bound(op :: plus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number

@@ -8,23 +8,33 @@ include("tree/ordered_include.jl")
 include("expr_tree/ordered_include.jl")
 
 using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .implementation_type_expr
+using .algo_tree
+using .implementation_complete_expr_tree
 
 using .bound_propagations
+using .convexity_detection
+
+
 create_bound_tree(t) = bound_propagations.create_bound_tree(t)
 set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
 set_bounds!(tree) = bound_propagations.set_bounds!(tree)
 get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
-
-using .convexity_detection
 create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
-set_convexity!(tree,cvx_tree) = convexity_detection.set_convexity!(tree,cvx_tree)
+set_convexity!(tree, cvx_tree, bound_tree) = convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
+get_convexity_status(cvx_tree) = convexity_detection.get_convexity_status(cvx_tree)
+constant_type() = convexity_detection.constant_type()
+linear_type() = convexity_detection.linear_type()
+convex_type() = convexity_detection.convex_type()
+concave_type() = convexity_detection.concave_type()
+unknown_type() = convexity_detection.unknown_type()
 
-using .implementation_complete_expr_tree
+
+
+
 create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
-using .algo_tree
-print_tree(t) = algo_tree.printer_tree(t)
+
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
 is_constant(t :: type_calculus_tree) = t == type_calculus_tree(0)
@@ -33,6 +43,7 @@ is_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(2)
 is_cubic(t :: type_calculus_tree) = t == type_calculus_tree(3)
 is_more_than_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(4)
 
+print_tree(t) = algo_tree.printer_tree(t)
 # trait_expr_tree's functions
 """
     transform_to_Expr(expr_tree)

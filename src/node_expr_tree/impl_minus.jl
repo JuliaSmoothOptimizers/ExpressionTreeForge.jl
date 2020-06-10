@@ -11,8 +11,10 @@ module minus_operators
     using ..trait_type_expr
 
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
-    import ..interface_expr_node._node_bound
     import ..interface_expr_node._evaluate_node2
+
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
     import Base.==
 
@@ -20,7 +22,41 @@ module minus_operators
 
     end
 
-
+    function _node_convexity(op :: minus_operator,
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where T <: Number
+        length(son_cvx) == length(son_bound) || error("unsuitable parameter _node_convexity : minus_operator")
+        if length(son_cvx) == 1
+            st_ch = son_cvx[1]
+            if implementation_convexity_type.is_constant(st_ch)
+                return implementation_convexity_type.constant_type()
+            elseif implementation_convexity_type.is_linear(st_ch)
+                return implementation_convexity_type.linear_type()
+            elseif implementation_convexity_type.is_convex(st_ch)
+                return implementation_convexity_type.concave_type()
+            elseif implementation_convexity_type.is_concave(st_ch)
+                return implementation_convexity_type.convex_type()
+            else
+                return implementation_convexity_type.unknown_type()
+            end
+        else
+            res_first_son = son_cvx[1]
+            res_second_son = _node_convexity(op, [son_cvx[2]], [son_bound[2]])
+            # @show res_first_son, res_second_son, son_cvx[2]
+            if res_first_son == res_second_son
+                return res_first_son #or res_second_son
+            elseif (implementation_convexity_type.is_linear(res_first_son) && implementation_convexity_type.is_constant(res_second_son)) || (implementation_convexity_type.is_linear(res_second_son) && implementation_convexity_type.is_constant(res_second_son))
+                return implementation_convexity_type.linear_type()
+            elseif (implementation_convexity_type.is_linear(res_first_son) || implementation_convexity_type.is_constant(res_first_son)) && (implementation_convexity_type.is_convex(res_second_son) || implementation_convexity_type.is_concave(res_second_son))
+                return res_second_son
+            elseif (implementation_convexity_type.is_linear(res_second_son) || implementation_convexity_type.is_constant(res_second_son)) && (implementation_convexity_type.is_convex(res_first_son) || implementation_convexity_type.is_concave(res_first_son))
+                return res_first_son
+            else
+                return implementation_convexity_type.unknown_type()
+            end
+        end
+    end
 
     function _node_bound(op :: minus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]

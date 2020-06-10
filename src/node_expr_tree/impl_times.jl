@@ -13,13 +13,66 @@ module times_operators
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 
     import  ..interface_expr_node._evaluate_node2
-    import  ..interface_expr_node._node_bound
+
+    import  ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
     import Base.==
 
     mutable struct time_operator <: ab_ex_nd
 
     end
+
+    function _node_convexity(op :: time_operator,
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where T <: Number
+
+        length(son_cvx) == length(son_bound) || error("mismatch length parameter, _node_convexity : times operator")
+        current_st = son_cvx[1]
+        current_bounds = son_bound[1]
+        for i in 2:length(son_cvx)
+            current_st = node_convexity_binary_time(current_st, son_cvx[i], current_bounds, son_bound[i])
+            current_bouds = bound_binary_times(current_bounds[1], current_bounds[2], son_bound[i][1], son_bound[i][2])
+        end
+        return current_st
+    end
+
+    function node_convexity_binary_time(status1 :: implementation_convexity_type.convexity_type,
+                                        status2 :: implementation_convexity_type.convexity_type,
+                                        bounds1 :: Tuple{T,T},
+                                        bounds2 :: Tuple{T,T}) where T <: Number
+        cste_exist = implementation_convexity_type.is_constant(status1) || implementation_convexity_type.is_constant(status2)
+        check_all =  implementation_convexity_type.is_constant(status1) && implementation_convexity_type.is_constant(status2)
+        if check_all # les 2 sont constants
+            return implementation_convexity_type.constant_type()
+        elseif (implementation_convexity_type.is_constant(status2) && implementation_convexity_type.is_linear(status1)) || (implementation_convexity_type.is_constant(status1) && implementation_convexity_type.is_linear(status2))
+            return implementation_convexity_type.linear_type()
+        elseif cste_exist #un seul statut est constant
+            if implementation_convexity_type.is_constant(status1) # les 2 éléments du tuples sont égaux
+                cst = bounds1[1]
+                if implementation_convexity_type.is_conxex(status2)
+                    cst >= 0 ? implementation_convexity_type.convex_type() : implementation_convexity_type.concave_type()
+                elseif implementation_convexity_type.is_concave(status2)
+                    cst >= 0 ? implementation_convexity_type.concave_type() : implementation_convexity_type.convex_type()
+                else
+                    return implementation_convexity_type.unknown_type()
+                end
+            else # c'est le deuxième terme qui est constant
+                cst = bounds2[1]
+                if implementation_convexity_type.is_conxex(status1)
+                    cst >= 0 ? implementation_convexity_type.convex_type() : implementation_convexity_type.concave_type()
+                elseif implementation_convexity_type.is_concave(status1)
+                    cst >= 0 ? implementation_convexity_type.concave_type() : implementation_convexity_type.convex_type()
+                else
+                    return implementation_convexity_type.unknown_type()
+                end
+            end
+        else
+            return implementation_convexity_type.unknown_type()
+        end
+    end
+
 
     # remarque le produit doit-être au moins binaire
     function _node_bound(op :: time_operator , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number

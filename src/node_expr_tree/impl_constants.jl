@@ -27,7 +27,7 @@ module constants
 
     _node_bound(c :: constant{T}, t :: DataType) where T <: Number = ((t)(c.value), (t)(c.value))
 
-    _node_convexity(c :: constant{T}) where T <: Number = implementation_convexity_type.linear_type()
+    _node_convexity(c :: constant{T}) where T <: Number = implementation_convexity_type.constant_type()
 
 
     function create_node_expr(x :: T ) where T <: Number
