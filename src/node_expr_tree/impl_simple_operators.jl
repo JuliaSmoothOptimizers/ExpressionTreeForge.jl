@@ -13,7 +13,7 @@ module simple_operators
     using ..implementation_type_expr
     using ..trait_type_expr
 
-    using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators, ..tan_operators, ..cos_operators, ..exp_operators
+    using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators, ..tan_operators, ..cos_operators, ..exp_operators, ..frac_operators
 
     mutable struct simple_operator <: ab_ex_nd
         op :: Symbol
@@ -27,6 +27,8 @@ module simple_operators
             minus_operators.minus_operator()
         elseif op ==:*
             times_operators.time_operator()
+        elseif op ==:/
+            frac_operators.frac_operator()
         elseif op == :sin
             sinus_operators.sinus_operator()
         elseif op == :tan

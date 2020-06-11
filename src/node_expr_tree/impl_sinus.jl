@@ -15,7 +15,8 @@ module sinus_operators
     import  ..interface_expr_node._evaluate_node2
 
     using ..implementation_type_expr
-    import ..interface_expr_node._node_bound
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
 
 
@@ -24,6 +25,27 @@ module sinus_operators
     mutable struct sinus_operator <: ab_ex_nd
 
     end
+
+    function _node_convexity(op :: sinus_operator,
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where T <: Number
+        (length(son_cvx) == length(son_bound) && length(son_cvx) == 1) || error("unsuitable length of parameters _node_convexity : exp_operator")
+        status = son_cvx[1]
+        (bi,bs) = son_bound[1]
+        if implementation_convexity_type.is_constant(status)
+            return implementation_convexity_type.constant_type()
+        elseif (bs - bi > π) || (sin(bi) * sin(bs) < 0)
+            return implementation_convexity_type.unknown_type()
+        elseif ((bs - bi <= π) && (sin(bi) >= 0) && (sin(bs) >= 0)) && (implementation_convexity_type.is_linear(status) || (implementation_convexity_type.is_convex(status) && cos(bi) <= 0 && cos(bs <= 0 )) || (implementation_convexity_type.is_concave(status) && cos(bi) >= 0 && cos( bs >= 0 )) )
+            return implementation_convexity_type.concave_type()
+        elseif ((bs - bi <= π) && (sin(bi) <= 0) && (sin(bs) <= 0)) && (implementation_convexity_type.is_linear(status) || (implementation_convexity_type.is_convex(status) && cos(bi) >= 0 && cos(bs >= 0 )) || (implementation_convexity_type.is_concave(status) && cos(bi) <= 0 && cos( bs <= 0 )) )
+            return implementation_convexity_type.convex_type()
+        else
+            return implementation_convexity_type.unknown_type()
+        end
+    end
+
 
     function _node_bound(op :: sinus_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]

@@ -54,7 +54,7 @@ module power_operators
                     return implementation_convexity_type.unknown_type()
                 end
             end
-        else #op.indxx is odd
+        elseif op.index %2 == 1  #op.indxx is odd
             if op.index > 0
                 if implementation_convexity_type.is_convex(st_ch) && bi >= 0
                     return implementation_convexity_type.convex_type()
@@ -72,6 +72,8 @@ module power_operators
                     return implementation_convexity_type.unknown_type()
                 end
             end
+        else
+            return implementation_convexity_type.unknown_type()
         end
     end
 
