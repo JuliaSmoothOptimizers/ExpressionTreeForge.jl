@@ -32,6 +32,10 @@ module implementation_complete_expr_tree
     set_bound!(node :: complete_node{T}, bi :: T, bs :: T) where T <: Number = abstract_expr_tree.set_bound!(node.bounds,bi,bs)
     get_bounds(node :: complete_node{T}) where T <: Number = abstract_expr_tree.get_bounds(node.bounds)
 
+    get_convexity_status(node :: complete_node{T}) where T <: Number = implementation_convexity_type.get_convexity_wrapper(node.convexity_status)
+    set_convexity_status!(node :: complete_node{T}, t :: implementation_convexity_type.convexity_type) where T <: Number = implementation_convexity_type.set_convexity_wrapper!(node.convexity_status, t)
+
+
     complete_expr_tree{T <: Number}  = type_node{complete_node{T}}
 
     create_complete_expr_tree(cn :: complete_node{T}, ch :: AbstractVector{complete_expr_tree{T}}) where T <: Number = complete_expr_tree{T}(cn,ch)

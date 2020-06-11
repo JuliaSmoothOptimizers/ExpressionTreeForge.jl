@@ -13,7 +13,8 @@ module exp_operators
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 
     import  ..interface_expr_node._evaluate_node2
-    import ..interface_expr_node._node_bound
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
 
     using ..implementation_type_expr
@@ -25,6 +26,20 @@ module exp_operators
 
     end
 
+    function _node_convexity(op :: exp_operator,
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where T <: Number
+        (length(son_cvx) == length(son_bound) && length(son_cvx) == 1) || error("unsuitable length of parameters _node_convexity : exp_operator")
+        status = son_cvx[1]
+        if implementation_convexity_type.is_constant(status)
+            return implementation_convexity_type.constant_type()
+        elseif implementation_convexity_type.is_convex(status)
+            return implementation_convexity_type.convex_type()
+        else
+            return implementation_convexity_type.unknown_type()
+        end
+    end
 
     function _node_bound(op :: exp_operator , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]

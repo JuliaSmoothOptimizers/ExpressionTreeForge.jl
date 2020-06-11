@@ -43,10 +43,9 @@ module minus_operators
         else
             res_first_son = son_cvx[1]
             res_second_son = _node_convexity(op, [son_cvx[2]], [son_bound[2]])
-            # @show res_first_son, res_second_son, son_cvx[2]
             if res_first_son == res_second_son
                 return res_first_son #or res_second_son
-            elseif (implementation_convexity_type.is_linear(res_first_son) && implementation_convexity_type.is_constant(res_second_son)) || (implementation_convexity_type.is_linear(res_second_son) && implementation_convexity_type.is_constant(res_second_son))
+            elseif (implementation_convexity_type.is_linear(res_first_son) && implementation_convexity_type.is_constant(res_second_son)) || (implementation_convexity_type.is_linear(res_second_son) && implementation_convexity_type.is_constant(res_first_son))
                 return implementation_convexity_type.linear_type()
             elseif (implementation_convexity_type.is_linear(res_first_son) || implementation_convexity_type.is_constant(res_first_son)) && (implementation_convexity_type.is_convex(res_second_son) || implementation_convexity_type.is_concave(res_second_son))
                 return res_second_son

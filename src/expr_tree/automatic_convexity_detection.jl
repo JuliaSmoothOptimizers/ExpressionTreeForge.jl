@@ -3,7 +3,7 @@ module convexity_detection
     using ..implementation_convexity_type
     using ..abstract_expr_tree
     using ..trait_tree, ..trait_expr_tree, ..trait_expr_node
-    using ..implementation_tree, ..implementation_complete_expr_tree
+    using ..implementation_tree, ..implementation_complete_expr_tree, ..implementation_complete_expr_tree
     using ..bound_propagations
 
 
@@ -13,6 +13,7 @@ module convexity_detection
     create_convex_tree( tree :: implementation_tree.type_node) =  convexity_tree( implementation_convexity_type.init_conv_status(), create_convex_tree.(trait_tree.get_children(tree)))
     create_convex_tree( cst :: T) where T <: Number =  convexity_tree( implementation_convexity_type.init_conv_status(), [])
     get_convexity_status( cvx_tree :: convexity_tree) = implementation_convexity_type.get_convexity_wrapper(trait_tree.get_node(cvx_tree))
+    get_convexity_status( complete_tree :: implementation_complete_expr_tree.complete_expr_tree) = implementation_complete_expr_tree.get_convexity_status(trait_tree.get_node(complete_tree))
 
     constant_type() = implementation_convexity_type.constant_type()
     linear_type() = implementation_convexity_type.linear_type()
@@ -45,7 +46,20 @@ module convexity_detection
         end
     end
 
+    function set_convexity!( tree :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number
+        node = trait_tree.get_node(tree)
+        op = implementation_complete_expr_tree.get_op_from_node(node)
+        if trait_expr_node.node_is_operator(op) == false
+            status = trait_expr_node.node_convexity(op)
+            implementation_complete_expr_tree.set_convexity_status!(node, status)
+        else
+            children = trait_tree.get_children(tree)
+            set_convexity!.(children)
+            son_cvxs = (x -> implementation_complete_expr_tree.get_convexity_status(trait_tree.get_node(x))).(children)
+            son_bounds = (x -> implementation_complete_expr_tree.get_bounds(trait_tree.get_node(x))).(children)
+            status = trait_expr_node.node_convexity(op, son_cvxs, son_bounds)
+            implementation_complete_expr_tree.set_convexity_status!(node, status)
+        end
 
-
-
+    end
 end
