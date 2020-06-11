@@ -8,7 +8,7 @@ using Test
     m = Model()
     n = 5
     @variable(m, x[1:n])
-    @NLobjective(m, Min, sin(sum( (x[j]^2 * x[j+1]^3) for j in 1:n-1 )) + ( sin(sin(x[1])*(π*0.5)) - (x[1]^2 * - (x[2])^2 - 1)) + cos(sin(x[3])*(0.5*π )) )
+    @NLobjective(m, Min, sin(sum( (1/2) * ((x[j+1]/(x[j]^2)) * x[j+1]^3) for j in 1:n-1 )) + ( sin(sin(x[1])*(π*0.5)) - (x[1]^2 * - (x[2])^2 - 1)) + cos(sin(x[3])*(0.5*π )) )
 
     evaluator = JuMP.NLPEvaluator(m)
     MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
