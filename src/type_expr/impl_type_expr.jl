@@ -54,7 +54,11 @@ module implementation_type_expr
                 return more
             end
         elseif _is_cubic(a)
-            return more 
+            if _is_constant(b)
+                return cubic
+            else
+                return more
+            end 
         elseif _is_more(a)
             return more
         end

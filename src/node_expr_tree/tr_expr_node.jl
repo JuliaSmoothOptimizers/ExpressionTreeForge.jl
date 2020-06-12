@@ -11,7 +11,6 @@ module trait_expr_node
 
     using ..trait_type_expr
 
-    import  ..interface_expr_node._evaluate_node2
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 

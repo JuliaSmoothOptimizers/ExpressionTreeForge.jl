@@ -12,8 +12,6 @@ module tan_operators
 
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 
-    import  ..interface_expr_node._evaluate_node2
-
     using ..implementation_type_expr
 
 

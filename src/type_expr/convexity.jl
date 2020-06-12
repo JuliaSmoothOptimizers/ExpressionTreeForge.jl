@@ -17,6 +17,7 @@ module implementation_convexity_type
     concave_wrapper() = convexity_wrapper(concave)
     unknown_wrapper() = convexity_wrapper(unknown)
 
+    not_treated_type() = not_treated
     constant_type() = constant
     linear_type() = linear
     convex_type() = convex

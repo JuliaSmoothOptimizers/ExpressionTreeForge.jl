@@ -12,9 +12,6 @@ module power_operators
 
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 
-    import  ..interface_expr_node._evaluate_node2
-
-
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 

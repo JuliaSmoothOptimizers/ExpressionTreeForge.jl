@@ -13,8 +13,6 @@ module variables
     import  ..interface_expr_node._evaluate_node, ..interface_expr_node._change_from_N_to_Ni!
     import ..interface_expr_node._cast_constant!, ..interface_expr_node._node_to_Expr, ..interface_expr_node._node_to_Expr2
 
-    import  ..interface_expr_node._evaluate_node2
-
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 
