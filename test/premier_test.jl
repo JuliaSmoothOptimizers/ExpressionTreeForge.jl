@@ -15,7 +15,7 @@ res_grad_e1 = CalculusTreeTools.calcul_gradient_expr_tree(e1,x)
 res_grad_et1 = CalculusTreeTools.calcul_gradient_expr_tree(et1,x)
 type_e1 = CalculusTreeTools.get_type_tree(e1)
 type_et1 = CalculusTreeTools.get_type_tree(et1)
-@show typeof(type_e1), typeof(type_e1) == CalculusTreeTools.type_calculus_tree
+
 @testset "premiers tests" begin
 
     @test res_e1 == res_et1

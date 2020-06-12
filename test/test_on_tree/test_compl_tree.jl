@@ -3,12 +3,12 @@ using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
 using Test
 
 # Ces tests vérifie que compl expr tree se comporte de la même manière que expr_tree
-@testset "test des arbres complets" begin
+# @testset "test des arbres complets" begin
     θ = 1e-5
     m = Model()
     n = 5
     @variable(m, x[1:n])
-    @NLobjective(m, Min, sin(sum( (1/2) * ((x[j+1]/(x[j]^2)) * x[j+1]^3) for j in 1:n-1 )) + ( sin(sin(x[1])*(π*0.5)) - (x[4]^2 * - (x[5]/2)^2 - 1)) + cos(sin(x[3])*(0.5*π )) )
+    @NLobjective(m, Min, sin(sum( (1/2) * ((x[j+1]/(x[j]^2)) * x[j+1]^3) for j in 1:n-1 )) + ( sin(sin(x[3])*(π*0.5)) - (x[4]^2 * - (x[5]/2)^2 - 1)) + cos(sin(x[3])*(0.5*π )) )
 
     evaluator = JuMP.NLPEvaluator(m)
     MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
@@ -28,11 +28,16 @@ using Test
     comp_elem = CalculusTreeTools.get_elemental_variable.(deleted_comp_expr_tree)
     elem = CalculusTreeTools.get_elemental_variable.(deleted_expr_tree)
 
+
+
     @test length(deleted_comp_expr_tree) == length(deleted_expr_tree)
     @test comp_elem == elem
+
     res_deleted_comp_tree_evaluated = (x -> x(v)).(CalculusTreeTools.evaluate_expr_tree.(deleted_comp_expr_tree))
     res_deleted_tree_evaluated = (x -> x(v)).(CalculusTreeTools.evaluate_expr_tree.(deleted_expr_tree))
     @test res_deleted_tree_evaluated == res_deleted_comp_tree_evaluated
+
+
 
 
     grad = zeros(n)
@@ -69,11 +74,21 @@ using Test
 
     @test CalculusTreeTools.get_convexity_status(convexity_tree) == CalculusTreeTools.get_convexity_status(complete_tree)
 
-
+    x = ( y -> y*4).(ones(n))
     CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[3], comp_elem[3])
     CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[3], elem[3])
 
-    @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[3], v) == CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[3], v)
+    @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[3], x) == CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[3], x)
+
+    CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[2], comp_elem[2])
+    CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[2], elem[2])
+
+    @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[2], x) == CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[2], x)
+
+    CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[4], comp_elem[4])
+    CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[4], elem[4])
+    CalculusTreeTools.print_tree(deleted_expr_tree[4])
+    @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[4], x) == CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[4], x)
 
 
-end
+# end
