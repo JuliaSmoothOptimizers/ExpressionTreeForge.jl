@@ -107,13 +107,6 @@ module minus_operators
         end
     end
 
-    function _evaluate_node2(op :: minus_operator, value_ch :: AbstractVector{T}) where T <: Number
-        if length(value_ch) == 1
-            return - value_ch[1] :: T
-        else
-            return (value_ch[1] - value_ch[2]) :: T
-        end
-    end
 
     function _node_to_Expr(op :: minus_operator)
         return [:-]

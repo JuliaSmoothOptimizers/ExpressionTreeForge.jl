@@ -70,10 +70,6 @@ module constants
         return (c.value)
     end
 
-    function _evaluate_node2(c :: constant{Y}, x :: AbstractVector{T}) where Y <: Number where T <: Number
-        return (T)(c.value) :: T
-    end
-
     _change_from_N_to_Ni!(v :: Number, dic_new_var :: Dict{Int,Int}) = ()
     _change_from_N_to_Ni!(c :: constant{Y}, dic_new_var :: Dict{Int,Int}) where Y <: Number = ()
 

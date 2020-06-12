@@ -57,12 +57,7 @@ module tan_operators
 
     function _evaluate_node(op :: tan_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for tan")
-        return tan(value_ch[1]) 
-    end
-
-    function _evaluate_node2(op :: tan_operator, value_ch :: AbstractVector{T}) where T <: Number
-        length(value_ch) == 1 || error("more than one argument for tan")
-        return tan(value_ch[1]) :: T
+        return tan(value_ch[1])
     end
 
 

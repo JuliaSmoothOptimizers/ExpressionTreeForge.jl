@@ -124,9 +124,6 @@ module times_operators
         return foldl(*,value_ch)
     end
 
-    function _evaluate_node2(op :: time_operator, value_ch :: AbstractVector{T}) where T <: Number
-        return foldl(*,value_ch)
-    end
 
     function _node_to_Expr(op :: time_operator)
         return [:*]

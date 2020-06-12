@@ -17,8 +17,7 @@ include("impl_exp.jl")
 include("impl_simple_operators.jl")
 
 
-include("pwr_operator.jl")
-include("impl_complex_operators.jl")
+include("impl_power.jl")
 
 
 include("tr_expr_node.jl")

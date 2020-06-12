@@ -4,7 +4,7 @@ using ..variables
 using ..constants
 using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators, ..tan_operators, ..power_operators, ..frac_operators, ..exp_operators
 using ..simple_operators
-using ..complex_operators
+
 
 using Test
 using MathOptInterface
@@ -28,7 +28,6 @@ using MathOptInterface
     @test abstract_expr_node.create_node_expr(:/) == frac_operators.frac_operator()
 
     @test abstract_expr_node.create_node_expr(:^,2, true ) == power_operators.power_operator(2)
-    @test abstract_expr_node.create_node_expr(:^,[2]) == complex_operators.complex_operator(:^,[2])
 
 end
 

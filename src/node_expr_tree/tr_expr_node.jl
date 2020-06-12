@@ -141,10 +141,6 @@ module trait_expr_node
     @inline _evaluate_node(a, ::type_expr_node, x:: AbstractVector{T}) where T <: Number = _evaluate_node(a, x)
     @inline _evaluate_node(a, ::type_not_expr_node, x :: AbstractVector{T}) where T <: Number = error("This node is not a expr node")
 
-    evaluate_node2(a, x :: Vector{T}) where T <: Number = _evaluate_node2(a, is_expr_node(a), x)
-    _evaluate_node2(a, ::type_expr_node, x:: Vector{T}) where T <: Number = _evaluate_node2(a, x)
-    _evaluate_node2(a, ::type_not_expr_node, x :: Vector{T}) where T <: Number = error("This node is not a expr node")
-    _evaluate_node2(a :: abstract_expr_node.ab_ex_nd) = ( (x :: T where T <: Number, y :: T where T <: Number) -> _evaluate_node2(a, [x,y]) )
 
 
     change_from_N_to_Ni!(a, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, is_expr_node(a), dic_new_var)

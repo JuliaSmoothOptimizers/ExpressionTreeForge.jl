@@ -113,10 +113,6 @@ module frac_operators
         return value_ch[1] / value_ch[2]
     end
 
-    function _evaluate_node2(op :: frac_operator, value_ch :: AbstractVector{T}) where T <: Number
-        return value_ch[1] / value_ch[2]
-    end
-
     function _node_to_Expr(op :: frac_operator)
         return [:/]
     end

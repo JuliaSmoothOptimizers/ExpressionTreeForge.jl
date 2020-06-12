@@ -21,8 +21,6 @@ module interface_expr_node
 
     _evaluate_node() = ()
 
-    _evaluate_node2() = ()
-
     _change_from_N_to_Ni!() = ()
 
     _cast_constant!() = ()

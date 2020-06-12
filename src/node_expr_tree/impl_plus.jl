@@ -83,9 +83,6 @@ module plus_operators
         return @fastmath sum(value_ch)
     end
 
-    function _evaluate_node2(op :: plus_operator, value_ch :: AbstractVector{T}) where T <: Number
-        return sum(value_ch) :: T
-    end
 
     function _node_to_Expr(op :: plus_operator)
         return [:+]
