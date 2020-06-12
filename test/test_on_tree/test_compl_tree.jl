@@ -28,6 +28,10 @@ using Test
 
     @test length(deleted_comp_expr_tree) == length(deleted_expr_tree)
     @test comp_elem == elem
+    res_deleted_comp_tree_evaluated = (x -> x(v)).(CalculusTreeTools.evaluate_expr_tree.(deleted_comp_expr_tree))
+    res_deleted_tree_evaluated = (x -> x(v)).(CalculusTreeTools.evaluate_expr_tree.(deleted_expr_tree))
+    @test res_deleted_tree_evaluated == res_deleted_comp_tree_evaluated
+
 
     grad = zeros(n)
     MathOptInterface.eval_objective_gradient(evaluator, grad, v)
