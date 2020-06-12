@@ -51,7 +51,7 @@ module times_operators
         elseif cste_exist #un seul statut est constant
             if implementation_convexity_type.is_constant(status1) # les 2 éléments du tuples sont égaux
                 cst = bounds1[1]
-                if implementation_convexity_type.is_conxex(status2)
+                if implementation_convexity_type.is_convex(status2)
                     cst >= 0 ? implementation_convexity_type.convex_type() : implementation_convexity_type.concave_type()
                 elseif implementation_convexity_type.is_concave(status2)
                     cst >= 0 ? implementation_convexity_type.concave_type() : implementation_convexity_type.convex_type()
@@ -60,7 +60,7 @@ module times_operators
                 end
             else # c'est le deuxième terme qui est constant
                 cst = bounds2[1]
-                if implementation_convexity_type.is_conxex(status1)
+                if implementation_convexity_type.is_convex(status1)
                     cst >= 0 ? implementation_convexity_type.convex_type() : implementation_convexity_type.concave_type()
                 elseif implementation_convexity_type.is_concave(status1)
                     cst >= 0 ? implementation_convexity_type.concave_type() : implementation_convexity_type.convex_type()

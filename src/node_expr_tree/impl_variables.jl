@@ -75,7 +75,7 @@ module variables
          return x[v.index] :: T
     end
 
-    function _change_from_N_to_Ni!(v :: variable, dic_new_var :: Dict{Int,Int})
+    function _change_from_N_to_Ni!(v :: variable, dic_new_var :: Dict{Int,Int})        
         v.index = dic_new_var[v.index]
     end
 
