@@ -92,7 +92,7 @@ using Test
         m = Model()
         n = 5
         @variable(m, x[1:n])
-        @NLobjective(m, Min, (- exp(x[1]))^2 +  (exp(x[2])^2)  ) 
+        @NLobjective(m, Min, (- exp(x[1]))^2 +  (exp(x[2])^2)  )
         # - (exp(x[j])^2) créé une fonction concave donc la borne sup est 0
         evaluator = JuMP.NLPEvaluator(m)
         MathOptInterface.initialize(evaluator, [:ExprGraph])
@@ -234,7 +234,7 @@ using Test
     end
 
 
-    @testset "test" begin
+    @testset "test lone constant" begin
         Expr_j = :(5)
         expr_tree_j = CalculusTreeTools.transform_to_expr_tree(Expr_j)
         bound_tree = CalculusTreeTools.create_bound_tree(expr_tree_j)
@@ -249,6 +249,24 @@ using Test
         CalculusTreeTools.set_bounds!(complete_tree)
         CalculusTreeTools.set_convexity!(complete_tree)
         @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.constant_type()
+    end
+
+    @testset "test variable" begin
+        Expr_j = :(x[1] + x[2]/5 + x[3] * 5)
+        expr_tree_j = CalculusTreeTools.transform_to_expr_tree(Expr_j)
+        bound_tree = CalculusTreeTools.create_bound_tree(expr_tree_j)
+        convexity_tree = CalculusTreeTools.create_convex_tree(expr_tree_j)
+        CalculusTreeTools.set_bounds!(expr_tree_j, bound_tree)
+
+        CalculusTreeTools.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
+
+        @test CalculusTreeTools.get_convexity_status(convexity_tree) == CalculusTreeTools.linear_type()
+
+        complete_tree = CalculusTreeTools.create_complete_tree(expr_tree_j)
+        CalculusTreeTools.set_bounds!(complete_tree)
+        CalculusTreeTools.set_convexity!(complete_tree)
+        @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.linear_type()
+
     end
 
 end

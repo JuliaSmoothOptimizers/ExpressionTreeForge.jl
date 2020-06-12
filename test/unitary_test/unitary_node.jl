@@ -2,7 +2,7 @@ using ..abstract_expr_node, ..trait_expr_node
 
 using ..variables
 using ..constants
-using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators, ..tan_operators, ..power_operators
+using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators, ..tan_operators, ..power_operators, ..frac_operators, ..exp_operators
 using ..simple_operators
 using ..complex_operators
 
@@ -24,6 +24,8 @@ using MathOptInterface
     @test abstract_expr_node.create_node_expr(:*) == times_operators.time_operator()
     @test abstract_expr_node.create_node_expr(:sin) == sinus_operators.sinus_operator()
     @test abstract_expr_node.create_node_expr(:tan) == tan_operators.tan_operator()
+    @test abstract_expr_node.create_node_expr(:exp) == exp_operators.exp_operator()
+    @test abstract_expr_node.create_node_expr(:/) == frac_operators.frac_operator()
 
     @test abstract_expr_node.create_node_expr(:^,2, true ) == power_operators.power_operator(2)
     @test abstract_expr_node.create_node_expr(:^,[2]) == complex_operators.complex_operator(:^,[2])
@@ -34,16 +36,18 @@ end
 
     constant = abstract_expr_node.create_node_expr(4)
     variable = abstract_expr_node.create_node_expr(:x, 5)
-    simple_operator = abstract_expr_node.create_node_expr(:*)
+    times = abstract_expr_node.create_node_expr(:*)
     plus = abstract_expr_node.create_node_expr(:+)
     minus = abstract_expr_node.create_node_expr(:-)
     power_operator = abstract_expr_node.create_node_expr(:^,2, true )
-    collection = [constant, variable, simple_operator, power_operator, plus, minus]
+    exp = abstract_expr_node.create_node_expr(:exp)
+    frac = abstract_expr_node.create_node_expr(:/)
+    collection = [constant, variable, times, power_operator, plus, minus, exp, frac]
 
-    @test trait_expr_node.is_expr_node.( vcat(collection,[:+, :*]) ) == [trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_not_expr_node(), trait_expr_node.type_not_expr_node()]
-    @test trait_expr_node.node_is_operator.( collection ) == [false, false, true, true, true, true ]
-    @test trait_expr_node.node_is_constant.( collection ) == [true, false, false, false, false, false]
-    @test trait_expr_node.node_is_variable.( collection ) == [false, true, false, false, false, false]
+    @test trait_expr_node.is_expr_node.( vcat(collection,[:+, :*]) ) == [trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_expr_node(), trait_expr_node.type_not_expr_node(), trait_expr_node.type_not_expr_node()]
+    @test trait_expr_node.node_is_operator.( collection ) == [false, false, true, true, true, true, true ,true ]
+    @test trait_expr_node.node_is_constant.( collection ) == [true, false, false, false, false, false, false, false]
+    @test trait_expr_node.node_is_variable.( collection ) == [false, true, false, false, false, false, false, false]
 
 
 
