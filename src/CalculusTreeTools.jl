@@ -20,6 +20,12 @@ set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
 set_bounds!(tree) = bound_propagations.set_bounds!(tree)
 get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
+
+convexity_wrapper = implementation_convexity_type.convexity_wrapper
+get_convexity_wrapper(t :: implementation_convexity_type.convexity_wrapper) = implementation_convexity_type.get_convexity_wrapper(t)
+set_convexity_wrapper!(cw :: implementation_convexity_type.convexity_wrapper, typ :: implementation_convexity_type.convexity_type) = implementation_convexity_type.set_convexity_wrapper!(cw,typ)
+
+
 create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
 set_convexity!(tree, cvx_tree, bound_tree) = convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
 set_convexity!(complete_tree) = convexity_detection.set_convexity!(complete_tree)
@@ -31,11 +37,17 @@ convex_type() = convexity_detection.convex_type()
 concave_type() = convexity_detection.concave_type()
 unknown_type() = convexity_detection.unknown_type()
 
-
+is_treated(c) = implementation_complete_expr_tree.is_treated(c)
+is_not_treated(c) = implementation_complete_expr_tree.is_not_treated(c)
+is_constant(c) = implementation_complete_expr_tree.is_constant(c)
+is_linear(c) = implementation_complete_expr_tree.is_linear(c)
+is_convex(c) = implementation_complete_expr_tree.is_convex(c)
+is_concave(c) = implementation_complete_expr_tree.is_concave(c)
+is_unknown(c) = implementation_complete_expr_tree.is_unknown(c)
 
 
 create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
-
+complete_expr_tree{T <: Number} = implementation_complete_expr_tree.complete_expr_tree{T}
 
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
@@ -164,7 +176,15 @@ calcul_Hessian_expr_tree( :(x[1]^2 + x[2]), ones(2))
 calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_Hessian_expr_tree(e,x)
 
 
-export type_calculus_tree, is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
+export create_bound_tree, set_bounds!, get_bound
+
+export type_calculus_tree, complete_expr_tree
+
+export not_treated_type, constant_type, linear_type, convex_type, concave_type, unknown_type
+export is_treated, is_not_treated, is_constant, is_linear, is_convex, is_concave, is_unknown
+export get_convexity_status, set_convexity!, create_convex_tree
+
+export  is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
 
 export transform_to_Expr, transform_to_expr_tree
 export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
