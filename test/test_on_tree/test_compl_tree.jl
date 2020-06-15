@@ -1,4 +1,4 @@
-using CalculusTreeTools
+# using CalculusTreeTools
 using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
 using Test
 
@@ -8,7 +8,8 @@ using Test
     m = Model()
     n = 5
     @variable(m, x[1:n])
-    @NLobjective(m, Min, sin(sum( (1/2) * ((x[j+1]/(x[j]^2)) * x[j+1]^3) for j in 1:n-1 )) + ( sin(sin(x[3])*(π*0.5)) - (x[4]^2 * - (x[5]/2)^2 - 1)) + cos(sin(x[3])*(0.5*π )) )
+    # @NLobjective(m, Min, sin(sum( (1/2) * ((x[j+1]/(x[j]^2)) * x[j+1]^3) for j in 1:n-1 )) + ( sin(sin(x[3])*(π*0.5)) - (x[4]^2 * - (x[5]/2)^2 - 1)) + cos(sin(x[3])*(0.5*π )) )
+    @NLobjective(m, Min, x[1] + x[2] + x[3] + x[4])
 
     evaluator = JuMP.NLPEvaluator(m)
     MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
@@ -87,8 +88,17 @@ using Test
 
     CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[4], comp_elem[4])
     CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[4], elem[4])
-    CalculusTreeTools.print_tree(deleted_expr_tree[4])
     @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[4], x) == CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[4], x)
 
+    copy_tree = copy(complete_tree)
+    @test copy_tree == complete_tree
+
+    CalculusTreeTools.print_tree(copy_tree)
+    CalculusTreeTools.print_tree(complete_tree)
+
+    CalculusTreeTools.evaluate_expr_tree(copy_tree, x)
+    CalculusTreeTools.evaluate_expr_tree(complete_tree, x)
+    @test CalculusTreeTools.get_bound(complete_tree) == CalculusTreeTools.get_bound(copy_tree)
+    @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.get_convexity_status(copy_tree)
 
 # end
