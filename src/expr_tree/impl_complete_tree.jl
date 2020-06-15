@@ -55,7 +55,7 @@ module implementation_complete_expr_tree
 
     create_expr_tree(field :: complete_node, children :: Vector{ type_node{complete_expr_tree}} ) = create_complete_node(field,children)
 
-    create_expr_tree(field :: complete_node ) = t_expr_tree(get_op_from_node(field), [])
+    create_expr_tree(field :: complete_node ) = complete_expr_tree(field,[])
 
     _get_expr_node(t :: complete_expr_tree) = get_op_from_node(trait_tree.get_node(t))
 
