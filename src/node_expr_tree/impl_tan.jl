@@ -13,6 +13,8 @@ module tan_operators
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 
     using ..implementation_type_expr
+    import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+    using ..implementation_convexity_type
 
 
     import Base.==
@@ -20,6 +22,15 @@ module tan_operators
     mutable struct tan_operator <: ab_ex_nd
 
     end
+
+    _node_convexity(op :: tan_operator,
+                             son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
+                             son_bound :: AbstractVector{Tuple{T,T}}
+                             ) where T <: Number = implementation_convexity_type.unknown_type()
+
+
+
+    _node_bound(op :: tan_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number = ((t)(-Inf),(t)(Inf))
 
 
     function create_node_expr( op :: tan_operator)
