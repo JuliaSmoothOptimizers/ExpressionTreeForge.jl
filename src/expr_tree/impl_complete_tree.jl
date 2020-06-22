@@ -123,6 +123,9 @@ module implementation_complete_expr_tree
         ch2 = trait_tree.get_children(ex2)
         nd1 = trait_tree.get_node(ex1)
         nd2 = trait_tree.get_node(ex2)
+        if length(ch1) != length(ch2)
+            return false
+        end 
         b = true
         for i in 1:length(ch1)
             b = b && (ch1[i] == ch2[i])

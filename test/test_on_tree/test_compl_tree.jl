@@ -1,9 +1,9 @@
-# using CalculusTreeTools
+using CalculusTreeTools
 using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
 using Test
 
 # Ces tests vérifie que compl expr tree se comporte de la même manière que expr_tree
-# @testset "test des arbres complets" begin
+@testset "test des arbres complets" begin
     θ = 1e-5
     m = Model()
     n = 5
@@ -93,12 +93,36 @@ using Test
     copy_tree = copy(complete_tree)
     @test copy_tree == complete_tree
 
-    CalculusTreeTools.print_tree(copy_tree)
-    CalculusTreeTools.print_tree(complete_tree)
+    # CalculusTreeTools.print_tree(copy_tree)
+    # CalculusTreeTools.print_tree(complete_tree)
 
     CalculusTreeTools.evaluate_expr_tree(copy_tree, x)
     CalculusTreeTools.evaluate_expr_tree(complete_tree, x)
     @test CalculusTreeTools.get_bound(complete_tree) == CalculusTreeTools.get_bound(copy_tree)
     @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.get_convexity_status(copy_tree)
 
-# end
+end
+
+
+@testset "test on ==/!= complete_expr_tree" begin
+    Expr1 = :( x[1] + x[2])
+    Expr2 = :( x[2] + x[2])
+    Expr3 = :( x[2] + x[3] + x[4])
+    Expr4 = :( x[2] + x[3] * x[4])
+    expr_tree1 = CalculusTreeTools.transform_to_expr_tree(Expr1)
+    expr_tree2 = CalculusTreeTools.transform_to_expr_tree(Expr2)
+    expr_tree3 = CalculusTreeTools.transform_to_expr_tree(Expr3)
+    expr_tree4 = CalculusTreeTools.transform_to_expr_tree(Expr4)
+    complete_tree1 = CalculusTreeTools.create_complete_tree(expr_tree1)
+    complete_tree2 = CalculusTreeTools.create_complete_tree(expr_tree2)
+    complete_tree3 = CalculusTreeTools.create_complete_tree(expr_tree3)
+    complete_tree4 = CalculusTreeTools.create_complete_tree(expr_tree4)
+    @test complete_tree1 != complete_tree2
+
+    @test complete_tree1 != complete_tree3
+    @test complete_tree2 != complete_tree3
+
+    @test complete_tree1 != complete_tree4
+    @test complete_tree2 != complete_tree4
+    @test complete_tree3 != complete_tree4
+end
