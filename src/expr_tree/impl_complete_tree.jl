@@ -121,11 +121,11 @@ module implementation_complete_expr_tree
     function (==)(ex1 :: complete_expr_tree{T}, ex2 :: complete_expr_tree{T}) where T <: Number
         ch1 = trait_tree.get_children(ex1)
         ch2 = trait_tree.get_children(ex2)
-        nd1 = trait_tree.get_node(ex1)
-        nd2 = trait_tree.get_node(ex2)
+        nd1 = _get_expr_node(ex1)
+        nd2 = _get_expr_node(ex2)
         if length(ch1) != length(ch2)
             return false
-        end 
+        end
         b = true
         for i in 1:length(ch1)
             b = b && (ch1[i] == ch2[i])

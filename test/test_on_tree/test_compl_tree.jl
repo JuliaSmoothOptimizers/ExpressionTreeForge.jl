@@ -117,6 +117,8 @@ end
     complete_tree2 = CalculusTreeTools.create_complete_tree(expr_tree2)
     complete_tree3 = CalculusTreeTools.create_complete_tree(expr_tree3)
     complete_tree4 = CalculusTreeTools.create_complete_tree(expr_tree4)
+    complete_tree5 = copy(complete_tree1)
+
     @test complete_tree1 != complete_tree2
 
     @test complete_tree1 != complete_tree3
@@ -125,4 +127,33 @@ end
     @test complete_tree1 != complete_tree4
     @test complete_tree2 != complete_tree4
     @test complete_tree3 != complete_tree4
+
+    @test complete_tree1 == complete_tree5
+    @test complete_tree2 != complete_tree5
+    @test complete_tree3 != complete_tree5
+    @test complete_tree4 != complete_tree5
+
+    CalculusTreeTools.set_bounds!(complete_tree1)
+    CalculusTreeTools.set_bounds!(complete_tree2)
+    CalculusTreeTools.set_bounds!(complete_tree3)
+    CalculusTreeTools.set_bounds!(complete_tree4)
+
+    CalculusTreeTools.set_convexity!(complete_tree1)
+    CalculusTreeTools.set_convexity!(complete_tree2)
+    CalculusTreeTools.set_convexity!(complete_tree3)
+    CalculusTreeTools.set_convexity!(complete_tree4)
+
+    @test complete_tree1 != complete_tree2
+
+    @test complete_tree1 != complete_tree3
+    @test complete_tree2 != complete_tree3
+
+    @test complete_tree1 != complete_tree4
+    @test complete_tree2 != complete_tree4
+    @test complete_tree3 != complete_tree4
+
+    @test complete_tree1 == complete_tree5
+    @test complete_tree2 != complete_tree5
+    @test complete_tree3 != complete_tree5
+    @test complete_tree4 != complete_tree5
 end
