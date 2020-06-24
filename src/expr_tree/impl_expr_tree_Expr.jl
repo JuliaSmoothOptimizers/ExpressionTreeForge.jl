@@ -9,9 +9,6 @@ module implementation_expr_tree_Expr
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
 
-
-
-
     function create_expr_tree( ex :: Expr)
         return ex
     end

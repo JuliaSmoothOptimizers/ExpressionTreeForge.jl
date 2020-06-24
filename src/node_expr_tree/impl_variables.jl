@@ -69,6 +69,10 @@ module variables
         return @inbounds x[v.index]
     end
 
+    function change_index( v :: MathOptInterface.VariableIndex, x :: AbstractVector{T}) where T <: Number
+        return x[v.value]
+    end
+
     function _change_from_N_to_Ni!(v :: variable, dic_new_var :: Dict{Int,Int})
         v.index = dic_new_var[v.index]
     end

@@ -145,6 +145,9 @@ evaluate_expr_tree(:(x[1] + x[2]), [0,1])
 > 1
 """
 evaluate_expr_tree(e :: Any, x :: AbstractVector{T}) where T <: Number  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+# evaluate_expr_tree(e :: Any, x :: AbstractVector{T}) where T <: AbstractVector{Number}  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+evaluate_expr_tree(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+evaluate_expr_tree(e :: Any, x :: AbstractArray)  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
 evaluate_expr_tree(e :: Any) = (x :: AbstractVector{} -> evaluate_expr_tree(e,x) )
 
 
