@@ -49,12 +49,12 @@ module M_evaluation_expr_tree
     @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree , x  :: AbstractVector{T}) where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         if trait_expr_node.node_is_operator(op) :: Bool == false
-            return trait_expr_node._evaluate_node(op, x) 
+            return trait_expr_node._evaluate_node(op, x)
         else
             children = trait_expr_tree.get_expr_children(expr_tree_cmp)
             n = length(children) :: Int
             temp = Vector{T}(undef, n)
-            map!( y :: implementation_complete_expr_tree.complete_expr_tree  -> _evaluate_expr_tree(y,x) :: T , temp, children)
+            map!( y :: implementation_complete_expr_tree.complete_expr_tree  -> _evaluate_expr_tree(y,x), temp, children)
             return trait_expr_node._evaluate_node(op,  temp)
         end
     end
