@@ -61,7 +61,6 @@ module M_evaluation_expr_tree
 
 
 
-    # temp_aux = Vector{T where T <: Number}(undef, n)
     @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree , xs  :: Array{Array{T,1},1} ) where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
@@ -113,9 +112,34 @@ module M_evaluation_expr_tree
         end
     end
 
-    # A = Array{Int,2}(undef, 2,5)
-    # @show length(view(A,1,:))
 
+    @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
+                                        xs  ::  AbstractArray{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number
+        op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
+        number_x = length(xs)
+        if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
+            temp = Vector{T}(undef, number_x)
+            map!( x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+            return temp
+        else
+            children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+            n = length(children)
+            lx = length(xs[1])
+            res = Vector{T}(undef,number_x)
+
+            temp = Array{T,2}(undef, n, number_x)
+
+            for i in 1:n
+                view(temp, i, :) .= _evaluate_expr_tree(children[i], xs)
+            end
+
+            for i in 1:number_x
+                res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
+            end
+
+            return res
+        end
+    end
 
 
     calcul_gradient_expr_tree(a :: Any, x :: Vector{}) = _calcul_gradient_expr_tree(a, is_expr_tree(a), x )
