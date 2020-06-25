@@ -74,6 +74,30 @@ module M_evaluation_expr_tree
             n = length(children)
             lx = length(xs[1])
             res = Vector{T}(undef,number_x)
+            temp = Array{T,2}(undef, n, number_x)
+            for i in 1:n
+                view(temp, i, :) .= _evaluate_expr_tree(children[i], xs)
+            end
+            for i in 1:number_x
+                res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
+            end
+            return res
+        end
+    end
+
+    @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
+                                        xs  ::  AbstractArray{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1}) where T <: Number
+        op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
+        number_x = length(xs)
+        if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
+            temp = Vector{T}(undef, number_x)
+            map!( x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+            return temp
+        else
+            children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+            n = length(children)
+            lx = length(xs[1])
+            res = Vector{T}(undef,number_x)
 
             temp = Array{T,2}(undef, n, number_x)
 
@@ -84,26 +108,10 @@ module M_evaluation_expr_tree
             for i in 1:number_x
                 res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
             end
-            # temp_aux = Vector{T}(undef, number_x)
-            # temp = Vector{Vector{T}}( (x -> temp_aux).([1:n;]) )
-            # for i in 1:n
-            #     temp[i] = _evaluate_expr_tree(children[i], xs)
-            # end
-            # def_value_children = Vector{T}(undef, n)
-            # value_children = Vector{Vector{T}}((x -> def_value_children).(1:lx))
-            # for i in 1:number_x
-            #     for j in 1:n
-            #         value_children[i][j] = temp[j][i]
-            #     end
-            # end
-            # for i in 1:number_x
-            #     res[i] = trait_expr_node._evaluate_node(op,  value_children[i])
-            # end
 
             return res
         end
     end
-
 
     # A = Array{Int,2}(undef, 2,5)
     # @show length(view(A,1,:))
