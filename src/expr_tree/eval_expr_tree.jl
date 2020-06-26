@@ -67,13 +67,13 @@ module M_evaluation_expr_tree
 @inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{Array{T,1},1} )  where T <: Number = error(" This is not an Expr tree")
 @inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{Array{T,1},1} ) where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
 
-@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1})  where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
-@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1})  where T <: Number = error(" This is not an Expr tree")
-@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1}) where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
+@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{SubArray{T,1,Array{T,1},N,true},1} )  where N where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{SubArray{T,1,Array{T,1},N,true},1})  where N where T <: Number = error(" This is not an Expr tree")
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{SubArray{T,1,Array{T,1},N,true},1}) where N where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
 
-@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
-@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1})  where T <: Number = error(" This is not an Expr tree")
-@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
+@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number = error(" This is not an Expr tree")
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
     @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree , xs  :: Array{Array{T,1},1} ) where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
@@ -98,7 +98,7 @@ module M_evaluation_expr_tree
     end
 
     @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
-                                        xs  ::  Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1}) where T <: Number
+                                        xs  :: Array{SubArray{T,1,Array{T,1},N,true},1}) where N where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
         if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
@@ -127,7 +127,7 @@ module M_evaluation_expr_tree
 
 
     @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
-                                        xs  ::  Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number
+                                        xs  ::  Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
         if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
