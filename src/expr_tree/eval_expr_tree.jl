@@ -61,7 +61,20 @@ module M_evaluation_expr_tree
 
 
 
-    @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree , xs  :: Array{Array{T,1},1} ) where T <: Number
+
+
+@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{Array{T,1},1} )  where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{Array{T,1},1} )  where T <: Number = error(" This is not an Expr tree")
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{Array{T,1},1} ) where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
+
+@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1})  where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1})  where T <: Number = error(" This is not an Expr tree")
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1}) where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
+
+@inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1})  where T <: Number = error(" This is not an Expr tree")
+@inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_expr_tree, x :: Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number = _evaluate_expr_tree_multiple_points(a, x)
+    @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree , xs  :: Array{Array{T,1},1} ) where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
         if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
@@ -75,7 +88,7 @@ module M_evaluation_expr_tree
             res = Vector{T}(undef,number_x)
             temp = Array{T,2}(undef, n, number_x)
             for i in 1:n
-                view(temp, i, :) .= _evaluate_expr_tree(children[i], xs)
+                view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
             end
             for i in 1:number_x
                 res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
@@ -84,7 +97,7 @@ module M_evaluation_expr_tree
         end
     end
 
-    @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
+    @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
                                         xs  ::  Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},true},1}) where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
@@ -101,7 +114,7 @@ module M_evaluation_expr_tree
             temp = Array{T,2}(undef, n, number_x)
 
             for i in 1:n
-                view(temp, i, :) .= _evaluate_expr_tree(children[i], xs)
+                view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
             end
 
             for i in 1:number_x
@@ -113,7 +126,7 @@ module M_evaluation_expr_tree
     end
 
 
-    @inline function _evaluate_expr_tree(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
+    @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
                                         xs  ::  Array{SubArray{T,1,Array{T,1},Tuple{UnitRange{Int64}},false},1}) where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
@@ -130,7 +143,7 @@ module M_evaluation_expr_tree
             temp = Array{T,2}(undef, n, number_x)
 
             for i in 1:n
-                view(temp, i, :) .= _evaluate_expr_tree(children[i], xs)
+                view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
             end
 
             for i in 1:number_x

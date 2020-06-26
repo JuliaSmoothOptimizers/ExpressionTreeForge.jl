@@ -151,6 +151,8 @@ evaluate_expr_tree(e :: Any, x :: AbstractArray)  = M_evaluation_expr_tree.evalu
 evaluate_expr_tree(e :: Any) = (x :: AbstractVector{} -> evaluate_expr_tree(e,x) )
 
 
+evaluate_expr_tree_multiple_points(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
+
 
 """
     calcul_gradient_expr_tree(t, x)
