@@ -60,6 +60,32 @@ module M_evaluation_expr_tree
     end
 
 
+    @inline function _evaluate_expr_tree_multiple_points(expr_tree :: implementation_expr_tree.t_expr_tree ,
+                                        xs  ::  Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number
+        op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
+        number_x = length(xs)
+        if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
+            temp = Vector{T}(undef, number_x)
+            map!( x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+            return temp
+        else
+            children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+            n = length(children)
+            lx = length(xs[1])
+            res = Vector{T}(undef,number_x)
+            temp = Array{T,2}(undef, n, number_x)
+            for i in 1:n
+                view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
+            end
+            for i in 1:number_x
+                res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
+            end
+            return res
+        end
+    end
+
+
+
 
 
 
@@ -110,17 +136,13 @@ module M_evaluation_expr_tree
             n = length(children)
             lx = length(xs[1])
             res = Vector{T}(undef,number_x)
-
             temp = Array{T,2}(undef, n, number_x)
-
             for i in 1:n
                 view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
             end
-
             for i in 1:number_x
                 res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
             end
-
             return res
         end
     end
@@ -139,17 +161,13 @@ module M_evaluation_expr_tree
             n = length(children)
             lx = length(xs[1])
             res = Vector{T}(undef,number_x)
-
             temp = Array{T,2}(undef, n, number_x)
-
             for i in 1:n
                 view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
             end
-
             for i in 1:number_x
                 res[i] = trait_expr_node._evaluate_node(op,  view(temp,: ,i ) )
             end
-
             return res
         end
     end
