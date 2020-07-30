@@ -10,13 +10,15 @@ module variables
 
     import ..implementation_type_expr.t_type_expr_basic
     import ..interface_expr_node._get_type_node, ..interface_expr_node._get_var_index
-    import  ..interface_expr_node._evaluate_node, ..interface_expr_node._change_from_N_to_Ni!
+    import  ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!, ..interface_expr_node._change_from_N_to_Ni!
     import ..interface_expr_node._cast_constant!, ..interface_expr_node._node_to_Expr, ..interface_expr_node._node_to_Expr2
 
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 
     using ..implementation_type_expr
+
+    using  ..abstract_expr_node
 
 
     import Base.(==)
@@ -65,9 +67,10 @@ module variables
         return dic[v.index] :: T
     end
 
-    @inline function _evaluate_node(v :: variable, x :: AbstractVector{T}) where T <: Number
-        return @inbounds x[v.index]
-    end
+    @inline _evaluate_node(v :: variable, x :: AbstractVector{T}) where T <: Number = @inbounds x[v.index]
+
+    @inline _evaluate_node!(v :: variable, x :: AbstractVector{T}, ref :: myRef{T}) where T <: Number = @inbounds abstract_expr_node.set_myRef!(ref, x[v.index])
+
 
     function change_index( v :: MathOptInterface.VariableIndex, x :: AbstractVector{T}) where T <: Number
         return x[v.value]

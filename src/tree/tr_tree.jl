@@ -7,18 +7,18 @@ module trait_tree
     struct type_trait_tree end
     struct type_not_trait_tree end
 
-    is_type_trait_tree( a :: ab_tree) = type_trait_tree()
-    is_type_trait_tree( a :: Expr) = type_trait_tree()
-    is_type_trait_tree( a :: Number) = type_trait_tree()
-    is_type_trait_tree( a :: Any) = type_not_trait_tree()
+    @inline is_type_trait_tree( a :: ab_tree) = type_trait_tree()
+    @inline is_type_trait_tree( a :: Expr) = type_trait_tree()
+    @inline is_type_trait_tree( a :: Number) = type_trait_tree()
+    @inline is_type_trait_tree( a :: Any) = type_not_trait_tree()
 
-    get_node(a) = _get_node(a, is_type_trait_tree(a))
-    _get_node(a, b :: type_trait_tree) = _get_node(a)
-    _get_node(a, b :: type_not_trait_tree) = error(" The parameter is not a Tree")
+    @inline get_node(a) = _get_node(a, is_type_trait_tree(a))
+    @inline _get_node(a, b :: type_trait_tree) = _get_node(a)
+    @inline _get_node(a, b :: type_not_trait_tree) = error(" The parameter is not a Tree")
 
-    get_children(a) = _get_children(a, is_type_trait_tree(a))
-    _get_children(a, :: type_trait_tree) = _get_children(a)
-    _get_children(a, :: type_not_trait_tree) = error(" The parameter is not a Tree")
+    @inline get_children(a) = _get_children(a, is_type_trait_tree(a))
+    @inline _get_children(a, :: type_trait_tree) = _get_children(a)
+    @inline _get_children(a, :: type_not_trait_tree) = error(" The parameter is not a Tree")
 
     export get_node
     export get_children

@@ -10,10 +10,12 @@ module power_operators
     import ..implementation_type_expr.t_type_expr_basic
     using ..trait_type_expr
 
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
+    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!
 
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
+
+    using ..abstract_expr_node
 
     import Base.==
 
@@ -127,22 +129,32 @@ module power_operators
 
     @inline function _evaluate_node(op :: power_operator{Z}, value_ch :: AbstractVector{T}) where T <: Number where Z <: Number
         length(value_ch) == 1 || error("power has more than one argument")
-        # return @fastmath @inbounds ( value_ch[1]^(op.index) )
-        return ( value_ch[1]^(op.index) )
+        return value_ch[1]^(op.index)
+    end
+
+    @inline function _evaluate_node(op :: power_operator{T}, value_ch :: AbstractVector{T}) where T <: Number
+        length(value_ch) == 1 || error("power has more than one argument")
+        @inbounds @fastmath return value_ch[1]^(op.index) :: T
+    end
+
+    @inline function _evaluate_node!(op :: power_operator{Y}, value_ch :: AbstractVector{myRef{Y}}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number
+        length(value_ch) == 1 || error("power has more than one argument")
+        @inbounds @fastmath abstract_expr_node.set_myRef!(ref, value_ch[1]^(op.index) :: Y)
     end
 
 
-    function _evaluate_node(op :: power_operator{Z}, value_ch :: T) where T <: Number where Z <: Number
-        return @fastmath (T)( value_ch^(op.index) ) :: T
-    end
+    @inline _evaluate_node(op :: power_operator{Z}, value_ch :: T) where T <: Number where Z <: Number = @fastmath (T)( value_ch^(op.index) ) :: T
+    @inline _evaluate_node(op :: power_operator{T}, value_ch :: T) where T <: Number where Z <: Number = @fastmath  value_ch^(op.index) :: T
+
+    @inline _evaluate_node!(op :: power_operator{Y}, value_ch :: Y, ref :: abstract_expr_node.myRef{Y}) where Y <: Number = @fastmath abstract_expr_node.set_myRef!(ref, value_ch^(op.index) :: Y)
 
     function _node_to_Expr(op :: power_operator{T}) where T <: Number
         return [:^, op.index]
     end
 
     function _cast_constant!(op :: power_operator{T}, t :: DataType) where T <: Number
-        op.index = (t)(op.index)
-        return power_operator{t}(t(op.index))
+        new_index = (t)(op.index)
+        return power_operator{t}(new_index)
     end
 
     export operator

@@ -10,11 +10,12 @@ module plus_operators
     import ..implementation_type_expr.t_type_expr_basic
     using ..trait_type_expr
 
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
+    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!
 
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 
+    using ..abstract_expr_node
 
     import Base.==
 
@@ -77,9 +78,8 @@ module plus_operators
 
     (==)(a :: plus_operator, b :: plus_operator) = true
 
-    @inline function _evaluate_node(op :: plus_operator, value_ch :: AbstractVector{T}) where T <: Number
-        return @fastmath sum(value_ch)
-    end
+    @inline _evaluate_node(op :: plus_operator, value_ch :: AbstractVector{T}) where T <: Number = @fastmath sum(value_ch)
+    @inline _evaluate_node!(op :: plus_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number = @fastmath abstract_expr_node.set_myRef!(ref, sum(value_ch))
 
 
     function _node_to_Expr(op :: plus_operator)

@@ -10,10 +10,11 @@ module times_operators
     import ..implementation_type_expr.t_type_expr_basic
     using ..trait_type_expr
 
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
+    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!
 
     import  ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
+    using  ..abstract_expr_node
 
     import Base.==
 
@@ -118,9 +119,10 @@ module times_operators
 
     (==)(a :: time_operator, b :: time_operator) = true
 
-    function _evaluate_node(op :: time_operator, value_ch :: AbstractVector{T}) where T <: Number
-        return foldl(*,value_ch)
-    end
+    @inline _evaluate_node(op :: time_operator, value_ch :: AbstractVector{T}) where T <: Number = @fastmath @inbounds foldl(*,value_ch)
+
+    @inline _evaluate_node!(op :: time_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{Y}}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, @fastmath @inbounds foldl(*,value_ch) )
+
 
 
     function _node_to_Expr(op :: time_operator)

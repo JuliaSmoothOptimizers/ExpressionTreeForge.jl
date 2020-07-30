@@ -12,14 +12,14 @@ module implementation_tree
         children :: Vector{type_node{T}}
     end
 
-    create_tree( field :: T, children :: Vector{type_node{T}}) where T = type_node{T}(field,children)
-    create_tree( field :: T, children :: Array{Any,1}) where T = type_node{T}(field,children)
+    @inline create_tree( field :: T, children :: Vector{type_node{T}}) where T = type_node{T}(field,children)
+    @inline create_tree( field :: T, children :: Array{Any,1}) where T = type_node{T}(field,children)
 
-    _get_node(tree :: type_node{T}) where T = tree.field
+    @inbounds @inline _get_node(tree :: type_node{T}) where T = tree.field
 
-    _get_children(tree :: type_node{T} ) where T = tree.children
+    @inline _get_children(tree :: type_node{T} ) where T = tree.children
 
-    (==)(a :: type_node{T}, b :: type_node{T}) where T = equal_tree(a,b)
+    @inline (==)(a :: type_node{T}, b :: type_node{T}) where T = equal_tree(a,b)
 
     function equal_tree(a :: type_node{T}, b :: type_node{T}, eq :: Atomic{Bool}=Atomic{Bool}(true)) where T
         if eq[]

@@ -195,12 +195,12 @@ This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,
     cast_type_of_constant(expr_tree, t)
 Cast the constant of the expression tree expr_tree to the type t.
 """
-    cast_type_of_constant!(expr_tree, t :: DataType) = _cast_type_of_constant!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), t)
-    _cast_type_of_constant!(expr_tree, :: trait_expr_tree.type_not_expr_tree, t :: DataType) =  error("this is not an expr tree")
-    _cast_type_of_constant!(expr_tree, :: trait_expr_tree.type_expr_tree, t :: DataType) =  _cast_type_of_constant!(expr_tree, t)
+    cast_type_of_constant(expr_tree, t :: DataType) = _cast_type_of_constant(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), t)
+    _cast_type_of_constant(expr_tree, :: trait_expr_tree.type_not_expr_tree, t :: DataType) =  error("this is not an expr tree")
+    _cast_type_of_constant(expr_tree, :: trait_expr_tree.type_expr_tree, t :: DataType) =  _cast_type_of_constant(expr_tree, t)
 # On chercher à caster les constantes de l'arbre au type t, on va donc parcourir l'arbre jusqu'à arriver aux feuilles
 # où nous réaliserons l'opération de caster au type t une constante individuellement .
-    function _cast_type_of_constant!(expr_tree, t :: DataType)
+    function _cast_type_of_constant(expr_tree, t :: DataType)
         # work_tree = trait_expr_tree.transform_to_expr_tree(expr_tree)
         # hl_trait_expr_tree._cast_type_of_constant(work_tree,t)
         hl_trait_expr_tree._cast_type_of_constant(expr_tree,t)

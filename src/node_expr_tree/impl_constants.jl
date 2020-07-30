@@ -5,7 +5,7 @@ module constants
 
     import  ..interface_expr_node._node_is_constant, ..interface_expr_node._node_is_variable,..interface_expr_node._node_is_operator
     import ..interface_expr_node._node_is_sin, ..interface_expr_node._node_is_cos, ..interface_expr_node._node_is_tan
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._change_from_N_to_Ni!
+    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!, ..interface_expr_node._change_from_N_to_Ni!
     import ..interface_expr_node._cast_constant!, ..interface_expr_node._node_to_Expr, ..interface_expr_node._node_to_Expr2
 
     using ..implementation_type_expr
@@ -14,6 +14,7 @@ module constants
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 
+    using  ..abstract_expr_node
 
     import Base.==
 
@@ -67,8 +68,14 @@ module constants
     end
 
     function _evaluate_node(c :: constant{Y}, x :: AbstractVector{T}) where Y <: Number where T <: Number
+        @show "non"
         return (c.value)
     end
+
+    @inline _evaluate_node(c :: constant{Y}, x :: AbstractVector{Y}) where Y <: Number =  c.value :: Y
+
+    @inline _evaluate_node!(c :: constant{Y}, x :: AbstractVector{Y}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, c.value :: Y)
+
 
     _change_from_N_to_Ni!(v :: Number, dic_new_var :: Dict{Int,Int}) = ()
     _change_from_N_to_Ni!(c :: constant{Y}, dic_new_var :: Dict{Int,Int}) where Y <: Number = ()
@@ -80,7 +87,8 @@ module constants
         # c.value = (t)(c.value)
         # c.value = convert(t, c.value)/
         # @show "_tadaa", c.value, typeof(c.value),c ,typeof(c)
-        return convert(constant{t},c)
+        # return convert(constant{t},c)
+        return constant{t}((t)(c.value))
     end
 
     function _cast_constant!(c :: Number, t :: DataType)

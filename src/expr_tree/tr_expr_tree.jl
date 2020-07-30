@@ -1,6 +1,6 @@
 module trait_expr_tree
 
-    using ..abstract_expr_tree, ..implementation_expr_tree, ..implementation_complete_expr_tree
+    using ..abstract_expr_tree, ..implementation_expr_tree, ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
 
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_node
@@ -19,6 +19,7 @@ module trait_expr_tree
     is_expr_tree(a :: Number) = type_expr_tree()
     is_expr_tree(:: Number) = type_expr_tree()
     is_expr_tree(a :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = type_expr_tree()
+    is_expr_tree(:: implementation_pre_compiled_tree.new_tree{T}) where T <: Number = type_expr_tree()
     is_expr_tree(a :: Any) = type_not_expr_tree()
     function is_expr_tree(t :: DataType)
         if t == abstract_expr_tree.ab_ex_tr || t == t_expr_tree || t == Expr || t == Number
@@ -166,17 +167,17 @@ module hl_trait_expr_tree
         nd = trait_expr_tree.get_expr_node(ex)
         if isempty(ch)
             treated_nd = trait_expr_node._cast_constant!(nd,t)
-            new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd)
+            new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd,t)
             return implementation_complete_expr_tree.create_complete_expr_tree(new_nd)
         elseif trait_expr_node.node_is_power(nd)
             treated_nd = trait_expr_node._cast_constant!(nd,t)
-            new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd)
+            new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd,t)
             treated_ch = _cast_type_of_constant.(ch,t)
             new_ch = implementation_complete_expr_tree.create_complete_expr_tree.(treated_ch)
             return implementation_complete_expr_tree.create_complete_expr_tree(new_nd,new_ch)
         else
             new_ch = _cast_type_of_constant.(ch,t)
-            new_nd = implementation_complete_expr_tree.create_complete_node(nd)
+            new_nd = implementation_complete_expr_tree.create_complete_node(nd,t)
             new_ex = implementation_complete_expr_tree.create_complete_expr_tree(new_nd, new_ch)
             return new_ex
         end

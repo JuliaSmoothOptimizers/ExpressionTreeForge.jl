@@ -1,7 +1,7 @@
 module M_evaluation_expr_tree
 
     using ..trait_expr_tree, ..trait_expr_node
-    using ..implementation_expr_tree, ..implementation_complete_expr_tree
+    using ..implementation_expr_tree, ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
     using ..abstract_expr_node
 
 
@@ -58,6 +58,9 @@ module M_evaluation_expr_tree
             return trait_expr_node._evaluate_node(op,  temp)
         end
     end
+
+    @inline _evaluate_expr_tree(tree :: implementation_pre_compiled_tree.new_tree{T} , x  :: AbstractVector{T}) where T <: Number = implementation_pre_compiled_tree.evaluate_new_tree(tree, x)
+
 
 
     @inline function _evaluate_expr_tree_multiple_points(expr_tree :: implementation_expr_tree.t_expr_tree ,
@@ -123,8 +126,8 @@ module M_evaluation_expr_tree
         end
     end
 
-    @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
-                                        xs  :: Array{SubArray{T,1,Array{T,1},N,true},1}) where N where T <: Number
+    function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
+                                                 xs  :: Array{SubArray{T,1,Array{T,1},N,true},1}) where N where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
         if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false
@@ -148,8 +151,8 @@ module M_evaluation_expr_tree
     end
 
 
-    @inline function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
-                                        xs  ::  Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number
+    function _evaluate_expr_tree_multiple_points(expr_tree_cmp :: implementation_complete_expr_tree.complete_expr_tree,
+                                                 xs  ::  Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree_cmp) :: trait_expr_node.ab_ex_nd
         number_x = length(xs)
         if trait_expr_node.node_is_operator(op :: trait_expr_node.ab_ex_nd) :: Bool == false

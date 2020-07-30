@@ -131,7 +131,7 @@ element_fun_from_N_to_Ni!(a :: Any, v :: AbstractVector{Int}) = algo_expr_tree.e
     cast_type_of_constant(expr_tree, t)
 Cast the constant of the Calculus tree expr_tree to the type t.
 """
-cast_type_of_constant(ex :: Any ,t :: DataType) = algo_expr_tree.cast_type_of_constant!(ex, t)
+cast_type_of_constant(ex :: Any ,t :: DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
 
 
 
