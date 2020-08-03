@@ -59,7 +59,7 @@ module M_evaluation_expr_tree
         end
     end
 
-    @inline _evaluate_expr_tree(tree :: implementation_pre_compiled_tree.new_tree{T} , x  :: AbstractVector{T}) where T <: Number = implementation_pre_compiled_tree.evaluate_new_tree(tree, x)
+    @inline _evaluate_expr_tree(tree :: implementation_pre_compiled_tree.pre_compiled_tree{T} , x  :: AbstractVector{T}) where T <: Number = implementation_pre_compiled_tree.evaluate_pre_compiled_tree(tree, x)
 
 
 

@@ -8,7 +8,7 @@ module frac_operators
     import ..interface_expr_node._cast_constant!, ..interface_expr_node._node_to_Expr
 
     import ..implementation_type_expr.t_type_expr_basic
-    using ..trait_type_expr
+    using ..trait_type_expr, ..implementation_type_expr
 
     import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
 

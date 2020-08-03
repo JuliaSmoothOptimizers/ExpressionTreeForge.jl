@@ -99,13 +99,11 @@ module power_operators
     end
 
 
-    function create_node_expr(op :: Symbol, arg :: T , ::Bool) where T <: Number
-        return power_operator{T}(arg)
-    end
+    @inline create_node_expr(op :: Symbol, arg :: T , ::Bool) where T <: Number = power_operator{T}(arg)
+    @inline create_node_expr(op :: power_operator{T} ) where T <: Number= power_operator{T}(op.index)
+    @inline create_node_expr(op :: Symbol, arg :: T , x :: AbstractVector{T}, ::Bool) where T <: Number = power_operator{T}(arg)
+    @inline create_node_expr(op :: power_operator{T}, x :: AbstractVector{T} ) where T <: Number= power_operator{T}(op.index)
 
-    function create_node_expr(op :: power_operator{T} ) where T <: Number
-        return power_operator{T}(op.index)
-    end
 
     _node_is_operator( op :: power_operator{T} ) where T <: Number= true
     _node_is_plus( op :: power_operator{T} ) where T <: Number = false

@@ -31,13 +31,11 @@ module constants
     _node_convexity(c :: constant{T}) where T <: Number = implementation_convexity_type.constant_type()
 
 
-    function create_node_expr(x :: T ) where T <: Number
-        return constant{T}(x)
-    end
+    @inline create_node_expr(x :: T ) where T <: Number = constant{T}(x)
+    @inline create_node_expr(c :: constant{T} ) where T <: Number = constant{T}(c.value)
+    @inline create_node_expr(c :: T, x :: AbstractVector{T} ) where T <: Number = constant{T}(c)
+    @inline create_node_expr(c :: constant{T}, x :: AbstractVector{T} ) where T <: Number = constant{T}(c.value)
 
-    function create_node_expr(c :: constant{T} ) where T <: Number
-        return constant{T}(c.value)
-    end
 
 
     _node_is_operator( c :: constant{T}) where T <: Number = false
@@ -63,18 +61,13 @@ module constants
         return (T)(c.value) :: T
     end
 
-    function _evaluate_node(c :: constant{Y}, dic :: Dict{Int, T where T <: Number}) where Y <: Number
-        return c.value :: Y
-    end
 
-    function _evaluate_node(c :: constant{Y}, x :: AbstractVector{T}) where Y <: Number where T <: Number
-        @show "non"
-        return (c.value)
-    end
-
+    @inline _evaluate_node(c :: constant{Y}, dic :: Dict{Int, T where T <: Number}) where Y <: Number = c.value :: Y
+    @inline _evaluate_node(c :: constant{Y}, x :: AbstractVector{T}) where Y <: Number where T <: Number = (c.value)
     @inline _evaluate_node(c :: constant{Y}, x :: AbstractVector{Y}) where Y <: Number =  c.value :: Y
-
+    @inline _evaluate_node(c :: constant{Y}) where Y <: Number =  c.value :: Y
     @inline _evaluate_node!(c :: constant{Y}, x :: AbstractVector{Y}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, c.value :: Y)
+    @inline _evaluate_node!(c :: constant{Y}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, c.value :: Y)
 
 
     _change_from_N_to_Ni!(v :: Number, dic_new_var :: Dict{Int,Int}) = ()

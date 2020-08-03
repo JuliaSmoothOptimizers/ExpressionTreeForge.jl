@@ -28,21 +28,21 @@ module variables
         index :: Int
     end
 
+    @inline get_name(v :: variable) = v.name
+    @inline get_index(v :: variable) = v.index
+    @inline get_value(v :: variable, x :: AbstractVector{T}) where T <: Number = x[get_index(v)]
+
     _node_bound(v :: variable, t :: DataType) = ((t)(-Inf), (t)(Inf))
 
     _node_convexity(v :: variable) = implementation_convexity_type.linear_type()
 
-    function create_node_expr(n :: Symbol, id :: Int)
-        return variable(n, id)
-    end
+    create_node_expr(n :: Symbol, id :: Int) = variable(n, id)
+    create_node_expr(n :: Symbol, id :: MathOptInterface.VariableIndex) = variable(n, id.value)
+    create_node_expr(v :: variable) = variable(v.name, v.index)
 
-    function create_node_expr(n :: Symbol, id :: MathOptInterface.VariableIndex)
-        return variable(n, id.value)
-    end
-
-    function create_node_expr(v :: variable)
-        return variable(v.name, v.index)
-    end
+    create_node_expr(n :: Symbol, id :: Int, x :: AbstractVector{Y}) where Y <: Number = variable(n, id)
+    create_node_expr(n :: Symbol, id :: MathOptInterface.VariableIndex, x :: AbstractVector{Y}) where Y <: Number = variable(n, id.value)
+    create_node_expr(v :: variable, x :: AbstractVector{Y}) where Y <: Number = variable(v.name, v.index)
 
     _node_is_operator( v :: variable) = false
     _node_is_plus( v :: variable) = false
@@ -69,7 +69,7 @@ module variables
 
     @inline _evaluate_node(v :: variable, x :: AbstractVector{T}) where T <: Number = @inbounds x[v.index]
 
-    @inline _evaluate_node!(v :: variable, x :: AbstractVector{T}, ref :: myRef{T}) where T <: Number = @inbounds abstract_expr_node.set_myRef!(ref, x[v.index])
+    @inbounds @inline _evaluate_node!(v :: variable, x :: AbstractVector{T}, ref :: myRef{T}) where T <: Number =  abstract_expr_node.set_myRef!(ref, get_value(v,x))
 
 
     function change_index( v :: MathOptInterface.VariableIndex, x :: AbstractVector{T}) where T <: Number

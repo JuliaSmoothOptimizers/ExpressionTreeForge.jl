@@ -43,5 +43,29 @@ module simple_operators
     end
 
 
+
+function create_node_expr(op :: Symbol, x :: AbstractVector{Y}) where Y <: Number
+        if op == :+
+            plus_operators.plus_operator()
+        elseif op == :-
+            minus_operators.minus_operator()
+        elseif op ==:*
+            times_operators.time_operator()
+        elseif op ==:/
+            frac_operators.frac_operator()
+        elseif op == :sin
+            sinus_operators.sinus_operator()
+        elseif op == :tan
+            tan_operators.tan_operator()
+        elseif op == :cos
+            cos_operators.cos_operator()
+        elseif op == :exp
+            exp_operators.exp_operator()
+        else
+            return simple_operator(op)
+        end
+    end
+
+
     export operator
 end
