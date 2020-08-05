@@ -13,7 +13,8 @@ module simple_operators
     using ..implementation_type_expr
     using ..trait_type_expr
 
-    using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators, ..tan_operators, ..cos_operators, ..exp_operators, ..frac_operators
+    using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators
+    using ..tan_operators, ..cos_operators, ..exp_operators, ..frac_operators
 
     mutable struct simple_operator <: ab_ex_nd
         op :: Symbol

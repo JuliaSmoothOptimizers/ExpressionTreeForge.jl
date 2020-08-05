@@ -7,9 +7,10 @@ module abstract_expr_node
     create_node_expr() = error("c'est une erreur ")
 
 
-    import Base.+
-    import Base.*
+    import Base.+, Base.-
+    import Base.*, Base./
     import Base.^
+    import Base.sin, Base.tan, Base.cos, Base.exp
 
 
     mutable struct myRef{Y <: Number}
@@ -32,18 +33,31 @@ module abstract_expr_node
     @inline set_myRef!(ref :: myRef{Y}, value :: Y) where Y <: Number = ref.value = value
     @inline get_myRef(ref :: myRef{Y}) where Y <: Number = ref.value :: Y
 
-    @inline +(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = get_myRef(ref1) + get_myRef(ref2)
-    @inline +(value :: Y, ref :: myRef{Y}) where Y <: Number = value + get_myRef(ref)
-    @inline +(ref :: myRef{Y}, value :: Y) where Y <: Number = value + get_myRef(ref)
+    @inline +(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = @fastmath get_myRef(ref1) + get_myRef(ref2)
+    @inline +(value :: Y, ref :: myRef{Y}) where Y <: Number = @fastmath value + get_myRef(ref)
+    @inline +(ref :: myRef{Y}, value :: Y) where Y <: Number = @fastmath value + get_myRef(ref)
 
-    @inline *(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = get_myRef(ref1) * get_myRef(ref2)
-    @inline *(value :: Y, ref :: myRef{Y}) where Y <: Number = value * get_myRef(ref)
-    @inline *(ref :: myRef{Y}, value :: Y) where Y <: Number = value * get_myRef(ref)
+    @inline -(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = @fastmath  get_myRef(ref1) - get_myRef(ref2)
+    @inline -(value :: Y, ref :: myRef{Y}) where Y <: Number = @fastmath value - get_myRef(ref)
+    @inline -(ref :: myRef{Y}, value :: Y) where Y <: Number =  @fastmath get_myRef(ref) - value
+    @inline -(ref :: myRef{Y}) where Y <: Number =  @fastmath - get_myRef(ref)
 
-    @inline ^(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = get_myRef(ref1) ^ get_myRef(ref2)
-    @inline ^(value :: Y, ref :: myRef{Y}) where Y <: Number = value ^ get_myRef(ref)
-    @inline ^(ref :: myRef{Y}, value :: Y) where Y <: Number =  get_myRef(ref) ^ value
+    @inline *(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = @fastmath get_myRef(ref1) * get_myRef(ref2)
+    @inline *(value :: Y, ref :: myRef{Y}) where Y <: Number = @fastmath value * get_myRef(ref)
+    @inline *(ref :: myRef{Y}, value :: Y) where Y <: Number = @fastmath value * get_myRef(ref)
 
+    @inline /(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = @fastmath get_myRef(ref1) / get_myRef(ref2)
+    @inline /(value :: Y, ref :: myRef{Y}) where Y <: Number = @fastmath value / get_myRef(ref)
+    @inline /(ref :: myRef{Y}, value :: Y) where Y <: Number = @fastmath get_myRef(ref) / value
+
+    @inline ^(ref1 :: myRef{Y}, ref2 :: myRef{Y}) where Y <: Number = @fastmath get_myRef(ref1) ^ get_myRef(ref2)
+    @inline ^(value :: Y, ref :: myRef{Y}) where Y <: Number = @fastmath value ^ get_myRef(ref)
+    @inline ^(ref :: myRef{Y}, value :: Y) where Y <: Number =  @fastmath get_myRef(ref) ^ value
+
+    @inline sin( ref :: myRef{Y}) where Y <: Number = @fastmath sin(get_myRef(ref))
+    @inline tan( ref :: myRef{Y}) where Y <: Number = @fastmath tan(get_myRef(ref))
+    @inline cos( ref :: myRef{Y}) where Y <: Number = @fastmath cos(get_myRef(ref))
+    @inline exp( ref :: myRef{Y}) where Y <: Number = @fastmath exp(get_myRef(ref))
 
     export ab_ex_nd, create_node_expr
 

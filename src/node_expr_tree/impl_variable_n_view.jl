@@ -41,8 +41,9 @@ module variables_n_view
     _node_convexity(v :: variable_n_view{Y}) where Y <: Number = implementation_convexity_type.linear_type()
 
     @inline create_node_expr(n :: Symbol, id :: Int, multiple_x :: Vector{Vector{Y}}) where Y <: Number = variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x) )
-    # @inline create_node_expr(v :: variable_view{Y}, x :: AbstractVector{Y}) where Y <: Number = variable_view(v.name, v.index, view(x, [v.index]) )
     @inline create_node_expr(v :: variables.variable, multiple_x :: Vector{Vector{Y}}) where Y <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x )
+    # @inline create_node_expr(n :: Symbol, id :: Int, multiple_x :: Vector{Vector{Y}}) where Y <: Number = variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x) )
+    # @inline create_node_expr(v :: variables.variable, multiple_x :: Vector{Vector{Y}}) where Y <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x )
 
     # (SubArray{Y,1,Array{Y,1},Tuple{Array{Int64,1}},false} where Y <: Number) <: (AbstractVector{Y} where Y <: Number)
 
@@ -68,7 +69,7 @@ module variables_n_view
 
 
     @inline _evaluate_node!(v :: variable_n_view{Y}, ref :: abstract_expr_node.myRef{Y}, i :: Int) where Y <: Number = abstract_expr_node.set_myRef!(ref, get_value(v, i ))
-    @inline _evaluate_node!(v :: variable_n_view{Y}, multiple_ref :: AbstractVector{abstract_expr_node.myRef{Y}}) where Y <: Number =  begin for i in [1:length(multiple_ref);] _evaluate_node!(v, multiple_ref[i], i) end end 
+    @inline _evaluate_node!(v :: variable_n_view{Y}, multiple_ref :: AbstractVector{abstract_expr_node.myRef{Y}}) where Y <: Number =  begin for i in [1:length(multiple_ref);] _evaluate_node!(v, multiple_ref[i], i) end end
 
 
     # change_index( v :: MathOptInterface.VariableIndex, x :: AbstractVector{T}) where T <: Number = x[v.value]

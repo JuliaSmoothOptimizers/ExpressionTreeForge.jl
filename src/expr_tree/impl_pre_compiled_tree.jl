@@ -132,6 +132,8 @@ module implementation_pre_compiled_tree
                 ref = get_tmp_from_node(node,i)
                 evaluate_new_node!(child, ref)
             end
+            tmp_vector= get_tmp_vector_from_node(node)
+            # @show op , tmp, tmp_vector[1] / tmp_vector[2] 
             trait_expr_node._evaluate_node!(op, get_tmp_vector_from_node(node), tmp)
         end
     end

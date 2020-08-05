@@ -10,13 +10,14 @@ module frac_operators
     import ..implementation_type_expr.t_type_expr_basic
     using ..trait_type_expr, ..implementation_type_expr
 
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
+    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!
 
 
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
 
     import Base.==
+    using ..abstract_expr_node
 
     mutable struct frac_operator <: ab_ex_nd
 
@@ -109,9 +110,14 @@ module frac_operators
 
     (==)(a :: frac_operator, b :: frac_operator) = true
 
-    function _evaluate_node(op :: frac_operator, value_ch :: AbstractVector{T}) where T <: Number
-        return value_ch[1] / value_ch[2]
+    @inline _evaluate_node(op :: frac_operator, value_ch :: AbstractVector{T}) where T <: Number = value_ch[1] / value_ch[2]
+    @inline _evaluate_node!(op :: frac_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number = abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
+    @inline function _evaluate_node!(op :: frac_operator, vec_value_ch :: Vector{Vector{abstract_expr_node.myRef{T}}}, vec_ref :: Vector{abstract_expr_node.myRef{T}} ) where T <: Number
+        for i in 1:length(vec_value_ch)
+           _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
+        end
     end
+
 
     function _node_to_Expr(op :: frac_operator)
         return [:/]

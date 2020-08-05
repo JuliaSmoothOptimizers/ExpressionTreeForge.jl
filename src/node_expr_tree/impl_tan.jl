@@ -10,12 +10,12 @@ module tan_operators
     import ..implementation_type_expr.t_type_expr_basic
     using ..trait_type_expr
 
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node
+    import ..interface_expr_node._get_type_node, ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!
 
     using ..implementation_type_expr
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
     using ..implementation_convexity_type
-
+    using ..abstract_expr_node
 
     import Base.==
 
@@ -67,6 +67,17 @@ module tan_operators
     function _evaluate_node(op :: tan_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for tan")
         return tan(value_ch[1])
+    end
+
+    @inline function _evaluate_node!(op :: tan_operator, value_ch :: AbstractVector{myRef{Y}}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number
+        length(value_ch) == 1 || error("power has more than one argument")
+        @inbounds @fastmath abstract_expr_node.set_myRef!(ref, tan(value_ch[1]) )
+    end
+
+    @inline function _evaluate_node!(op :: tan_operator, vec_value_ch :: Vector{Vector{myRef{Y}}}, vec_ref :: Vector{abstract_expr_node.myRef{Y}}) where Y <: Number
+        for i in 1:length(vec_value_ch)
+             _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
+        end
     end
 
 

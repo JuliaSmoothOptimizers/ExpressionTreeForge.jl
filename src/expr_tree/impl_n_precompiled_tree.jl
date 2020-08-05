@@ -57,6 +57,11 @@ module implementation_pre_n_compiled_tree
 
 
 
+    function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
+        multiple_x = map(view_x -> Array(view_x), multiple_x_view)
+        create_pre_n_compiled_tree(tree, multiple_x)
+    end
+
     function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x :: Vector{Vector{T}}) where T <: Number
         tree = _create_pre_n_compiled_tree(tree, multiple_x)
         tmp = create_new_vector_myRef(length(multiple_x), T)
@@ -79,6 +84,22 @@ module implementation_pre_n_compiled_tree
         end
     end
 
+
+
+
+
+
+
+    function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
+        n_eval = length(multiple_x_view)
+        n_eval == get_multiple(tree) || error("mismatch of the vector of point and the pre_compilation of the tree")
+        tree.multiple_x .= multiple_x_view
+        racine = get_racine(tree)
+        vec_tmp = get_vec_tmp(tree)
+        evaluate_eval_n_node!(racine, vec_tmp)
+        res = sum(vec_tmp) :: T
+        return res :: T
+    end
 
 
     function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}, multiple_v :: Vector{Vector{T}}) where T <: Number
@@ -104,11 +125,6 @@ module implementation_pre_n_compiled_tree
                 vector_ref = get_tmp_for_n_eval_child(node,i)
                 evaluate_eval_n_node!(child, vector_ref)
             end
-            l_tmp = get_length_n_eval(node)
-            # for i in 1:l_tmp
-            #     vector_ref = get_tmp_eval_node(node,i)
-            #     trait_expr_node._evaluate_node!(op, vector_ref, tmp[i])
-            # end
             vec_values_children = get_vec_tmp_children(node)
             trait_expr_node._evaluate_node!(op, vec_values_children, tmp)
         end

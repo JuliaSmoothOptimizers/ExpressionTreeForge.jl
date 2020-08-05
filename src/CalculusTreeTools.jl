@@ -55,7 +55,7 @@ create_pre_compiled_tree(tree, x) = implementation_pre_compiled_tree.create_pre_
 
 pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}
 create_pre_n_compiled_tree(tree, x :: Vector{Vector{T}}) where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
-
+create_pre_n_compiled_tree(tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
 is_constant(t :: type_calculus_tree) = t == type_calculus_tree(0)
