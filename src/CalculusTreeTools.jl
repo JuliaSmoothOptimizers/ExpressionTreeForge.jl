@@ -46,6 +46,7 @@ is_convex(c) = implementation_convexity_type.is_convex(c)
 is_concave(c) = implementation_convexity_type.is_concave(c)
 is_unknown(c) = implementation_convexity_type.is_unknown(c)
 
+t_expr_tree = implementation_expr_tree.t_expr_tree
 
 create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
 complete_expr_tree{T <: Number} = implementation_complete_expr_tree.complete_expr_tree{T}
