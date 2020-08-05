@@ -2,6 +2,8 @@ module trait_expr_tree
 
     using ..abstract_expr_tree, ..implementation_expr_tree, ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
 
+    using ..implementation_pre_n_compiled_tree
+
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_node
     import ..interface_expr_tree._transform_to_expr_tree, ..interface_expr_tree._expr_tree_to_create
@@ -20,6 +22,7 @@ module trait_expr_tree
     is_expr_tree(:: Number) = type_expr_tree()
     is_expr_tree(a :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = type_expr_tree()
     is_expr_tree(a :: implementation_pre_compiled_tree.pre_compiled_tree{T}) where T <: Number = type_expr_tree()
+    is_expr_tree(a :: implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}) where T <: Number = type_expr_tree()
     is_expr_tree(a :: Any) = type_not_expr_tree()
     function is_expr_tree(t :: DataType)
         if t == abstract_expr_tree.ab_ex_tr || t == t_expr_tree || t == Expr || t == Number
@@ -130,21 +133,22 @@ module hl_trait_expr_tree
         tree_of_needed_type = trait_expr_tree.transform_to_Expr(original_ex)
     end
 
-    function _expr_tree_to_create(original_ex :: implementation_expr_tree.t_expr_tree, tree_of_needed_type :: implementation_expr_tree.t_expr_tree)
-        # return original_ex
-    end
+    _expr_tree_to_create(original_ex :: implementation_expr_tree.t_expr_tree, tree_of_needed_type :: implementation_expr_tree.t_expr_tree) = original_ex
 
 
     function _cast_type_of_constant( ex ::  implementation_expr_tree.t_expr_tree, t :: DataType)
         ch = trait_expr_tree.get_expr_children(ex)
         nd = trait_expr_tree.get_expr_node(ex)
         if isempty(ch)
-            trait_expr_node._cast_constant!(nd,t)
+            node = trait_expr_node._cast_constant!(nd,t)
+            return implementation_expr_tree.create_expr_tree(node)
         elseif trait_expr_node.node_is_power(nd)
-            trait_expr_node._cast_constant!(nd,t)
-            _cast_type_of_constant.(ch,t)
+            new_node = trait_expr_node._cast_constant!(nd,t)
+            new_ch = _cast_type_of_constant.(ch,t)
+            return implementation_expr_tree.create_expr_tree(new_node, new_ch)
         else
-            _cast_type_of_constant.(ch,t)
+            new_ch = _cast_type_of_constant.(ch,t)
+            return implementation_expr_tree.create_expr_tree(nd, new_ch)
         end
     end
 

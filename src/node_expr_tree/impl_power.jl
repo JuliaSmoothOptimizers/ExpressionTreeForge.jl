@@ -140,6 +140,12 @@ module power_operators
         @inbounds @fastmath abstract_expr_node.set_myRef!(ref, value_ch[1]^(op.index) :: Y)
     end
 
+    @inline function _evaluate_node!(op :: power_operator{Y}, vec_value_ch :: Vector{Vector{myRef{Y}}}, vec_ref :: Vector{abstract_expr_node.myRef{Y}}) where Y <: Number
+        for i in 1:length(vec_value_ch)
+             _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
+        end
+    end
+
 
     @inline _evaluate_node(op :: power_operator{Z}, value_ch :: T) where T <: Number where Z <: Number = @fastmath (T)( value_ch^(op.index) ) :: T
     @inline _evaluate_node(op :: power_operator{T}, value_ch :: T) where T <: Number where Z <: Number = @fastmath  value_ch^(op.index) :: T

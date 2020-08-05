@@ -4,6 +4,8 @@ module M_evaluation_expr_tree
     using ..implementation_expr_tree, ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
     using ..abstract_expr_node
 
+    using ..implementation_pre_n_compiled_tree
+
 
     using ForwardDiff
 
@@ -63,6 +65,8 @@ module M_evaluation_expr_tree
 
 
 
+
+
     @inline function _evaluate_expr_tree_multiple_points(expr_tree :: implementation_expr_tree.t_expr_tree ,
                                         xs  ::  Array{SubArray{T,1,Array{T,1},N,false},1}) where N where T <: Number
         op = trait_expr_tree.get_expr_node(expr_tree) :: trait_expr_node.ab_ex_nd
@@ -90,7 +94,7 @@ module M_evaluation_expr_tree
 
 
 
-
+@inline evaluate_expr_tree_multiple_points(tree :: implementation_pre_n_compiled_tree.pre_n_compiled_tree{T} , multiple_x :: Vector{Vector{T}}) where T <: Number = implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x)
 
 @inline evaluate_expr_tree_multiple_points(a :: Any, x :: Array{Array{T,1},1} )  where T <: Number = _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
 @inline _evaluate_expr_tree_multiple_points(a, :: trait_expr_tree.type_not_expr_tree, x :: Array{Array{T,1},1} )  where T <: Number = error(" This is not an Expr tree")

@@ -101,6 +101,19 @@ using Test
     @test CalculusTreeTools.get_bound(complete_tree) == CalculusTreeTools.get_bound(copy_tree)
     @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.get_convexity_status(copy_tree)
 
+
+    @testset "test sur l'opération cast " begin
+        type_test = [Float32, Float16, BigFloat, Float64]
+        for t in type_test
+            x = ones(t,n)
+            cast_new_tree = CalculusTreeTools.cast_type_of_constant(expr_tree,t)
+            cast_complete_tree = CalculusTreeTools.cast_type_of_constant(complete_tree,t)
+            obj_casted_ex_t = CalculusTreeTools.evaluate_expr_tree(cast_new_tree,x)
+            obj_casted_cp_t = CalculusTreeTools.evaluate_expr_tree(cast_complete_tree,x)
+            @test obj_casted_ex_t == obj_casted_cp_t
+            @test typeof(obj_casted_ex_t) == t && typeof(obj_casted_cp_t) == t
+        end
+    end
 end
 
 
@@ -156,4 +169,7 @@ end
     @test complete_tree2 != complete_tree5
     @test complete_tree3 != complete_tree5
     @test complete_tree4 != complete_tree5
+
+
+
 end

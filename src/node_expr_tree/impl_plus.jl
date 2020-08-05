@@ -80,6 +80,11 @@ module plus_operators
 
     @inline _evaluate_node(op :: plus_operator, value_ch :: AbstractVector{T}) where T <: Number = @fastmath sum(value_ch)
     @inline _evaluate_node!(op :: plus_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number = @fastmath abstract_expr_node.set_myRef!(ref, sum(value_ch))
+    @inline function _evaluate_node!(op :: plus_operator, vec_value_ch :: Vector{Vector{abstract_expr_node.myRef{T}}}, vec_ref :: Vector{abstract_expr_node.myRef{T}} ) where T <: Number
+        for i in 1:length(vec_value_ch)
+           _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
+        end
+    end
 
 
     function _node_to_Expr(op :: plus_operator)

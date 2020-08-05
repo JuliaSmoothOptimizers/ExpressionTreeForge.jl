@@ -123,7 +123,11 @@ module times_operators
 
     @inline _evaluate_node!(op :: time_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{Y}}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, @fastmath @inbounds foldl(*,value_ch) )
 
-
+    @inline function _evaluate_node!(op :: time_operator, vec_value_ch :: Vector{Vector{abstract_expr_node.myRef{Y}}}, vec_ref :: Vector{abstract_expr_node.myRef{Y}}) where Y <: Number
+        for i in 1:length(vec_value_ch)
+            _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
+        end
+    end
 
     function _node_to_Expr(op :: time_operator)
         return [:*]

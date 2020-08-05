@@ -9,7 +9,8 @@ include("expr_tree/ordered_include.jl")
 
 using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .implementation_type_expr
 using .algo_tree
-using .implementation_complete_expr_tree, .implementation_pre_compiled_tree
+using .implementation_complete_expr_tree, .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
+
 
 using .bound_propagations
 using .convexity_detection
@@ -51,6 +52,9 @@ complete_expr_tree{T <: Number} = implementation_complete_expr_tree.complete_exp
 
 pre_compiled_tree{T <: Number} = implementation_pre_compiled_tree.pre_compiled_tree{T}
 create_pre_compiled_tree(tree, x) = implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
+
+pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}
+create_pre_n_compiled_tree(tree, x :: Vector{Vector{T}}) where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
 
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
