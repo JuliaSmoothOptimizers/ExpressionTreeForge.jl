@@ -6,11 +6,13 @@ module implementation_complete_expr_tree
     using ..abstract_expr_tree
     using ..trait_tree
     using ..implementation_convexity_type
-
+    using ..interface_expr_tree
+    using ..implementation_expr_tree
     import ..abstract_expr_tree.create_expr_tree, ..abstract_expr_tree.create_Expr, ..abstract_expr_tree.create_Expr2
     import ..interface_expr_tree._inverse_expr_tree
 
     import ..implementation_tree.type_node
+
 
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
@@ -43,7 +45,7 @@ module implementation_complete_expr_tree
     @inline create_complete_expr_tree(cn :: complete_node{T}, ch :: AbstractVector{complete_expr_tree{T}}) where T <: Number = complete_expr_tree{T}(cn,ch)
     @inline create_complete_expr_tree(cn :: complete_node{T}) where T <: Number = create_complete_expr_tree(cn, Vector{complete_expr_tree{T}}(undef,0) )
     @inline create_complete_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = ex
-    function create_complete_expr_tree(t :: type_node{ab_ex_nd})
+    function create_complete_expr_tree(t :: implementation_expr_tree.type_node{T}) where T <: ab_ex_nd
         nd = trait_tree.get_node(t)
         ch = trait_tree.get_children(t)
         if isempty(ch)
@@ -56,22 +58,19 @@ module implementation_complete_expr_tree
         end
     end
 
-    # create_expr_tree(field :: complete_node{T}, children :: Vector{ type_node{complete_expr_tree{T}}} ) where T <: Number = complete_expr_tree(field, children)
-    @inline create_expr_tree(field :: complete_node{T}, children :: Vector{ type_node{complete_expr_tree{T}}} ) where T <: Number = create_complete_expr_tree(field, children)
+    @inline create_expr_tree( tree :: complete_expr_tree{T} ) where T <: Number = create_expr_tree( trait_tree.get_node(tree), trait_tree.get_children(tree) )
+    @inline create_expr_tree( field :: complete_node{T}, children :: Vector{ complete_expr_tree{T}} ) where T <: Number = abstract_expr_tree.create_expr_tree( get_op_from_node(field),  Vector{implementation_expr_tree.t_expr_tree}(create_expr_tree.(children))  )
+    @inline create_expr_tree( field :: complete_node{T} ) where T <: Number = abstract_expr_tree.create_expr_tree( get_op_from_node(field)) :: implementation_expr_tree.t_expr_tree
 
-    # create_expr_tree(field :: complete_node{T} ) where T <: Number = create_expr_tree(field, Vector{complete_expr_tree{T}}(undef,0))
-    @inline create_expr_tree(field :: complete_node{T} ) where T <: Number = create_complete_expr_tree(field, Vector{complete_expr_tree{T}}(undef,0))
-
-
-    @inline _get_expr_node(t :: complete_expr_tree) = get_op_from_node(trait_tree.get_node(t))
+    @inline _get_expr_node( t :: complete_expr_tree ) = get_op_from_node(trait_tree.get_node(t))
 
     @inline _get_expr_children(t :: complete_expr_tree) = trait_tree.get_children(t)
 
     @inline _get_real_node(ex :: complete_expr_tree{T}) where T <: Number = _get_expr_node(ex)
 
     @inline tuple_bound_from_tree(ex :: complete_expr_tree{T} ) where T <: Number = get_bounds(trait_tree._get_node(ex))
-
-    @inline _transform_to_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = abstract_expr_tree.create_expr_tree(get_op_from_node(trait_tree.get_node(ex)), _transform_to_expr_tree.(trait_tree.get_children(ex)) )
+    @inline _transform_to_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = create_expr_tree(ex)
+    # @inline _transform_to_expr_tree(ex :: complete_expr_tree{T}) where T <: Number = abstract_expr_tree.create_expr_tree(get_op_from_node(trait_tree.get_node(ex)), _transform_to_expr_tree.(trait_tree.get_children(ex)) )
 
     function create_Expr(t :: complete_expr_tree)
         nd = trait_tree.get_node(t)
@@ -105,13 +104,21 @@ module implementation_complete_expr_tree
 
     function Base.copy(ex :: complete_expr_tree{T}) where T <: Number
         nd = trait_tree.get_node(ex)
-        ch = trait_tree.get_children(ex)
+        ch = trait_tree.get_children(ex) :: Vector{complete_expr_tree{T}}
         if isempty(ch)
-            leaf = abstract_expr_tree.create_expr_tree(nd)
+            # leaf = abstract_expr_tree.create_expr_tree(nd)
+            # new_nd = create_complete_node(nd, T)
+            # leaf = create_complete_expr_tree(new_nd)
+            leaf = create_complete_expr_tree(nd)
             return leaf
         else
+            # @show ex
+            # @show ch
+            # @show nd
             res_ch = Base.copy.(ch)
             new_node = create_complete_node(get_op_from_node(nd), get_bounds_from_node(nd), nd.convexity_status)
+            # @show res_ch
+            # @show new_node
             return create_complete_expr_tree(new_node, res_ch)
         end
     end

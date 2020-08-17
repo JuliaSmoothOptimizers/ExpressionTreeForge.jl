@@ -92,6 +92,12 @@ This function is usefull in our algorithms to synchronise all the types satisfyi
     _transform_to_expr_tree(:: type_expr_tree, a :: T) where T = _transform_to_expr_tree(a) :: implementation_expr_tree.t_expr_tree
 
 
+
+"""
+    transform_to_Expr(ex)
+This function transform an expr_tree and transform it in Expr.
+    #Deprecated
+"""
     transform_to_Expr(ex) = _transform_to_Expr( trait_expr_tree.is_expr_tree(ex), ex)
     _transform_to_Expr( :: trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr(ex)
     _transform_to_Expr( :: trait_expr_tree.type_not_expr_tree, ex) = error("notre parametre n'est pas un arbre d'expression")

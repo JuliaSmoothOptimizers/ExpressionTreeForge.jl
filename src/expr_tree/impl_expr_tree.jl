@@ -59,22 +59,12 @@ module implementation_expr_tree
     end
 
 
-    function create_expr_tree(field :: ab_ex_nd, children :: Vector{ type_node{ab_ex_nd}} )
-        return t_expr_tree(field, children)
-    end
-
-    function create_expr_tree(field :: ab_ex_nd )
-        return t_expr_tree(field, [])
-    end
+    create_expr_tree( field :: T, children :: Vector{ type_node{T}} ) where T <: ab_ex_nd = length(children) == 0 ? create_expr_tree(field) : t_expr_tree(field, children)
+    create_expr_tree( field :: T ) where T <: ab_ex_nd = t_expr_tree(field, Vector{t_expr_tree}(undef,0) )
 
 
-    function _get_expr_node(t :: t_expr_tree)
-        return trait_tree.get_node(t)
-    end
-
-    function _get_expr_children(t :: t_expr_tree)
-        return trait_tree.get_children(t)
-    end
+    _get_expr_node(t :: t_expr_tree) = trait_tree.get_node(t)
+    _get_expr_children(t :: t_expr_tree) = trait_tree.get_children(t)
 
 
     function _inverse_expr_tree(t :: t_expr_tree)
@@ -82,6 +72,7 @@ module implementation_expr_tree
         new_node = abstract_expr_tree.create_expr_tree(op_minus, [t])
         return new_node
     end
+
 
     function _get_real_node(ex :: t_expr_tree)
         if isempty(_get_expr_children(ex))
@@ -91,12 +82,17 @@ module implementation_expr_tree
         end
     end
 
-    function _transform_to_expr_tree(ex :: t_expr_tree)
-        return ex :: t_expr_tree
-    end
+
+    _transform_to_expr_tree(ex :: t_expr_tree) = ex :: t_expr_tree
 
 
 
+
+
+
+#=
+    Overleading of Base operators
+=#
     function Base.copy(ex :: t_expr_tree)
         nd = trait_tree.get_node(ex)
         ch = trait_tree.get_children(ex)
@@ -106,7 +102,6 @@ module implementation_expr_tree
         else
             res_ch = Base.copy.(ch)
             new_node = abstract_expr_node.create_node_expr(nd)
-            # @show res_ch, ch, nd, new_node
             return create_expr_tree(new_node, res_ch)
         end
     end

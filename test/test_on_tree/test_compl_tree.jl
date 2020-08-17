@@ -102,7 +102,7 @@ using Test
     @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.get_convexity_status(copy_tree)
 
 
-    @testset "test sur l'opération cast " begin
+    @testset "test supp " begin
         type_test = [Float32, Float16, BigFloat, Float64]
         for t in type_test
             x = ones(t,n)
@@ -171,5 +171,29 @@ end
     @test complete_tree4 != complete_tree5
 
 
+
+end
+
+
+@testset " test un peu généraux" begin
+    θ = 1e-5
+    m = Model()
+    n = 15
+    @variable(m, x[1:n])
+    @NLobjective(m, Min, sum( (1/2) * ((x[j+1]/(x[j]^2)) * x[j+1]^3) for j in 1:n-1 ))
+
+    evaluator = JuMP.NLPEvaluator(m)
+    MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
+
+    v = ones(n)
+    Expr = MathOptInterface.objective_expr(evaluator)
+    expr_tree = CalculusTreeTools.transform_to_expr_tree(Expr)
+    complete_tree = CalculusTreeTools.create_complete_tree(expr_tree)
+
+    complete_tree_cp = copy(complete_tree)
+    expr_tree_trans = CalculusTreeTools.transform_to_expr_tree(complete_tree)
+
+    @test complete_tree_cp == complete_tree
+    @test expr_tree_trans == expr_tree
 
 end
