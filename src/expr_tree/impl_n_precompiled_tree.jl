@@ -38,6 +38,13 @@ module implementation_pre_n_compiled_tree
              tree.multiple_x[i] .= new_multiple_x[i]
         end
     end
+    function set_multiple_x!(tree :: pre_n_compiled_tree{T}, new_multiple_x :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
+        n = length(new_multiple_x)
+        n == length(tree.multiple_x) || error("error set_multiple_x!")
+        for i in 1:n
+             tree.multiple_x[i] .= new_multiple_x[i]
+        end
+    end
     @inline get_vec_tmp(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.vec_tmp
 
     @inline get_field_from_node(node :: eval_n_node{Y}) where Y <: Number = node.field
@@ -101,8 +108,9 @@ module implementation_pre_n_compiled_tree
     function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
         n_eval = length(multiple_x_view)
         n_eval == get_multiple(tree) || error("mismatch of the vector of point and the pre_compilation of the tree")
-        multiple_x = map(view_x -> Array(view_x), multiple_x_view)
-        set_multiple_x!(tree, multiple_x)
+        # multiple_x = map(view_x -> Array(view_x), multiple_x_view)
+        # set_multiple_x!(tree, multiple_x)
+        set_multiple_x!(tree, multiple_x_view)
         racine = get_racine(tree)
         vec_tmp = get_vec_tmp(tree)
         evaluate_eval_n_node!(racine, vec_tmp)
