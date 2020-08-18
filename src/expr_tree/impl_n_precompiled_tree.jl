@@ -31,6 +31,7 @@ module implementation_pre_n_compiled_tree
     @inline get_racine(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.racine
     @inline get_multiple(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.multiple
     @inline get_multiple_x(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.multiple_x
+    @inline set_multiple_x!(tree :: pre_n_compiled_tree{Y}, new_multiple_x :: Vector{Vector{Y}}) where Y <: Number = tree.multiple_x .= new_multiple_x
     @inline get_vec_tmp(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.vec_tmp
 
     @inline get_field_from_node(node :: eval_n_node{Y}) where Y <: Number = node.field
@@ -63,9 +64,10 @@ module implementation_pre_n_compiled_tree
     end
 
     function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x :: Vector{Vector{T}}) where T <: Number
-        tree = _create_pre_n_compiled_tree(tree, multiple_x)
-        tmp = create_new_vector_myRef(length(multiple_x), T)
-        pre_n_compiled_tree{T}( tree, multiple_x, length(multiple_x), tmp)
+        new_multiple_x = copy(multiple_x)
+        compiled_tree = _create_pre_n_compiled_tree(tree, new_multiple_x)
+        tmp = create_new_vector_myRef(length(new_multiple_x), T)
+        pre_n_compiled_tree{T}(compiled_tree, new_multiple_x, length(new_multiple_x), tmp)
     end
 
     function _create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x :: Vector{Vector{T}}) where T <: Number
@@ -94,7 +96,7 @@ module implementation_pre_n_compiled_tree
         n_eval = length(multiple_x_view)
         n_eval == get_multiple(tree) || error("mismatch of the vector of point and the pre_compilation of the tree")
         multiple_x = map(view_x -> Array(view_x), multiple_x_view)
-        tree.multiple_x .= multiple_x
+        set_multiple_x!(tree, multiple_x)
         racine = get_racine(tree)
         vec_tmp = get_vec_tmp(tree)
         evaluate_eval_n_node!(racine, vec_tmp)
@@ -106,7 +108,7 @@ module implementation_pre_n_compiled_tree
     function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}, multiple_v :: Vector{Vector{T}}) where T <: Number
         n_eval = length(multiple_v)
         n_eval == get_multiple(tree) || error("mismatch of the vector of point and the pre_compilation of the tree")
-        tree.multiple_x .= multiple_v
+        set_multiple_x!(tree, multiple_v)
         racine = get_racine(tree)
         vec_tmp = get_vec_tmp(tree)
         evaluate_eval_n_node!(racine, vec_tmp)
