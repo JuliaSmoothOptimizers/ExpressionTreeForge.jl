@@ -71,10 +71,46 @@ module implementation_pre_n_compiled_tree
 
 
 
+    # function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
+    #     multiple_x = map(view_x -> Array(view_x), multiple_x_view)
+    #     create_pre_n_compiled_tree(tree, multiple_x)
+    # end
+
     function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
-        multiple_x = map(view_x -> Array(view_x), multiple_x_view)
-        create_pre_n_compiled_tree(tree, multiple_x)
+        view_of_view = big_view(multiple_x_view)
+        compiled_tree = _create_pre_n_compiled_tree(tree, view_of_view)
+        tmp = create_new_vector_myRef(length(view_of_view), T)
+
+        pre_n_compiled_tree{T}(compiled_tree, view_of_view, length(multiple_x_view), tmp)
     end
+
+
+    function big_view( multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
+        n = length(multiple_x_view)
+        res = Vector{SubArray{T,1,Array{T,1},N,false}}(undef, n)
+        for i in 1:n
+            nᵢ = length(multiple_x_view[i])
+            res[i] = view(multiple_x_view[i], [1:nᵢ;]) :: SubArray{T,1,Array{T,1},N,false}
+        end
+        return res
+    end
+
+    function _create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
+        nd = trait_tree.get_node(tree)
+        ch = trait_tree.get_children(tree)
+        n_eval = length(multiple_x_view)
+        if isempty(ch)
+            new_op = abstract_expr_node.create_node_expr(nd, multiple_x_view)
+            new_field = create_new_field(new_op)
+            new_node = create_eval_n_node(new_field, n_eval, T)
+            return new_node
+        else
+            new_ch = map( child -> _create_pre_n_compiled_tree(child, multiple_x_view), ch)
+            new_field = create_new_field(nd)
+            return create_eval_n_node(new_field, new_ch, n_eval)
+        end
+    end
+
 
     function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x :: Vector{Vector{T}}) where T <: Number
         new_multiple_x = copy(multiple_x)
@@ -108,8 +144,6 @@ module implementation_pre_n_compiled_tree
     function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
         n_eval = length(multiple_x_view)
         n_eval == get_multiple(tree) || error("mismatch of the vector of point and the pre_compilation of the tree")
-        # multiple_x = map(view_x -> Array(view_x), multiple_x_view)
-        # set_multiple_x!(tree, multiple_x)
         set_multiple_x!(tree, multiple_x_view)
         racine = get_racine(tree)
         vec_tmp = get_vec_tmp(tree)

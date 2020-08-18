@@ -42,6 +42,10 @@ module variables_n_view
 
     @inline create_node_expr(n :: Symbol, id :: Int, multiple_x :: Vector{Vector{Y}}) where Y <: Number = variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x) )
     @inline create_node_expr(v :: variables.variable, multiple_x :: Vector{Vector{Y}}) where Y <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x )
+
+    @inline create_node_expr(n :: Symbol, id :: Int, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = variable_n_view{T}(n, id, map(x -> view(x, [id]), multiple_x_view) )
+    @inline create_node_expr(v :: variables.variable, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x_view )
+
     # @inline create_node_expr(n :: Symbol, id :: Int, multiple_x :: Vector{Vector{Y}}) where Y <: Number = variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x) )
     # @inline create_node_expr(v :: variables.variable, multiple_x :: Vector{Vector{Y}}) where Y <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x )
 

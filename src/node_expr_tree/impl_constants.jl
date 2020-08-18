@@ -36,7 +36,7 @@ module constants
     @inline create_node_expr(c :: T, x :: AbstractVector{T} ) where T <: Number = constant{T}(c)
     @inline create_node_expr(c :: constant{T}, x :: AbstractVector{T} ) where T <: Number = constant{T}(c.value)
     @inline create_node_expr(c :: constant{T}, x :: Vector{Vector{T}} ) where T <: Number = constant{T}(c.value)
-
+    @inline create_node_expr(c :: constant{T}, x :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = constant{T}(c.value)
 
 
     _node_is_operator( c :: constant{T}) where T <: Number = false
@@ -69,7 +69,7 @@ module constants
     @inline _evaluate_node(c :: constant{Y}) where Y <: Number =  c.value :: Y
     @inline _evaluate_node!(c :: constant{Y}, x :: AbstractVector{Y}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, c.value :: Y)
     @inline _evaluate_node!(c :: constant{Y}, ref :: abstract_expr_node.myRef{Y}) where Y <: Number =  abstract_expr_node.set_myRef!(ref, c.value :: Y)
-    @inline _evaluate_node!(c :: constant{Y}, multiple_ref :: AbstractVector{abstract_expr_node.myRef{Y}}) where Y <: Number = begin for ref in multiple_ref abstract_expr_node.set_myRef!(ref, c.value :: Y) end end 
+    @inline _evaluate_node!(c :: constant{Y}, multiple_ref :: AbstractVector{abstract_expr_node.myRef{Y}}) where Y <: Number = begin for ref in multiple_ref abstract_expr_node.set_myRef!(ref, c.value :: Y) end end
 
 
     _change_from_N_to_Ni!(v :: Number, dic_new_var :: Dict{Int,Int}) = ()
