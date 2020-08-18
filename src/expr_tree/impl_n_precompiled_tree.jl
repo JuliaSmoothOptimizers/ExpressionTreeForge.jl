@@ -31,7 +31,13 @@ module implementation_pre_n_compiled_tree
     @inline get_racine(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.racine
     @inline get_multiple(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.multiple
     @inline get_multiple_x(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.multiple_x
-    @inline set_multiple_x!(tree :: pre_n_compiled_tree{Y}, new_multiple_x :: Vector{Vector{Y}}) where Y <: Number = tree.multiple_x .= new_multiple_x
+    function set_multiple_x!(tree :: pre_n_compiled_tree{Y}, new_multiple_x :: Vector{Vector{Y}}) where Y <: Number
+        n = length(new_multiple_x)
+        n == length(tree.multiple_x) || error("error set_multiple_x!")
+        for i in 1:n
+             tree.multiple_x[i] .= new_multiple_x[i]
+        end
+    end
     @inline get_vec_tmp(tree :: pre_n_compiled_tree{Y}) where Y <: Number = tree.vec_tmp
 
     @inline get_field_from_node(node :: eval_n_node{Y}) where Y <: Number = node.field
