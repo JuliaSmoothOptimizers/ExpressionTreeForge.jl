@@ -10,7 +10,7 @@ n = 1000
 
 @variable(m, x[1:n])
 
-@NLobjective(m, Min, sum( (x[j]*(1/2) + (2 * exp(x[j]))/exp(x[j+1]) + x[j+1]*4 + sin(x[j]/5))^2 for j in 1:n-1 ) - (tan(x[6])) )
+@NLobjective(m, Min, sum( (x[j] + tan(x[j+1]))^2  +(x[j]*(1/2) + (2 * exp(x[j]))/exp(x[j+1]) + x[j+1]*4 + sin(x[j]/5))^2 for j in 1:n-1 ) - (tan(x[6])) )
 evaluator = JuMP.NLPEvaluator(m)
 MathOptInterface.initialize(evaluator, [:ExprGraph])
 Expr_j = MathOptInterface.objective_expr(evaluator)
@@ -43,6 +43,7 @@ obj_JuMP = MathOptInterface.eval_objective(evaluator, x)
 obj_all_x = CalculusTreeTools.evaluate_expr_tree_multiple_points(n_compiled_tree, all_x)
 obj_all_x_views = CalculusTreeTools.evaluate_expr_tree_multiple_points(n_compiled_tree_views, all_x_views)
 map!(x ->  CalculusTreeTools.evaluate_expr_tree(expr_tree, x), resx, all_x )
+obj_all_without_x = CalculusTreeTools.evaluate_expr_tree_multiple_points(n_compiled_tree_views)
 
 # @code_warntype CalculusTreeTools.evaluate_expr_tree_multiple_points(n_compiled_tree_views, all_x)
 # @profview @benchmark CalculusTreeTools.evaluate_expr_tree_multiple_points(n_compiled_tree, all_x)
@@ -54,4 +55,5 @@ map!(x ->  CalculusTreeTools.evaluate_expr_tree(expr_tree, x), resx, all_x )
     @test ω(obj_JuMP, obj_compiled_tree)
     @test ω(sum(resx),obj_all_x)
     @test ω(sum(resx),obj_all_x_views)
+    @test ω(obj_all_without_x,obj_all_x_views)
 end
