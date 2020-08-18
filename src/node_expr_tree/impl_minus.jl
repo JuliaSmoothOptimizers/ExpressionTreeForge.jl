@@ -108,7 +108,7 @@ module minus_operators
     end
 
 
-    @inline function _evaluate_node(op :: minus_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number
+    @inline function _evaluate_node!(op :: minus_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number
         if length(value_ch) == 1
             abstract_expr_node.set_myRef!(ref, - value_ch[1])
         else
