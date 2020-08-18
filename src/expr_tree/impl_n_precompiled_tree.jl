@@ -97,7 +97,7 @@ module implementation_pre_n_compiled_tree
         racine = get_racine(tree)
         vec_tmp = get_vec_tmp(tree)
         evaluate_eval_n_node!(racine, vec_tmp)
-        res = sum(vec_tmp) :: T
+        length(vec_tmp) == 1 ? res = abstract_expr_node.get_myRef(vec_tmp[1]) :: T  : res = sum(vec_tmp) :: T
         return res :: T
     end
 
