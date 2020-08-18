@@ -160,6 +160,7 @@ evaluate_expr_tree(e :: Any) = (x :: AbstractVector{} -> evaluate_expr_tree(e,x)
 
 
 evaluate_expr_tree_multiple_points(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
+evaluate_expr_tree_multiple_points(e :: Any)  = implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
 
 
 """

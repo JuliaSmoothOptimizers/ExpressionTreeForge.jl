@@ -165,6 +165,14 @@ module implementation_pre_n_compiled_tree
     end
 
 
+    function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}) where T <: Number
+        racine = get_racine(tree)
+        vec_tmp = get_vec_tmp(tree)
+        evaluate_eval_n_node!(racine, vec_tmp)
+        length(vec_tmp) == 1 ? res = abstract_expr_node.get_myRef(vec_tmp[1]) :: T  : res = sum(vec_tmp) :: T
+        return res :: T
+    end
+
     function evaluate_eval_n_node!(node :: eval_n_node{T}, tmp :: AbstractVector{myRef{T}}) where T <: Number
         op = get_op_from_node(node)
         if trait_expr_node.node_is_operator(op) :: Bool == false
