@@ -10,7 +10,7 @@ n = 1000
 
 @variable(m, x[1:n])
 
-@NLobjective(m, Min, sum( (x[j]*(1/2) + (2 * exp(x[j]))/exp(x[j+1]) + x[j+1]*4 + sin(x[j]/5))^2 for j in 1:n-1 ) )
+@NLobjective(m, Min, sum( (x[j]*(1/2) + (2 * exp(x[j]))/exp(x[j+1]) + x[j+1]*4 + sin(x[j]/5))^2 for j in 1:n-1 ) - (tan(x[6])) )
 evaluator = JuMP.NLPEvaluator(m)
 MathOptInterface.initialize(evaluator, [:ExprGraph])
 Expr_j = MathOptInterface.objective_expr(evaluator)

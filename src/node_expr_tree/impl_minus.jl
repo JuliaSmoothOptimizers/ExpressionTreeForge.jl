@@ -112,7 +112,7 @@ module minus_operators
         if length(value_ch) == 1
             abstract_expr_node.set_myRef!(ref, - value_ch[1])
         else
-            abstract_expr_node.set_myRef!(value_ch[1] - value_ch[2])
+            abstract_expr_node.set_myRef!(ref, value_ch[1] - value_ch[2])
         end
     end
 
