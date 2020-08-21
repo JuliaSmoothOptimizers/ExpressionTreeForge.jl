@@ -83,7 +83,7 @@ module implementation_expr_tree
     end
 
 
-    _transform_to_expr_tree(ex :: t_expr_tree) = ex :: t_expr_tree
+    _transform_to_expr_tree(ex :: t_expr_tree) = copy(ex) :: t_expr_tree
 
 
 
