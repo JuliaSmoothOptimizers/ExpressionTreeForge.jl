@@ -204,6 +204,7 @@ Cast the constant of the expression tree expr_tree to the type t.
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_expr_tree) = _get_function_of_evaluation(expr_tree)
     function _get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree)
         ex_Expr = trait_expr_tree.transform_to_Expr2(ex)
+        @show ex_Expr
         vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
         sort!(vars_ex_Expr)
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
