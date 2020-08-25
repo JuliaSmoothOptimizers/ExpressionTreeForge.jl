@@ -209,9 +209,10 @@ Cast the constant of the expression tree expr_tree to the type t.
         sort!(vars_ex_Expr)
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
         @eval f_evaluation($(vars_x_ex_Expr...)) = $ex_Expr
+        @show f_evaluation(x_temp...)
         f(x :: AbstractVector{T}) where T <: Number = (T)(f_evaluation(x...))
         x_temp = ones(length(vars_ex_Expr))
-        @show f(x_temp), f_evaluation(x_temp...)
+        @show f(x_temp)
         return f :: Function
     end
 
