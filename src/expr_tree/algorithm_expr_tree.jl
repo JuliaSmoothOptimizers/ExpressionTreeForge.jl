@@ -216,8 +216,9 @@ Cast the constant of the expression tree expr_tree to the type t.
 
         f(x :: AbstractVector{T}) where T <: Number = (T)( Base.invokelatest(f_evaluation(x...)) )
 
-        # @show Base.invokelatest(f(x_temp) )
-        return Base.invokelatest(f) :: Function
+        # @show f(x_temp)
+        # return Base.invokelatest(f) :: Function
+        return f :: Function
     end
 
 end
