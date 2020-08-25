@@ -15,15 +15,16 @@ module trait_expr_tree
     struct type_expr_tree end
     struct type_not_expr_tree end
 
-    is_expr_tree(a :: abstract_expr_tree.ab_ex_tr) = type_expr_tree()
-    is_expr_tree(a :: t_expr_tree )= type_expr_tree()
-    is_expr_tree(a :: Expr) = type_expr_tree()
-    is_expr_tree(a :: Number) = type_expr_tree()
-    is_expr_tree(:: Number) = type_expr_tree()
-    is_expr_tree(a :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = type_expr_tree()
-    is_expr_tree(a :: implementation_pre_compiled_tree.pre_compiled_tree{T}) where T <: Number = type_expr_tree()
-    is_expr_tree(a :: implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}) where T <: Number = type_expr_tree()
-    is_expr_tree(a :: Any) = type_not_expr_tree()
+    @inline is_expr_tree(a :: abstract_expr_tree.ab_ex_tr) = type_expr_tree()
+    @inline is_expr_tree(a :: t_expr_tree )= type_expr_tree()
+    @inline is_expr_tree(a :: Expr) = type_expr_tree()
+    @inline is_expr_tree(a :: Number) = type_expr_tree()
+    # @inline is_expr_tree(a :: Symbol) = type_expr_tree()
+    @inline is_expr_tree(:: Number) = type_expr_tree()
+    @inline is_expr_tree(a :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = type_expr_tree()
+    @inline is_expr_tree(a :: implementation_pre_compiled_tree.pre_compiled_tree{T}) where T <: Number = type_expr_tree()
+    @inline is_expr_tree(a :: implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}) where T <: Number = type_expr_tree()
+    @inline is_expr_tree(a :: Any) = type_not_expr_tree()
     function is_expr_tree(t :: DataType)
         if t == abstract_expr_tree.ab_ex_tr || t == t_expr_tree || t == Expr || t == Number
             type_expr_tree()
@@ -32,24 +33,24 @@ module trait_expr_tree
         end
     end
 
-    get_expr_node(a) = _get_expr_node(a, is_expr_tree(a))
-    _get_expr_node(a, :: type_not_expr_tree) = error(" This is not an expr tree")
-    _get_expr_node(a, :: type_expr_tree) = _get_expr_node(a)
+    @inline get_expr_node(a) = _get_expr_node(a, is_expr_tree(a))
+    @inline _get_expr_node(a, :: type_not_expr_tree) = error(" This is not an expr tree")
+    @inline _get_expr_node(a, :: type_expr_tree) = _get_expr_node(a)
 
 
-    get_expr_children(a) = _get_expr_children(a, is_expr_tree(a))
-    _get_expr_children(a, :: type_not_expr_tree) = error("This is not an expr tree")
-    _get_expr_children(a, :: type_expr_tree) = _get_expr_children(a)
+    @inline get_expr_children(a) = _get_expr_children(a, is_expr_tree(a))
+    @inline _get_expr_children(a, :: type_not_expr_tree) = error("This is not an expr tree")
+    @inline _get_expr_children(a, :: type_expr_tree) = _get_expr_children(a)
 
 
-    inverse_expr_tree(a) = _inverse_expr_tree(a, is_expr_tree(a))
-    _inverse_expr_tree(a, ::type_not_expr_tree) = error("This is not an expr tree")
-    _inverse_expr_tree(a, ::type_expr_tree) = _inverse_expr_tree(a)
+    @inline inverse_expr_tree(a) = _inverse_expr_tree(a, is_expr_tree(a))
+    @inline _inverse_expr_tree(a, ::type_not_expr_tree) = error("This is not an expr tree")
+    @inline _inverse_expr_tree(a, ::type_expr_tree) = _inverse_expr_tree(a)
 
 
-    expr_tree_equal(a,b,eq :: Atomic{Bool}=Atomic{Bool}(true)) = hand_expr_tree_equal(a,b,is_expr_tree(a), is_expr_tree(b),eq)
-    hand_expr_tree_equal(a , b, :: type_not_expr_tree, :: Any, eq) = error("we can't compare if these two tree are not expr tree")
-    hand_expr_tree_equal(a , b, :: Any, :: type_not_expr_tree, eq) = error("we can't compare if these two tree are not expr tree")
+    @inline expr_tree_equal(a,b,eq :: Atomic{Bool}=Atomic{Bool}(true)) = hand_expr_tree_equal(a,b,is_expr_tree(a), is_expr_tree(b),eq)
+    @inline hand_expr_tree_equal(a , b, :: type_not_expr_tree, :: Any, eq) = error("we can't compare if these two tree are not expr tree")
+    @inline hand_expr_tree_equal(a , b, :: Any, :: type_not_expr_tree, eq) = error("we can't compare if these two tree are not expr tree")
     function hand_expr_tree_equal(a , b, :: type_expr_tree,  :: type_expr_tree, eq :: Atomic{Bool})
         if eq[]
             if _get_expr_node(a) == _get_expr_node(b)
@@ -77,9 +78,9 @@ module trait_expr_tree
     get_real_node(a)
 Fonction à prendre avec des pincettes, pour le moment utiliser seulement sur les feuilles.
 """
-    get_real_node(a) = _get_real_node(is_expr_tree(a), a)
-    _get_real_node(:: type_not_expr_tree, :: Any) = error("nous ne traitons pas un arbre d'expression")
-    _get_real_node(:: type_expr_tree, a :: Any) = _get_real_node(a)
+    @inline get_real_node(a) = _get_real_node(is_expr_tree(a), a)
+    @inline _get_real_node(:: type_not_expr_tree, :: Any) = error("nous ne traitons pas un arbre d'expression")
+    @inline _get_real_node(:: type_expr_tree, a :: Any) = _get_real_node(a)
 
 
 """
@@ -87,9 +88,9 @@ Fonction à prendre avec des pincettes, pour le moment utiliser seulement sur le
 This function takes an argument expression_tree satisfying the trait is_expr_tree and return an expression tree of the type t_expr_tree.
 This function is usefull in our algorithms to synchronise all the types satisfying the trait is_expr_tree (like Expr) to the type t_expr_tree.
 """
-    transform_to_expr_tree(a :: T ) where T = _transform_to_expr_tree(is_expr_tree(a), a)
-    _transform_to_expr_tree(:: type_not_expr_tree, :: T) where T = error("nous ne traitons pas un arbre d'expression")
-    _transform_to_expr_tree(:: type_expr_tree, a :: T) where T = _transform_to_expr_tree(a) :: implementation_expr_tree.t_expr_tree
+    @inline transform_to_expr_tree(a :: T ) where T = _transform_to_expr_tree(is_expr_tree(a), a)
+    @inline _transform_to_expr_tree(:: type_not_expr_tree, :: T) where T = error("nous ne traitons pas un arbre d'expression")
+    @inline _transform_to_expr_tree(:: type_expr_tree, a :: T) where T = _transform_to_expr_tree(a) :: implementation_expr_tree.t_expr_tree
 
 
 
@@ -98,12 +99,15 @@ This function is usefull in our algorithms to synchronise all the types satisfyi
 This function transform an expr_tree and transform it in Expr.
     #Deprecated
 """
-    transform_to_Expr(ex) = _transform_to_Expr( trait_expr_tree.is_expr_tree(ex), ex)
-    _transform_to_Expr( :: trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr(ex)
-    _transform_to_Expr( :: trait_expr_tree.type_not_expr_tree, ex) = error("notre parametre n'est pas un arbre d'expression")
-    function _transform_to_Expr(ex)
-        return abstract_expr_tree.create_Expr(ex)
-    end
+    @inline transform_to_Expr(ex) = _transform_to_Expr( trait_expr_tree.is_expr_tree(ex), ex)
+    @inline _transform_to_Expr( :: trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr(ex)
+    @inline _transform_to_Expr( :: trait_expr_tree.type_not_expr_tree, ex) = error("notre parametre n'est pas un arbre d'expression")
+    @inline _transform_to_Expr(ex) = abstract_expr_tree.create_Expr(ex)
+
+    @inline transform_to_Expr2(ex) = _transform_to_Expr2( trait_expr_tree.is_expr_tree(ex), ex)
+    @inline _transform_to_Expr2( :: trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr2(ex)
+    @inline _transform_to_Expr2( :: trait_expr_tree.type_not_expr_tree, ex) = error("notre parametre n'est pas un arbre d'expression")
+    @inline _transform_to_Expr2(ex) = abstract_expr_tree.create_Expr2(ex)
 
 
 
@@ -111,9 +115,9 @@ This function transform an expr_tree and transform it in Expr.
     expr_tree_to_create(arbre créé, arbre d'origine)
 fonction ayant pour but d'homogénéiser 2 arbres quelconque peut importe leurs types.
 """
-    expr_tree_to_create(expr_tree_to_create, expr_tree_of_good_type) = _expr_tree_to_create(expr_tree_to_create, expr_tree_of_good_type, is_expr_tree(expr_tree_to_create), is_expr_tree(expr_tree_of_good_type))
-    _expr_tree_to_create(a, b, :: type_not_expr_tree, :: Any) = error("le type de l'arbre d'origine ne satisfait pas le trait")
-    _expr_tree_to_create(a, b, :: Any, :: type_not_expr_tree) = error("le type de l'arbre que l'on cherche à créer ne satisfait pas le trait")
+    @inline expr_tree_to_create(expr_tree_to_create, expr_tree_of_good_type) = _expr_tree_to_create(expr_tree_to_create, expr_tree_of_good_type, is_expr_tree(expr_tree_to_create), is_expr_tree(expr_tree_of_good_type))
+    @inline _expr_tree_to_create(a, b, :: type_not_expr_tree, :: Any) = error("le type de l'arbre d'origine ne satisfait pas le trait")
+    @inline _expr_tree_to_create(a, b, :: Any, :: type_not_expr_tree) = error("le type de l'arbre que l'on cherche à créer ne satisfait pas le trait")
     function _expr_tree_to_create(a, b, :: type_expr_tree, :: type_expr_tree)
         @show typeof(a), typeof(b)
         uniformized_a = transform_to_expr_tree(a)
@@ -134,12 +138,8 @@ module hl_trait_expr_tree
     using ..trait_expr_tree, ..trait_expr_node
     using ..implementation_expr_tree, ..implementation_expr_tree_Expr, ..implementation_complete_expr_tree
 
-    function _expr_tree_to_create(original_ex :: implementation_expr_tree.t_expr_tree,  tree_of_needed_type :: Expr)
-        # return trait_expr_tree.transform_to_Expr(original_ex)
-        tree_of_needed_type = trait_expr_tree.transform_to_Expr(original_ex)
-    end
-
-    _expr_tree_to_create(original_ex :: implementation_expr_tree.t_expr_tree, tree_of_needed_type :: implementation_expr_tree.t_expr_tree) = original_ex
+    @inline _expr_tree_to_create(original_ex :: implementation_expr_tree.t_expr_tree,  tree_of_needed_type :: Expr) = trait_expr_tree.transform_to_Expr(original_ex)
+    @inline _expr_tree_to_create(original_ex :: implementation_expr_tree.t_expr_tree, tree_of_needed_type :: implementation_expr_tree.t_expr_tree) = original_ex
 
 
     function _cast_type_of_constant( ex ::  implementation_expr_tree.t_expr_tree, t :: DataType)
@@ -157,6 +157,7 @@ module hl_trait_expr_tree
             return implementation_expr_tree.create_expr_tree(nd, new_ch)
         end
     end
+
 
     function _cast_type_of_constant( ex :: Expr, t :: DataType)
         ch = trait_expr_tree.get_expr_children(ex)

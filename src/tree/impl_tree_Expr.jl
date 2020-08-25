@@ -5,9 +5,7 @@ module implementation_tree_Expr
     import ..abstract_tree.create_tree
 
 
-    function create_tree(ex :: Expr)
-        return ex
-    end
+    create_tree(ex :: Expr) = ex
 
     function _get_node(ex :: Expr)
         hd = ex.head
@@ -24,7 +22,7 @@ module implementation_tree_Expr
         end
     end
 
-    _get_node(ex :: Number ) = ex
+    @inline _get_node(ex :: Number ) = ex
 
 
     function _get_children(ex :: Expr )
@@ -42,7 +40,7 @@ module implementation_tree_Expr
         end
     end
 
-    _get_children(ex :: Number) = []
+    @inline _get_children(ex :: Number) = []
 
 
 

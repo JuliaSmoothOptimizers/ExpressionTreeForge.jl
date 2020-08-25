@@ -16,70 +16,68 @@ using .bound_propagations
 using .convexity_detection
 
 
-create_bound_tree(t) = bound_propagations.create_bound_tree(t)
-set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
-set_bounds!(tree) = bound_propagations.set_bounds!(tree)
-get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
+@inline create_bound_tree(t) = bound_propagations.create_bound_tree(t)
+@inline set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
+@inline set_bounds!(tree) = bound_propagations.set_bounds!(tree)
+@inline get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
 
 convexity_wrapper = implementation_convexity_type.convexity_wrapper
-get_convexity_wrapper(t :: implementation_convexity_type.convexity_wrapper) = implementation_convexity_type.get_convexity_wrapper(t)
-set_convexity_wrapper!(cw :: implementation_convexity_type.convexity_wrapper, typ :: implementation_convexity_type.convexity_type) = implementation_convexity_type.set_convexity_wrapper!(cw,typ)
+@inline get_convexity_wrapper(t :: implementation_convexity_type.convexity_wrapper) = implementation_convexity_type.get_convexity_wrapper(t)
+@inline set_convexity_wrapper!(cw :: implementation_convexity_type.convexity_wrapper, typ :: implementation_convexity_type.convexity_type) = implementation_convexity_type.set_convexity_wrapper!(cw,typ)
 
 
-create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
-set_convexity!(tree, cvx_tree, bound_tree) = convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
-set_convexity!(complete_tree) = convexity_detection.set_convexity!(complete_tree)
-get_convexity_status(cvx_tree :: convexity_detection.convexity_tree) = convexity_detection.get_convexity_status(cvx_tree)
-get_convexity_status(complete_tree :: implementation_complete_expr_tree.complete_expr_tree) = convexity_detection.get_convexity_status(complete_tree)
-constant_type() = implementation_convexity_type.constant_type()
-linear_type() = implementation_convexity_type.linear_type()
-convex_type() = implementation_convexity_type.convex_type()
-concave_type() = implementation_convexity_type.concave_type()
-unknown_type() = implementation_convexity_type.unknown_type()
+@inline create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
+@inline set_convexity!(tree, cvx_tree, bound_tree) = convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
+@inline set_convexity!(complete_tree) = convexity_detection.set_convexity!(complete_tree)
+@inline get_convexity_status(cvx_tree :: convexity_detection.convexity_tree) = convexity_detection.get_convexity_status(cvx_tree)
+@inline get_convexity_status(complete_tree :: implementation_complete_expr_tree.complete_expr_tree) = convexity_detection.get_convexity_status(complete_tree)
+@inline constant_type() = implementation_convexity_type.constant_type()
+@inline linear_type() = implementation_convexity_type.linear_type()
+@inline convex_type() = implementation_convexity_type.convex_type()
+@inline concave_type() = implementation_convexity_type.concave_type()
+@inline unknown_type() = implementation_convexity_type.unknown_type()
 
-is_treated(c) = implementation_convexity_type.is_treated(c)
-is_not_treated(c) = implementation_convexity_type.is_not_treated(c)
-is_constant(c) = implementation_convexity_type.is_constant(c)
-is_linear(c) = implementation_convexity_type.is_linear(c)
-is_convex(c) = implementation_convexity_type.is_convex(c)
-is_concave(c) = implementation_convexity_type.is_concave(c)
-is_unknown(c) = implementation_convexity_type.is_unknown(c)
+@inline is_treated(c) = implementation_convexity_type.is_treated(c)
+@inline is_not_treated(c) = implementation_convexity_type.is_not_treated(c)
+@inline is_constant(c) = implementation_convexity_type.is_constant(c)
+@inline is_linear(c) = implementation_convexity_type.is_linear(c)
+@inline is_convex(c) = implementation_convexity_type.is_convex(c)
+@inline is_concave(c) = implementation_convexity_type.is_concave(c)
+@inline is_unknown(c) = implementation_convexity_type.is_unknown(c)
 
 t_expr_tree = implementation_expr_tree.t_expr_tree
 
-create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
+@inline create_complete_tree(tree) = implementation_complete_expr_tree.create_complete_expr_tree(tree)
 complete_expr_tree{T <: Number} = implementation_complete_expr_tree.complete_expr_tree{T}
 
 pre_compiled_tree{T <: Number} = implementation_pre_compiled_tree.pre_compiled_tree{T}
-create_pre_compiled_tree(tree, x) = implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
+@inline create_pre_compiled_tree(tree, x) = implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
 
 pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}
-create_pre_n_compiled_tree(tree, x :: Vector{Vector{T}}) where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
-create_pre_n_compiled_tree(tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
+@inline create_pre_n_compiled_tree(tree, x :: Vector{Vector{T}}) where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
+@inline create_pre_n_compiled_tree(tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
-is_constant(t :: type_calculus_tree) = t == type_calculus_tree(0)
-is_linear(t :: type_calculus_tree) = t == type_calculus_tree(1)
-is_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(2)
-is_cubic(t :: type_calculus_tree) = t == type_calculus_tree(3)
-is_more_than_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(4)
+@inline is_constant(t :: type_calculus_tree) = t == type_calculus_tree(0)
+@inline is_linear(t :: type_calculus_tree) = t == type_calculus_tree(1)
+@inline is_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(2)
+@inline is_cubic(t :: type_calculus_tree) = t == type_calculus_tree(3)
+@inline is_more_than_quadratic(t :: type_calculus_tree) = t == type_calculus_tree(4)
 
-print_tree(t) = algo_tree.printer_tree(t)
+@inline print_tree(t) = algo_tree.printer_tree(t)
 # trait_expr_tree's functions
 """
     transform_to_Expr(expr_tree)
 Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree
 """
-transform_to_Expr(e :: Any) = trait_expr_tree.transform_to_Expr(e :: Any)
+@inline transform_to_Expr(e :: Any) = trait_expr_tree.transform_to_Expr(e :: Any)
 
 """
     transform_to_expr_tree(Expr)
 Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in trait_expr_tree
 """
-transform_to_expr_tree(e :: Any) = trait_expr_tree.transform_to_expr_tree(e)
-
-
+@inline transform_to_expr_tree(e :: Any) = trait_expr_tree.transform_to_expr_tree(e)
 
 
 # algo_expr_tree's functions
@@ -95,7 +93,7 @@ x[2],
 x[3] * x[4]
 ]
 """
-delete_imbricated_plus(a :: Any) = algo_expr_tree.delete_imbricated_plus(a)
+@inline delete_imbricated_plus(a :: Any) = algo_expr_tree.delete_imbricated_plus(a)
 
 """
     get_type_tree(t)
@@ -106,7 +104,7 @@ get_type_tree( :(x[1])) = linear
 get_type_tree( :(x[1]* x[2])) = quadratic
 
 """
-get_type_tree(a :: Any) =  algo_expr_tree.get_type_tree(a)
+@inline get_type_tree(a :: Any) =  algo_expr_tree.get_type_tree(a)
 
 """
     get_elemental_variable(expr_tree)
@@ -116,14 +114,14 @@ get_elemental_variable( :(x[1] + x[3]) )
 get_elemental_variable( :(x[1]^2 + x[6] + x[2]) )
 > [1, 6, 2]
 """
-get_elemental_variable(a :: Any) = algo_expr_tree.get_elemental_variable(a)
+@inline get_elemental_variable(a :: Any) = algo_expr_tree.get_elemental_variable(a)
 
 """
     get_Ui(index_new_var, n)
 Create a the matrix U associated to the variable appearing in index_new_var.
 This function create a sparse matrix of size length(index_new_var)×n.
 """
-get_Ui(a :: Vector{Int}, n :: Int) = algo_expr_tree.get_Ui(a,n)
+@inline get_Ui(a :: Vector{Int}, n :: Int) = algo_expr_tree.get_Ui(a,n)
 
 
 """
@@ -133,13 +131,13 @@ This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,
 element_fun_from_N_to_Ni!( :(x[4] + x[5]), [1,2])
 > :(x[1] + x[2])
 """
-element_fun_from_N_to_Ni!(a :: Any, v :: AbstractVector{Int}) = algo_expr_tree.element_fun_from_N_to_Ni!(a, v)
+@inline element_fun_from_N_to_Ni!(a :: Any, v :: AbstractVector{Int}) = algo_expr_tree.element_fun_from_N_to_Ni!(a, v)
 
 """
     cast_type_of_constant(expr_tree, t)
 Cast the constant of the Calculus tree expr_tree to the type t.
 """
-cast_type_of_constant(ex :: Any ,t :: DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
+@inline cast_type_of_constant(ex :: Any ,t :: DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
 
 
 
@@ -152,15 +150,15 @@ evaluate_expr_tree(:(x[1] + x[2]), ones(2))
 evaluate_expr_tree(:(x[1] + x[2]), [0,1])
 > 1
 """
-evaluate_expr_tree(e :: Any, x :: AbstractVector{T}) where T <: Number  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+@inline evaluate_expr_tree(e :: Any, x :: AbstractVector{T}) where T <: Number  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
 # evaluate_expr_tree(e :: Any, x :: AbstractVector{T}) where T <: AbstractVector{Number}  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
-evaluate_expr_tree(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
-evaluate_expr_tree(e :: Any, x :: AbstractArray)  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
-evaluate_expr_tree(e :: Any) = (x :: AbstractVector{} -> evaluate_expr_tree(e,x) )
+@inline evaluate_expr_tree(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+@inline evaluate_expr_tree(e :: Any, x :: AbstractArray)  = M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+@inline evaluate_expr_tree(e :: Any) = (x :: AbstractVector{} -> evaluate_expr_tree(e,x) )
 
 
-evaluate_expr_tree_multiple_points(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
-evaluate_expr_tree_multiple_points(e :: Any)  = implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
+@inline evaluate_expr_tree_multiple_points(e :: Any, x :: AbstractVector)  = M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
+@inline evaluate_expr_tree_multiple_points(e :: Any)  = implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
 
 
 """
@@ -169,7 +167,7 @@ Evaluate the gradient of the calculus tree t as the point x
 calcul_gradient_expr_tree( :(x[1] + x[2]), ones(2))
 >[1.0 1.0]
 """
-calcul_gradient_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_gradient_expr_tree(e, x)
+@inline calcul_gradient_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_gradient_expr_tree(e, x)
 
 
 """
@@ -178,7 +176,7 @@ Evaluate the gradient of the calculus tree t as the point x
 calcul_gradient_expr_tree2( :(x[1] + x[2]), ones(2))
 >[1.0 1.0]
 """
-calcul_gradient_expr_tree2(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_gradient_expr_tree2(e, x)
+@inline calcul_gradient_expr_tree2(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_gradient_expr_tree2(e, x)
 
 
 """
@@ -187,7 +185,7 @@ Evaluate the Hessian of the calculus tree t as the point x
 calcul_Hessian_expr_tree( :(x[1]^2 + x[2]), ones(2))
 >[2.0 0.0; 0.0 0.0]
 """
-calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_Hessian_expr_tree(e,x)
+@inline calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_Hessian_expr_tree(e,x)
 
 
 export create_bound_tree, set_bounds!, get_bound

@@ -11,10 +11,10 @@ module bound_propagations
 
     bound_tree{T} = implementation_tree.type_node{abstract_expr_tree.bounds{T}}
 
-    craete_empty_bounds(t :: DataType) = bounds{t}(-Inf,Inf)
+    @inline craete_empty_bounds(t :: DataType) = bounds{t}(-Inf,Inf)
 
-    create_bound_tree( tree :: implementation_tree.type_node, type=Float64 :: DataType) = return bound_tree{type}( abstract_expr_tree.bounds{type}((type)(0),(type)(0)), create_bound_tree.(trait_tree.get_children(tree)))
-    create_bound_tree( cst :: T, type=Float64 :: DataType) where T <: Number = return bound_tree{type}( abstract_expr_tree.bounds{type}((type)(0),(type)(0)),[])
+    @inline create_bound_tree( tree :: implementation_tree.type_node, type=Float64 :: DataType) = return bound_tree{type}( abstract_expr_tree.bounds{type}((type)(0),(type)(0)), create_bound_tree.(trait_tree.get_children(tree)))
+    @inline create_bound_tree( cst :: T, type=Float64 :: DataType) where T <: Number = return bound_tree{type}( abstract_expr_tree.bounds{type}((type)(0),(type)(0)),[])
 
 
     function set_bounds!( tree :: implementation_tree.type_node, bounds_tree :: bound_tree{T}) where T <: Number
@@ -56,9 +56,9 @@ module bound_propagations
         end
     end
 
-    bound_to_tuple(b :: abstract_expr_tree.bounds{T}) where T <: Number = (b.inf_bound, b.sup_bound)
+    @inline bound_to_tuple(b :: abstract_expr_tree.bounds{T}) where T <: Number = (b.inf_bound, b.sup_bound)
 
-    get_bound(b :: bound_tree{T}) where T <: Number = bound_to_tuple(trait_tree.get_node(b))
-    get_bound(ex :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = implementation_complete_expr_tree.tuple_bound_from_tree(ex)
+    @inline get_bound(b :: bound_tree{T}) where T <: Number = bound_to_tuple(trait_tree.get_node(b))
+    @inline get_bound(ex :: implementation_complete_expr_tree.complete_expr_tree{T}) where T <: Number = implementation_complete_expr_tree.tuple_bound_from_tree(ex)
 
 end

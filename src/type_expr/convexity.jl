@@ -7,43 +7,43 @@ module implementation_convexity_type
         status :: convexity_type
     end
 
-    get_convexity_wrapper(c :: convexity_wrapper) = c.status
-    set_convexity_wrapper!(c :: convexity_wrapper, t :: convexity_type) = c.status = t
+    @inline get_convexity_wrapper(c :: convexity_wrapper) = c.status
+    @inline set_convexity_wrapper!(c :: convexity_wrapper, t :: convexity_type) = c.status = t
 
-    init_conv_status() = convexity_wrapper(not_treated)
-    constant_wrapper() = convexity_wrapper(constant)
-    linear_wrapper() = convexity_wrapper(linear)
-    convex_wrapper() = convexity_wrapper(convex)
-    concave_wrapper() = convexity_wrapper(concave)
-    unknown_wrapper() = convexity_wrapper(unknown)
+    @inline init_conv_status() = convexity_wrapper(not_treated)
+    @inline constant_wrapper() = convexity_wrapper(constant)
+    @inline linear_wrapper() = convexity_wrapper(linear)
+    @inline convex_wrapper() = convexity_wrapper(convex)
+    @inline concave_wrapper() = convexity_wrapper(concave)
+    @inline unknown_wrapper() = convexity_wrapper(unknown)
 
-    not_treated_type() = not_treated
-    constant_type() = constant
-    linear_type() = linear
-    convex_type() = convex
-    concave_type() = concave
-    unknown_type() = unknown
+    @inline not_treated_type() = not_treated
+    @inline constant_type() = constant
+    @inline linear_type() = linear
+    @inline convex_type() = convex
+    @inline concave_type() = concave
+    @inline unknown_type() = unknown
 
-    is_treated(status :: convexity_type) = status != not_treated
-    is_treated(c :: convexity_wrapper) = c.status != not_treated
+    @inline is_treated(status :: convexity_type) = status != not_treated
+    @inline is_treated(c :: convexity_wrapper) = c.status != not_treated
 
-    is_not_treated(status :: convexity_type) = status == not_treated
-    is_not_treated(c :: convexity_wrapper) = c.status == not_treated
+    @inline is_not_treated(status :: convexity_type) = status == not_treated
+    @inline is_not_treated(c :: convexity_wrapper) = c.status == not_treated
 
-    is_constant(status :: convexity_type) = status == constant
-    is_constant(c :: convexity_wrapper) = c.status == constant
+    @inline is_constant(status :: convexity_type) = status == constant
+    @inline is_constant(c :: convexity_wrapper) = c.status == constant
 
-    is_linear(status :: convexity_type) = (status == linear) || is_constant(status)
-    is_linear(c :: convexity_wrapper) = c.status == linear || is_constant(c)
+    @inline is_linear(status :: convexity_type) = (status == linear) || is_constant(status)
+    @inline is_linear(c :: convexity_wrapper) = c.status == linear || is_constant(c)
 
-    is_convex(status :: convexity_type) = (status == convex) || is_linear(status)
-    is_convex(c :: convexity_wrapper) = (c.status == convex) || is_linear(c)
+    @inline is_convex(status :: convexity_type) = (status == convex) || is_linear(status)
+    @inline is_convex(c :: convexity_wrapper) = (c.status == convex) || is_linear(c)
 
-    is_concave(status :: convexity_type) = (status == concave) || is_linear(status)
-    is_concave(c :: convexity_wrapper) = (c.status == concave) || is_linear(c)
+    @inline is_concave(status :: convexity_type) = (status == concave) || is_linear(status)
+    @inline is_concave(c :: convexity_wrapper) = (c.status == concave) || is_linear(c)
 
-    is_unknown(status :: convexity_type) = status == unknown
-    is_unknown(c :: convexity_wrapper) = (c.status == unknown)
+    @inline is_unknown(status :: convexity_type) = status == unknown
+    @inline is_unknown(c :: convexity_wrapper) = (c.status == unknown)
 
 
 

@@ -10,25 +10,25 @@ module implementation_type_expr
 
 
 ############## définition des fonctions de l'interface ###################
-    _is_constant(t :: t_type_expr_basic) = (t == constant)
+    @inline _is_constant(t :: t_type_expr_basic) = (t == constant)
 
-    _is_linear(t :: t_type_expr_basic) = ( t == linear)
+    @inline _is_linear(t :: t_type_expr_basic) = ( t == linear)
 
-    _is_quadratic(t :: t_type_expr_basic) = (t == quadratic)
+    @inline _is_quadratic(t :: t_type_expr_basic) = (t == quadratic)
 
-    _is_cubic(t :: t_type_expr_basic) = (t == cubic)
+    @inline _is_cubic(t :: t_type_expr_basic) = (t == cubic)
 
-    _is_more(t :: t_type_expr_basic) = (t == more)
+    @inline _is_more(t :: t_type_expr_basic) = (t == more)
 
-    return_constant() = t_type_expr_basic(0)
+    @inline return_constant() = t_type_expr_basic(0)
 
-    return_linear() = t_type_expr_basic(1)
+    @inline return_linear() = t_type_expr_basic(1)
 
-    return_quadratic() = t_type_expr_basic(2)
+    @inline return_quadratic() = t_type_expr_basic(2)
 
-    return_cubic() = t_type_expr_basic(3)
+    @inline return_cubic() = t_type_expr_basic(3)
 
-    return_more() = t_type_expr_basic(4)
+    @inline return_more() = t_type_expr_basic(4)
 
 ############## définition de fonctions nécessaires dans des algorithmes ###################
 
@@ -58,7 +58,7 @@ module implementation_type_expr
                 return cubic
             else
                 return more
-            end 
+            end
         elseif _is_more(a)
             return more
         end

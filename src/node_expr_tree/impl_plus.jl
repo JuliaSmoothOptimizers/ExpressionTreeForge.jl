@@ -51,22 +51,20 @@ module plus_operators
         return (sum(vector_inf_bound), sum(vector_sup_bound))
     end
 
-    function create_node_expr(  op :: plus_operator )
-        return plus_operator()
-    end
+    @inline create_node_expr(  op :: plus_operator ) = plus_operator()
 
-    _node_is_operator( op :: plus_operator ) = true
-    _node_is_plus( op :: plus_operator ) = true
-    _node_is_minus(op :: plus_operator ) = false
-    _node_is_times(op :: plus_operator ) = false
-    _node_is_power(op :: plus_operator ) = false
-    _node_is_sin(op :: plus_operator) = false
-    _node_is_cos(op :: plus_operator) = false
-    _node_is_tan(op :: plus_operator) = false
+    @inline _node_is_operator( op :: plus_operator ) = true
+        @inline _node_is_plus( op :: plus_operator ) = true
+        @inline _node_is_minus(op :: plus_operator ) = false
+        @inline _node_is_times(op :: plus_operator ) = false
+        @inline _node_is_power(op :: plus_operator ) = false
+        @inline _node_is_sin(op :: plus_operator) = false
+        @inline _node_is_cos(op :: plus_operator) = false
+        @inline _node_is_tan(op :: plus_operator) = false
 
-    _node_is_variable(op :: plus_operator ) = false
+    @inline _node_is_variable(op :: plus_operator ) = false
 
-    _node_is_constant(op :: plus_operator ) = false
+    @inline _node_is_constant(op :: plus_operator ) = false
 
     function _get_type_node(op :: plus_operator, type_ch :: Vector{t_type_expr_basic})
         if length(type_ch) == 1
@@ -76,7 +74,7 @@ module plus_operators
         end
     end
 
-    (==)(a :: plus_operator, b :: plus_operator) = true
+    @inline (==)(a :: plus_operator, b :: plus_operator) = true
 
     @inline _evaluate_node(op :: plus_operator, value_ch :: AbstractVector{T}) where T <: Number = @fastmath sum(value_ch)
     @inline _evaluate_node!(op :: plus_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number = @fastmath length(value_ch) > 1 ? abstract_expr_node.set_myRef!(ref, sum(value_ch)) : abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
@@ -87,9 +85,6 @@ module plus_operators
     end
 
 
-    function _node_to_Expr(op :: plus_operator)
-        return [:+]
-    end
+    @inline _node_to_Expr(op :: plus_operator) = [:+]
 
-    export operator
 end

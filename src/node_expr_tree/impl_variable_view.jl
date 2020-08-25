@@ -35,9 +35,9 @@ module variables_view
     @inline get_x_view(v :: variable_view{Y}) where Y <: Number = v.x_view
     @inbounds @inline get_value(v :: variable_view{Y}) where Y <: Number = get_x_view(v)[1]
 
-    _node_bound(v :: variable_view{Y}, t :: DataType) where Y <: Number = ((t)(-Inf), (t)(Inf))
+    @inline _node_bound(v :: variable_view{Y}, t :: DataType) where Y <: Number = ((t)(-Inf), (t)(Inf))
 
-    _node_convexity(v :: variable_view{Y}) where Y <: Number = implementation_convexity_type.linear_type()
+    @inline _node_convexity(v :: variable_view{Y}) where Y <: Number = implementation_convexity_type.linear_type()
 
     @inline create_node_expr(n :: Symbol, id :: Int, x :: AbstractVector{Y}) where Y <: Number = variable_view(n, id, view(x, [id]) )
     @inline create_node_expr(n :: Symbol, id :: MathOptInterface.VariableIndex, x :: AbstractVector{Y}) where Y <: Number = variable_view(n, id.value, view(x, [id.value]) )
@@ -83,13 +83,11 @@ module variables_view
     end
 
 
-    function _node_to_Expr(v :: variable_view{Y}) where Y <: Number
-        return Expr(:ref, v.name,  MathOptInterface.VariableIndex(v.index))
-    end
+    @inline _node_to_Expr(v :: variable_view{Y}) where Y <: Number = Expr(:ref, v.name,  MathOptInterface.VariableIndex(v.index))
 
-    function _node_to_Expr2(v :: variable_view{Y}) where Y <: Number
-        return Expr(:ref, v.name,  v.index)
-    end
+
+    @inline _node_to_Expr2(v :: variable_view{Y}) where Y <: Number = Expr(:ref, v.name,  v.index)
+
 
     function _cast_constant!(v :: variable_view{Y}, t :: DataType) where Y <: Number
         x_view = get_x_view(v)
@@ -101,5 +99,4 @@ module variables_view
     end
 
 
-    export variable
 end

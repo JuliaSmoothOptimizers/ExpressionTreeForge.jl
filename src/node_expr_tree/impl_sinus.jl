@@ -82,26 +82,25 @@ module sinus_operators
         end
     end
 
-    belong(bi ,bs, x ) = (bi<= x) && (bs >= x)
+    @inline belong(bi ,bs, x ) = (bi<= x) && (bs >= x)
 
 
-    function create_node_expr( op :: sinus_operator)
-        return sinus_operator()
-    end
+    @inline create_node_expr( op :: sinus_operator) = sinus_operator()
 
 
-    _node_is_operator( op :: sinus_operator ) = true
-    _node_is_plus( op :: sinus_operator ) = false
-    _node_is_minus(op :: sinus_operator ) = false
-    _node_is_times(op :: sinus_operator ) = false
-    _node_is_power(op :: sinus_operator ) = false
-    _node_is_sin(op :: sinus_operator) = true
-    _node_is_cos(op :: sinus_operator) = false
-    _node_is_tan(op :: sinus_operator) = false
 
-    _node_is_variable(op :: sinus_operator ) = false
+    @inline _node_is_operator( op :: sinus_operator ) = true
+        @inline _node_is_plus( op :: sinus_operator ) = false
+        @inline _node_is_minus(op :: sinus_operator ) = false
+        @inline _node_is_times(op :: sinus_operator ) = false
+        @inline _node_is_power(op :: sinus_operator ) = false
+        @inline _node_is_sin(op :: sinus_operator) = true
+        @inline _node_is_cos(op :: sinus_operator) = false
+        @inline _node_is_tan(op :: sinus_operator) = false
 
-    _node_is_constant(op :: sinus_operator ) = false
+    @inline _node_is_variable(op :: sinus_operator ) = false
+
+    @inline _node_is_constant(op :: sinus_operator ) = false
 
     function _get_type_node(op :: sinus_operator, type_ch :: Vector{t_type_expr_basic})
         if length(type_ch) == 1
@@ -114,9 +113,9 @@ module sinus_operators
         end
     end
 
-    (==)(a :: sinus_operator, b :: sinus_operator) = true
+    @inline (==)(a :: sinus_operator, b :: sinus_operator) = true
 
-    function _evaluate_node(op :: sinus_operator, value_ch :: AbstractVector{T}) where T <: Number
+    @inline function _evaluate_node(op :: sinus_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for sin")
         return sin(value_ch[1])
     end
@@ -132,9 +131,6 @@ module sinus_operators
         end
     end
 
-    function _node_to_Expr(op :: sinus_operator)
-        return [:sin]
-    end
+    @inline _node_to_Expr(op :: sinus_operator) = [:sin]
 
-    export operator
 end

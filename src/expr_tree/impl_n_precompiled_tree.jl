@@ -70,12 +70,6 @@ module implementation_pre_n_compiled_tree
     @inline create_eval_n_node(field :: new_field, n_eval :: Int, type :: DataType = Float64 ) = create_eval_n_node(field, Vector{eval_n_node{type}}(undef,0), n_eval )
 
 
-
-    # function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
-    #     multiple_x = map(view_x -> Array(view_x), multiple_x_view)
-    #     create_pre_n_compiled_tree(tree, multiple_x)
-    # end
-
     function create_pre_n_compiled_tree(tree :: implementation_expr_tree.t_expr_tree, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number
         view_of_view = big_view(multiple_x_view)
         compiled_tree = _create_pre_n_compiled_tree(tree, view_of_view)
@@ -134,11 +128,6 @@ module implementation_pre_n_compiled_tree
             return create_eval_n_node(new_field, new_ch, n_eval)
         end
     end
-
-
-
-
-
 
 
     function evaluate_pre_n_compiled_tree(tree :: pre_n_compiled_tree{T}, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number

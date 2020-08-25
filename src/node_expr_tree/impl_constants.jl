@@ -24,11 +24,11 @@ module constants
 
 
     # Base.convert(::Type{constant{T}}, x :: constant{Y}) where T <: Number where Y <: Number = constant{T}(T(x.value))
-    Base.convert(::Type{constant{T}}, x :: constant{Y}) where T <: Number where Y <: Number = constant{T}(T(x.value))
+    @inline Base.convert(::Type{constant{T}}, x :: constant{Y}) where T <: Number where Y <: Number = constant{T}(T(x.value))
 
-    _node_bound(c :: constant{T}, t :: DataType) where T <: Number = ((t)(c.value), (t)(c.value))
+    @inline _node_bound(c :: constant{T}, t :: DataType) where T <: Number = ((t)(c.value), (t)(c.value))
 
-    _node_convexity(c :: constant{T}) where T <: Number = implementation_convexity_type.constant_type()
+    @inline _node_convexity(c :: constant{T}) where T <: Number = implementation_convexity_type.constant_type()
 
 
     @inline create_node_expr(x :: T ) where T <: Number = constant{T}(x)
@@ -39,28 +39,26 @@ module constants
     @inline create_node_expr(c :: constant{T}, x :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = constant{T}(c.value)
 
 
-    _node_is_operator( c :: constant{T}) where T <: Number = false
-        _node_is_plus( c :: constant{T}) where T <: Number = false
-        _node_is_minus(c :: constant{T}) where T <: Number = false
-        _node_is_times(c :: constant{T}) where T <: Number = false
-        _node_is_power(c :: constant{T}) where T <: Number = false
-        _node_is_sin(c :: constant{T}) where T <: Number = false
-        _node_is_cos(c :: constant{T}) where T <: Number = false
-        _node_is_tan(c :: constant{T}) where T <: Number = false
+    @inline _node_is_operator( c :: constant{T}) where T <: Number = false
+        @inline _node_is_plus( c :: constant{T}) where T <: Number = false
+        @inline _node_is_minus(c :: constant{T}) where T <: Number = false
+        @inline _node_is_times(c :: constant{T}) where T <: Number = false
+        @inline _node_is_power(c :: constant{T}) where T <: Number = false
+        @inline _node_is_sin(c :: constant{T}) where T <: Number = false
+        @inline _node_is_cos(c :: constant{T}) where T <: Number = false
+        @inline _node_is_tan(c :: constant{T}) where T <: Number = false
 
-    _node_is_variable(c :: constant{T}) where T <: Number = false
+    @inline _node_is_variable(c :: constant{T}) where T <: Number = false
 
-    _node_is_constant(c :: constant{T}) where T <: Number = true
-
-
-    _get_type_node(c :: constant{T}) where T <: Number = implementation_type_expr.return_constant()
-
-    (==)(a :: constant{T}, b :: constant{T}) where T <: Number = (a.value == b.value)
+    @inline _node_is_constant(c :: constant{T}) where T <: Number = true
 
 
-    function _evaluate_node(c :: constant{Y}, x :: SubArray{T,1,Array{T,1},Tuple{Array{Int64,1}},false}) where Y <: Number where T <: Number
-        return (T)(c.value) :: T
-    end
+    @inline _get_type_node(c :: constant{T}) where T <: Number = implementation_type_expr.return_constant()
+
+    @inline (==)(a :: constant{T}, b :: constant{T}) where T <: Number = (a.value == b.value)
+
+
+    @inline _evaluate_node(c :: constant{Y}, x :: SubArray{T,1,Array{T,1},Tuple{Array{Int64,1}},false}) where Y <: Number where T <: Number = (T)(c.value) :: T
 
 
     @inline _evaluate_node(c :: constant{Y}, dic :: Dict{Int, T where T <: Number}) where Y <: Number = c.value :: Y
@@ -72,32 +70,16 @@ module constants
     @inline _evaluate_node!(c :: constant{Y}, multiple_ref :: AbstractVector{abstract_expr_node.myRef{Y}}) where Y <: Number = begin for ref in multiple_ref abstract_expr_node.set_myRef!(ref, c.value :: Y) end end
 
 
-    _change_from_N_to_Ni!(v :: Number, dic_new_var :: Dict{Int,Int}) = ()
-    _change_from_N_to_Ni!(c :: constant{Y}, dic_new_var :: Dict{Int,Int}) where Y <: Number = ()
+    @inline _change_from_N_to_Ni!(v :: Number, dic_new_var :: Dict{Int,Int}) = ()
+    @inline _change_from_N_to_Ni!(c :: constant{Y}, dic_new_var :: Dict{Int,Int}) where Y <: Number = ()
 
 
 
-    function _cast_constant!(c :: constant{Y}, t :: DataType) where Y <: Number
-        # @show "tadaa_", c.value, typeof(c.value), (t)(c.value), t, convert(t, c.value), convert(constant{t},c)
-        # c.value = (t)(c.value)
-        # c.value = convert(t, c.value)/
-        # @show "_tadaa", c.value, typeof(c.value),c ,typeof(c)
-        # return convert(constant{t},c)
-        return constant{t}((t)(c.value))
-    end
+    @inline _cast_constant!(c :: constant{Y}, t :: DataType) where Y <: Number = constant{t}((t)(c.value))
+    @inline _cast_constant!(c :: Number, t :: DataType) =  (t)(c)
 
-    function _cast_constant!(c :: Number, t :: DataType)
-        return (t)(c)
-    end
-
-
-    function _node_to_Expr(c :: constant{Y}) where Y <: Number
-        return c.value
-    end
-
-    function _node_to_Expr2(c :: constant{Y}) where Y <: Number
-        return c.value
-    end
+    @inline _node_to_Expr(c :: constant{Y}) where Y <: Number = c.value
+    @inline _node_to_Expr2(c :: constant{Y}) where Y <: Number = c.value
 
     export constant
 end

@@ -117,13 +117,7 @@ module algo_expr_tree
         if trait_expr_node.node_is_operator(nd)
             ch = trait_expr_tree.get_expr_children(expr_tree)
             n = length(ch)
-            list_var =  Vector{Vector{Int}}(undef,n)
-
-            Threads.@threads for i in 1:n
-                list_var[i] = get_elemental_variable(ch[i])
-            end
-
-            # list_var = get_elemental_variable.(ch)
+            list_var = map(get_elemental_variable, ch)
             res = unique!(vcat(list_var...))
             return res :: Vector{Int}
         elseif trait_expr_node.node_is_variable(nd)

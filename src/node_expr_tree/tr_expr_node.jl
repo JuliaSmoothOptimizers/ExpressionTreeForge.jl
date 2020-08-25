@@ -38,6 +38,7 @@ module trait_expr_node
     @inline is_expr_node(a :: abstract_expr_node.ab_ex_nd) = type_expr_node()
     @inline is_expr_node(a :: Expr) = type_expr_node()
     @inline is_expr_node(a :: Number) = type_expr_node()
+    # @inline is_expr_node(a :: Symbol) = type_expr_node()
     @inline is_expr_node(a :: Any) = type_not_expr_node()
 
     @inline node_is_operator(a) = _node_is_operator(a, is_expr_node(a))
@@ -155,22 +156,23 @@ module trait_expr_node
 
 
 
-    change_from_N_to_Ni!(a, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, is_expr_node(a), dic_new_var)
-    _change_from_N_to_Ni!(a, ::type_expr_node, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, dic_new_var)
-    _change_from_N_to_Ni!(a, ::type_not_expr_node, dic_new_var :: Dict{Int,Int}) = error("This node is not a expr node")
+    @inline change_from_N_to_Ni!(a, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, is_expr_node(a), dic_new_var)
+    @inline _change_from_N_to_Ni!(a, ::type_expr_node, dic_new_var :: Dict{Int,Int}) = _change_from_N_to_Ni!(a, dic_new_var)
+    @inline _change_from_N_to_Ni!(a, ::type_not_expr_node, dic_new_var :: Dict{Int,Int}) = error("This node is not a expr node")
 
 
 
-    node_to_Expr(a) = _node_to_Expr(a, is_expr_node(a))
-    _node_to_Expr(a, ::type_expr_node) = _node_to_Expr(a)
-    _node_to_Expr(a, ::type_not_expr_node) = error("This node is not a expr node")
+    @inline node_to_Expr(a) = _node_to_Expr(a, is_expr_node(a))
+    @inline _node_to_Expr(a, ::type_expr_node) = _node_to_Expr(a)
+    @inline _node_to_Expr(a, ::type_not_expr_node) = error("This node is not a expr node")
 
-    node_to_Expr2(a) = _node_to_Expr2(a, is_expr_node(a))
-    _node_to_Expr2(a, ::type_expr_node) = _node_to_Expr2(a)
-    _node_to_Expr2(a, ::type_not_expr_node) = error("This node is not a expr node")
+    @inline node_to_Expr2(a) = _node_to_Expr2(a, is_expr_node(a))
+    @inline _node_to_Expr2(a, ::type_expr_node) = _node_to_Expr2(a)
+    @inline _node_to_Expr2(a, ::type_not_expr_node) = error("This node is not a expr node")
+    @inline _node_to_Expr2(a) = _node_to_Expr(a)
 
-    cast_constant!(a, t :: DataType) = _cast_constant!(a, is_expr_node(a), t)
-    _cast_constant!(a, ::type_expr_node, t :: DataType) = _cast_constant!(a, t)
-    _cast_constant!(a, ::type_not_expr_node, t :: DataType) = error("This node is not a expr node")
+    @inline cast_constant!(a, t :: DataType) = _cast_constant!(a, is_expr_node(a), t)
+    @inline _cast_constant!(a, ::type_expr_node, t :: DataType) = _cast_constant!(a, t)
+    @inline _cast_constant!(a, ::type_not_expr_node, t :: DataType) = error("This node is not a expr node")
 
 end  # module trait_expr_node

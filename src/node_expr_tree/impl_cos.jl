@@ -87,23 +87,20 @@ module cos_operators
     belong(bi ,bs, x ) = (bi<= x) && (bs >= x)
 
 
-    function create_node_expr( op :: cos_operator)
-        return cos_operator()
-    end
+    @inline create_node_expr( op :: cos_operator) = cos_operator()
 
+    @inline _node_is_operator( op :: cos_operator ) = true
+        @inline _node_is_plus( op :: cos_operator ) = false
+        @inline _node_is_minus(op :: cos_operator ) = false
+        @inline _node_is_times(op :: cos_operator ) = false
+        @inline _node_is_power(op :: cos_operator ) = false
+        @inline _node_is_sin(op :: cos_operator) = false
+        @inline _node_is_cos(op :: cos_operator) = true
+        @inline _node_is_tan(op :: cos_operator) = false
 
-    _node_is_operator( op :: cos_operator ) = true
-    _node_is_plus( op :: cos_operator ) = false
-    _node_is_minus(op :: cos_operator ) = false
-    _node_is_times(op :: cos_operator ) = false
-    _node_is_power(op :: cos_operator ) = false
-    _node_is_sin(op :: cos_operator) = false
-    _node_is_cos(op :: cos_operator) = true
-    _node_is_tan(op :: cos_operator) = false
+    @inline _node_is_variable(op :: cos_operator ) = false
 
-    _node_is_variable(op :: cos_operator ) = false
-
-    _node_is_constant(op :: cos_operator ) = false
+    @inline _node_is_constant(op :: cos_operator ) = false
 
     function _get_type_node(op :: cos_operator, type_ch :: Vector{t_type_expr_basic})
         if length(type_ch) == 1
@@ -116,9 +113,9 @@ module cos_operators
         end
     end
 
-    (==)(a :: cos_operator, b :: cos_operator) = true
+    @inline (==)(a :: cos_operator, b :: cos_operator) = true
 
-    function _evaluate_node(op :: cos_operator, value_ch :: AbstractVector{T}) where T <: Number
+    @inline function _evaluate_node(op :: cos_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for tan")
         return cos(value_ch[1])
     end
@@ -134,10 +131,6 @@ module cos_operators
         end
     end
 
+    @inline _node_to_Expr(op :: cos_operator) = [:cos]
 
-    function _node_to_Expr(op :: cos_operator)
-        return [:cos]
-    end
-
-    export operator
 end

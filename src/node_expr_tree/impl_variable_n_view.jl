@@ -36,9 +36,9 @@ module variables_n_view
     @inline @inbounds get_x_view(v :: variable_n_view{Y}, i :: Int) where Y <: Number = get_multiple_x_view(v)[i]
     @inline @inbounds get_value(v :: variable_n_view{Y}, i :: Int) where Y <: Number = get_x_view(v,i)[1]
 
-    _node_bound(v :: variable_n_view{Y}, t :: DataType) where Y <: Number = ((t)(-Inf), (t)(Inf))
+    @inline _node_bound(v :: variable_n_view{Y}, t :: DataType) where Y <: Number = ((t)(-Inf), (t)(Inf))
 
-    _node_convexity(v :: variable_n_view{Y}) where Y <: Number = implementation_convexity_type.linear_type()
+    @inline _node_convexity(v :: variable_n_view{Y}) where Y <: Number = implementation_convexity_type.linear_type()
 
     @inline create_node_expr(n :: Symbol, id :: Int, multiple_x :: Vector{Vector{Y}}) where Y <: Number = variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x) )
     @inline create_node_expr(v :: variables.variable, multiple_x :: Vector{Vector{Y}}) where Y <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x )

@@ -75,12 +75,12 @@ module implementation_pre_compiled_tree
     end
 
 
-
     function evaluate_new_tree(tree :: pre_compiled_tree{T}, x  :: AbstractVector{T}) where T <: Number
         res = abstract_expr_node.new_ref(T)
         evaluate_new_node!(tree,x,res)
         return abstract_expr_node.get_myRef(res)
     end
+
 
     function evaluate_pre_compiled_tree(tree :: pre_compiled_tree{T}, v :: AbstractVector{T}) where T <: Number
         res = abstract_expr_node.new_ref(T)
@@ -106,6 +106,7 @@ module implementation_pre_compiled_tree
         end
     end
 
+
     function evaluate_new_node!(node :: new_node{T}, x  :: AbstractVector{T}, tmp :: myRef{T}) where T <: Number
         op = get_op_from_node(node)
         if trait_expr_node.node_is_operator(op) :: Bool == false
@@ -121,6 +122,7 @@ module implementation_pre_compiled_tree
         end
     end
 
+
     function evaluate_new_node!(node :: new_node{T}, tmp :: myRef{T}) where T <: Number
         op = get_op_from_node(node)
         if trait_expr_node.node_is_operator(op) :: Bool == false
@@ -133,7 +135,7 @@ module implementation_pre_compiled_tree
                 evaluate_new_node!(child, ref)
             end
             tmp_vector= get_tmp_vector_from_node(node)
-            # @show op , tmp, tmp_vector[1] / tmp_vector[2] 
+            # @show op , tmp, tmp_vector[1] / tmp_vector[2]
             trait_expr_node._evaluate_node!(op, get_tmp_vector_from_node(node), tmp)
         end
     end

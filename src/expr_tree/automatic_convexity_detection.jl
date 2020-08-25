@@ -10,16 +10,16 @@ module convexity_detection
     convexity_tree{T} = implementation_tree.type_node{implementation_convexity_type.convexity_wrapper}
 
 
-    create_convex_tree( tree :: implementation_tree.type_node) =  convexity_tree( implementation_convexity_type.init_conv_status(), create_convex_tree.(trait_tree.get_children(tree)))
-    create_convex_tree( cst :: T) where T <: Number =  convexity_tree( implementation_convexity_type.init_conv_status(), [])
-    get_convexity_status( cvx_tree :: convexity_tree) = implementation_convexity_type.get_convexity_wrapper(trait_tree.get_node(cvx_tree))
-    get_convexity_status( complete_tree :: implementation_complete_expr_tree.complete_expr_tree) = implementation_complete_expr_tree.get_convexity_status(trait_tree.get_node(complete_tree))
+    @inline create_convex_tree( tree :: implementation_tree.type_node) =  convexity_tree( implementation_convexity_type.init_conv_status(), create_convex_tree.(trait_tree.get_children(tree)))
+    @inline create_convex_tree( cst :: T) where T <: Number =  convexity_tree( implementation_convexity_type.init_conv_status(), [])
+    @inline get_convexity_status( cvx_tree :: convexity_tree) = implementation_convexity_type.get_convexity_wrapper(trait_tree.get_node(cvx_tree))
+    @inline get_convexity_status( complete_tree :: implementation_complete_expr_tree.complete_expr_tree) = implementation_complete_expr_tree.get_convexity_status(trait_tree.get_node(complete_tree))
 
-    constant_type() = implementation_convexity_type.constant_type()
-    linear_type() = implementation_convexity_type.linear_type()
-    convex_type() = implementation_convexity_type.convex_type()
-    concave_type() = implementation_convexity_type.concave_type()
-    unknown_type() = implementation_convexity_type.unknown_type()
+    @inline constant_type() = implementation_convexity_type.constant_type()
+    @inline linear_type() = implementation_convexity_type.linear_type()
+    @inline convex_type() = implementation_convexity_type.convex_type()
+    @inline concave_type() = implementation_convexity_type.concave_type()
+    @inline unknown_type() = implementation_convexity_type.unknown_type()
 
     function set_convexity!( tree :: implementation_tree.type_node, cvx_tree :: convexity_tree, bounds_tree)
         node = trait_tree.get_node(tree)

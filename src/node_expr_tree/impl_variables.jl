@@ -54,6 +54,7 @@ module variables
     _node_is_tan(v :: variable) = false
 
     _node_is_variable(v :: variable) = true
+    _node_is_variable(v :: Symbol) = true
 
     _node_is_constant(v :: variable) = false
 
@@ -102,7 +103,8 @@ module variables
     end
 
     function _node_to_Expr2(v :: variable)
-        return Expr(:ref, v.name,  v.index)
+        # return Expr(:ref, v.name,  v.index)
+        return Symbol( string(v.name) * string(v.index))
     end
 
     _cast_constant!(v :: variable, t :: DataType) = v

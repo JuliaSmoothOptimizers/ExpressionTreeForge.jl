@@ -9,13 +9,9 @@ module implementation_expr_tree_Expr
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
 
-    function create_expr_tree( ex :: Expr)
-        return ex
-    end
+    @inline create_expr_tree( ex :: Expr) = ex
 
-    function create_Expr(ex :: Expr)
-        return ex
-    end
+    @inline create_Expr(ex :: Expr) = ex
 
     function _get_expr_node(ex :: Expr )
         hd = ex.head
@@ -37,10 +33,7 @@ module implementation_expr_tree_Expr
         end
     end
 
-    function _get_expr_node(ex :: Number )
-        return abstract_expr_node.create_node_expr(ex)
-    end
-
+    @inline _get_expr_node(ex :: Number ) = abstract_expr_node.create_node_expr(ex)
 
     function _get_expr_children(ex :: Expr)
         hd = ex.head
@@ -59,17 +52,11 @@ module implementation_expr_tree_Expr
         end
     end
 
-    function _get_expr_children(t :: Number)
-        return []
-    end
+    @inline _get_expr_children(t :: Number) = []
 
-    function _inverse_expr_tree(ex :: Expr)
-        return Expr(:call, :-, ex)
-    end
+    @inline _inverse_expr_tree(ex :: Expr) = Expr(:call, :-, ex)
+    @inline _inverse_expr_tree(ex :: Number) = Expr(:call, :-, ex)
 
-    function _inverse_expr_tree(ex :: Number)
-        return Expr(:call, :-, ex)
-    end
 
     #Fonction à reprendre potetiellement, pourle moment ca marche
     function _get_real_node(ex :: Expr)
@@ -93,10 +80,7 @@ module implementation_expr_tree_Expr
         end
     end
 
-    function _get_real_node(ex :: Number)
-        return ex
-    end
-
+    @inline _get_real_node(ex :: Number) = ex
 
     function _transform_to_expr_tree(ex :: Expr)
         n_node = _get_expr_node(ex) :: abstract_expr_node.ab_ex_nd
@@ -109,8 +93,6 @@ module implementation_expr_tree_Expr
         end
     end
 
-    function _transform_to_expr_tree(ex :: Number)
-        return abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(ex)) :: implementation_expr_tree.t_expr_tree
-    end
+    _transform_to_expr_tree(ex :: Number) = abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(ex)) :: implementation_expr_tree.t_expr_tree
 
 end

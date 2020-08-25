@@ -96,28 +96,25 @@ module times_operators
     end
 
 
-    function create_node_expr(op :: time_operator)
-        return time_operator()
-    end
+    @inline create_node_expr(op :: time_operator) = time_operator()
 
-    _node_is_operator( op :: time_operator ) = true
-    _node_is_plus( op :: time_operator ) = false
-    _node_is_minus(op :: time_operator ) = false
-    _node_is_times(op :: time_operator ) = true
-    _node_is_power(op :: time_operator ) = false
-    _node_is_sin(op :: time_operator) = false
-    _node_is_cos(op :: time_operator) = false
-    _node_is_tan(op :: time_operator) = false
 
-    _node_is_variable(op :: time_operator ) = false
+    @inline _node_is_operator( op :: time_operator ) = true
+        @inline _node_is_plus( op :: time_operator ) = false
+        @inline _node_is_minus(op :: time_operator ) = false
+        @inline _node_is_times(op :: time_operator ) = true
+        @inline _node_is_power(op :: time_operator ) = false
+        @inline _node_is_sin(op :: time_operator) = false
+        @inline _node_is_cos(op :: time_operator) = false
+        @inline _node_is_tan(op :: time_operator) = false
 
-    _node_is_constant(op :: time_operator ) = false
+    @inline _node_is_variable(op :: time_operator ) = false
 
-    function _get_type_node(op :: time_operator, type_ch :: Vector{t_type_expr_basic})
-        foldl(trait_type_expr.type_product, type_ch)
-    end
+    @inline _node_is_constant(op :: time_operator ) = false
 
-    (==)(a :: time_operator, b :: time_operator) = true
+    @inline _get_type_node(op :: time_operator, type_ch :: Vector{t_type_expr_basic}) = foldl(trait_type_expr.type_product, type_ch)
+
+    @inline (==)(a :: time_operator, b :: time_operator) = true
 
     @inline _evaluate_node(op :: time_operator, value_ch :: AbstractVector{T}) where T <: Number = @fastmath @inbounds foldl(*,value_ch)
 
@@ -129,9 +126,6 @@ module times_operators
         end
     end
 
-    function _node_to_Expr(op :: time_operator)
-        return [:*]
-    end
-
-    export operator
+    @inline _node_to_Expr(op :: time_operator) = [:*]
+    
 end

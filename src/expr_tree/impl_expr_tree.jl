@@ -44,7 +44,7 @@ module implementation_expr_tree
             return trait_expr_node.node_to_Expr2(nd)
         else
             children_Expr = create_Expr2.(ch)
-            node_Expr = trait_expr_node.node_to_Expr(nd)
+            node_Expr = trait_expr_node.node_to_Expr2(nd)
             #défférenciation entre les opérateurs simple :+, :- et compliqué comme :^2
             #premier cas, les cas simple :+, :-
             if length(node_Expr) == 1

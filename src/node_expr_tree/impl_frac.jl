@@ -80,24 +80,21 @@ module frac_operators
     end
 
 
-    function create_node_expr( op :: frac_operator)
-        return frac_operator()
-    end
+    @inline create_node_expr( op :: frac_operator) = frac_operator()
 
+    @inline _node_is_operator( op :: frac_operator ) = true
+        @inline _node_is_plus( op :: frac_operator ) = false
+        @inline _node_is_minus(op :: frac_operator ) = false
+        @inline _node_is_times(op :: frac_operator ) = false
+        @inline _node_is_power(op :: frac_operator ) = false
+        @inline _node_is_sin(op :: frac_operator) = false
+        @inline _node_is_cos(op :: frac_operator) = false
+        @inline _node_is_tan(op :: frac_operator) = false
+        @inline _node_is_frac(op :: frac_operator) = true
 
-    _node_is_operator( op :: frac_operator ) = true
-    _node_is_plus( op :: frac_operator ) = false
-    _node_is_minus(op :: frac_operator ) = false
-    _node_is_times(op :: frac_operator ) = false
-    _node_is_power(op :: frac_operator ) = false
-    _node_is_sin(op :: frac_operator) = false
-    _node_is_cos(op :: frac_operator) = false
-    _node_is_tan(op :: frac_operator) = false
-    _node_is_frac(op :: frac_operator) = true
+    @inline _node_is_variable(op :: frac_operator ) = false
 
-    _node_is_variable(op :: frac_operator ) = false
-
-    _node_is_constant(op :: frac_operator ) = false
+    @inline _node_is_constant(op :: frac_operator ) = false
 
     function _get_type_node(op :: frac_operator, type_ch :: Vector{t_type_expr_basic})
         t_denom = type_ch[2]
@@ -108,7 +105,7 @@ module frac_operators
         end
     end
 
-    (==)(a :: frac_operator, b :: frac_operator) = true
+    @inline (==)(a :: frac_operator, b :: frac_operator) = true
 
     @inline _evaluate_node(op :: frac_operator, value_ch :: AbstractVector{T}) where T <: Number = value_ch[1] / value_ch[2]
     @inline _evaluate_node!(op :: frac_operator, value_ch :: AbstractVector{abstract_expr_node.myRef{T}}, ref :: abstract_expr_node.myRef{T} ) where T <: Number = abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
@@ -119,9 +116,6 @@ module frac_operators
     end
 
 
-    function _node_to_Expr(op :: frac_operator)
-        return [:/]
-    end
+    @inline _node_to_Expr(op :: frac_operator) = [:/]
 
-    export operator
 end

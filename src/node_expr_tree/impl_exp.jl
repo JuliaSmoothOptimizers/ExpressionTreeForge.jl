@@ -51,23 +51,21 @@ module exp_operators
     end
 
 
-    function create_node_expr( op :: exp_operator)
-        return exp_operator()
-    end
+    @inline create_node_expr( op :: exp_operator) = exp_operator()
 
 
-    _node_is_operator( op :: exp_operator ) = true
-    _node_is_plus( op :: exp_operator ) = false
-    _node_is_minus(op :: exp_operator ) = false
-    _node_is_times(op :: exp_operator ) = false
-    _node_is_power(op :: exp_operator ) = false
-    _node_is_sin(op :: exp_operator) = false
-    _node_is_cos(op :: exp_operator) = false
-    _node_is_tan(op :: exp_operator) = false
+    @inline _node_is_operator( op :: exp_operator ) = true
+        @inline _node_is_plus( op :: exp_operator ) = false
+        @inline _node_is_minus(op :: exp_operator ) = false
+        @inline _node_is_times(op :: exp_operator ) = false
+        @inline _node_is_power(op :: exp_operator ) = false
+        @inline _node_is_sin(op :: exp_operator) = false
+        @inline _node_is_cos(op :: exp_operator) = false
+        @inline _node_is_tan(op :: exp_operator) = false
 
-    _node_is_variable(op :: exp_operator ) = false
+    @inline _node_is_variable(op :: exp_operator ) = false
 
-    _node_is_constant(op :: exp_operator ) = false
+    @inline _node_is_constant(op :: exp_operator ) = false
 
     function _get_type_node(op :: exp_operator, type_ch :: Vector{t_type_expr_basic})
         if length(type_ch) == 1
@@ -80,9 +78,9 @@ module exp_operators
         end
     end
 
-    (==)(a :: exp_operator, b :: exp_operator) = true
+    @inline (==)(a :: exp_operator, b :: exp_operator) = true
 
-    function _evaluate_node(op :: exp_operator, value_ch :: AbstractVector{T}) where T <: Number
+    @inline function _evaluate_node(op :: exp_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for exp")
         @fastmath return exp(value_ch[1])
     end
@@ -98,9 +96,6 @@ module exp_operators
         end
     end
 
-    function _node_to_Expr(op :: exp_operator)
-        return [:exp]
-    end
+    @inline _node_to_Expr(op :: exp_operator) = [:exp]
 
-    export operator
 end

@@ -30,26 +30,23 @@ module tan_operators
 
 
 
-    _node_bound(op :: tan_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number = ((t)(-Inf),(t)(Inf))
+    @inline _node_bound(op :: tan_operator, son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where T <: Number = ((t)(-Inf),(t)(Inf))
 
 
-    function create_node_expr( op :: tan_operator)
-        return tan_operator()
-    end
+    @inline create_node_expr( op :: tan_operator) = tan_operator()
 
+    @inline _node_is_operator( op :: tan_operator ) = true
+        @inline _node_is_plus( op :: tan_operator ) = false
+        @inline _node_is_minus(op :: tan_operator ) = false
+        @inline _node_is_times(op :: tan_operator ) = false
+        @inline _node_is_power(op :: tan_operator ) = false
+        @inline _node_is_sin(op :: tan_operator) = false
+        @inline _node_is_cos(op :: tan_operator) = false
+        @inline _node_is_tan(op :: tan_operator) = true
 
-    _node_is_operator( op :: tan_operator ) = true
-    _node_is_plus( op :: tan_operator ) = false
-    _node_is_minus(op :: tan_operator ) = false
-    _node_is_times(op :: tan_operator ) = false
-    _node_is_power(op :: tan_operator ) = false
-    _node_is_sin(op :: tan_operator) = false
-    _node_is_cos(op :: tan_operator) = false
-    _node_is_tan(op :: tan_operator) = true
+    @inline _node_is_variable(op :: tan_operator ) = false
 
-    _node_is_variable(op :: tan_operator ) = false
-
-    _node_is_constant(op :: tan_operator ) = false
+    @inline _node_is_constant(op :: tan_operator ) = false
 
     function _get_type_node(op :: tan_operator, type_ch :: Vector{t_type_expr_basic})
         if length(type_ch) == 1
@@ -62,9 +59,9 @@ module tan_operators
         end
     end
 
-    (==)(a :: tan_operator, b :: tan_operator) = true
+    @inline (==)(a :: tan_operator, b :: tan_operator) = true
 
-    function _evaluate_node(op :: tan_operator, value_ch :: AbstractVector{T}) where T <: Number
+    @inline function _evaluate_node(op :: tan_operator, value_ch :: AbstractVector{T}) where T <: Number
         length(value_ch) == 1 || error("more than one argument for tan")
         return tan(value_ch[1])
     end
@@ -81,9 +78,6 @@ module tan_operators
     end
 
 
-    function _node_to_Expr(op :: tan_operator)
-        return [:tan]
-    end
+    @inline _node_to_Expr(op :: tan_operator) = [:tan]
 
-    export operator
 end

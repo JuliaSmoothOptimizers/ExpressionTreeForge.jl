@@ -23,7 +23,7 @@ module power_operators
         index :: T
     end
 
-    my_and(a :: Bool, b :: Bool) = (a && b)
+    @inline my_and(a :: Bool, b :: Bool) = (a && b)
     function _node_convexity(op :: power_operator{Y},
                              son_cvx :: AbstractVector{implementation_convexity_type.convexity_type},
                              son_bound :: AbstractVector{Tuple{T,T}}
@@ -105,25 +105,25 @@ module power_operators
     @inline create_node_expr(op :: power_operator{T}, x :: AbstractVector{T} ) where T <: Number= power_operator{T}(op.index)
 
 
-    _node_is_operator( op :: power_operator{T} ) where T <: Number= true
-    _node_is_plus( op :: power_operator{T} ) where T <: Number = false
-    _node_is_minus(op :: power_operator{T} ) where T <: Number = false
-    _node_is_times(op :: power_operator{T} ) where T <: Number = false
-    _node_is_power(op :: power_operator{T} ) where T <: Number = true
-    _node_is_sin(op :: power_operator{T}) where T <: Number = false
-    _node_is_cos(op :: power_operator{T}) where T <: Number = false
-    _node_is_tan(op :: power_operator{T}) where T <: Number = false
+    @inline _node_is_operator( op :: power_operator{T} ) where T <: Number= true
+        @inline _node_is_plus( op :: power_operator{T} ) where T <: Number = false
+        @inline _node_is_minus(op :: power_operator{T} ) where T <: Number = false
+        @inline _node_is_times(op :: power_operator{T} ) where T <: Number = false
+        @inline _node_is_power(op :: power_operator{T} ) where T <: Number = true
+        @inline _node_is_sin(op :: power_operator{T}) where T <: Number = false
+        @inline _node_is_cos(op :: power_operator{T}) where T <: Number = false
+        @inline _node_is_tan(op :: power_operator{T}) where T <: Number = false
 
-    _node_is_variable(op :: power_operator{T} ) where T <: Number = false
+    @inline _node_is_variable(op :: power_operator{T} ) where T <: Number = false
 
-    _node_is_constant(op :: power_operator{T} ) where T <: Number = false
+    @inline _node_is_constant(op :: power_operator{T} ) where T <: Number = false
 
     function _get_type_node(op :: power_operator{T}, type_ch :: Vector{t_type_expr_basic}) where T <: Number
         length(type_ch) == 1 || error("power has more than one argument")
         return trait_type_expr.type_power(op.index, type_ch[1])
     end
 
-    (==)(a :: power_operator{T}, b :: power_operator{T}) where T <: Number = ( a.index == b.index)
+    @inline (==)(a :: power_operator{T}, b :: power_operator{T}) where T <: Number = ( a.index == b.index)
 
     @inline function _evaluate_node(op :: power_operator{Z}, value_ch :: AbstractVector{T}) where T <: Number where Z <: Number
         length(value_ch) == 1 || error("power has more than one argument")
@@ -152,14 +152,11 @@ module power_operators
 
     @inline _evaluate_node!(op :: power_operator{Y}, value_ch :: Y, ref :: abstract_expr_node.myRef{Y}) where Y <: Number = @fastmath abstract_expr_node.set_myRef!(ref, value_ch^(op.index) :: Y)
 
-    function _node_to_Expr(op :: power_operator{T}) where T <: Number
-        return [:^, op.index]
-    end
+    @inline _node_to_Expr(op :: power_operator{T}) where T <: Number = [:^, op.index]
 
     function _cast_constant!(op :: power_operator{T}, t :: DataType) where T <: Number
         new_index = (t)(op.index)
         return power_operator{t}(new_index)
     end
 
-    export operator
 end

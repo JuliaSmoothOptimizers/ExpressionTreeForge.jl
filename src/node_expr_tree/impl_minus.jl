@@ -71,23 +71,22 @@ module minus_operators
         end
     end
 
-    function create_node_expr( op :: minus_operator)
-        return minus_operator()
-    end
+    @inline create_node_expr( op :: minus_operator) = minus_operator()
 
 
-    _node_is_operator( op :: minus_operator ) = true
-    _node_is_plus( op :: minus_operator ) = false
-    _node_is_minus(op :: minus_operator ) = true
-    _node_is_times(op :: minus_operator ) = false
-    _node_is_power(op :: minus_operator ) = false
-    _node_is_sin(op :: minus_operator) = false
-    _node_is_cos(op :: minus_operator) = false
-    _node_is_tan(op :: minus_operator) = false
 
-    _node_is_variable(op :: minus_operator ) = false
+    @inline _node_is_operator( op :: minus_operator ) = true
+        @inline _node_is_plus( op :: minus_operator ) = false
+        @inline _node_is_minus(op :: minus_operator ) = true
+        @inline _node_is_times(op :: minus_operator ) = false
+        @inline _node_is_power(op :: minus_operator ) = false
+        @inline _node_is_sin(op :: minus_operator) = false
+        @inline _node_is_cos(op :: minus_operator) = false
+        @inline _node_is_tan(op :: minus_operator) = false
 
-    _node_is_constant(op :: minus_operator ) = false
+    @inline _node_is_variable(op :: minus_operator ) = false
+
+    @inline _node_is_constant(op :: minus_operator ) = false
 
     function _get_type_node(op :: minus_operator, type_ch :: Vector{t_type_expr_basic})
         if length(type_ch) == 1
@@ -97,7 +96,7 @@ module minus_operators
         end
     end
 
-    (==)(a :: minus_operator, b :: minus_operator) = true
+    @inline (==)(a :: minus_operator, b :: minus_operator) = true
 
     function _evaluate_node(op :: minus_operator, value_ch :: AbstractVector{T}) where T <: Number
         if length(value_ch) == 1
@@ -123,9 +122,7 @@ module minus_operators
         end
     end
 
-    function _node_to_Expr(op :: minus_operator)
-        return [:-]
-    end
+    @inline _node_to_Expr(op :: minus_operator) = [:-]
 
-    export operator
+
 end
