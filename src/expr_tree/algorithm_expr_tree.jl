@@ -210,7 +210,7 @@ Cast the constant of the expression tree expr_tree to the type t.
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
         @eval f_evaluation($(vars_x_ex_Expr...)) = $ex_Expr
 
-        f = (x :: AbstractVector{T where T <: Number} -> Base.invokelatest(f_evaluation, x) )
+        f = (x :: AbstractVector{T where T <: Number} -> Base.invokelatest(f_evaluation, x...) )
         return Base.invokelatest(f)
     end
 
