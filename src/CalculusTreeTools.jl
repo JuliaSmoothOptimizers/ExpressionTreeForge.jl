@@ -69,9 +69,18 @@ type_calculus_tree = implementation_type_expr.t_type_expr_basic
 # trait_expr_tree's functions
 """
     transform_to_Expr(expr_tree)
-Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree
+Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree.
+ATTENTION: This function return an Expr with variable as MathOptInterface.VariableIndex
+In order to get an standard Expr see transform_to_Expr_julia.
 """
 @inline transform_to_Expr(e :: Any) = trait_expr_tree.transform_to_Expr(e :: Any)
+
+
+"""
+    transform_to_Expr_julia(expr_tree)
+Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree.
+"""
+@inline transform_to_Expr_julia(e :: Any) = trait_expr_tree.transform_to_Expr2(e :: Any)
 
 """
     transform_to_expr_tree(Expr)
@@ -187,6 +196,12 @@ calcul_Hessian_expr_tree( :(x[1]^2 + x[2]), ones(2))
 """
 @inline calcul_Hessian_expr_tree(e :: Any, x :: AbstractVector) = M_evaluation_expr_tree.calcul_Hessian_expr_tree(e,x)
 
+
+"""
+    get_function_of_evaluation(ex)
+Return a evaluation function of ex with better performance than the actual evaluate_expr_tree.
+"""
+@inline get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree) = algo_expr_tree.get_function_of_evaluation(ex)
 
 export create_bound_tree, set_bounds!, get_bound
 

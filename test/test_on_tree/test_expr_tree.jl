@@ -294,3 +294,33 @@ end
     # InteractiveUtils.@code_warntype algo_expr_tree.get_type_tree(test_fac_expr_tree_plus)
     # InteractiveUtils.@code_warntype algo_expr_tree.delete_imbricated_plus(test_fac_expr_tree_plus)
 end
+
+
+function create_trees(n :: Int)
+    m = Model()
+    @variable(m, x[1:n])
+    @NLobjective(m, Min, sum( (1/2) * (x[j+1]/(x[j]^2)) + sin(x[j+1]^3) for j in 1:n-1 ) + tan(x[1])*1/x[3] + exp(x[2]) - 4)
+    evaluator = JuMP.NLPEvaluator(m)
+    MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
+    v = ones(n)
+    Expr_j = MathOptInterface.objective_expr(evaluator)
+    expr_tree = CalculusTreeTools.transform_to_expr_tree(Expr_j)
+    expr_tree_j = copy(expr_tree)
+    complete_tree = CalculusTreeTools.create_complete_tree(expr_tree_j)
+
+    return Expr_j, expr_tree_j, complete_tree, evaluator
+end
+
+γ(a,b) = (a-b) < 1e-5
+
+@testset "test de la création de la fonction d'évaluation" begin
+    n = 50
+    expr, expr_tree, comp_tree, evaluator = create_trees(n)
+    f = CalculusTreeTools.get_function_of_evaluation(expr_tree)
+    x = ones(50)
+    obj_MOI_x = MathOptInterface.eval_objective(evaluator, x)
+    obj_f = f(x)
+    @show obj_f, obj_MOI_x
+    @test obj_f == obj_MOI_x
+    @test γ(obj_f, obj_MOI_x)
+end

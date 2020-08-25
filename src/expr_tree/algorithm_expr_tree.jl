@@ -10,6 +10,7 @@ module algo_expr_tree
     using ..implementation_tree
     using ..implementation_type_expr
     using ..hl_trait_expr_tree
+    using ..implementation_expr_tree
 
     using SparseArrays
 
@@ -32,9 +33,9 @@ module algo_expr_tree
     ]
 
 """
-    delete_imbricated_plus(a :: Any) = _delete_imbricated_plus(a, trait_expr_tree.is_expr_tree(a))
-    _delete_imbricated_plus(a, :: trait_expr_tree.type_not_expr_tree) = error(" This is not an expr tree")
-    _delete_imbricated_plus(a, :: trait_expr_tree.type_expr_tree) = _delete_imbricated_plus(a)
+    @inline delete_imbricated_plus(a :: Any) = _delete_imbricated_plus(a, trait_expr_tree.is_expr_tree(a))
+    @inline _delete_imbricated_plus(a, :: trait_expr_tree.type_not_expr_tree) = error(" This is not an expr tree")
+    @inline _delete_imbricated_plus(a, :: trait_expr_tree.type_expr_tree) = _delete_imbricated_plus(a)
     function _delete_imbricated_plus( expr_tree :: T ) where T
         nd = trait_expr_tree.get_expr_node(expr_tree)
         if trait_expr_node.node_is_operator(nd)
@@ -77,9 +78,9 @@ module algo_expr_tree
     get_type_tree( :(x[1]* x[2])) = quadratic
 
 """
-    get_type_tree(a :: Any) = _get_type_tree(a, trait_expr_tree.is_expr_tree(a))
-    _get_type_tree(a, :: trait_expr_tree.type_not_expr_tree) = error(" This is not an Expr tree")
-    _get_type_tree(a, :: trait_expr_tree.type_expr_tree) = _get_type_tree(a)
+    @inline get_type_tree(a :: Any) = _get_type_tree(a, trait_expr_tree.is_expr_tree(a))
+    @inline _get_type_tree(a, :: trait_expr_tree.type_not_expr_tree) = error(" This is not an Expr tree")
+    @inline _get_type_tree(a, :: trait_expr_tree.type_expr_tree) = _get_type_tree(a)
     function _get_type_tree(expr_tree)
         ch = trait_expr_tree.get_expr_children(expr_tree)
         if isempty(ch)
@@ -109,9 +110,9 @@ module algo_expr_tree
     get_elemental_variable( :(x[1]^2 + x[6] + x[2]) )
     > [1, 6, 2]
 """
-    get_elemental_variable(a :: Any) = _get_elemental_variable(a, trait_expr_tree.is_expr_tree(a))
-    _get_elemental_variable(a, :: trait_expr_tree.type_not_expr_tree) = error(" This is not an Expr tree")
-    _get_elemental_variable(a, :: trait_expr_tree.type_expr_tree) = _get_elemental_variable(a)
+    @inline get_elemental_variable(a :: Any) = _get_elemental_variable(a, trait_expr_tree.is_expr_tree(a))
+    @inline _get_elemental_variable(a, :: trait_expr_tree.type_not_expr_tree) = error(" This is not an Expr tree")
+    @inline _get_elemental_variable(a, :: trait_expr_tree.type_expr_tree) = _get_elemental_variable(a)
     function _get_elemental_variable(expr_tree)
         nd =  trait_expr_tree.get_expr_node(expr_tree)
         if trait_expr_node.node_is_operator(nd)
@@ -147,12 +148,12 @@ function from Rⁱ → R .
 This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,x₉ for example
 
 """
-    element_fun_from_N_to_Ni!(expr_tree, a :: Vector{Int}) = _element_fun_from_N_to_Ni!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree),a)
-    _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_not_expr_tree, a :: Vector{Int}) = error(" This is not an Expr tree")
-    _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_expr_tree, a :: Vector{Int}) = _element_fun_from_N_to_Ni!(expr_tree,a)
-    element_fun_from_N_to_Ni!(expr_tree, a :: Dict{Int,Int}) = _element_fun_from_N_to_Ni!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree),a)
-    _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_not_expr_tree, a :: Dict{Int,Int}) = error(" This is not an Expr tree")
-    _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_expr_tree, a :: Dict{Int,Int}) = _element_fun_from_N_to_Ni!(expr_tree,a)
+    @inline element_fun_from_N_to_Ni!(expr_tree, a :: Vector{Int}) = _element_fun_from_N_to_Ni!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree),a)
+    @inline _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_not_expr_tree, a :: Vector{Int}) = error(" This is not an Expr tree")
+    @inline _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_expr_tree, a :: Vector{Int}) = _element_fun_from_N_to_Ni!(expr_tree,a)
+    @inline element_fun_from_N_to_Ni!(expr_tree, a :: Dict{Int,Int}) = _element_fun_from_N_to_Ni!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree),a)
+    @inline _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_not_expr_tree, a :: Dict{Int,Int}) = error(" This is not an Expr tree")
+    @inline _element_fun_from_N_to_Ni!(expr_tree, :: trait_expr_tree.type_expr_tree, a :: Dict{Int,Int}) = _element_fun_from_N_to_Ni!(expr_tree,a)
     # Pour les 2 fonction suivantes.
     #     - La première prend en entrée un vecteur d'entier, la fonction N_to_Ni créé le dictionnaire qui sera nécessaire pour la seconde fonction,
     #     la première fonction défini juste le dictionnaire nécessaire pour la seconde fonction.
@@ -189,18 +190,26 @@ This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,
     cast_type_of_constant(expr_tree, t)
 Cast the constant of the expression tree expr_tree to the type t.
 """
-    cast_type_of_constant(expr_tree, t :: DataType) = _cast_type_of_constant(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), t)
-    _cast_type_of_constant(expr_tree, :: trait_expr_tree.type_not_expr_tree, t :: DataType) =  error("this is not an expr tree")
-    _cast_type_of_constant(expr_tree, :: trait_expr_tree.type_expr_tree, t :: DataType) =  _cast_type_of_constant(expr_tree, t)
+    @inline cast_type_of_constant(expr_tree, t :: DataType) = _cast_type_of_constant(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), t)
+    @inline _cast_type_of_constant(expr_tree, :: trait_expr_tree.type_not_expr_tree, t :: DataType) =  error("this is not an expr tree")
+    @inline _cast_type_of_constant(expr_tree, :: trait_expr_tree.type_expr_tree, t :: DataType) =  _cast_type_of_constant(expr_tree, t)
 # On chercher à caster les constantes de l'arbre au type t, on va donc parcourir l'arbre jusqu'à arriver aux feuilles
 # où nous réaliserons l'opération de caster au type t une constante individuellement .
-    function _cast_type_of_constant(expr_tree, t :: DataType)
-        # work_tree = trait_expr_tree.transform_to_expr_tree(expr_tree)
-        # hl_trait_expr_tree._cast_type_of_constant(work_tree,t)
-        hl_trait_expr_tree._cast_type_of_constant(expr_tree,t)
-        # tmp_tree = trait_expr_tree.expr_tree_to_create(work_tree, expr_tree)
-        # res = trait_expr_tree.expr_tree_to_create(work_tree, expr_tree)
-        # return tmp_tree
+    @inline _cast_type_of_constant(expr_tree, t :: DataType) = hl_trait_expr_tree._cast_type_of_constant(expr_tree,t)
+
+
+
+    @inline get_function_of_evaluation(expr_tree) = _get_function_of_evaluation(expr_tree, trait_expr_tree.is_expr_tree(expr_tree))
+    @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_not_expr_tree) = error("this is not an expr tree")
+    @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_expr_tree) = _get_function_of_evaluation(expr_tree)
+    function _get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree)
+        ex_Expr = trait_expr_tree.transform_to_Expr2(ex)
+        vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
+        sort!(vars_ex_Expr)
+        vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
+        @eval f_evaluation($(vars_x_ex_Expr...)) = $ex_Expr
+        f(x :: AbstractVector{T}) where T <: Number = (T)(f_evaluation(x...))
+        return f :: Function
     end
 
 end

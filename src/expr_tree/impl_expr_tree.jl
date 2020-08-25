@@ -37,6 +37,7 @@ module implementation_expr_tree
         end
     end
 
+
     function create_Expr2(t :: t_expr_tree)
         nd = trait_tree.get_node(t)
         ch = trait_tree.get_children(t)
@@ -85,11 +86,6 @@ module implementation_expr_tree
 
     _transform_to_expr_tree(ex :: t_expr_tree) = copy(ex) :: t_expr_tree
 
-
-
-
-
-
 #=
     Overleading of Base operators
 =#
@@ -106,6 +102,8 @@ module implementation_expr_tree
         end
     end
 
+
+    
 
     export t_expr_tree
 
