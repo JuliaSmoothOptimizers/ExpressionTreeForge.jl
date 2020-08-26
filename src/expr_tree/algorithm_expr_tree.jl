@@ -198,6 +198,16 @@ Cast the constant of the expression tree expr_tree to the type t.
     @inline _cast_type_of_constant(expr_tree, t :: DataType) = hl_trait_expr_tree._cast_type_of_constant(expr_tree,t)
 
 
+    struct function_wrapper{T <: Number}
+        my_fun :: Function
+        x :: Vector{T}
+    end
+    @inline get_fun(fw :: function_wrapper{T}) where T <: Number = fw.my_fun
+    @inline get_x(fw :: function_wrapper{T}) where T <: Number = fw.x
+    @inline set_x!(fw :: function_wrapper{T}, v :: AbstractVector{T}) where T <: Number = fw.x .= v
+    @inline eval_function_wrapper(fw :: function_wrapper{T}) where T <: Number = get_fun(fw)(get_x(fw)...)
+    @inline eval_function_wrapper(fw :: function_wrapper{T}, v :: AbstractVector{T}) where T <: Number = begin set_x!(fw,v) ; return eval_function_wrapper(fw) end
+    @inline eval_function_wrapper(fw :: function_wrapper{T}, v :: AbstractVector{N}) where N <: Number where T <: Number = begin set_x!(fw, Vector{T}(v)) ; return (N)(eval_function_wrapper(fw)) end
 
 
     @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Expr) = (@eval f($(symbol_x...)) = $expr) :: Function
@@ -206,21 +216,15 @@ Cast the constant of the expression tree expr_tree to the type t.
     @inline get_function_of_evaluation(expr_tree) = _get_function_of_evaluation(expr_tree, trait_expr_tree.is_expr_tree(expr_tree))
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_not_expr_tree) = error("this is not an expr tree")
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_expr_tree) = _get_function_of_evaluation(expr_tree)
-    function _get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree)
+    function _get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree, t :: DataType=Float64)
         ex_Expr = trait_expr_tree.transform_to_Expr2(ex)
-        # @show ex_Expr
         vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
         sort!(vars_ex_Expr)
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
-        return fun_eval(vars_x_ex_Expr, ex_Expr)
-        # x_temp = ones(length(vars_x_ex_Expr))
-        # @show Base.invokelatest(f_evaluation, x_temp...)
-
-        # f(x :: AbstractVector{T}) where T <: Number = f_evaluation(x...)
-        # f(x :: AbstractVector{T}) where T <: Number = f_evaluation(x...)
-        # @show Base.invokelatest(f, x_temp)
-        # return (x :: AbstractVector{T where T <: Number} -> Base.invokelatest(f,x))
-        # return f
+        nᵢ = length(vars_x_ex_Expr)
+        x = Vector{t}(undef, nᵢ)
+        fw = function_wrapper{t}(fun_eval(vars_x_ex_Expr, ex_Expr),x)
+        return fw
     end
 
 end
