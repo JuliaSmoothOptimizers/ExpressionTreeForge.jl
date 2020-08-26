@@ -208,7 +208,8 @@ Cast the constant of the expression tree expr_tree to the type t.
     @inline eval_function_wrapper(fw :: function_wrapper{T}) where T <: Number = get_fun(fw)(get_x(fw)...)
     @inline eval_function_wrapper(fw :: function_wrapper{T}, v :: AbstractVector{T}) where T <: Number = begin set_x!(fw,v) ; return eval_function_wrapper(fw) end
     @inline eval_function_wrapper(fw :: function_wrapper{T}, v :: AbstractVector{N}) where N <: Number where T <: Number = begin set_x!(fw, Vector{T}(v)) ; return (N)(eval_function_wrapper(fw)) end
-    @inline eval_function_wrapper2(fw :: function_wrapper{T}, v :: AbstractVector{N}) where N <: Number where T <: Number =  (N)(fw.my_fun(v...)) end
+    @inline eval_function_wrapper2(fw :: function_wrapper{T}, v :: AbstractVector{N}) where N <: Number where T <: Number =  (N)(fw.my_fun(v...)) 
+    @inline eval_function_wrapper2(fw :: function_wrapper{T}, v :: AbstractVector{T}) where T <: Number =  fw.my_fun(v...)
 
 
     @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Expr) = (@eval f($(symbol_x...)) = $expr) :: Function
