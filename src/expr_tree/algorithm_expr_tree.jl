@@ -200,8 +200,8 @@ Cast the constant of the expression tree expr_tree to the type t.
 
 
 
-    @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Expr) = (@eval f_evaluation($(symbol_x...)) = $expr) :: Function
-    @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Float64) = (@eval f_evaluation($(symbol_x...)) = $expr) :: Function
+    @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Expr) = (@eval f($(symbol_x...)) = $expr) :: Function
+    @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Float64) = (@eval f($(symbol_x...)) = $expr) :: Function
 
     @inline get_function_of_evaluation(expr_tree) = _get_function_of_evaluation(expr_tree, trait_expr_tree.is_expr_tree(expr_tree))
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_not_expr_tree) = error("this is not an expr tree")
