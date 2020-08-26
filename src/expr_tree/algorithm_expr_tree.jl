@@ -208,13 +208,13 @@ Cast the constant of the expression tree expr_tree to the type t.
         vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
         sort!(vars_ex_Expr)
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
-        @eval f_evaluation($(vars_x_ex_Expr...)) = $ex_Expr
-        x_temp = ones(length(vars_x_ex_Expr))
-        @show Base.invokelatest(f_evaluation, x_temp...)
+        return @eval f_evaluation($(vars_x_ex_Expr...)) = $ex_Expr
+        # x_temp = ones(length(vars_x_ex_Expr))
+        # @show Base.invokelatest(f_evaluation, x_temp...)
 
         # f(x :: AbstractVector{T}) where T <: Number = f_evaluation(x...)
-        f(x :: AbstractVector{T}) where T <: Number = f_evaluation(x...)
-        @show Base.invokelatest(f, x_temp)
+        # f(x :: AbstractVector{T}) where T <: Number = f_evaluation(x...)
+        # @show Base.invokelatest(f, x_temp)
         # return (x :: AbstractVector{T where T <: Number} -> Base.invokelatest(f,x))
         return f
     end
