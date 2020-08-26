@@ -319,7 +319,7 @@ end
     f = CalculusTreeTools.get_function_of_evaluation(expr_tree)
     x = ones(50)
     obj_MOI_x = MathOptInterface.eval_objective(evaluator, x)
-    obj_f = f(x)
+    obj_f =CalculusTreeTools.algo_expr_tree.eval_function_wrapper(f,x)
     @show obj_f, obj_MOI_x
     @test obj_f == obj_MOI_x
     @test γ(obj_f, obj_MOI_x)
