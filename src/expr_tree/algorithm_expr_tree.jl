@@ -208,8 +208,6 @@ Cast the constant of the expression tree expr_tree to the type t.
     @inline eval_function_wrapper(fw :: function_wrapper{T}) where T <: Number = get_fun(fw)(get_x(fw)...)
     @inline eval_function_wrapper(fw :: function_wrapper{T}, v :: AbstractVector{T}) where T <: Number = begin set_x!(fw,v) ; return eval_function_wrapper(fw) end
     @inline eval_function_wrapper(fw :: function_wrapper{T}, v :: AbstractVector{N}) where N <: Number where T <: Number = begin set_x!(fw, Vector{T}(v)) ; return (N)(eval_function_wrapper(fw)) end
-    @inline eval_function_wrapper2(fw :: function_wrapper{T}, v :: AbstractVector{N}) where N <: Number where T <: Number =  (N)(fw.my_fun(v...)) 
-    @inline eval_function_wrapper2(fw :: function_wrapper{T}, v :: AbstractVector{T}) where T <: Number =  fw.my_fun(v...)
 
 
     @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Expr) = (@eval f($(symbol_x...)) = $expr) :: Function
@@ -218,14 +216,19 @@ Cast the constant of the expression tree expr_tree to the type t.
     @inline get_function_of_evaluation(expr_tree) = _get_function_of_evaluation(expr_tree, trait_expr_tree.is_expr_tree(expr_tree))
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_not_expr_tree) = error("this is not an expr tree")
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_expr_tree) = _get_function_of_evaluation(expr_tree)
-    function _get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree, t :: DataType=Float64)
+    function _get_function_of_evaluation(ex :: implementation_expr_tree.t_expr_tree, t :: DataType=Float64; n :: Int=-1)
         ex_Expr = trait_expr_tree.transform_to_Expr2(ex)
-        vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
-        sort!(vars_ex_Expr)
+        if n == -1
+            vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
+            sort!(vars_ex_Expr)
+            nᵢ = length(vars_ex_Expr)
+            x = Vector{t}(undef, nᵢ)
+        else
+            vars_ex_Expr = [1:n;]
+            nᵢ = length(vars_ex_Expr)
+            x = Vector{t}(undef, nᵢ)
+        end 
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
-        nᵢ = length(vars_x_ex_Expr)
-        x = Vector{t}(undef, nᵢ)
-        # fw = function_wrapper{t}(fun_eval(vars_x_ex_Expr, ex_Expr),x)
         @eval f($(vars_x_ex_Expr...)) = $ex_Expr
         fw = function_wrapper{t}(f, x)
         return fw
