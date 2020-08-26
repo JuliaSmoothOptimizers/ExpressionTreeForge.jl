@@ -221,6 +221,8 @@ Cast the constant of the expression tree expr_tree to the type t.
         vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
         sort!(vars_ex_Expr)
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
+        nᵢ = length(vars_x_ex_Expr)
+        x = Vector{t}(undef, nᵢ)
         # fw = function_wrapper{t}(fun_eval(vars_x_ex_Expr, ex_Expr),x)
         @eval f($(vars_x_ex_Expr...)) = $ex_Expr
         fw = function_wrapper{t}(f, x)
