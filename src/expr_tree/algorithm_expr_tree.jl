@@ -199,6 +199,9 @@ Cast the constant of the expression tree expr_tree to the type t.
 
 
 
+
+    @inline fun_eval(symbol_x :: Vector{Symbol}, expr :: Expr) = (@eval f_evaluation($(symbol_x...)) = $expr) :: Function
+
     @inline get_function_of_evaluation(expr_tree) = _get_function_of_evaluation(expr_tree, trait_expr_tree.is_expr_tree(expr_tree))
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_not_expr_tree) = error("this is not an expr tree")
     @inline _get_function_of_evaluation(expr_tree, :: trait_expr_tree.type_expr_tree) = _get_function_of_evaluation(expr_tree)
@@ -208,7 +211,7 @@ Cast the constant of the expression tree expr_tree to the type t.
         vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
         sort!(vars_ex_Expr)
         vars_x_ex_Expr = map(i :: Int -> Symbol( "x" * string(i) ), vars_ex_Expr)
-        return @eval f_evaluation($(vars_x_ex_Expr...)) = $ex_Expr
+        return fun_eval(vars_x_ex_Expr, ex_Expr)
         # x_temp = ones(length(vars_x_ex_Expr))
         # @show Base.invokelatest(f_evaluation, x_temp...)
 
@@ -216,7 +219,7 @@ Cast the constant of the expression tree expr_tree to the type t.
         # f(x :: AbstractVector{T}) where T <: Number = f_evaluation(x...)
         # @show Base.invokelatest(f, x_temp)
         # return (x :: AbstractVector{T where T <: Number} -> Base.invokelatest(f,x))
-        return f
+        # return f
     end
 
 end
