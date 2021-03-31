@@ -8,6 +8,8 @@ include("impl_complete_tree.jl")
 include("impl_pre_compiled_tree.jl")
 include("impl_n_precompiled_tree.jl")
 
+include("impl_expression_tree.jl")
+
 include("tr_expr_tree.jl")
 include("bound_propagation.jl")
 include("automatic_convexity_detection.jl")

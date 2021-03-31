@@ -16,6 +16,8 @@ module constants
 
     using  ..abstract_expr_node
 
+    import Base.show
+
     import Base.==
 
     mutable struct constant{T <: Number} <: ab_ex_nd
@@ -80,6 +82,7 @@ module constants
 
     @inline _node_to_Expr(c :: constant{Y}) where Y <: Number = c.value
     @inline _node_to_Expr2(c :: constant{Y}) where Y <: Number = c.value
+
 
     export constant
 end

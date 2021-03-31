@@ -20,6 +20,7 @@ module trait_tree
     @inline _get_children(a, :: type_trait_tree) = _get_children(a)
     @inline _get_children(a, :: type_not_trait_tree) = error(" The parameter is not a Tree")
 
+
     export get_node
     export get_children
 
@@ -40,6 +41,7 @@ module algo_tree
         printer_tree.(ch, deepth + 1)
     end
 
-    export printer_tree
+    import Base.show
 
+    export printer_tree
 end
