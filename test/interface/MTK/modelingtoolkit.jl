@@ -26,3 +26,4 @@ CalculusTreeTools.set_convexity!(complete_ex)
 CalculusTreeTools.get_convexity_status(complete_ex)
 CalculusTreeTools.set_bounds!(complete_ex)
 CalculusTreeTools.get_bound(complete_ex)
+

@@ -27,3 +27,5 @@ Manifest.toml
 #script de développement
 test/script_dvpt/**
 test/profiles_functions/**
+
+todo.md
