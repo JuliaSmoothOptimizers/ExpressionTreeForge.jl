@@ -27,6 +27,7 @@ module trait_expr_tree
     @inline is_expr_tree(a :: implementation_pre_compiled_tree.pre_compiled_tree{T}) where T <: Number = type_expr_tree()
     @inline is_expr_tree(a :: implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}) where T <: Number = type_expr_tree()
     @inline is_expr_tree(a :: ModelingToolkit.Operation) = type_expr_tree()
+		# @inline is_expr_tree(a :: ModelingToolkit.Num) = type_expr_tree()
     @inline is_expr_tree(a :: Any) = type_not_expr_tree()
     function is_expr_tree(t :: DataType)
         if t == abstract_expr_tree.ab_ex_tr || t == t_expr_tree || t == Expr || t == Number

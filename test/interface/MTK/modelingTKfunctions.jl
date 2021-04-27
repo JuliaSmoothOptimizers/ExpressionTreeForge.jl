@@ -50,14 +50,16 @@ function srosenbr(x :: AbstractVector{Y}) where Y <: Number
   sum(100.0 * (x[2*i] - x[2*i-1]^2)^2  + (x[2*i-1] - 1.0)^2 for i=1:div(n, 2))
 end
 
-
-
+f(x) = tan(x[1]) + (sin(x[2]) * cos(x[3]))^2 + exp(x[4])^2 + 5
+@variables x[1:5]
+tmp = f(x)
 
 
 function produce_complete_tree_from_julia_function(f, n)
     @variables x[1:n]
     tmp = f(x)
     ex = CalculusTreeTools.transform_to_expr_tree(tmp)
+		CalculusTreeTools.print_tree(ex)
     complete_ex = CalculusTreeTools.create_complete_tree(ex)
     CalculusTreeTools.set_convexity!(complete_ex)
     CalculusTreeTools.get_convexity_status(complete_ex)
@@ -66,6 +68,8 @@ function produce_complete_tree_from_julia_function(f, n)
     
     return ex, complete_ex
 end 
+
+(tmp_tree, tmp_ctree) = produce_complete_tree_from_julia_function(f,n)
 
 
 (arwhead_tree, arwhead_ctree) = produce_complete_tree_from_julia_function(arwhead,n)
