@@ -117,6 +117,8 @@ module implementation_expression_tree_Expr
 				return abstract_expr_node.create_node_expr(:-)
 			elseif op == * 
 				return abstract_expr_node.create_node_expr(:*)
+			elseif op == /
+				return abstract_expr_node.create_node_expr(:/)				
 			elseif op == ^
 				index_power = ex.args[end].value
 				return abstract_expr_node.create_node_expr(:^, index_power, true )
