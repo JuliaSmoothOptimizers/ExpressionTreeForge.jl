@@ -50,7 +50,7 @@ function srosenbr(x :: AbstractVector{Y}) where Y <: Number
   sum(100.0 * (x[2*i] - x[2*i-1]^2)^2  + (x[2*i-1] - 1.0)^2 for i=1:div(n, 2))
 end
 
-f(x) = tan(x[1]) + (sin(x[2]) * cos(x[3]))^2 + exp(x[4])^2 + 5
+f(x) = tan(x[1]) + (sin(x[2]) * cos(x[3]))^2 + exp(x[4]/2)^2 + 5
 @variables x[1:5]
 tmp = f(x)
 
