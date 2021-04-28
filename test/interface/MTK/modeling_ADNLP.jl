@@ -11,7 +11,7 @@ function produce_complete_tree_from_ADNLP(adnlp :: ADNLPModel)
 end 
 
 function produce_complete_tree_from_julia_function(f, n)
-	@variables x[1:n]
+	ModelingToolkit.@variables x[1:n]
 	tmp = f(x)
 	ex = CalculusTreeTools.transform_to_expr_tree(tmp)
 	complete_ex = CalculusTreeTools.create_complete_tree(ex)
