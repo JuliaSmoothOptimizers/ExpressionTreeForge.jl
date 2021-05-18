@@ -205,7 +205,7 @@ Return a evaluation function of ex with better performance than the actual evalu
 
 export create_bound_tree, set_bounds!, get_bound
 
-export type_calculus_tree, complete_expr_tree
+export type_calculus_tree, complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree
 
 export not_treated_type, constant_type, linear_type, convex_type, concave_type, unknown_type
 export is_treated, is_not_treated, is_constant, is_linear, is_convex, is_concave, is_unknown
