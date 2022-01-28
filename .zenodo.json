@@ -1,6 +1,6 @@
 {
-  "description": "A package Template.jl",
-  "title": "Template.jl",
+  "description": "A package CalculusTreeTools.jl",
+  "title": "CalculusTreeTools.jl",
   "upload_type": "software",
   "publication_date": "2019-02-07",
   "creators": [
@@ -13,7 +13,7 @@
   "related_identifiers": [
     {
       "scheme": "url",
-      "identifier": "https://github.com/paraynaud/Template.jl/releases/latest",
+      "identifier": "https://github.com/paraynaud/CalculusTreeTools.jl/releases/latest",
       "relation": "isSupplementTo"
     }
   ]

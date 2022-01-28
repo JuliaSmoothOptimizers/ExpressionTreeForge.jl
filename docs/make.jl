@@ -1,8 +1,8 @@
 using Documenter
-using Template
+using CalculusTreeTools
 
 makedocs(
-  modules = [Template],
+  modules = [CalculusTreeTools],
   doctest = true,
   # linkcheck = true,
   strict = true,
@@ -10,8 +10,8 @@ makedocs(
     assets = ["assets/style.css"],
     prettyurls = get(ENV, "CI", nothing) == "true",
   ),
-  sitename = "Template.jl",
+  sitename = "CalculusTreeTools.jl",
   pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
 )
 
-deploydocs(repo = "github.com/paraynaud/Template.jl.git", devbranch = "main")
+deploydocs(repo = "github.com/paraynaud/CalculusTreeTools.jl.git", devbranch = "main")

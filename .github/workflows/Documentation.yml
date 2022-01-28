@@ -24,5 +24,4 @@ jobs:
 
 
 # using DocumenterTools
-# DocumenterTools.genkeys(user="paraynaud", repo="Template.jl")
-DocumenterTools.genkeys(user="paraynaud", repo="Template.jl")
+# DocumenterTools.genkeys(user="paraynaud", repo="CalculusTreeTools.jl")
