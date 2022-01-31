@@ -1,6 +1,8 @@
-using Test
-using MathOptInterface, JuMP
-using .trait_expr_tree, .abstract_expr_tree, .algo_expr_tree, .algo_tree
+using CalculusTreeTools.trait_expr_tree, CalculusTreeTools.trait_type_expr
+using CalculusTreeTools.abstract_expr_node, CalculusTreeTools.abstract_expr_tree
+using CalculusTreeTools.algo_expr_tree, CalculusTreeTools.algo_tree
+using CalculusTreeTools.implementation_expr_tree
+using CalculusTreeTools.M_evaluation_expr_tree
 
 @testset "test building of trees and equality" begin
   expr_1 = :(x[1] + x[2] )
@@ -227,7 +229,6 @@ function create_trees(n :: Int)
   @NLobjective(m, Min, sum( (1/2) * (x[j+1]/(x[j]^2)) + sin(x[j+1]^3) for j in 1:n-1 ) + tan(x[1])*1/x[3] + exp(x[2]) - 4)
   evaluator = JuMP.NLPEvaluator(m)
   MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
-  v = ones(n)
   Expr_j = MathOptInterface.objective_expr(evaluator)
   expr_tree = CalculusTreeTools.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
@@ -243,7 +244,6 @@ end
   x = ones(50)
   obj_MOI_x = MathOptInterface.eval_objective(evaluator, x)
   obj_f =CalculusTreeTools.algo_expr_tree.eval_function_wrapper(f,x)
-  @show obj_f, obj_MOI_x
   @test obj_f == obj_MOI_x
-  @test obj_f ≈obj_MOI_x 
+  @test obj_f ≈ obj_MOI_x 
 end

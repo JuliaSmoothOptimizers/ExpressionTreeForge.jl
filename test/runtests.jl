@@ -1,15 +1,14 @@
-using Revise
-using Test
+using Revise, Test
+using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
+
 using CalculusTreeTools
 
-#= include pour pouvoir utiliser les modules locaux dans les tests =#
-root_src = "../"*"src/"
+# root_src = "../"*"src/"
 
-
-include(root_src*"type_expr/ordered_include.jl")
-include(root_src*"node_expr_tree/ordered_include.jl")
-include(root_src*"tree/ordered_include.jl")
-include(root_src*"expr_tree/ordered_include.jl")
+# include(root_src*"type_expr/ordered_include.jl")
+# include(root_src*"node_expr_tree/ordered_include.jl")
+# include(root_src*"tree/ordered_include.jl")
+# include(root_src*"expr_tree/ordered_include.jl")
 
 
 #= include des tests=#

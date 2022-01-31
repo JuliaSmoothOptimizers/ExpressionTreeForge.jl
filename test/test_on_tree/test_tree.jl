@@ -1,6 +1,4 @@
-using Test
-
-using .trait_tree, .abstract_tree, .implementation_tree, .implementation_tree_Expr
+using CalculusTreeTools.trait_tree, CalculusTreeTools.abstract_tree, CalculusTreeTools.implementation_tree, CalculusTreeTools.implementation_tree_Expr
 
 @testset "test on tree/tr_tree" begin
 	t1 = abstract_tree.create_tree(5 , [] )

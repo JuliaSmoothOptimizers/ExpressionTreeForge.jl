@@ -1,5 +1,5 @@
-using .trait_type_expr
-using .implementation_type_expr
+using CalculusTreeTools.trait_type_expr
+using CalculusTreeTools.implementation_type_expr, CalculusTreeTools.implementation_convexity_type, CalculusTreeTools.implementation_convexity_type
 
 @testset "test implementation_type_expr" begin
 
@@ -109,55 +109,41 @@ using .implementation_type_expr
 
 end
 
+@testset "Convexity" begin
+	not_treated = implementation_convexity_type.not_treated_type()
+	cst = implementation_convexity_type.constant_type()
+	lnr = implementation_convexity_type.linear_type()
+	convex = implementation_convexity_type.convex_type()
+	concave = implementation_convexity_type.concave_type()
+	unknown = implementation_convexity_type.unknown_type()
+	all_status = [not_treated, cst, lnr, convex, concave, unknown]
+
+	@test (x -> implementation_convexity_type.is_treated(x)).(all_status) == [false, true, true, true, true, true]
+	@test (x -> implementation_convexity_type.is_not_treated(x)).(all_status) == [true, false, false, false, false, false]
+	@test (x -> implementation_convexity_type.is_constant(x)).(all_status) == [false, true, false, false, false, false]
+	@test (x -> implementation_convexity_type.is_linear(x)).(all_status) == [false, true, true, false, false, false]
+	@test (x -> implementation_convexity_type.is_convex(x)).(all_status) == [false, true, true, true, false, false]
+	@test (x -> implementation_convexity_type.is_concave(x)).(all_status) == [false, true, true, false, true, false]
+	@test (x -> implementation_convexity_type.is_unknown(x)).(all_status) == [false, false, false, false, false, true]
+
+	not_treated_wrapper = implementation_convexity_type.init_conv_status()
+	constant_wrapper = implementation_convexity_type.constant_wrapper()
+	linear_wrapper = implementation_convexity_type.linear_wrapper()
+	convex_wrapper = implementation_convexity_type.convex_wrapper()
+	concave_wrapper = implementation_convexity_type.concave_wrapper()
+	unknown_wrapper = implementation_convexity_type.unknown_wrapper()
+	all_status_wrapper = [not_treated_wrapper, constant_wrapper, linear_wrapper, convex_wrapper, concave_wrapper, unknown_wrapper]
+
+	@test (x -> implementation_convexity_type.is_treated(x)).(all_status_wrapper) == [false, true, true, true, true, true]
+	@test (x -> implementation_convexity_type.is_not_treated(x)).(all_status_wrapper) == [true, false, false, false, false, false]
+	@test (x -> implementation_convexity_type.is_constant(x)).(all_status_wrapper) == [false, true, false, false, false, false]
+	@test (x -> implementation_convexity_type.is_linear(x)).(all_status_wrapper) == [false, true, true, false, false, false]
+	@test (x -> implementation_convexity_type.is_convex(x)).(all_status_wrapper) == [false, true, true, true, false, false]
+	@test (x -> implementation_convexity_type.is_concave(x)).(all_status_wrapper) == [false, true, true, false, true, false]
+	@test (x -> implementation_convexity_type.is_unknown(x)).(all_status_wrapper) == [false, false, false, false, false, true]
 
 
-using .implementation_convexity_type
+	@test (x -> implementation_convexity_type.get_convexity_wrapper(x)).(all_status_wrapper) == all_status
+		# (x -> implementation_convexity_type.set_convexity_wrapper!(x, cst)).(all_status_wrapper)
 
-@testset " test convexity" begin
-
-    #test des type directement
-    not_treated = implementation_convexity_type.not_treated_type()
-    cst = implementation_convexity_type.constant_type()
-    lnr = implementation_convexity_type.linear_type()
-    convex = implementation_convexity_type.convex_type()
-    concave = implementation_convexity_type.concave_type()
-    unknown = implementation_convexity_type.unknown_type()
-    all_status = [not_treated, cst, lnr, convex, concave, unknown]
-
-    @test (x -> implementation_convexity_type.is_treated(x)).(all_status) == [false, true, true, true, true, true]
-    @test (x -> implementation_convexity_type.is_not_treated(x)).(all_status) == [true, false, false, false, false, false]
-    @test (x -> implementation_convexity_type.is_constant(x)).(all_status) == [false, true, false, false, false, false]
-    @test (x -> implementation_convexity_type.is_linear(x)).(all_status) == [false, true, true, false, false, false]
-    @test (x -> implementation_convexity_type.is_convex(x)).(all_status) == [false, true, true, true, false, false]
-    @test (x -> implementation_convexity_type.is_concave(x)).(all_status) == [false, true, true, false, true, false]
-    @test (x -> implementation_convexity_type.is_unknown(x)).(all_status) == [false, false, false, false, false, true]
-
-
-
-
-
-    not_treated_wrapper = implementation_convexity_type.init_conv_status()
-    constant_wrapper = implementation_convexity_type.constant_wrapper()
-    linear_wrapper = implementation_convexity_type.linear_wrapper()
-    convex_wrapper = implementation_convexity_type.convex_wrapper()
-    concave_wrapper = implementation_convexity_type.concave_wrapper()
-    unknown_wrapper = implementation_convexity_type.unknown_wrapper()
-    all_status_wrapper = [not_treated_wrapper, constant_wrapper, linear_wrapper, convex_wrapper, concave_wrapper, unknown_wrapper]
-
-    @test (x -> implementation_convexity_type.is_treated(x)).(all_status_wrapper) == [false, true, true, true, true, true]
-    @test (x -> implementation_convexity_type.is_not_treated(x)).(all_status_wrapper) == [true, false, false, false, false, false]
-    @test (x -> implementation_convexity_type.is_constant(x)).(all_status_wrapper) == [false, true, false, false, false, false]
-    @test (x -> implementation_convexity_type.is_linear(x)).(all_status_wrapper) == [false, true, true, false, false, false]
-    @test (x -> implementation_convexity_type.is_convex(x)).(all_status_wrapper) == [false, true, true, true, false, false]
-    @test (x -> implementation_convexity_type.is_concave(x)).(all_status_wrapper) == [false, true, true, false, true, false]
-    @test (x -> implementation_convexity_type.is_unknown(x)).(all_status_wrapper) == [false, false, false, false, false, true]
-
-
-    @test (x -> implementation_convexity_type.get_convexity_wrapper(x)).(all_status_wrapper) == all_status
-     (x -> implementation_convexity_type.set_convexity_wrapper!(x, cst)).(all_status_wrapper)
-
-     # @show all_status_wrapper, constant_wrapper
-     # my_and(a :: Bool, b :: Bool) = a && b
-     # b = mapreduce( x -> x == constant_wrapper, my_and, all_status_wrapper)
-     # @show b
 end
