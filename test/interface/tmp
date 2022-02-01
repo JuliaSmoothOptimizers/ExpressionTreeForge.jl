@@ -11,16 +11,18 @@ module implementation_expression_tree_Expr
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
  		
-  	mutable struct Variable_counter
+    
+
+		mutable struct Variable_counter
 			current_var :: Int
-			dic_var :: Dict{Symbol,Int64}
+			dic_var :: Dict{Symbol,Inte}
 		end
 		Variable_counter(;index=0, dic_var=Dict{Symbol,Int64}()) = Variable_counter{index, dic_var}
 		
 		@inline zero_vc() = Variable_counter()
 		@inline increase!(vc :: Variable_counter) = vc.current_var += 1
 		@inline get_value(vc :: Variable_counter, s :: Symbol) = get(vc.dic_var, s, vc.current_var + 1)
-		@inline add_dic_var!(vc :: Variable_counter, s :: Symbol, index :: Int64) = vc.dic_var[s] = index
+		@inline add_dic_var!(vc :: Variable_counter, s :: Symbol, index :: In64) = vc.dic_var[s] = index
 		@inline is_next(vc :: Variable_counter) = vc.current_var + 1
 
 		@inline create_expr_tree( ex :: ModelingToolkit.Operation) = ex

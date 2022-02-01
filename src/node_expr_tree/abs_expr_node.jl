@@ -16,7 +16,7 @@ module abstract_expr_node
   
   create_node_expr() = error("c'est une erreur ")
 
-  @inline new_ref(value :: Y ) where Y <: Number= myRef{Y}(value)
+  @inline new_ref(value :: Y ) where Y <: Number = myRef{Y}(value)
   @inline new_ref(type :: DataType) = myRef{type}((type)(-1))
   @inline create_new_vector_myRef(n :: Int, type :: DataType=Float64) = Vector{myRef{type}}(map(i -> new_ref(type) , [1:n;]))
   @inline create_undef_array_myRef(line :: Int, column ::Int, type :: DataType=Float64) = Array{myRef{type},2}( map( x -> myRef{type}((type)(-1)), ones(line, column)) )

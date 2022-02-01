@@ -1,4 +1,4 @@
-using Revise, Test
+using Test
 using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
 
 using CalculusTreeTools
@@ -15,3 +15,5 @@ using CalculusTreeTools
 include("test_on_tree/ordered_include.jl")
 include("unitary_test/ordered_include.jl")
 include("premier_test.jl")
+
+# using ADNLPModels, ForwardDiff, JuMP, MathOptInterface, ReverseDiff, LinearAlgebra, SparseArrays, Test, ModelingToolkit

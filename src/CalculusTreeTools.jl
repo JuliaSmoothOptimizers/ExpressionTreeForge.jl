@@ -1,7 +1,5 @@
 module CalculusTreeTools
 
-using Revise
-
 include("type_expr/ordered_include.jl")
 include("node_expr_tree/ordered_include.jl")
 include("tree/ordered_include.jl")
@@ -20,7 +18,6 @@ using .convexity_detection
 @inline set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
 @inline set_bounds!(tree) = bound_propagations.set_bounds!(tree)
 @inline get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
-
 
 convexity_wrapper = implementation_convexity_type.convexity_wrapper
 @inline get_convexity_wrapper(t :: implementation_convexity_type.convexity_wrapper) = implementation_convexity_type.get_convexity_wrapper(t)
