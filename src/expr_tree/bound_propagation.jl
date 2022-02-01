@@ -33,7 +33,7 @@ module bound_propagations
                 set_bounds!(children_tree[i], children_bound_tree[i])
             end
             son_bounds = (x :: bound_tree -> bound_to_tuple(trait_tree.get_node(x))).(children_bound_tree)
-            (inf_bound_node ,sup_bound_node) = trait_expr_node.node_bound(node, son_bounds, T)
+            (inf_bound_node, sup_bound_node) = trait_expr_node.node_bound(node, son_bounds, T)
             bound = trait_tree.get_node(bounds_tree)
             bound.inf_bound = inf_bound_node
             bound.sup_bound = sup_bound_node

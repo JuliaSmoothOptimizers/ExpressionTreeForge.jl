@@ -81,18 +81,19 @@ module power_operators
     function _node_bound(op :: power_operator{Y} , son_bound :: AbstractVector{Tuple{T,T}}, t :: DataType) where Y <: Number where T <: Number
         vector_inf_bound = [p[1] for p in son_bound]
         vector_sup_bound = [p[2] for p in son_bound]
-        length(vector_inf_bound) == 1 || error("puissance non unaire")
-        length(vector_sup_bound) == 1 || error("puissance non unaire")
+				length(vector_inf_bound) != length(vector_sup_bound) || @error("bounds errors")
+        length(vector_inf_bound) == 1 || length(vector_sup_bound) == 1 || @error("non-unary power operator")        
         bi = vector_inf_bound[1]
         bs = vector_sup_bound[1]
+				bi <= bs || @error("wrong bounds")
         if op.index % 2 == 0
-            if bi > 0  # bs aussi
-                return (bi^(op.index), bs^(op.index))
-            elseif bs < 0 #bi aussi
-                return (bs^(op.index), bi^(op.index))
-            else
-                return ((t)(0) , max( abs(bi), abs(bs))^(op.index) )
-            end
+					if bi > 0  # 0 < bi < bs < Inf
+						return (bi^(op.index), bs^(op.index))
+					elseif bs < 0 # -Inf < bi < bs < 0
+						return (bs^(op.index), bi^(op.index))
+					else # -Inf < bi < 0 < bs < Inf
+						return ((t)(0) , max( abs(bi), abs(bs))^(op.index) )
+					end
         else
             return (bi^(op.index), bs^(op.index))
         end

@@ -58,6 +58,7 @@
     CalculusTreeTools.set_bounds!(complete_tree)
     CalculusTreeTools.set_convexity!(complete_tree)
     @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.convex_type()
+
     m = Model()
     n = 5
     @variable(m, x[1:n])
@@ -77,6 +78,7 @@
     CalculusTreeTools.set_bounds!(complete_tree)
     CalculusTreeTools.set_convexity!(complete_tree)
     @test CalculusTreeTools.get_convexity_status(complete_tree) == CalculusTreeTools.convex_type()
+		
     m = Model()
     n = 5
     @variable(m, x[1:n])
