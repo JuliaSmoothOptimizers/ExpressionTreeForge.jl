@@ -1,4 +1,3 @@
-
 module algo_expr_tree
 
     using ..trait_tree
