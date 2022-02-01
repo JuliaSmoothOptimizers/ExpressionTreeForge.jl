@@ -82,6 +82,7 @@ module power_operators
         vector_inf_bound = [p[1] for p in son_bound]
         vector_sup_bound = [p[2] for p in son_bound]
 				length(vector_inf_bound) != length(vector_sup_bound) || @error("bounds errors")
+				length(vector_inf_bound) != length(vector_sup_bound) || @show vector_sup_bound || @show vector_inf_bound
         length(vector_inf_bound) == 1 || length(vector_sup_bound) == 1 || @error("non-unary power operator")        
         bi = vector_inf_bound[1]
         bs = vector_sup_bound[1]
@@ -92,7 +93,7 @@ module power_operators
 					elseif bs < 0 # -Inf < bi < bs < 0
 						return (bs^(op.index), bi^(op.index))
 					else # -Inf < bi < 0 < bs < Inf
-						return ((t)(0) , max( abs(bi), abs(bs))^(op.index) )
+						return ((t)(0) , max(abs(bi), abs(bs))^(op.index) )
 					end
         else
             return (bi^(op.index), bs^(op.index))
