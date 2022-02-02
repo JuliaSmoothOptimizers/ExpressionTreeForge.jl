@@ -10,8 +10,7 @@ using .algo_tree
 using .implementation_complete_expr_tree, .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
 
 
-using .bound_propagations
-using .convexity_detection
+using .bound_propagations, .convexity_detection
 
 
 @inline create_bound_tree(t) = bound_propagations.create_bound_tree(t)
