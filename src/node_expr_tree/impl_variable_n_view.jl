@@ -2,27 +2,17 @@ module variables_n_view
     using MathOptInterface
 
     import ..abstract_expr_node.ab_ex_nd, ..abstract_expr_node.create_node_expr
-
-    import ..interface_expr_node._node_is_plus, ..interface_expr_node._node_is_minus, ..interface_expr_node._node_is_power, ..interface_expr_node._node_is_times
-    import ..interface_expr_node._node_is_constant, ..interface_expr_node._node_is_variable,..interface_expr_node._node_is_operator
-    import ..interface_expr_node._node_is_sin, ..interface_expr_node._node_is_cos, ..interface_expr_node._node_is_tan
-
+		import ..interface_expr_node:_node_is_plus, _node_is_minus, _node_is_power, _node_is_times, _node_is_constant, _node_is_variable, _node_is_operator, _node_is_sin, _node_is_cos, _node_is_tan
+		import ..interface_expr_node: _get_type_node, _get_var_index, _evaluate_node, _evaluate_node!, _change_from_N_to_Ni!, _cast_constant!, _node_to_Expr, _node_to_Expr2, _node_bound, _node_convexity  
 
     import ..implementation_type_expr.t_type_expr_basic
-    import ..interface_expr_node._get_type_node, ..interface_expr_node._get_var_index
-    import  ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!, ..interface_expr_node._change_from_N_to_Ni!
-    import ..interface_expr_node._cast_constant!, ..interface_expr_node._node_to_Expr, ..interface_expr_node._node_to_Expr2
-
     import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
-    using ..implementation_convexity_type
-
-    using ..implementation_type_expr
-
-    using  ..abstract_expr_node
+    using ..implementation_convexity_type, ..implementation_type_expr
+    using ..abstract_expr_node
     using ..variables
-
-
     import Base.(==)
+
+		export variable_n_view
 
     mutable struct variable_n_view{Y <: Number}  <: ab_ex_nd
         name :: Symbol
@@ -46,12 +36,7 @@ module variables_n_view
     @inline create_node_expr(n :: Symbol, id :: Int, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = variable_n_view{T}(n, id, map(x -> view(x, [id]), multiple_x_view) )
     @inline create_node_expr(v :: variables.variable, multiple_x_view :: Vector{SubArray{T,1,Array{T,1},N,false}} ) where N where T <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x_view )
 
-    # @inline create_node_expr(n :: Symbol, id :: Int, multiple_x :: Vector{Vector{Y}}) where Y <: Number = variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x) )
-    # @inline create_node_expr(v :: variables.variable, multiple_x :: Vector{Vector{Y}}) where Y <: Number = create_node_expr( variables.get_name(v), variables.get_index(v), multiple_x )
-
-    # (SubArray{Y,1,Array{Y,1},Tuple{Array{Int64,1}},false} where Y <: Number) <: (AbstractVector{Y} where Y <: Number)
-
-    @inline _node_is_operator( v :: variable_n_view{Y}) where Y <: Number = false
+   @inline _node_is_operator( v :: variable_n_view{Y}) where Y <: Number = false
     @inline _node_is_plus( v :: variable_n_view{Y}) where Y <: Number = false
     @inline _node_is_minus(v :: variable_n_view{Y}) where Y <: Number = false
     @inline _node_is_times(v :: variable_n_view{Y}) where Y <: Number = false
@@ -71,12 +56,8 @@ module variables_n_view
     #peut-être à revoir
     @inline (==)(a :: variable_n_view{Y}, b :: variable_n_view{Y}) where Y <: Number =  (a.name == b.name) && (a.index == b.index) && (a.multiple_x_view .== b.multiple_x_view)
 
-
     @inline _evaluate_node!(v :: variable_n_view{Y}, ref :: abstract_expr_node.myRef{Y}, i :: Int) where Y <: Number = abstract_expr_node.set_myRef!(ref, get_value(v, i ))
     @inline _evaluate_node!(v :: variable_n_view{Y}, multiple_ref :: AbstractVector{abstract_expr_node.myRef{Y}}) where Y <: Number =  begin for i in [1:length(multiple_ref);] _evaluate_node!(v, multiple_ref[i], i) end end
-
-
-    # change_index( v :: MathOptInterface.VariableIndex, x :: AbstractVector{T}) where T <: Number = x[v.value]
 
     function _change_from_N_to_Ni!(v :: variable_n_view{Y}, dic_new_var :: Dict{Int,Int}) where Y <: Number
         v.index = dic_new_var[v.index]

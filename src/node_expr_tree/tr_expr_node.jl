@@ -2,16 +2,11 @@ module trait_expr_node
 
   using ..abstract_expr_node
 
-  import ..interface_expr_node._node_is_plus, ..interface_expr_node._node_is_minus, ..interface_expr_node._node_is_power, ..interface_expr_node._node_is_times
-  import ..interface_expr_node._node_is_constant, ..interface_expr_node._node_is_variable,..interface_expr_node._node_is_operator
-  import ..interface_expr_node._node_is_sin, ..interface_expr_node._node_is_cos, ..interface_expr_node._node_is_tan
-  import ..interface_expr_node._get_type_node, ..interface_expr_node._get_var_index
-  import ..interface_expr_node._evaluate_node, ..interface_expr_node._evaluate_node!, ..interface_expr_node._change_from_N_to_Ni!
-  import ..interface_expr_node._cast_constant!, ..interface_expr_node._node_to_Expr, ..interface_expr_node._node_to_Expr2
+  import ..interface_expr_node: _node_is_plus, _node_is_minus, _node_is_power, _node_is_times,  _node_is_constant, _node_is_variable, _node_is_operator, _node_is_sin, _node_is_cos, _node_is_tan
+  import ..interface_expr_node: _get_type_node, _get_var_index, _evaluate_node, _evaluate_node!, _change_from_N_to_Ni!, _cast_constant!, _node_to_Expr, _node_to_Expr2
+  import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
 
   using ..trait_type_expr
-
-  import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
   using ..implementation_convexity_type
 
   struct type_expr_node end
@@ -24,7 +19,6 @@ module trait_expr_node
   @inline _node_bound(a,  son_bound :: AbstractVector{Tuple{T,T}}, ::type_expr_node, t :: DataType ) where T <: Number = _node_bound(a, son_bound, t)
   @inline _node_bound(a, son_bound :: AbstractVector{Tuple{T,T}}, ::type_not_expr_node, t :: DataType ) where T <: Number =  error("This node is not a expr node; node_bound function")
 
-
   @inline node_convexity(a) = _node_convexity(a, is_expr_node(a))
   @inline _node_convexity(a, ::type_expr_node) = _node_convexity(a)
   @inline _node_convexity(a, ::type_not_expr_node) =  error("This node is not a expr node; node_convexity function")
@@ -36,7 +30,6 @@ module trait_expr_node
   @inline is_expr_node(a :: abstract_expr_node.ab_ex_nd) = type_expr_node()
   @inline is_expr_node(a :: Expr) = type_expr_node()
   @inline is_expr_node(a :: Number) = type_expr_node()
-  # @inline is_expr_node(a :: Symbol) = type_expr_node()
   @inline is_expr_node(a :: Any) = type_not_expr_node()
 
   @inline node_is_operator(a) = _node_is_operator(a, is_expr_node(a))
