@@ -16,7 +16,7 @@ makedocs(
   pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
 )
 
-deploydocs(repo = "github.com/paraynaud/CalculusTreeTools.jl.git", devbranch = "main")
+deploydocs(repo = "github.com/paraynaud/CalculusTreeTools.jl.git", devbranch = "master")
 
 
 # abstract_expr_tree
