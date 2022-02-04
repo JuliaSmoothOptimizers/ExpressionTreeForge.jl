@@ -1,18 +1,16 @@
 module abstract_tree
 
-"""
-    définition du type abstrait tree
-"""
-    abstract type ab_tree end
-
-
+  export create_tree
 
 """
-    création de la fonction create_tree qui est un constructeur des arbres,
-    on retrouvera dans  les fichiers d'implémentation
+  Define the abstrait type ab_tree
 """
-    create_tree() = ()
+  abstract type ab_tree end
 
-    export create_tree
+"""
+create_tree()
+    Define a tree, the implementation of the function must be done by the subtype of ab_tree
+"""
+  create_tree() = @error("Should not be called (abstract_tree)")
 
 end  # module abstract_tree
