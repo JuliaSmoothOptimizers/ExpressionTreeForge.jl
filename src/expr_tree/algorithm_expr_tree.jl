@@ -1,7 +1,7 @@
 module algo_expr_tree
   using SparseArrays
 
-  using ..trait_expr_node, ..trait_expr_tree, ..trait_tree, 
+  using ..trait_expr_node, ..trait_expr_tree, ..trait_tree
   using ..abstract_expr_tree, ..abstract_expr_node, ..abstract_tree
   using ..implementation_tree, ..implementation_type_expr
   using ..hl_trait_expr_tree

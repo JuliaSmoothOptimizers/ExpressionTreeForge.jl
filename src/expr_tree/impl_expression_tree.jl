@@ -14,7 +14,7 @@ module implementation_expression_tree_Expr
     current_var :: Int
     dic_var :: Dict{Symbol,Int64}
   end
-  Variable_counter(;index=0, dic_var=Dict{Symbol,Int64}()) = Variable_counter{index, dic_var}
+  Variable_counter(;index=0, dic_var=Dict{Symbol,Int64}()) = Variable_counter(index, dic_var)
   
   @inline zero_vc() = Variable_counter()
   @inline increase!(vc :: Variable_counter) = vc.current_var += 1
@@ -51,8 +51,14 @@ module implementation_expression_tree_Expr
       index == is_next(vc) && increase!(vc)				
       add_dic_var!(vc, symbol, index)
       abstract_expr_node.create_node_expr(:x, index)
+		elseif typeof(op) == ModelingToolkit.Variable{Number}
+      symbol = op.name
+      index = get_value(vc, symbol)
+      index == is_next(vc) && increase!(vc)				
+      add_dic_var!(vc, symbol, index)
+      abstract_expr_node.create_node_expr(:x, index)
     else
-      @error("unsurpported operator (ModelingToolKit Interface)")
+			@error("unsurpported operator (ModelingToolKit Interface)")
     end
   end		
 

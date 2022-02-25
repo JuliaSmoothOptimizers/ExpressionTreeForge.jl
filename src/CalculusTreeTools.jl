@@ -10,10 +10,10 @@ module CalculusTreeTools
   using .implementation_complete_expr_tree, .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
   using .bound_propagations, .convexity_detection
 
-  export create_bound_tree, set_bounds!, get_bound
-  export type_calculus_tree, complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree
-  export not_treated_type, constant_type, linear_type, convex_type, concave_type, unknown_type
-  export is_treated, is_not_treated, is_constant, is_linear, is_convex, is_concave, is_unknown
+  export create_bound_tree, get_bound, set_bounds!
+  export complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree, type_calculus_tree
+  export concave_type, constant_type, convex_type, linear_type, not_treated_type, unknown_type
+  export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
   export get_convexity_status, set_convexity!, create_convex_tree
   export is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
   export transform_to_Expr, transform_to_expr_tree
@@ -75,7 +75,7 @@ module CalculusTreeTools
   ATTENTION: This function return an Expr with variable as MathOptInterface.VariableIndex
   In order to get an standard Expr use transform_to_Expr_julia.
   """
-  @inline transform_to_Expr(e :: Any) = trait_expr_tree.transform_to_Expr(e :: Any)
+  @inline transform_to_Expr(e :: Any) = trait_expr_tree.transform_to_Expr(e :: Any) 
 
   """
       transform_to_Expr_julia(expr_tree)
@@ -87,7 +87,7 @@ module CalculusTreeTools
       transform_to_expr_tree(Expr)
   Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in trait_expr_tree
   """
-  @inline transform_to_expr_tree(e :: Any) = trait_expr_tree.transform_to_expr_tree(e)
+  @inline transform_to_expr_tree(e :: Any) = trait_expr_tree.transform_to_expr_tree(e) :: t_expr_tree
 
   """
       delete_imbricated_plus(e)

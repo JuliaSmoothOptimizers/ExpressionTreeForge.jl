@@ -1,16 +1,17 @@
 module trait_expr_tree
 
+using Base.Threads
   using ..abstract_expr_tree, ..implementation_expr_tree, ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
-
   using ..implementation_pre_n_compiled_tree
   using ..implementation_expression_tree_Expr
+
 
   import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
   import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_node
   import ..interface_expr_tree._transform_to_expr_tree, ..interface_expr_tree._expr_tree_to_create
 
   import Base.==
-  using Base.Threads
+  
 
   using ModelingToolkit
 
@@ -74,8 +75,6 @@ module trait_expr_tree
     return false
   end
 
-
-
 """
   get_real_node(a)
 Fonction à prendre avec des pincettes, pour le moment utiliser seulement sur les feuilles.
@@ -89,7 +88,7 @@ Fonction à prendre avec des pincettes, pour le moment utiliser seulement sur le
 This function takes an argument expression_tree satisfying the trait is_expr_tree and return an expression tree of the type t_expr_tree.
 This function is usefull in our algorithms to synchronise all the types satisfying the trait is_expr_tree (like Expr) to the type t_expr_tree.
 """
-  @inline transform_to_expr_tree(a :: T ) where T = _transform_to_expr_tree(is_expr_tree(a), a)
+  @inline transform_to_expr_tree(a :: T ) where T = _transform_to_expr_tree(is_expr_tree(a), a) :: implementation_expr_tree.t_expr_tree
   @inline _transform_to_expr_tree(:: type_not_expr_tree, :: T) where T = error("nous ne traitons pas un arbre d'expression")
   @inline _transform_to_expr_tree(:: type_expr_tree, a :: T) where T = _transform_to_expr_tree(a) :: implementation_expr_tree.t_expr_tree
 
