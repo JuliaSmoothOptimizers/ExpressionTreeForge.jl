@@ -1,19 +1,15 @@
 module trait_expr_tree
 
-using Base.Threads
+	using ModelingToolkit
+	using Base.Threads
   using ..abstract_expr_tree, ..implementation_expr_tree, ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
   using ..implementation_pre_n_compiled_tree
   using ..implementation_expression_tree_Expr
 
-
   import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
   import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_node
   import ..interface_expr_tree._transform_to_expr_tree, ..interface_expr_tree._expr_tree_to_create
-
   import Base.==
-  
-
-  using ModelingToolkit
 
   struct type_expr_tree end
   struct type_not_expr_tree end
@@ -115,7 +111,6 @@ fonction ayant pour but d'homogénéiser 2 arbres quelconque peut importe leurs 
   @inline _expr_tree_to_create(a, b, :: type_not_expr_tree, :: Any) = error("le type de l'arbre d'origine ne satisfait pas le trait")
   @inline _expr_tree_to_create(a, b, :: Any, :: type_not_expr_tree) = error("le type de l'arbre que l'on cherche à créer ne satisfait pas le trait")
   function _expr_tree_to_create(a, b, :: type_expr_tree, :: type_expr_tree)
-    @show typeof(a), typeof(b)
     uniformized_a = transform_to_expr_tree(a) # :: implementation_expr_tree.t_expr_tree        
      _expr_tree_to_create(uniformized_a, b)
   end
