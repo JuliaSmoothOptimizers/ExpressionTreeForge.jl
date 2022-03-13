@@ -1,7 +1,9 @@
 using Test
-using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
-
+using Test
 using CalculusTreeTools
+using JuMP, LinearAlgebra, MathOptInterface, ModelingToolkit, SparseArrays
+
+
 
 # root_src = "../"*"src/"
 
