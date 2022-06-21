@@ -17,11 +17,21 @@ module implementation_expression_tree_Expr
   Variable_counter(;index=0, dic_var=Dict{Symbol,Int64}()) = Variable_counter(index, dic_var)
   
   @inline zero_vc() = Variable_counter()
-  @inline increase!(vc :: Variable_counter) = vc.current_var += 1
-  @inline get_value(vc :: Variable_counter, s :: Symbol) = get(vc.dic_var, s, vc.current_var + 1)
-  @inline add_dic_var!(vc :: Variable_counter, s :: Symbol, index :: Int64) = vc.dic_var[s] = index
-  @inline is_next(vc :: Variable_counter) = vc.current_var + 1
-
+  @inline get_value(vc :: Variable_counter, s :: Symbol) = get(vc.dic_var, s, -1)
+  @inline decimal_basis(a :: Int, b :: Int) = a*10+b
+	function add_dic_var!(vc :: Variable_counter, sym :: Symbol)
+		str_sym = String(sym) # Symbol -> String
+		chains = split(str_sym, "x") # split from the "x"
+		str = string(chains[2]) # get the indices
+		int_chain = Vector{Int}(undef, length(str)) # 
+		for (id,v) in enumerate(str)
+			int_chain[id] = Int(v) # transform unicode to Int
+		end 				
+		dec_basis = (x -> x - 8320).(int_chain) # Int('₁') = 8321
+		index = mapreduce(x -> x, decimal_basis, dec_basis) # calcul le nombre à parti de la base décimal.
+		vc.dic_var[sym] = index
+	end 
+	
   @inline create_expr_tree( ex :: ModelingToolkit.Operation) = ex
   @inline create_Expr(ex :: ModelingToolkit.Operation) = ex
   function _get_expr_node(ex :: ModelingToolkit.Operation; vc :: Variable_counter=Variable_counter() )
@@ -48,14 +58,18 @@ module implementation_expression_tree_Expr
     elseif typeof(op) == ModelingToolkit.Variable
       symbol = op.name
       index = get_value(vc, symbol)
-      index == is_next(vc) && increase!(vc)				
-      add_dic_var!(vc, symbol, index)
+  		if index == -1
+				add_dic_var!(vc, symbol) 
+				index = get_value(vc, symbol)
+			end
       abstract_expr_node.create_node_expr(:x, index)
 		elseif typeof(op) == ModelingToolkit.Variable{Number}
       symbol = op.name
       index = get_value(vc, symbol)
-      index == is_next(vc) && increase!(vc)				
-      add_dic_var!(vc, symbol, index)
+  		if index == -1
+				add_dic_var!(vc, symbol) 
+				index = get_value(vc, symbol)
+			end
       abstract_expr_node.create_node_expr(:x, index)
     else
 			@error("unsurpported operator (ModelingToolKit Interface)")

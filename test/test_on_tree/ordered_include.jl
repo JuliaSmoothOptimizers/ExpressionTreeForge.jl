@@ -1,3 +1,5 @@
 include("test_tree.jl")
 include("test_expr_tree.jl")
 include("test_compl_tree.jl")
+include("test_pre_compiled_tree.jl")
+include("mtk.jl")

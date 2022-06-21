@@ -16,7 +16,7 @@ module CalculusTreeTools
   export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
   export get_convexity_status, set_convexity!, create_convex_tree
   export is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
-  export transform_to_Expr, transform_to_expr_tree
+  export transform_to_Expr, transform_to_Expr_julia, transform_to_expr_tree
   export delete_imbricated_plus, get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
   export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
