@@ -1,6 +1,5 @@
 include("itf_expr_node.jl")
 
-
 include("abs_expr_node.jl")
 
 include("impl_constants.jl")
@@ -17,11 +16,8 @@ include("impl_cos.jl")
 include("impl_tan.jl")
 include("impl_exp.jl")
 
-
 include("impl_simple_operators.jl")
 
-
 include("impl_power.jl")
-
 
 include("tr_expr_node.jl")
