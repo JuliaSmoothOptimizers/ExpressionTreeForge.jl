@@ -32,8 +32,7 @@ import Base.(==)
 
 export time_operator
 
-mutable struct time_operator <: ab_ex_nd
-end
+mutable struct time_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::time_operator,

@@ -32,8 +32,7 @@ using ..abstract_expr_node
 import Base.(==)
 export cos_operator
 
-mutable struct cos_operator <: ab_ex_nd
-end
+mutable struct cos_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::cos_operator,

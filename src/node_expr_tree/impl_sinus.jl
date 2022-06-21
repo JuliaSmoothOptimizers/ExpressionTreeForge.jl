@@ -32,8 +32,7 @@ using ..abstract_expr_node
 import Base.(==)
 export sinus_operator
 
-mutable struct sinus_operator <: ab_ex_nd
-end
+mutable struct sinus_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::sinus_operator,

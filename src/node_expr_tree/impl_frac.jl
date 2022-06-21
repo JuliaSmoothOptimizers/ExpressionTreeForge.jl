@@ -32,8 +32,7 @@ using ..abstract_expr_node
 import Base.(==)
 export variable
 
-mutable struct frac_operator <: ab_ex_nd
-end
+mutable struct frac_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::frac_operator,

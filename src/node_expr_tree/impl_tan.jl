@@ -32,8 +32,7 @@ using ..abstract_expr_node
 import Base.(==)
 export tan_operator
 
-mutable struct tan_operator <: ab_ex_nd
-end
+mutable struct tan_operator <: ab_ex_nd end
 
 _node_convexity(
   op::tan_operator,
