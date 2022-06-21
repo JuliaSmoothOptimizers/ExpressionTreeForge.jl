@@ -2,34 +2,31 @@ using ModelingToolkit
 using CalculusTreeTools
 using ADNLPModels
 
-
-function produce_complete_tree_from_ADNLP(adnlp :: ADNLPModel)
-	f = adnlp.f
-	x0 = adnlp.meta.x0
-	(ex, complet_ex) = produce_complete_tree_from_julia_function(f, n)
-	return (ex, complet_ex)
-end 
+function produce_complete_tree_from_ADNLP(adnlp::ADNLPModel)
+  f = adnlp.f
+  x0 = adnlp.meta.x0
+  (ex, complet_ex) = produce_complete_tree_from_julia_function(f, n)
+  return (ex, complet_ex)
+end
 
 function produce_complete_tree_from_julia_function(f, n)
-	ModelingToolkit.@variables x[1:n]
-	tmp = f(x)
-	ex = CalculusTreeTools.transform_to_expr_tree(tmp)
-	complete_ex = CalculusTreeTools.create_complete_tree(ex)
-	CalculusTreeTools.set_convexity!(complete_ex)
-	CalculusTreeTools.get_convexity_status(complete_ex)
-	CalculusTreeTools.set_bounds!(complete_ex)
-	CalculusTreeTools.get_bound(complete_ex)
-	
-	return ex, complete_ex
-end 
+  ModelingToolkit.@variables x[1:n]
+  tmp = f(x)
+  ex = CalculusTreeTools.transform_to_expr_tree(tmp)
+  complete_ex = CalculusTreeTools.create_complete_tree(ex)
+  CalculusTreeTools.set_convexity!(complete_ex)
+  CalculusTreeTools.get_convexity_status(complete_ex)
+  CalculusTreeTools.set_bounds!(complete_ex)
+  CalculusTreeTools.get_bound(complete_ex)
 
+  return ex, complete_ex
+end
 
-n=5
+n = 5
 f(x) = sum(x)
 x0 = zeros(n)
-f_nlp = ADNLPModel(f,x0)
+f_nlp = ADNLPModel(f, x0)
 (ex, complete_ex) = produce_complete_tree_from_ADNLP(f_nlp)
-
 
 # #=function GridapOptimalControlNLPModel(f, con, domain, n; 
 #                                        x0 = nothing, xf = nothing, 
@@ -49,6 +46,5 @@ f_nlp = ADNLPModel(f,x0)
 # #Le membre de droite de l'EDO:
 # γ = 3 
 # con(x, u) = γ *u * x
-
 
 # # nlp = GridapOptimalControlNLPModel(f, con, domain, n; x0 = x0, umin = umin, umax = umax)
