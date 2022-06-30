@@ -52,18 +52,18 @@ dump(tmp3[1].args[1])
 dump(tmp3[1].args[1].op.name)
 # Symbol u₁
 
-# f_expr = build_function(f,[x,y,t]) # provoque une erreur 
+# f_expr = build_function(f,[x,y,t]) # provoque une erreur
 # rappel: res_f = f([x,y,z])
 # f_expr_of_f = build_function(res_f,[x,y,z]) # provoque une erreur car z n'est pas une variable
 f_expr_of_f = build_function(res_f, [x, y, t])
 
 # julia> typeof(f_expr_of_f[1])
 # Expr
-# dump(f_expr_of_f) 
-# 2 fonctions sont crées, les 2 fonctions sont des Expr sur lesquel on utilise ensuite eval() 
+# dump(f_expr_of_f)
+# 2 fonctions sont crées, les 2 fonctions sont des Expr sur lesquel on utilise ensuite eval()
 # 	eval(f_expr_of_f[1])([args]) est une fonction renvoyant un résultat
 # 	eval(f_expr_of_f)[2](res,[args]) est une fonction ne réalisant pas d'allocations et renvoyant le résultat dans res
-# Mon code fonctionne à partir d'Expr qui est un type assez complexe il ne fonctionnera pas à partir des Expr f_expr_of_f[1] 
+# Mon code fonctionne à partir d'Expr qui est un type assez complexe il ne fonctionnera pas à partir des Expr f_expr_of_f[1]
 # Exemple:
 _args = [1, 2, 3]
 
@@ -109,9 +109,9 @@ Cool features!! :
 Conclusion:
 	Un exemple de ce que l'on pourrait faire:
 	@variable x[1:n]
-	define its objective function using pure julia code 
+	define its objective function using pure julia code
 	function obj_fun(x)
 		...
-	end 
-	mon_code( toexpr( obj_fun(x) ) )
+	end
+	mon_code(toexpr(obj_fun(x) ) )
 =#

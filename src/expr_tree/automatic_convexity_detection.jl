@@ -13,10 +13,13 @@ convexity_tree{T} = implementation_tree.type_node{implementation_convexity_type.
   implementation_convexity_type.init_conv_status(),
   create_convex_tree.(trait_tree.get_children(tree)),
 )
+
 @inline create_convex_tree(cst::T) where {T <: Number} =
   convexity_tree(implementation_convexity_type.init_conv_status(), [])
+
 @inline get_convexity_status(cvx_tree::convexity_tree) =
   implementation_convexity_type.get_convexity_wrapper(trait_tree.get_node(cvx_tree))
+
 @inline get_convexity_status(complete_tree::implementation_complete_expr_tree.complete_expr_tree) =
   implementation_complete_expr_tree.get_convexity_status(trait_tree.get_node(complete_tree))
 

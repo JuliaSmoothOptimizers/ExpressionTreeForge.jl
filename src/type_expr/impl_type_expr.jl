@@ -39,8 +39,9 @@ export t_type_expr_basic,
 @inline return_more() = t_type_expr_basic(4)
 
 """
-    _type_product(a,b)
-Compute the t_type_expr_basic that resultsof of the product a*b
+    result_type = _type_product(a,b)
+
+Compute `result_type::t_type_expr_basic` that results of `a*b`.
 """
 function _type_product(a::t_type_expr_basic, b::t_type_expr_basic)
   if _is_constant(a)
@@ -75,8 +76,9 @@ function _type_product(a::t_type_expr_basic, b::t_type_expr_basic)
 end
 
 """
-    _type_product(index,b)
-Compute the t_type_expr_basic that results of b^(index)
+    result_type = _type_product(index,b)
+
+Compute `result_type::t_type_expr_basic` that results of `b^(index)`.
 """
 function _type_power(index_power::Number, b::t_type_expr_basic)
   if index_power == 0

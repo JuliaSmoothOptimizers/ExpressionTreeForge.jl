@@ -7,6 +7,7 @@ mutable struct new_field
 end
 
 @inline create_new_field(op::abstract_expr_node.ab_ex_nd) = new_field(op)
+
 @inline get_op_from_field(field::new_field) = field.op
 
 mutable struct new_node{Y <: Number}
@@ -22,15 +23,22 @@ mutable struct pre_compiled_tree{Y <: Number}
 end
 
 @inline get_x(tree::pre_compiled_tree{Y}) where {Y <: Number} = tree.x
+
 @inline get_racine(tree::pre_compiled_tree{Y}) where {Y <: Number} = tree.racine
 
 @inline get_field_from_node(node::new_node{Y}) where {Y <: Number} = node.field
+
 @inline get_children_vector_from_node(node::new_node{Y}) where {Y <: Number} = node.children
+
 @inline get_children_from_node(node::new_node{Y}, i::Int) where {Y <: Number} = node.children[i]
+
 @inline get_tmp_vector_from_node(node::new_node{Y}) where {Y <: Number} = node.tmp
+
 @inline get_tmp_from_node(node::new_node{Y}, i::Int) where {Y <: Number} = node.tmp[i]
+
 @inline get_op_from_node(node::new_node{Y}) where {Y <: Number} =
   get_op_from_field(get_field_from_node(node))
+
 @inline get_length_children(node::new_node{Y}) where {Y <: Number} = node.length_children
 
 @inline create_new_node(
@@ -38,12 +46,15 @@ end
   tmp::Vector{myRef{Y}},
   children::Vector{new_node{Y}},
 ) where {Y <: Number} = new_node{Y}(field, tmp, children, length(children))
+
 @inline create_new_node(field::new_field, children::Vector{new_node{Y}}) where {Y <: Number} =
   create_new_node(field, abstract_expr_node.create_new_vector_myRef(length(children), Y), children)
+
 @inline create_new_node(field::new_field, type::DataType = Float64) =
   create_new_node(field, Vector{new_node{type}}(undef, 0))
 
 @inline create_pre_compiled_tree(tree::pre_compiled_tree{T}) where {T <: Number} = tree
+
 function create_pre_compiled_tree(tree::implementation_expr_tree.t_expr_tree, t::DataType = Float64)
   nd = trait_tree.get_node(tree)
   ch = trait_tree.get_children(tree)

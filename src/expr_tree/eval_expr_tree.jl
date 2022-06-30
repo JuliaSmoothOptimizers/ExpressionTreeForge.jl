@@ -10,32 +10,43 @@ using ..implementation_pre_n_compiled_tree
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
 # IT requires that the constants have the same type of x
 @inline evaluate_expr_tree(a::Any) = (x::AbstractVector{} -> evaluate_expr_tree(a, x))
+
 @inline evaluate_expr_tree(a::Any, elmt_var::Vector{Int}) =
   (x::AbstractVector{} -> evaluate_expr_tree(a, view(x, elmt_var)))
+
 @inline evaluate_expr_tree(a::Any, x::AbstractVector{T}) where {T <: Number} =
   _evaluate_expr_tree(a, trait_expr_tree.is_expr_tree(a), x)
+
 @inline evaluate_expr_tree(a::Any, x::AbstractVector) =
   _evaluate_expr_tree(a, trait_expr_tree.is_expr_tree(a), x)
+
 @inline evaluate_expr_tree(a::Any, x::AbstractArray) =
   _evaluate_expr_tree(a, trait_expr_tree.is_expr_tree(a), x)
+
 @inline _evaluate_expr_tree(
   a,
   ::trait_expr_tree.type_not_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree(
   a,
   ::trait_expr_tree.type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = _evaluate_expr_tree(a, x)
+
 @inline _evaluate_expr_tree(a, ::trait_expr_tree.type_not_expr_tree, x::AbstractVector) =
   error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree(a, ::trait_expr_tree.type_expr_tree, x::AbstractVector) =
   _evaluate_expr_tree(a, x)
+
 @inline _evaluate_expr_tree(a, ::trait_expr_tree.type_not_expr_tree, x::AbstractArray) =
   error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree(a, ::trait_expr_tree.type_expr_tree, x::AbstractArray) =
   _evaluate_expr_tree(a, x)
+
 function _evaluate_expr_tree(expr_tree::Y, x::AbstractVector{T}) where {T <: Number} where {Y}
   nd = trait_expr_tree._get_expr_node(expr_tree)
   if trait_expr_node.node_is_operator(nd) == false
@@ -127,6 +138,7 @@ end
   multiple_x::Vector{Vector{T}},
 ) where {T <: Number} =
   implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x)
+
 @inline evaluate_expr_tree_multiple_points(
   tree::implementation_pre_n_compiled_tree.pre_n_compiled_tree{T},
   multiple_x_view::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
@@ -135,11 +147,13 @@ end
 
 @inline evaluate_expr_tree_multiple_points(a::Any, x::Array{Array{T, 1}, 1}) where {T <: Number} =
   _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+
 @inline _evaluate_expr_tree_multiple_points(
   a,
   ::trait_expr_tree.type_not_expr_tree,
   x::Array{Array{T, 1}, 1},
 ) where {T <: Number} = error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree_multiple_points(
   a,
   ::trait_expr_tree.type_expr_tree,
@@ -151,11 +165,13 @@ end
   x::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number} =
   _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+
 @inline _evaluate_expr_tree_multiple_points(
   a,
   ::trait_expr_tree.type_not_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number} = error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree_multiple_points(
   a,
   ::trait_expr_tree.type_expr_tree,
@@ -167,16 +183,19 @@ end
   x::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} =
   _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+
 @inline _evaluate_expr_tree_multiple_points(
   a,
   ::trait_expr_tree.type_not_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} = error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree_multiple_points(
   a,
   ::trait_expr_tree.type_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} = _evaluate_expr_tree_multiple_points(a, x)
+
 @inline function _evaluate_expr_tree_multiple_points(
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{Array{T, 1}, 1},

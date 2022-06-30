@@ -118,7 +118,7 @@ struct type_not_expr_node end
 @inline _get_var_index(a, ::type_expr_node) = _get_var_index(a)
 @inline _get_var_index(a, ::type_not_expr_node) = error("This node is not a expr node")
 
-#  Constants's part 
+#  Constants's part
 @inline node_is_constant(a) = _node_is_constant(a, is_expr_node(a))
 @inline _node_is_constant(a, ::type_expr_node) = _node_is_constant(a)
 @inline _node_is_constant(a, ::type_not_expr_node) = error("This node is not a expr node")

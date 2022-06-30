@@ -15,6 +15,8 @@ import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_n
 import ..interface_expr_tree._transform_to_expr_tree, ..interface_expr_tree._expr_tree_to_create
 import Base.==
 
+export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
+
 struct type_expr_tree end
 struct type_not_expr_tree end
 
@@ -27,11 +29,14 @@ struct type_not_expr_tree end
 @inline is_expr_tree(
   a::implementation_complete_expr_tree.complete_expr_tree{T},
 ) where {T <: Number} = type_expr_tree()
+
 @inline is_expr_tree(a::implementation_pre_compiled_tree.pre_compiled_tree{T}) where {T <: Number} =
   type_expr_tree()
+
 @inline is_expr_tree(
   a::implementation_pre_n_compiled_tree.pre_n_compiled_tree{T},
 ) where {T <: Number} = type_expr_tree()
+
 @inline is_expr_tree(a::ModelingToolkit.Operation) = type_expr_tree()
 @inline is_expr_tree(a::ModelingToolkit.Constant) = type_expr_tree()
 @inline is_expr_tree(a::ModelingToolkit.Variable) = type_expr_tree()
@@ -58,10 +63,13 @@ end
 
 @inline expr_tree_equal(a, b, eq::Atomic{Bool} = Atomic{Bool}(true)) =
   hand_expr_tree_equal(a, b, is_expr_tree(a), is_expr_tree(b), eq)
+
 @inline hand_expr_tree_equal(a, b, ::type_not_expr_tree, ::Any, eq) =
   error("we can't compare if these two tree are not expr tree")
+
 @inline hand_expr_tree_equal(a, b, ::Any, ::type_not_expr_tree, eq) =
   error("we can't compare if these two tree are not expr tree")
+
 function hand_expr_tree_equal(a, b, ::type_expr_tree, ::type_expr_tree, eq::Atomic{Bool})
   if eq[]
     if _get_expr_node(a) == _get_expr_node(b)
@@ -88,8 +96,10 @@ end
 Fonction à prendre avec des pincettes, pour le moment utiliser seulement sur les feuilles.
 """
 @inline get_real_node(a) = _get_real_node(is_expr_tree(a), a)
+
 @inline _get_real_node(::type_not_expr_tree, ::Any) =
   error("nous ne traitons pas un arbre d'expression")
+
 @inline _get_real_node(::type_expr_tree, a::Any) = _get_real_node(a)
 
 """
@@ -99,8 +109,10 @@ This function is usefull in our algorithms to synchronise all the types satisfyi
 """
 @inline transform_to_expr_tree(a::T) where {T} =
   _transform_to_expr_tree(is_expr_tree(a), a)::implementation_expr_tree.t_expr_tree
+
 @inline _transform_to_expr_tree(::type_not_expr_tree, ::T) where {T} =
   error("nous ne traitons pas un arbre d'expression")
+
 @inline _transform_to_expr_tree(::type_expr_tree, a::T) where {T} =
   _transform_to_expr_tree(a)::implementation_expr_tree.t_expr_tree
 
@@ -110,12 +122,16 @@ This function transform an expr_tree and transform it in Expr.
   #Deprecated
 """
 @inline transform_to_Expr(ex) = _transform_to_Expr(trait_expr_tree.is_expr_tree(ex), ex)
+
 @inline _transform_to_Expr(::trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr(ex)
+
 @inline _transform_to_Expr(::trait_expr_tree.type_not_expr_tree, ex) =
   error("notre parametre n'est pas un arbre d'expression")
+
 @inline _transform_to_Expr(ex) = abstract_expr_tree.create_Expr(ex)
 
 @inline transform_to_Expr2(ex) = _transform_to_Expr2(trait_expr_tree.is_expr_tree(ex), ex)
+
 @inline _transform_to_Expr2(::trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr2(ex)
 @inline _transform_to_Expr2(::trait_expr_tree.type_not_expr_tree, ex) =
   error("notre parametre n'est pas un arbre d'expression")
@@ -131,87 +147,16 @@ fonction ayant pour but d'homogénéiser 2 arbres quelconque peut importe leurs 
   is_expr_tree(expr_tree_to_create),
   is_expr_tree(expr_tree_of_good_type),
 )
+
 @inline _expr_tree_to_create(a, b, ::type_not_expr_tree, ::Any) =
   error("le type de l'arbre d'origine ne satisfait pas le trait")
+
 @inline _expr_tree_to_create(a, b, ::Any, ::type_not_expr_tree) =
   error("le type de l'arbre que l'on cherche à créer ne satisfait pas le trait")
+
 function _expr_tree_to_create(a, b, ::type_expr_tree, ::type_expr_tree)
-  uniformized_a = transform_to_expr_tree(a) # :: implementation_expr_tree.t_expr_tree        
+  uniformized_a = transform_to_expr_tree(a) # :: implementation_expr_tree.t_expr_tree
   _expr_tree_to_create(uniformized_a, b)
 end
 
-export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
-
 end  # module trait_expr_tree
-
-module hl_trait_expr_tree
-
-import ..interface_expr_tree._expr_tree_to_create
-
-using ..trait_expr_tree, ..trait_expr_node
-using ..implementation_expr_tree,
-  ..implementation_expr_tree_Expr, ..implementation_complete_expr_tree
-
-@inline _expr_tree_to_create(
-  original_ex::implementation_expr_tree.t_expr_tree,
-  tree_of_needed_type::Expr,
-) = trait_expr_tree.transform_to_Expr(original_ex)
-@inline _expr_tree_to_create(
-  original_ex::implementation_expr_tree.t_expr_tree,
-  tree_of_needed_type::implementation_expr_tree.t_expr_tree,
-) = original_ex
-
-function _cast_type_of_constant(ex::implementation_expr_tree.t_expr_tree, t::DataType)
-  ch = trait_expr_tree.get_expr_children(ex)
-  nd = trait_expr_tree.get_expr_node(ex)
-  if isempty(ch)
-    node = trait_expr_node._cast_constant!(nd, t)
-    return implementation_expr_tree.create_expr_tree(node)
-  elseif trait_expr_node.node_is_power(nd)
-    new_node = trait_expr_node._cast_constant!(nd, t)
-    new_ch = _cast_type_of_constant.(ch, t)
-    return implementation_expr_tree.create_expr_tree(new_node, new_ch)
-  else
-    new_ch = _cast_type_of_constant.(ch, t)
-    return implementation_expr_tree.create_expr_tree(nd, new_ch)
-  end
-end
-
-function _cast_type_of_constant(ex::Expr, t::DataType)
-  ch = trait_expr_tree.get_expr_children(ex)
-  for i = 1:length(ch)
-    node_i = trait_expr_tree.get_expr_node(ch[i])
-    if trait_expr_node.node_is_constant(node_i)
-      ex.args[i + 1] = trait_expr_node._cast_constant!(i, t) #manipulation assez bas niveau des Expr
-    # @show i, ch[i]
-    elseif trait_expr_node.node_is_power(node_i)
-      ch[i].args[end] = trait_expr_node._cast_constant!(node_i, t)
-    end
-  end
-end
-
-function _cast_type_of_constant(
-  ex::implementation_complete_expr_tree.complete_expr_tree,
-  t::DataType,
-)
-  ch = trait_expr_tree.get_expr_children(ex)
-  nd = trait_expr_tree.get_expr_node(ex)
-  if isempty(ch)
-    treated_nd = trait_expr_node._cast_constant!(nd, t)
-    new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd, t)
-    return implementation_complete_expr_tree.create_complete_expr_tree(new_nd)
-  elseif trait_expr_node.node_is_power(nd)
-    treated_nd = trait_expr_node._cast_constant!(nd, t)
-    new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd, t)
-    treated_ch = _cast_type_of_constant.(ch, t)
-    new_ch = implementation_complete_expr_tree.create_complete_expr_tree.(treated_ch)
-    return implementation_complete_expr_tree.create_complete_expr_tree(new_nd, new_ch)
-  else
-    new_ch = _cast_type_of_constant.(ch, t)
-    new_nd = implementation_complete_expr_tree.create_complete_node(nd, t)
-    new_ex = implementation_complete_expr_tree.create_complete_expr_tree(new_nd, new_ch)
-    return new_ex
-  end
-end
-
-end

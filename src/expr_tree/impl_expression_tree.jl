@@ -18,13 +18,16 @@ end
 Variable_counter(; index = 0, dic_var = Dict{Symbol, Int64}()) = Variable_counter(index, dic_var)
 
 @inline zero_vc() = Variable_counter()
+
 @inline get_value(vc::Variable_counter, s::Symbol) = get(vc.dic_var, s, -1)
+
 @inline decimal_basis(a::Int, b::Int) = a * 10 + b
+
 function add_dic_var!(vc::Variable_counter, sym::Symbol)
   str_sym = String(sym) # Symbol -> String
   chains = split(str_sym, "x") # split from the "x"
   str = string(chains[2]) # get the indices
-  int_chain = Vector{Int}(undef, length(str)) # 
+  int_chain = Vector{Int}(undef, length(str)) #
   for (id, v) in enumerate(str)
     int_chain[id] = Int(v) # transform unicode to Int
   end
@@ -34,7 +37,9 @@ function add_dic_var!(vc::Variable_counter, sym::Symbol)
 end
 
 @inline create_expr_tree(ex::ModelingToolkit.Operation) = ex
+
 @inline create_Expr(ex::ModelingToolkit.Operation) = ex
+
 function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Variable_counter())
   op = ex.op
   if op == +
@@ -78,8 +83,10 @@ function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Va
 end
 
 @inline _get_expr_node(ex::ModelingToolkit.Constant) = abstract_expr_node.create_node_expr(ex.value)
+
 @inline _get_expr_children(ex::ModelingToolkit.Operation) =
   (ex.op == ^) ? ex.args[1:(end - 1)] : ex.args
+
 @inline _get_expr_children(c::ModelingToolkit.Constant) = []
 
 function _transform_to_expr_tree(ex::ModelingToolkit.Operation)

@@ -7,6 +7,7 @@ mutable struct new_field
 end
 
 @inline create_new_field(op::abstract_expr_node.ab_ex_nd) = new_field(op)
+
 @inline get_op_from_field(field::new_field) = field.op
 
 mutable struct eval_n_node{Y <: Number}
@@ -26,8 +27,11 @@ mutable struct pre_n_compiled_tree{Y <: Number}
 end
 
 @inline get_racine(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.racine
+
 @inline get_multiple(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple
+
 @inline get_multiple_x(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple_x
+
 function set_multiple_x!(
   tree::pre_n_compiled_tree{Y},
   new_multiple_x::Vector{Vector{Y}},
@@ -38,6 +42,7 @@ function set_multiple_x!(
     tree.multiple_x[i] .= new_multiple_x[i]
   end
 end
+
 function set_multiple_x!(
   tree::pre_n_compiled_tree{T},
   new_multiple_x::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
@@ -50,18 +55,28 @@ function set_multiple_x!(
 end
 
 @inline get_vec_tmp(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.vec_tmp
+
 @inline get_field_from_node(node::eval_n_node{Y}) where {Y <: Number} = node.field
+
 @inline get_children_vector_from_node(node::eval_n_node{Y}) where {Y <: Number} = node.children
+
 @inline get_children_from_node(node::eval_n_node{Y}, i::Int) where {Y <: Number} = node.children[i]
+
 @inline get_vec_tmp_children(node::eval_n_node{Y}) where {Y <: Number} = node.vec_tmp_children
+
 @inline get_vec_tmp_n_eval(node::eval_n_node{Y}) where {Y <: Number} = node.vec_tmp_n_eval
+
 @inline get_tmp_for_n_eval_child(node::eval_n_node{Y}, i::Int) where {Y <: Number} =
   get_vec_tmp_n_eval(node)[i]
+
 @inline get_tmp_eval_node(node::eval_n_node{Y}, i::Int) where {Y <: Number} =
   get_vec_tmp_children(node)[i]
+
 @inline get_op_from_node(node::eval_n_node{Y}) where {Y <: Number} =
   get_op_from_field(get_field_from_node(node))
+
 @inline get_length_children(node::eval_n_node{Y}) where {Y <: Number} = node.length_children
+
 @inline get_length_n_eval(node::eval_n_node{Y}) where {Y <: Number} = node.length_n_eval
 
 @inline create_eval_n_node(
@@ -73,6 +88,7 @@ end
   n_eval::Int,
 ) where {Y <: Number} =
   eval_n_node{Y}(field, vec_tmp_children, vec_tmp_n_eval, children, n_children, n_eval)
+
 function create_eval_n_node(
   field::new_field,
   children::Vector{eval_n_node{Y}},
@@ -84,6 +100,7 @@ function create_eval_n_node(
   abstract_expr_node.equalize_vec_vec_myRef!(vec_tmp_n_eval, vec_tmp_children)
   return create_eval_n_node(field, vec_tmp_children, vec_tmp_n_eval, children, n_children, n_eval)
 end
+
 @inline create_eval_n_node(field::new_field, n_eval::Int, type::DataType = Float64) =
   create_eval_n_node(field, Vector{eval_n_node{type}}(undef, 0), n_eval)
 

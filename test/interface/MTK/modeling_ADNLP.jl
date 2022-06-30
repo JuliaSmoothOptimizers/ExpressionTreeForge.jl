@@ -28,10 +28,10 @@ x0 = zeros(n)
 f_nlp = ADNLPModel(f, x0)
 (ex, complete_ex) = produce_complete_tree_from_ADNLP(f_nlp)
 
-# #=function GridapOptimalControlNLPModel(f, con, domain, n; 
-#                                        x0 = nothing, xf = nothing, 
+# #=function GridapOptimalControlNLPModel(f, con, domain, n;
+#                                        x0 = nothing, xf = nothing,
 #                                        umin = nothing, umax = nothing) =#
-# # 
+# #
 # # n est la taille de la discrétisation (entier)
 # n = 100
 # # le domain au format (t₀, T)
@@ -44,7 +44,7 @@ f_nlp = ADNLPModel(f, x0)
 # #La fonction objectif sous l'intégrale:
 # f(x, u) = - (1.-u)*x
 # #Le membre de droite de l'EDO:
-# γ = 3 
+# γ = 3
 # con(x, u) = γ *u * x
 
 # # nlp = GridapOptimalControlNLPModel(f, con, domain, n; x0 = x0, umin = umin, umax = umax)

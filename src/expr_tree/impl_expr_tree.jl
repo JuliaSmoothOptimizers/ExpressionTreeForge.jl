@@ -58,9 +58,11 @@ end
 
 create_expr_tree(field::T, children::Vector{type_node{T}}) where {T <: ab_ex_nd} =
   length(children) == 0 ? create_expr_tree(field) : t_expr_tree(field, children)
+
 create_expr_tree(field::T) where {T <: ab_ex_nd} = t_expr_tree(field, Vector{t_expr_tree}(undef, 0))
 
 _get_expr_node(t::t_expr_tree) = trait_tree.get_node(t)
+
 _get_expr_children(t::t_expr_tree) = trait_tree.get_children(t)
 
 function _inverse_expr_tree(t::t_expr_tree)

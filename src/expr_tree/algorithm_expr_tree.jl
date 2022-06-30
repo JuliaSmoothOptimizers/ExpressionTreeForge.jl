@@ -10,21 +10,22 @@ using ..implementation_expr_tree
 """
     delete_imbricated_plus(t)
 
-    t must be a type which satisfies the trait_expr_tree. In that case if
-    t represent a function, delete_imbricated_plus(t) will split that function
-    into element function if it is possible.
+t must be a type which satisfies the trait_expr_tree. In that case if
+t represent a function, delete_imbricated_plus(t) will split that function
+into element function if it is possible.
 
-    delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
-    [
-    x[1],
-    x[2],
-    x[3] * x[4]
-    ]
-
+Example:
+delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
+[
+x[1],
+x[2],
+x[3] * x[4]
+]
 """
 @inline delete_imbricated_plus(a::Any) = _delete_imbricated_plus(a, trait_expr_tree.is_expr_tree(a))
 @inline _delete_imbricated_plus(a, ::trait_expr_tree.type_not_expr_tree) =
   error(" This is not an expr tree")
+
 @inline _delete_imbricated_plus(a, ::trait_expr_tree.type_expr_tree) = _delete_imbricated_plus(a)
 function _delete_imbricated_plus(expr_tree::T) where {T}
   nd = trait_expr_tree.get_expr_node(expr_tree)
@@ -63,9 +64,9 @@ end
 
     Return the type of the expression tree t, whose the type is inside the trait_expr_tree
 
-    get_type_tree( :(5+4)) = constant
-    get_type_tree( :(x[1])) = linear
-    get_type_tree( :(x[1]* x[2])) = quadratic
+    get_type_tree(:(5+4)) = constant
+    get_type_tree(:(x[1])) = linear
+    get_type_tree(:(x[1]* x[2])) = quadratic
 
 """
 @inline get_type_tree(a::Any) = _get_type_tree(a, trait_expr_tree.is_expr_tree(a))
@@ -92,17 +93,21 @@ end
 """
     get_elemental_variable(expr_tree)
 
-    Return the index of the variable appearing in the expression tree
+Return the index of the variable appearing in the expression tree
 
-    get_elemental_variable( :(x[1] + x[3]) )
-    > [1, 3]
-    get_elemental_variable( :(x[1]^2 + x[6] + x[2]) )
-    > [1, 6, 2]
+Example:
+get_elemental_variable(:(x[1] + x[3]) )
+> [1, 3]
+get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
+> [1, 6, 2]
 """
 @inline get_elemental_variable(a::Any) = _get_elemental_variable(a, trait_expr_tree.is_expr_tree(a))
+
 @inline _get_elemental_variable(a, ::trait_expr_tree.type_not_expr_tree) =
   error(" This is not an Expr tree")
+
 @inline _get_elemental_variable(a, ::trait_expr_tree.type_expr_tree) = _get_elemental_variable(a)
+
 function _get_elemental_variable(expr_tree)
   nd = trait_expr_tree.get_expr_node(expr_tree)
   if trait_expr_node.node_is_operator(nd)
@@ -122,6 +127,7 @@ end
 
 """
     get_Ui(index_new_var, n)
+
 Create a the matrix U associated to the variable appearing in index_new_var.
 This function create a sparse matrix of size length(index_new_var)×n.
 """
@@ -139,6 +145,7 @@ end
 
 """
     element_fun_from_N_to_Ni!(expr_tree, vector)
+
 Transform the tree expr_tree, which represent a function from Rⁿ ⇢ R, to an element
 function from Rⁱ → R .
 This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,x₉ for example
@@ -146,22 +153,28 @@ This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,
 """
 @inline element_fun_from_N_to_Ni!(expr_tree, a::Vector{Int}) =
   _element_fun_from_N_to_Ni!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), a)
+
 @inline _element_fun_from_N_to_Ni!(
   expr_tree,
   ::trait_expr_tree.type_not_expr_tree,
   a::Vector{Int},
 ) = error(" This is not an Expr tree")
+
 @inline _element_fun_from_N_to_Ni!(expr_tree, ::trait_expr_tree.type_expr_tree, a::Vector{Int}) =
   _element_fun_from_N_to_Ni!(expr_tree, a)
+
 @inline element_fun_from_N_to_Ni!(expr_tree, a::Dict{Int, Int}) =
   _element_fun_from_N_to_Ni!(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), a)
+
 @inline _element_fun_from_N_to_Ni!(
   expr_tree,
   ::trait_expr_tree.type_not_expr_tree,
   a::Dict{Int, Int},
 ) = error(" This is not an Expr tree")
+
 @inline _element_fun_from_N_to_Ni!(expr_tree, ::trait_expr_tree.type_expr_tree, a::Dict{Int, Int}) =
   _element_fun_from_N_to_Ni!(expr_tree, a)
+
 # Pour les 2 fonction suivantes.
 #     - La première prend en entrée un vecteur d'entier, la fonction N_to_Ni créé le dictionnaire qui sera nécessaire pour la seconde fonction,
 #     la première fonction défini juste le dictionnaire nécessaire pour la seconde fonction.
@@ -194,14 +207,18 @@ end
 
 """
     cast_type_of_constant(expr_tree, t)
+
 Cast the constant of the expression tree expr_tree to the type t.
 """
 @inline cast_type_of_constant(expr_tree, t::DataType) =
   _cast_type_of_constant(expr_tree, trait_expr_tree.is_expr_tree(expr_tree), t)
+
 @inline _cast_type_of_constant(expr_tree, ::trait_expr_tree.type_not_expr_tree, t::DataType) =
   error("this is not an expr tree")
+
 @inline _cast_type_of_constant(expr_tree, ::trait_expr_tree.type_expr_tree, t::DataType) =
   _cast_type_of_constant(expr_tree, t)
+
 # Cast the type t by walking into the expr_tree
 @inline _cast_type_of_constant(expr_tree, t::DataType) =
   hl_trait_expr_tree._cast_type_of_constant(expr_tree, t)
@@ -210,16 +227,22 @@ struct function_wrapper{T <: Number}
   my_fun::Function
   x::Vector{T}
 end
+
 @inline get_fun(fw::function_wrapper{T}) where {T <: Number} = fw.my_fun
+
 @inline get_x(fw::function_wrapper{T}) where {T <: Number} = fw.x
+
 @inline set_x!(fw::function_wrapper{T}, v::AbstractVector{T}) where {T <: Number} = fw.x .= v
+
 @inline eval_function_wrapper(fw::function_wrapper{T}) where {T <: Number} =
   (T)(Base.invokelatest(get_fun(fw), get_x(fw)...))
+
 @inline eval_function_wrapper(fw::function_wrapper{T}, v::AbstractVector{T}) where {T <: Number} =
   begin
     set_x!(fw, v)
     return eval_function_wrapper(fw)
   end
+
 @inline eval_function_wrapper(
   fw::function_wrapper{T},
   v::AbstractVector{N},
@@ -234,10 +257,13 @@ end
 
 @inline get_function_of_evaluation(expr_tree) =
   _get_function_of_evaluation(expr_tree, trait_expr_tree.is_expr_tree(expr_tree))
+
 @inline _get_function_of_evaluation(expr_tree, ::trait_expr_tree.type_not_expr_tree) =
   error("this is not an expr tree")
+
 @inline _get_function_of_evaluation(expr_tree, ::trait_expr_tree.type_expr_tree) =
   _get_function_of_evaluation(expr_tree)
+
 function _get_function_of_evaluation(
   ex::implementation_expr_tree.t_expr_tree,
   t::DataType = Float64;

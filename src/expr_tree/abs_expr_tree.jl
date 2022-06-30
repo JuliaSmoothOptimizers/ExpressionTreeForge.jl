@@ -12,7 +12,9 @@ mutable struct bounds{T <: Number}
 end
 
 create_empty_bounds(t::DataType) = bounds{t}((t)(-Inf), (t)(Inf))
+
 get_bounds(b::bounds{T}) where {T <: Number} = (b.inf_bound, b.sup_bound)
+
 function set_bound!(b::bounds{T}, bi::T, bs::T) where {T <: Number}
   b.inf_bound = bi
   b.sup_bound = bs

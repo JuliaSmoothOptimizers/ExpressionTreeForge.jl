@@ -11,7 +11,7 @@ module implementation_expression_tree_Expr
     import ..interface_expr_tree._get_expr_node, ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
     import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
  		
-    
+
 
 		mutable struct Variable_counter
 			current_var :: Int
@@ -25,7 +25,7 @@ module implementation_expression_tree_Expr
 		@inline add_dic_var!(vc :: Variable_counter, s :: Symbol, index :: In64) = vc.dic_var[s] = index
 		@inline is_next(vc :: Variable_counter) = vc.current_var + 1
 
-		@inline create_expr_tree( ex :: ModelingToolkit.Operation) = ex
+		@inline create_expr_tree(ex :: ModelingToolkit.Operation) = ex
     @inline create_Expr(ex :: ModelingToolkit.Operation) = ex
     function _get_expr_node(ex :: ModelingToolkit.Operation; vc :: Variable_counter=Variable_counter() )
 			op = ex.op
@@ -33,14 +33,14 @@ module implementation_expression_tree_Expr
 				return abstract_expr_node.create_node_expr(:+)
 			elseif op == -
 				return abstract_expr_node.create_node_expr(:-)
-			elseif op == * 
+			elseif op == *
 				return abstract_expr_node.create_node_expr(:*)
 			elseif op == /
 				return abstract_expr_node.create_node_expr(:/)				
 			elseif op == ^
 				power_value = ex.args[end].value
 				return abstract_expr_node.create_node_expr(:^, power_value, true )
-			elseif op == tan 
+			elseif op == tan
 				return abstract_expr_node.create_node_expr(:tan)
 			elseif op == cos
 				return abstract_expr_node.create_node_expr(:cos)
@@ -68,7 +68,7 @@ module implementation_expression_tree_Expr
     function _transform_to_expr_tree(ex :: ModelingToolkit.Operation)
 			vc = zero_vc()
 			_transform_to_expr_tree2(ex :: ModelingToolkit.Operation; vc)		
-		end 
+		end
 
 		function _transform_to_expr_tree2(ex :: ModelingToolkit.Operation; vc :: Variable_counter)		
 			n_node = _get_expr_node(ex; vc) :: abstract_expr_node.ab_ex_nd

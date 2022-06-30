@@ -110,7 +110,8 @@ Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait 
 If e represent a calculus tree, delete_imbricated_plus(e) will split that function into element function if it is possible.
 concretely if divides the tree into subtrees as long as top nodes are + or -
 
-delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
+Example:
+julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
 [
 x[1],
 x[2],
@@ -121,27 +122,35 @@ x[3] * x[4]
 
 """
     get_type_tree(t)
+
 Return the type of the expression tree t, whose the types are defined in type_expr/impl_type_expr.jl
 
-get_type_tree( :(5+4)) = constant
-get_type_tree( :(x[1])) = linear
-get_type_tree( :(x[1]* x[2])) = quadratic
-
+Example:
+julia> get_type_tree(:(5+4)) == constant
+true
+julia> get_type_tree(:(x[1])) == linear
+true
+julia> get_type_tree(:(x[1]* x[2])) == quadratic
+true
 """
 @inline get_type_tree(a::Any) = algo_expr_tree.get_type_tree(a)
 
 """
     get_elemental_variable(expr_tree)
-Return the index of the variable appearing in the expression tree
-get_elemental_variable( :(x[1] + x[3]) )
-> [1, 3]
-get_elemental_variable( :(x[1]^2 + x[6] + x[2]) )
-> [1, 6, 2]
+
+Return the index of the variable appearing in the expression tree.
+
+Example:
+julia> get_elemental_variable(:(x[1] + x[3]) )
+[1, 3]
+julia> get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
+[1, 6, 2]
 """
 @inline get_elemental_variable(a::Any) = algo_expr_tree.get_elemental_variable(a)
 
 """
     get_Ui(index_new_var, n)
+
 Create a the matrix U associated to the variable appearing in index_new_var.
 This function create a sparse matrix of size length(index_new_var)×n.
 """
@@ -149,9 +158,10 @@ This function create a sparse matrix of size length(index_new_var)×n.
 
 """
     element_fun_from_N_to_Ni!(expr_tree, v)
+
 Transform the tree expr_tree, which represent a function from Rⁿ ⇢ R, to an element, function from Rⁱ → R, where i is the length of the vector v .
 This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,x₉ for example
-element_fun_from_N_to_Ni!( :(x[4] + x[5]), [1,2])
+element_fun_from_N_to_Ni!(:(x[4] + x[5]), [1,2])
 > :(x[1] + x[2])
 """
 @inline element_fun_from_N_to_Ni!(a::Any, v::AbstractVector{Int}) =
@@ -159,6 +169,7 @@ element_fun_from_N_to_Ni!( :(x[4] + x[5]), [1,2])
 
 """
     cast_type_of_constant(expr_tree, t)
+
 Cast the constant of the Calculus tree expr_tree to the type t.
 """
 @inline cast_type_of_constant(ex::Any, t::DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
@@ -166,11 +177,14 @@ Cast the constant of the Calculus tree expr_tree to the type t.
 # M_evaluation_expr_tree's functions
 """
     evaluate_expr_tree(t, x)
+
 Evaluate the Calculus tree t given the vector x, the value of the variables in t.
-evaluate_expr_tree(:(x[1] + x[2]), ones(2))
-> 2
-evaluate_expr_tree(:(x[1] + x[2]), [0,1])
-> 1
+
+Example:
+julia> evaluate_expr_tree(:(x[1] + x[2]), ones(2))
+2
+julia> evaluate_expr_tree(:(x[1] + x[2]), [0,1])
+1
 """
 @inline evaluate_expr_tree(e::Any, x::AbstractVector{T}) where {T <: Number} =
   M_evaluation_expr_tree.evaluate_expr_tree(e, x)
@@ -187,27 +201,35 @@ evaluate_expr_tree(:(x[1] + x[2]), [0,1])
 
 """
     calcul_gradient_expr_tree(t, x)
+
 Evaluate the gradient of the calculus tree t as the point x
-calcul_gradient_expr_tree( :(x[1] + x[2]), rand(2))
->[1.0 1.0]
+
+Example:
+julia> calcul_gradient_expr_tree(:(x[1] + x[2]), rand(2))
+[1.0 1.0]
 """
 @inline calcul_gradient_expr_tree(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_gradient_expr_tree(e, x)
 
 """
     calcul_gradient_expr_tree2(t, x)
-Evaluate the gradient of the calculus tree t as the point x
-calcul_gradient_expr_tree2( :(x[1] + x[2]), rand(2))
->[1.0 1.0]
+
+Evaluate the gradient of the calculus tree t as the point x.
+
+Example:
+julia> calcul_gradient_expr_tree2(:(x[1] + x[2]), rand(2))
+[1.0 1.0]
 """
 @inline calcul_gradient_expr_tree2(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_gradient_expr_tree2(e, x)
 
 """
     calcul_Hessian_expr_tree(t, x)
-Evaluate the Hessian of the calculus tree t as the point x
-calcul_Hessian_expr_tree( :(x[1]^2 + x[2]), rand(2))
->[2.0 0.0; 0.0 0.0]
+
+Evaluate the Hessian of the calculus tree t as the point x.
+
+julia> calcul_Hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
+[2.0 0.0; 0.0 0.0]
 """
 @inline calcul_Hessian_expr_tree(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_Hessian_expr_tree(e, x)
@@ -219,4 +241,4 @@ Return a evaluation function of ex with better performance than the actual evalu
 @inline get_function_of_evaluation(ex::implementation_expr_tree.t_expr_tree) =
   algo_expr_tree.get_function_of_evaluation(ex)
 
-end # module
+end

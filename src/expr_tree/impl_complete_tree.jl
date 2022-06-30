@@ -26,26 +26,32 @@ end
   bounds::abstract_expr_tree.bounds{T},
   cvx_st::implementation_convexity_type.convexity_wrapper,
 ) where {T <: Number} = complete_node{T}(op, bounds, cvx_st)
+
 @inline create_complete_node(
   op::ab_ex_nd,
   bounds::abstract_expr_tree.bounds{T},
 ) where {T <: Number} =
   create_complete_node(op, bounds, implementation_convexity_type.init_conv_status())
+
 @inline create_complete_node(op::ab_ex_nd, bi::T, bs::T) where {T <: Number} =
   create_complete_node(op, abstract_expr_tree.bounds{T}(bi, bs))
+
 @inline create_complete_node(op::ab_ex_nd, t = Float64::DataType) =
   create_complete_node(op, (t)(-Inf), (t)(Inf))
 
 @inline get_op_from_node(cmp_nope::complete_node) = cmp_nope.op
 
 @inline get_bounds_from_node(cmp_nope::complete_node) = cmp_nope.bounds
+
 @inline set_bound!(node::complete_node{T}, bi::T, bs::T) where {T <: Number} =
   abstract_expr_tree.set_bound!(node.bounds, bi, bs)
+
 @inline get_bounds(node::complete_node{T}) where {T <: Number} =
   abstract_expr_tree.get_bounds(node.bounds)
 
 @inline get_convexity_status(node::complete_node{T}) where {T <: Number} =
   implementation_convexity_type.get_convexity_wrapper(node.convexity_status)
+
 @inline set_convexity_status!(
   node::complete_node{T},
   t::implementation_convexity_type.convexity_type,
@@ -58,9 +64,12 @@ complete_expr_tree{T <: Number} = type_node{complete_node{T}}
   cn::complete_node{T},
   ch::AbstractVector{complete_expr_tree{T}},
 ) where {T <: Number} = complete_expr_tree{T}(cn, ch)
+
 @inline create_complete_expr_tree(cn::complete_node{T}) where {T <: Number} =
   create_complete_expr_tree(cn, Vector{complete_expr_tree{T}}(undef, 0))
+
 @inline create_complete_expr_tree(ex::complete_expr_tree{T}) where {T <: Number} = ex
+
 function create_complete_expr_tree(t::implementation_expr_tree.type_node{T}) where {T <: ab_ex_nd}
   nd = trait_tree.get_node(t)
   ch = trait_tree.get_children(t)
@@ -76,6 +85,7 @@ end
 
 @inline create_expr_tree(tree::complete_expr_tree{T}) where {T <: Number} =
   create_expr_tree(trait_tree.get_node(tree), trait_tree.get_children(tree))
+
 @inline create_expr_tree(
   field::complete_node{T},
   children::Vector{complete_expr_tree{T}},
@@ -83,15 +93,19 @@ end
   get_op_from_node(field),
   Vector{implementation_expr_tree.t_expr_tree}(create_expr_tree.(children)),
 )
+
 @inline create_expr_tree(field::complete_node{T}) where {T <: Number} =
   abstract_expr_tree.create_expr_tree(get_op_from_node(field))::implementation_expr_tree.t_expr_tree
 
 @inline _get_expr_node(t::complete_expr_tree) = get_op_from_node(trait_tree.get_node(t))
+
 @inline _get_expr_children(t::complete_expr_tree) = trait_tree.get_children(t)
+
 @inline _get_real_node(ex::complete_expr_tree{T}) where {T <: Number} = _get_expr_node(ex)
 
 @inline tuple_bound_from_tree(ex::complete_expr_tree{T}) where {T <: Number} =
   get_bounds(trait_tree._get_node(ex))
+
 @inline _transform_to_expr_tree(ex::complete_expr_tree{T}) where {T <: Number} =
   create_expr_tree(ex)
 

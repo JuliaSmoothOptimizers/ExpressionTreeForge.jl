@@ -23,11 +23,11 @@ f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad f \in \R^n \to \R, \quad \hat f_i:\R
 $$
 $f$ is a sum of element functions $\hat{f}_i$, and usually $n_i \ll n$. $U_i$ is a linear operator, it selects the variables used by $\hat{f}_i$.
 
-The derivatives of partially separable function are partitioned, the gradient 
+The derivatives of partially separable function are partitioned, the gradient
 $$
 \nabla f(x) = \sum_{i=1}^N U_i^\top \nabla \hat{f}_i (U_i x),
 $$
-and the hessian 
+and the hessian
 $$
 \nabla^2 f(x) = \sum_{i=1}^N U_i^\top \nabla^2 \hat{f_i} (U_i x) U_i,
 $$
@@ -60,7 +60,7 @@ using CalculusTreeTools
 m = Model()
 n = 10
 @variable(m, x[1:n])
-@NLobjective(m, Min, sum( x[j] * x[j+1] for j in 1:n-1 ) + (sin(x[1]))^2 + x[n-1]^3  + 5 )
+@NLobjective(m, Min, sum(x[j] * x[j+1] for j in 1:n-1 ) + (sin(x[1]))^2 + x[n-1]^3  + 5 )
 evaluator = JuMP.NLPEvaluator(m)
 MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
@@ -91,7 +91,7 @@ convexity_status = get_convexity_status(complete_tree)
 
 ## Dependencies
 This module is use in addition of [PartitionedStructures.jl](https://github.com/paraynaud/PartitionedStructures.jl)
-to define a trust-region method exploiting the partial separabiliy through partitioned quasi-Newton approximation by:  
+to define a trust-region method exploiting the partial separabiliy through partitioned quasi-Newton approximation by:
  [PartiallySeparableNLPModels.jl](https://github.com/paraynaud/PartiallySeparableNLPModels.jl) and [PartiallySeparableSolvers.jl](https://github.com/paraynaud/PartiallySeparableSolvers.jl).
 
 

@@ -13,10 +13,11 @@ bound_tree{T} = implementation_tree.type_node{abstract_expr_tree.bounds{T}}
     abstract_expr_tree.bounds{type}((type)(0), (type)(0)),
     create_bound_tree.(trait_tree.get_children(tree)),
   )
+
 @inline create_bound_tree(cst::T, type = Float64::DataType) where {T <: Number} =
   return bound_tree{type}(abstract_expr_tree.bounds{type}((type)(0), (type)(0)), [])
 
-""" 
+"""
     set_bounds!(tree,bound_tre)
 Propagate the bounds for each node of tree
 """
