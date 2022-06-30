@@ -32,8 +32,7 @@ using ..abstract_expr_node
 import Base.(==)
 export plus_operator
 
-mutable struct plus_operator <: ab_ex_nd
-end
+mutable struct plus_operator <: ab_ex_nd end
 
 my_and(a::Bool, b::Bool) = (a && b)
 function _node_convexity(
