@@ -24,7 +24,6 @@ struct type_not_expr_tree end
 @inline is_expr_tree(a::t_expr_tree) = type_expr_tree()
 @inline is_expr_tree(a::Expr) = type_expr_tree()
 @inline is_expr_tree(a::Number) = type_expr_tree()
-# @inline is_expr_tree(a :: Symbol) = type_expr_tree()
 @inline is_expr_tree(::Number) = type_expr_tree()
 @inline is_expr_tree(
   a::implementation_complete_expr_tree.complete_expr_tree{T},

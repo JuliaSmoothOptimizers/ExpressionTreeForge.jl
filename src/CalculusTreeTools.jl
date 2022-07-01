@@ -23,26 +23,36 @@ export delete_imbricated_plus,
 export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
 @inline create_bound_tree(t) = bound_propagations.create_bound_tree(t)
+
 @inline set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
+
 @inline set_bounds!(tree) = bound_propagations.set_bounds!(tree)
+
 @inline get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
 convexity_wrapper = implementation_convexity_type.convexity_wrapper
+
 @inline get_convexity_wrapper(t::implementation_convexity_type.convexity_wrapper) =
   implementation_convexity_type.get_convexity_wrapper(t)
+
 @inline set_convexity_wrapper!(
   cw::implementation_convexity_type.convexity_wrapper,
   typ::implementation_convexity_type.convexity_type,
 ) = implementation_convexity_type.set_convexity_wrapper!(cw, typ)
 
 @inline create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
+
 @inline set_convexity!(tree, cvx_tree, bound_tree) =
   convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
+
 @inline set_convexity!(complete_tree) = convexity_detection.set_convexity!(complete_tree)
+
 @inline get_convexity_status(cvx_tree::convexity_detection.convexity_tree) =
   convexity_detection.get_convexity_status(cvx_tree)
+
 @inline get_convexity_status(complete_tree::implementation_complete_expr_tree.complete_expr_tree) =
   convexity_detection.get_convexity_status(complete_tree)
+
 @inline constant_type() = implementation_convexity_type.constant_type()
 @inline linear_type() = implementation_convexity_type.linear_type()
 @inline convex_type() = implementation_convexity_type.convex_type()
@@ -61,15 +71,19 @@ t_expr_tree = implementation_expr_tree.t_expr_tree
 
 @inline create_complete_tree(tree) =
   implementation_complete_expr_tree.create_complete_expr_tree(tree)
+
 complete_expr_tree{T <: Number} = implementation_complete_expr_tree.complete_expr_tree{T}
 
 pre_compiled_tree{T <: Number} = implementation_pre_compiled_tree.pre_compiled_tree{T}
+
 @inline create_pre_compiled_tree(tree, x) =
   implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
 
 pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}
+
 @inline create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number} =
   implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
+
 @inline create_pre_n_compiled_tree(
   tree,
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
@@ -77,6 +91,7 @@ pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_comp
   implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
 type_calculus_tree = implementation_type_expr.t_type_expr_basic
+
 @inline is_constant(t::type_calculus_tree) = t == type_calculus_tree(0)
 @inline is_linear(t::type_calculus_tree) = t == type_calculus_tree(1)
 @inline is_quadratic(t::type_calculus_tree) = t == type_calculus_tree(2)
@@ -87,6 +102,7 @@ type_calculus_tree = implementation_type_expr.t_type_expr_basic
 # trait_expr_tree's functions
 """
     transform_to_Expr(expr_tree)
+
 Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait defined in trait_expr_tree.
 ATTENTION: This function return an Expr with variable as MathOptInterface.VariableIndex
 In order to get an standard Expr use transform_to_Expr_julia.
@@ -95,18 +111,21 @@ In order to get an standard Expr use transform_to_Expr_julia.
 
 """
     transform_to_Expr_julia(expr_tree)
+
 Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree.
 """
 @inline transform_to_Expr_julia(e::Any) = trait_expr_tree.transform_to_Expr2(e::Any)
 
 """
     transform_to_expr_tree(Expr)
+
 Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in trait_expr_tree
 """
 @inline transform_to_expr_tree(e::Any) = trait_expr_tree.transform_to_expr_tree(e)::t_expr_tree
 
 """
     delete_imbricated_plus(e)
+
 If e represent a calculus tree, delete_imbricated_plus(e) will split that function into element function if it is possible.
 concretely if divides the tree into subtrees as long as top nodes are + or -
 
@@ -188,14 +207,18 @@ julia> evaluate_expr_tree(:(x[1] + x[2]), [0,1])
 """
 @inline evaluate_expr_tree(e::Any, x::AbstractVector{T}) where {T <: Number} =
   M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+
 @inline evaluate_expr_tree(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+
 @inline evaluate_expr_tree(e::Any, x::AbstractArray) =
   M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+
 @inline evaluate_expr_tree(e::Any) = (x::AbstractVector{} -> evaluate_expr_tree(e, x))
 
 @inline evaluate_expr_tree_multiple_points(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
+
 @inline evaluate_expr_tree_multiple_points(e::Any) =
   implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
 
@@ -236,6 +259,7 @@ julia> calcul_Hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
 
 """
     get_function_of_evaluation(ex)
+
 Return a evaluation function of ex with better performance than the actual evaluate_expr_tree.
 """
 @inline get_function_of_evaluation(ex::implementation_expr_tree.t_expr_tree) =
