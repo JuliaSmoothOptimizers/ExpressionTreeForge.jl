@@ -1,6 +1,6 @@
-include("itf_expr_node.jl")
-
 include("abs_expr_node.jl")
+
+include("itf_expr_node.jl")
 
 include("impl_constants.jl")
 include("impl_variables.jl")
