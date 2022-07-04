@@ -23,6 +23,7 @@ x[3] * x[4]
 ]
 """
 @inline delete_imbricated_plus(a::Any) = _delete_imbricated_plus(a, trait_expr_tree.is_expr_tree(a))
+
 @inline _delete_imbricated_plus(a, ::trait_expr_tree.type_not_expr_tree) =
   error(" This is not an expr tree")
 
@@ -72,6 +73,7 @@ end
 @inline get_type_tree(a::Any) = _get_type_tree(a, trait_expr_tree.is_expr_tree(a))
 @inline _get_type_tree(a, ::trait_expr_tree.type_not_expr_tree) = error(" This is not an Expr tree")
 @inline _get_type_tree(a, ::trait_expr_tree.type_expr_tree) = _get_type_tree(a)
+
 function _get_type_tree(expr_tree)
   ch = trait_expr_tree.get_expr_children(expr_tree)
   if isempty(ch)
