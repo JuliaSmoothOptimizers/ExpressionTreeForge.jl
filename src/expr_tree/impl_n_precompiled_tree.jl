@@ -3,10 +3,10 @@ module implementation_pre_n_compiled_tree
 using ..M_abstract_expr_node, ..trait_tree, ..implementation_expr_tree, ..M_trait_expr_node
 
 mutable struct new_field
-  op::M_abstract_expr_node.ab_ex_nd
+  op::M_abstract_expr_node.Abstract_expr_node
 end
 
-@inline create_new_field(op::M_abstract_expr_node.ab_ex_nd) = new_field(op)
+@inline create_new_field(op::M_abstract_expr_node.Abstract_expr_node) = new_field(op)
 
 @inline get_op_from_field(field::new_field) = field.op
 

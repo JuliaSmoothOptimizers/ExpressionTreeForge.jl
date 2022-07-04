@@ -1,7 +1,7 @@
 module M_variables_n_view
 using MathOptInterface
 
-import ..M_abstract_expr_node.ab_ex_nd, ..M_abstract_expr_node.create_node_expr
+import ..M_abstract_expr_node.Abstract_expr_node, ..M_abstract_expr_node.create_node_expr
 import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
@@ -24,7 +24,7 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 
-import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 import ..M_interface_expr_node._node_bound, ..M_interface_expr_node._node_convexity
 using ..M_implementation_convexity_type, ..M_implementation_type_expr
 using ..M_abstract_expr_node
@@ -33,7 +33,7 @@ import Base.(==)
 
 export variable_n_view
 
-mutable struct variable_n_view{Y <: Number} <: ab_ex_nd
+mutable struct variable_n_view{Y <: Number} <: Abstract_expr_node
   name::Symbol
   index::Int
   multiple_x_view::Vector{SubArray{Y, 1, Array{Y, 1}, Tuple{Array{Int64, 1}}, false}}

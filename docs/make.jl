@@ -41,7 +41,7 @@ using CalculusTreeTools:
   M_trait_type_expr,
   M_interface_type_expr,
   M_implementation_type_expr,
-  M_M_implementation_convexity_type
+  M_implementation_convexity_type
 
 makedocs(
   modules = [
@@ -85,7 +85,7 @@ makedocs(
     M_trait_type_expr,
     M_interface_type_expr,
     M_implementation_type_expr,
-    M_M_implementation_convexity_type,
+    M_implementation_convexity_type,
   ],
   doctest = true,
   # linkcheck = true,

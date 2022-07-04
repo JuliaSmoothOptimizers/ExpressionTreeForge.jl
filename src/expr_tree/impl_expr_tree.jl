@@ -12,7 +12,7 @@ import ..interface_expr_tree._get_expr_node,
   ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
 import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
 
-t_expr_tree = Type_node{ab_ex_nd}
+t_expr_tree = Type_node{Abstract_expr_node}
 
 function create_Expr(t::t_expr_tree)
   nd = trait_tree.get_node(t)
@@ -56,10 +56,10 @@ function create_Expr2(t::t_expr_tree)
   end
 end
 
-create_expr_tree(field::T, children::Vector{Type_node{T}}) where {T <: ab_ex_nd} =
+create_expr_tree(field::T, children::Vector{Type_node{T}}) where {T <: Abstract_expr_node} =
   length(children) == 0 ? create_expr_tree(field) : t_expr_tree(field, children)
 
-create_expr_tree(field::T) where {T <: ab_ex_nd} = t_expr_tree(field, Vector{t_expr_tree}(undef, 0))
+create_expr_tree(field::T) where {T <: Abstract_expr_node} = t_expr_tree(field, Vector{t_expr_tree}(undef, 0))
 
 _get_expr_node(t::t_expr_tree) = trait_tree.get_node(t)
 

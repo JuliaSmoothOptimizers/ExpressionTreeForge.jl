@@ -1,6 +1,6 @@
 module M_constant
 
-import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_abstract_expr_node: Abstract_expr_node, create_node_expr
 import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
@@ -22,7 +22,7 @@ import ..M_interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
@@ -31,7 +31,7 @@ using ..M_abstract_expr_node
 import Base.(==)
 export constant
 
-mutable struct constant{T <: Number} <: ab_ex_nd
+mutable struct constant{T <: Number} <: Abstract_expr_node
   value::T
 end
 

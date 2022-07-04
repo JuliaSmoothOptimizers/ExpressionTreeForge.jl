@@ -41,16 +41,16 @@ end
   collection = [constant, variable, times, power_operator, plus, minus, exp, frac]
 
   @test M_trait_expr_node.is_expr_node.(vcat(collection, [:+, :*])) == [
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_not_expr_node(),
-    M_trait_expr_node.type_not_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_not_expr_node(),
+    M_trait_expr_node.Type_not_expr_node(),
   ]
   @test M_trait_expr_node.node_is_operator.(collection) ==
         [false, false, true, true, true, true, true, true]
@@ -69,12 +69,12 @@ end
   ]
 
   @test M_trait_expr_node.is_expr_node.(coll_simple_op) == [
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
-    M_trait_expr_node.type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
+    M_trait_expr_node.Type_expr_node(),
   ]
   @test M_trait_expr_node.node_is_operator.(coll_simple_op) == [true, true, true, true, true, true]
   @test M_trait_expr_node.node_is_plus.(coll_simple_op) == [true, false, false, false, false, false]

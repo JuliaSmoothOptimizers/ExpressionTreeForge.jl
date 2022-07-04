@@ -90,7 +90,7 @@ pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_comp
 ) where {N} where {T <: Number} =
   implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
-type_calculus_tree = M_implementation_type_expr.t_type_expr_basic
+type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 
 @inline is_constant(t::type_calculus_tree) = t == type_calculus_tree(0)
 @inline is_linear(t::type_calculus_tree) = t == type_calculus_tree(1)

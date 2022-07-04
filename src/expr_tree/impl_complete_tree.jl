@@ -16,27 +16,27 @@ import ..interface_expr_tree:
 export complete_node
 
 mutable struct complete_node{T <: Number}
-  op::M_abstract_expr_node.ab_ex_nd
+  op::M_abstract_expr_node.Abstract_expr_node
   bounds::abstract_expr_tree.bounds{T}
   convexity_status::M_implementation_convexity_type.Convexity_wrapper
 end
 
 @inline create_complete_node(
-  op::ab_ex_nd,
+  op::Abstract_expr_node,
   bounds::abstract_expr_tree.bounds{T},
   cvx_st::M_implementation_convexity_type.Convexity_wrapper,
 ) where {T <: Number} = complete_node{T}(op, bounds, cvx_st)
 
 @inline create_complete_node(
-  op::ab_ex_nd,
+  op::Abstract_expr_node,
   bounds::abstract_expr_tree.bounds{T},
 ) where {T <: Number} =
   create_complete_node(op, bounds, M_implementation_convexity_type.init_conv_status())
 
-@inline create_complete_node(op::ab_ex_nd, bi::T, bs::T) where {T <: Number} =
+@inline create_complete_node(op::Abstract_expr_node, bi::T, bs::T) where {T <: Number} =
   create_complete_node(op, abstract_expr_tree.bounds{T}(bi, bs))
 
-@inline create_complete_node(op::ab_ex_nd, t = Float64::DataType) =
+@inline create_complete_node(op::Abstract_expr_node, t = Float64::DataType) =
   create_complete_node(op, (t)(-Inf), (t)(Inf))
 
 @inline get_op_from_node(cmp_nope::complete_node) = cmp_nope.op
@@ -70,7 +70,7 @@ complete_expr_tree{T <: Number} = Type_node{complete_node{T}}
 
 @inline create_complete_expr_tree(ex::complete_expr_tree{T}) where {T <: Number} = ex
 
-function create_complete_expr_tree(t::implementation_expr_tree.Type_node{T}) where {T <: ab_ex_nd}
+function create_complete_expr_tree(t::implementation_expr_tree.Type_node{T}) where {T <: Abstract_expr_node}
   nd = trait_tree.get_node(t)
   ch = trait_tree.get_children(t)
   if isempty(ch)

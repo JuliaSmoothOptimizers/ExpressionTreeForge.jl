@@ -82,7 +82,7 @@ function _get_type_tree(expr_tree)
     return type_node
   else
     n = length(ch)
-    ch_type = Vector{M_implementation_type_expr.t_type_expr_basic}(undef, n)
+    ch_type = Vector{M_implementation_type_expr.Type_expr_basic}(undef, n)
     for i = 1:n
       ch_type[i] = _get_type_tree(ch[i])
     end

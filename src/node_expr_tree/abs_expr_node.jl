@@ -5,11 +5,11 @@ import Base.*, Base./
 import Base.^
 import Base.sin, Base.tan, Base.cos, Base.exp
 
-export ab_ex_nd, create_node_expr
+export Abstract_expr_node, create_node_expr
 export MyRef, new_ref, create_new_vector_myRef, set_myRef!, get_myRef
 
 """ Supertype of every node. """
-abstract type ab_ex_nd end
+abstract type Abstract_expr_node end
 
 """
     create_node_expr(arg::UnionAll)
@@ -17,7 +17,7 @@ abstract type ab_ex_nd end
 Create a node from `arg`.
 See the different implementation in the `src/node_expr_tree/impl_operaotrs.jl`.
 """
-create_node_expr(node::ab_ex_nd) = error("error in the create of a node")
+create_node_expr(node::Abstract_expr_node) = error("error in the create of a node")
 
 """
     MyRef{Y <: Number}

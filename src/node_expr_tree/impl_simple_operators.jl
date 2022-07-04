@@ -1,6 +1,6 @@
 module M_simple_operator
 
-import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_abstract_expr_node: Abstract_expr_node, create_node_expr
 import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
@@ -21,7 +21,7 @@ import ..M_interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
@@ -33,7 +33,7 @@ export simple_operator
 using ..M_plus_operator, ..M_minus_operator, ..M_times_operator, ..M_sinus_operator
 using ..M_tan_operator, ..M_cos_operator, ..M_exp_operator, ..M_frac_operator
 
-mutable struct simple_operator <: ab_ex_nd
+mutable struct simple_operator <: Abstract_expr_node
   op::Symbol
 end
 

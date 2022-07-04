@@ -1,6 +1,6 @@
 module M_minus_operator
 
-import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_abstract_expr_node: Abstract_expr_node, create_node_expr
 import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
@@ -21,7 +21,7 @@ import ..M_interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
@@ -30,7 +30,7 @@ using ..M_abstract_expr_node
 import Base.(==)
 export minus_operator
 
-mutable struct minus_operator <: ab_ex_nd end
+mutable struct minus_operator <: Abstract_expr_node end
 
 function _node_convexity(
   op::minus_operator,
@@ -121,7 +121,7 @@ end
 
 @inline _node_is_constant(op::minus_operator) = false
 
-function _get_type_node(op::minus_operator, type_ch::Vector{t_type_expr_basic})
+function _get_type_node(op::minus_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     return type_ch[1]
   else

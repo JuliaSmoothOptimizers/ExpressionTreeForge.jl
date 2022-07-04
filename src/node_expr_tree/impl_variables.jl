@@ -1,7 +1,7 @@
 module M_variable
 using MathOptInterface
 
-import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_abstract_expr_node: Abstract_expr_node, create_node_expr
 import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
@@ -24,7 +24,7 @@ import ..M_interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
@@ -32,7 +32,7 @@ using ..M_abstract_expr_node
 import Base.(==)
 export variable
 
-mutable struct variable <: ab_ex_nd
+mutable struct variable <: Abstract_expr_node
   name::Symbol
   index::Int
 end

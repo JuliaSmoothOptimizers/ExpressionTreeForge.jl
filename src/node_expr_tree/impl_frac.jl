@@ -1,6 +1,6 @@
 module M_frac_operator
 
-import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_abstract_expr_node: Abstract_expr_node, create_node_expr
 import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
@@ -21,7 +21,7 @@ import ..M_interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
@@ -30,7 +30,7 @@ using ..M_abstract_expr_node
 import Base.(==)
 export variable
 
-mutable struct frac_operator <: ab_ex_nd end
+mutable struct frac_operator <: Abstract_expr_node end
 
 function _node_convexity(
   op::frac_operator,
@@ -134,7 +134,7 @@ end
 
 @inline _node_is_constant(op::frac_operator) = false
 
-function _get_type_node(op::frac_operator, type_ch::Vector{t_type_expr_basic})
+function _get_type_node(op::frac_operator, type_ch::Vector{Type_expr_basic})
   t_denom = type_ch[2]
   if M_trait_type_expr._is_constant(t_denom)
     return type_ch[1]

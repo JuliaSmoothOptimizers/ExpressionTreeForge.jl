@@ -80,7 +80,7 @@ end
 @inline _get_real_node(ex::Number) = ex
 
 function _transform_to_expr_tree(ex::Expr)
-  n_node = _get_expr_node(ex)::M_abstract_expr_node.ab_ex_nd
+  n_node = _get_expr_node(ex)::M_abstract_expr_node.Abstract_expr_node
   children = _get_expr_children(ex)
   if isempty(children)
     return abstract_expr_tree.create_expr_tree(n_node)::implementation_expr_tree.t_expr_tree
