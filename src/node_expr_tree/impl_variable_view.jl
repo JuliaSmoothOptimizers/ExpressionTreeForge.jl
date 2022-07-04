@@ -1,4 +1,4 @@
-module variables_view
+module M_variables_view
 using MathOptInterface
 
 import ..abstract_expr_node: ab_ex_nd, create_node_expr
@@ -29,7 +29,7 @@ import ..implementation_type_expr.t_type_expr_basic
 using ..implementation_convexity_type
 using ..implementation_type_expr
 using ..abstract_expr_node
-using ..variables
+using ..M_variable
 import Base.(==)
 
 export variable_view
@@ -59,8 +59,8 @@ end
 ) where {Y <: Number} = variable_view(n, id.value, view(x, [id.value]))
 @inline create_node_expr(v::variable_view{Y}, x::AbstractVector{Y}) where {Y <: Number} =
   variable_view(v.name, v.index, view(x, [v.index]))
-@inline create_node_expr(v::variables.variable, x::AbstractVector{Y}) where {Y <: Number} =
-  create_node_expr(variables.get_name(v), variables.get_index(v), x)
+@inline create_node_expr(v::M_variable.variable, x::AbstractVector{Y}) where {Y <: Number} =
+  create_node_expr(M_variable.get_name(v),M_variable.get_index(v), x)
 
 # (SubArray{Y,1,Array{Y,1},Tuple{Array{Int64,1}},false} where Y <: Number) <: (AbstractVector{Y} where Y <: Number)
 

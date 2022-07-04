@@ -8,7 +8,7 @@ using ..abstract_expr_node
 using ..implementation_pre_n_compiled_tree
 
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
-# IT requires that the constants have the same type of x
+# IT requires that the M_constant have the same type of x
 @inline evaluate_expr_tree(a::Any) = (x::AbstractVector{} -> evaluate_expr_tree(a, x))
 
 @inline evaluate_expr_tree(a::Any, elmt_var::Vector{Int}) =

@@ -32,8 +32,8 @@ mutable struct MyRef{Y <: Number}
 end
 
 """
-    new_ref(value::Y) where {Y <: Number}
-    new_ref(type::DataType)
+    myref = new_ref(value::Y) where {Y <: Number}
+    myref = new_ref(type::DataType)
 
 Create a new reference `myRef` from `value` or `type`.
 """
@@ -41,20 +41,35 @@ Create a new reference `myRef` from `value` or `type`.
 @inline new_ref(type::DataType) = MyRef{type}((type)(-1))
 
 """
-    create_new_vector_myRef(n::Int, type::DataType = Float64)
+    vector_myref = create_new_vector_myRef(n::Int, type::DataType = Float64)
 
-Create a vector of `n` `myRef{type}`
+Create a vector of `n` `myRef{type}` components.
 """
 @inline create_new_vector_myRef(n::Int, type::DataType = Float64) =
   Vector{MyRef{type}}(map(i -> new_ref(type), [1:n;]))
 
-@inline create_undef_array_myRef(line::Int, column::Int, type::DataType = Float64) =
-  Array{MyRef{type}, 2}(map(x -> MyRef{type}((type)(-1)), ones(line, column)))
+"""
+    create_undef_array_myRef(n::Int, m::Int, type::DataType = Float64)
 
+Create a `n`×`m` array composed of `myRef{type}` components.
+"""
+@inline create_undef_array_myRef(n::Int, m::Int, type::DataType = Float64) =
+  Array{MyRef{type}, 2}(map(x -> MyRef{type}((type)(-1)), ones(n, m)))
+
+"""
+    create_undef_array_myRef(l::Int, c::Int, type::DataType = Float64)
+
+Create a vector of size `l`, each component is a `Vector{myRef{type}}` of `c` components.
+"""
 @inline create_vector_of_vector_myRef(l::Int, c::Int, type::DataType = Float64) =
   Vector{Vector{MyRef{type}}}(map(i -> create_new_vector_myRef(c, type), [1:l;]))
 
-function equalize_vec_vec_myRef!(
+"""
+    equalize_vec_vec_myRef!(a::Vector{Vector{MyRef{T}}}, b::Vector{Vector{MyRef{T}}}) where {T <: Number}
+
+Set the references of `b` to those of `a`.
+"""
+  function equalize_vec_vec_myRef!(
   a::Vector{Vector{MyRef{T}}},
   b::Vector{Vector{MyRef{T}}},
 ) where {T <: Number}
@@ -65,7 +80,18 @@ function equalize_vec_vec_myRef!(
   end
 end
 
+"""
+    set_myRef!(reference::MyRef{Y}, value::Y) where {Y <: Number}
+
+Set the `reference` to `value`.
+"""
 @inline set_myRef!(ref::MyRef{Y}, value::Y) where {Y <: Number} = ref.value = value
+
+"""
+    value = get_myRef(reference::MyRef{Y}) where {Y <: Number}
+
+Get the `value` of the `reference`
+"""
 @inline get_myRef(ref::MyRef{Y}) where {Y <: Number} = ref.value::Y
 
 @inline +(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} =

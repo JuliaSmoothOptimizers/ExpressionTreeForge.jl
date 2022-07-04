@@ -1,4 +1,4 @@
-module variables_n_view
+module M_variables_n_view
 using MathOptInterface
 
 import ..abstract_expr_node.ab_ex_nd, ..abstract_expr_node.create_node_expr
@@ -28,7 +28,7 @@ import ..implementation_type_expr.t_type_expr_basic
 import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
 using ..implementation_convexity_type, ..implementation_type_expr
 using ..abstract_expr_node
-using ..variables
+using ..M_variable
 import Base.(==)
 
 export variable_n_view
@@ -53,8 +53,8 @@ end
 
 @inline create_node_expr(n::Symbol, id::Int, multiple_x::Vector{Vector{Y}}) where {Y <: Number} =
   variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x))
-@inline create_node_expr(v::variables.variable, multiple_x::Vector{Vector{Y}}) where {Y <: Number} =
-  create_node_expr(variables.get_name(v), variables.get_index(v), multiple_x)
+@inline create_node_expr(v::M_variable.variable, multiple_x::Vector{Vector{Y}}) where {Y <: Number} =
+  create_node_expr(M_variable.get_name(v),M_variable.get_index(v), multiple_x)
 
 @inline create_node_expr(
   n::Symbol,
@@ -63,10 +63,10 @@ end
 ) where {N} where {T <: Number} =
   variable_n_view{T}(n, id, map(x -> view(x, [id]), multiple_x_view))
 @inline create_node_expr(
-  v::variables.variable,
+  v::M_variable.variable,
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number} =
-  create_node_expr(variables.get_name(v), variables.get_index(v), multiple_x_view)
+  create_node_expr(M_variable.get_name(v),M_variable.get_index(v), multiple_x_view)
 
 @inline _node_is_operator(v::variable_n_view{Y}) where {Y <: Number} = false
 @inline _node_is_plus(v::variable_n_view{Y}) where {Y <: Number} = false

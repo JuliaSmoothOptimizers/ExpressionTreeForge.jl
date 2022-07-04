@@ -1,4 +1,4 @@
-module sinus_operators
+module M_sinus_operator
 
 import ..abstract_expr_node: ab_ex_nd, create_node_expr
 import ..interface_expr_node:

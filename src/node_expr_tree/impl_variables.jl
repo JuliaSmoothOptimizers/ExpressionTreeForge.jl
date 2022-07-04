@@ -1,4 +1,4 @@
-module variables
+module M_variable
 using MathOptInterface
 
 import ..abstract_expr_node: ab_ex_nd, create_node_expr

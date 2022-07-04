@@ -1,4 +1,4 @@
-module simple_operators
+module M_simple_operator
 
 import ..abstract_expr_node: ab_ex_nd, create_node_expr
 import ..interface_expr_node:
@@ -30,8 +30,8 @@ using ..abstract_expr_node
 import Base.(==)
 export simple_operator
 
-using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators
-using ..tan_operators, ..cos_operators, ..exp_operators, ..frac_operators
+using ..M_plus_operator, ..M_minus_operator, ..M_times_operator, ..M_sinus_operator
+using ..M_tan_operator, ..M_cos_operator, ..M_exp_operator, ..M_frac_operator
 
 mutable struct simple_operator <: ab_ex_nd
   op::Symbol
@@ -39,21 +39,21 @@ end
 
 function create_node_expr(op::Symbol)
   if op == :+
-    plus_operators.plus_operator()
+    M_plus_operator.plus_operator()
   elseif op == :-
-    minus_operators.minus_operator()
+    M_minus_operator.minus_operator()
   elseif op == :*
-    times_operators.time_operator()
+    M_times_operator.time_operator()
   elseif op == :/
-    frac_operators.frac_operator()
+    M_frac_operator.frac_operator()
   elseif op == :sin
-    sinus_operators.sinus_operator()
+    M_sinus_operator.sinus_operator()
   elseif op == :tan
-    tan_operators.tan_operator()
+    M_tan_operator.tan_operator()
   elseif op == :cos
-    cos_operators.cos_operator()
+    M_cos_operator.cos_operator()
   elseif op == :exp
-    exp_operators.exp_operator()
+    M_exp_operator.exp_operator()
   else
     return simple_operator(op)
   end
@@ -61,21 +61,21 @@ end
 
 function create_node_expr(op::Symbol, x::AbstractVector{Y}) where {Y <: Number}
   if op == :+
-    plus_operators.plus_operator()
+    M_plus_operator.plus_operator()
   elseif op == :-
-    minus_operators.minus_operator()
+    M_minus_operator.minus_operator()
   elseif op == :*
-    times_operators.time_operator()
+    M_times_operator.time_operator()
   elseif op == :/
-    frac_operators.frac_operator()
+    M_frac_operator.frac_operator()
   elseif op == :sin
-    sinus_operators.sinus_operator()
+    M_sinus_operator.sinus_operator()
   elseif op == :tan
-    tan_operators.tan_operator()
+    M_tan_operator.tan_operator()
   elseif op == :cos
-    cos_operators.cos_operator()
+    M_cos_operator.cos_operator()
   elseif op == :exp
-    exp_operators.exp_operator()
+    M_exp_operator.exp_operator()
   else
     return simple_operator(op)
   end

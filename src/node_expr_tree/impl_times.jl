@@ -1,4 +1,4 @@
-module times_operators
+module M_times_operator
 
 import ..abstract_expr_node: ab_ex_nd, create_node_expr
 import ..interface_expr_node:
@@ -61,7 +61,7 @@ function node_convexity_binary_time(
   check_all =
     implementation_convexity_type.is_constant(status1) &&
     implementation_convexity_type.is_constant(status2)
-  if check_all # both status are constants
+  if check_all # both status are M_constant
     return implementation_convexity_type.constant_type()
   elseif (
     implementation_convexity_type.is_constant(status2) &&
