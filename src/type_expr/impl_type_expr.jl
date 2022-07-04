@@ -17,7 +17,7 @@ export t_type_expr_basic,
 
 @enum t_type_expr_basic constant = 0 linear = 1 quadratic = 2 cubic = 3 more = 4
 
-############## définition des fonctions de l'interface ###################
+############## interface methods ###################
 @inline _is_constant(t::t_type_expr_basic) = (t == constant)
 
 @inline _is_linear(t::t_type_expr_basic) = (t == linear)
@@ -28,20 +28,45 @@ export t_type_expr_basic,
 
 @inline _is_more(t::t_type_expr_basic) = (t == more)
 
+"""
+    constant = return_constant()
+
+Return `constant::t_type_expr_basic`.
+"""
 @inline return_constant() = t_type_expr_basic(0)
 
+"""
+    linear = return_linear()
+
+Return `linear::t_type_expr_basic`.
+"""
 @inline return_linear() = t_type_expr_basic(1)
 
+"""
+    quadratic = return_quadratic()
+
+Return `quadratic::t_type_expr_basic`.
+"""
 @inline return_quadratic() = t_type_expr_basic(2)
 
+"""
+    cubic = return_cubic()
+
+Return `cubic::t_type_expr_basic`.
+"""
 @inline return_cubic() = t_type_expr_basic(3)
 
+"""
+    more = return_more()
+
+Return `more::t_type_expr_basic`.
+"""
 @inline return_more() = t_type_expr_basic(4)
 
 """
-    result_type = _type_product(a,b)
+    result_type = _type_product(a::t_type_expr_basic, b::t_type_expr_basic)
 
-Compute `result_type::t_type_expr_basic` that results of `a*b`.
+Return `result_type::t_type_expr_basic`, the type resulting of the product `a*b`.
 """
 function _type_product(a::t_type_expr_basic, b::t_type_expr_basic)
   if _is_constant(a)
@@ -76,9 +101,9 @@ function _type_product(a::t_type_expr_basic, b::t_type_expr_basic)
 end
 
 """
-    result_type = _type_product(index,b)
+    result_type = _type_power(index_power::Number, b::t_type_expr_basic)
 
-Compute `result_type::t_type_expr_basic` that results of `b^(index)`.
+Return `result_type::t_type_expr_basic`, resulting of `b^(index)`.
 """
 function _type_power(index_power::Number, b::t_type_expr_basic)
   if index_power == 0
@@ -102,4 +127,4 @@ function _type_power(index_power::Number, b::t_type_expr_basic)
   end
 end
 
-end  # module implementation_type_expr
+end

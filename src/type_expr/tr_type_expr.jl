@@ -6,6 +6,7 @@ import ..interface_type_expr:
 
 export is_trait_type_expr, is_linear, is_constant, is_quadratic, is_cubic, is_more_than_quadratic
 
+""" """
 struct type_type_expr end
 struct type_not_type_expr end
 
