@@ -3,13 +3,13 @@ module convexity_detection
 using ..M_implementation_convexity_type
 using ..abstract_expr_tree
 using ..trait_tree, ..trait_expr_tree, ..M_trait_expr_node
-using ..implementation_tree,
+using ..M_implementation_tree,
   ..implementation_complete_expr_tree, ..implementation_complete_expr_tree
 using ..bound_propagations
 
-convexity_tree{T} = implementation_tree.Type_node{M_implementation_convexity_type.Convexity_wrapper}
+convexity_tree{T} = M_implementation_tree.Type_node{M_implementation_convexity_type.Convexity_wrapper}
 
-@inline create_convex_tree(tree::implementation_tree.Type_node) = convexity_tree(
+@inline create_convex_tree(tree::M_implementation_tree.Type_node) = convexity_tree(
   M_implementation_convexity_type.init_conv_status(),
   create_convex_tree.(trait_tree.get_children(tree)),
 )
@@ -29,7 +29,7 @@ convexity_tree{T} = implementation_tree.Type_node{M_implementation_convexity_typ
 @inline concave_type() = M_implementation_convexity_type.concave_type()
 @inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
-function set_convexity!(tree::implementation_tree.Type_node, cvx_tree::convexity_tree, bounds_tree)
+function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::convexity_tree, bounds_tree)
   node = trait_tree.get_node(tree)
   if M_trait_expr_node.node_is_operator(node) == false
     (length(trait_tree.get_children(tree)) == length(trait_tree.get_children(cvx_tree))) ||
@@ -37,7 +37,7 @@ function set_convexity!(tree::implementation_tree.Type_node, cvx_tree::convexity
     convex_wrapper = trait_tree.get_node(cvx_tree)
     status = M_trait_expr_node.node_convexity(node)
     M_implementation_convexity_type.set_convexity_wrapper!(convex_wrapper, status)
-    # implementation_tree.set_convexity_wrapper(convex_wrapper, implementation_tree.linear_type())
+    # M_implementation_tree.set_convexity_wrapper(convex_wrapper, M_implementation_tree.linear_type())
   else
     children_tree = trait_tree.get_children(tree)
     children_convex_tree = trait_tree.get_children(cvx_tree)

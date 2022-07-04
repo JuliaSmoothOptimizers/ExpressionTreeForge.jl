@@ -1,4 +1,4 @@
-module interface_tree
+module M_interface_tree
 
 """
     node = _get_node(tree)

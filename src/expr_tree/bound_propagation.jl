@@ -2,13 +2,13 @@ module bound_propagations
 
 using ..abstract_expr_tree
 using ..trait_tree, ..trait_expr_tree, ..M_trait_expr_node
-using ..implementation_tree, ..implementation_complete_expr_tree
+using ..M_implementation_tree, ..implementation_complete_expr_tree
 
-bound_tree{T} = implementation_tree.Type_node{abstract_expr_tree.bounds{T}}
+bound_tree{T} = M_implementation_tree.Type_node{abstract_expr_tree.bounds{T}}
 
 @inline craete_empty_bounds(t::DataType) = bounds{t}(-Inf, Inf)
 
-@inline create_bound_tree(tree::implementation_tree.Type_node, type = Float64::DataType) =
+@inline create_bound_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
   return bound_tree{type}(
     abstract_expr_tree.bounds{type}((type)(0), (type)(0)),
     create_bound_tree.(trait_tree.get_children(tree)),
@@ -22,7 +22,7 @@ bound_tree{T} = implementation_tree.Type_node{abstract_expr_tree.bounds{T}}
 Propagate the bounds for each node of tree
 """
 function set_bounds!(
-  tree::implementation_tree.Type_node,
+  tree::M_implementation_tree.Type_node,
   bounds_tree::bound_tree{T},
 ) where {T <: Number}
   node = trait_tree.get_node(tree)

@@ -1,14 +1,14 @@
 using CalculusTreeTools.trait_tree,
-  CalculusTreeTools.abstract_tree,
-  CalculusTreeTools.implementation_tree,
-  CalculusTreeTools.implementation_tree_Expr
+  CalculusTreeTools.M_abstract_tree,
+  CalculusTreeTools.M_implementation_tree,
+  CalculusTreeTools.M_implementation_tree_Expr
 
 @testset "test on tree/tr_tree" begin
-  t1 = abstract_tree.create_tree(5, [])
+  t1 = M_abstract_tree.create_tree(5, [])
   @test trait_tree.get_node(t1) == 5
   @test trait_tree.get_children(t1) == []
 
-  t2_expr = abstract_tree.create_tree(:(5 + 6))
+  t2_expr = M_abstract_tree.create_tree(:(5 + 6))
   @test trait_tree.get_node(t2_expr) == :+
   @test trait_tree.get_children(t2_expr) == [5, 6]
 
@@ -19,34 +19,34 @@ using CalculusTreeTools.trait_tree,
 end
 
 @testset " test on tree/impl_tree " begin
-  tree1 = implementation_tree.create_tree(5, [])
-  @test tree1 == implementation_tree.Type_node{Int64}(5, [])
-  @test implementation_tree._get_node(tree1) == 5
-  @test implementation_tree._get_children(tree1) == []
+  tree1 = M_implementation_tree.create_tree(5, [])
+  @test tree1 == M_implementation_tree.Type_node{Int64}(5, [])
+  @test M_implementation_tree._get_node(tree1) == 5
+  @test M_implementation_tree._get_children(tree1) == []
 
-  tree2 = implementation_tree.create_tree(6, [tree1, tree1])
-  @test tree2 == implementation_tree.Type_node{Int64}(6, [tree1, tree1])
-  @test implementation_tree._get_node(tree2) == 6
-  @test implementation_tree._get_children(tree2) == [tree1, tree1]
+  tree2 = M_implementation_tree.create_tree(6, [tree1, tree1])
+  @test tree2 == M_implementation_tree.Type_node{Int64}(6, [tree1, tree1])
+  @test M_implementation_tree._get_node(tree2) == 6
+  @test M_implementation_tree._get_children(tree2) == [tree1, tree1]
 
-  @test tree2 == implementation_tree.Type_node{Int64}(
+  @test tree2 == M_implementation_tree.Type_node{Int64}(
     6,
-    [implementation_tree.Type_node{Int64}(5, []), implementation_tree.Type_node{Int64}(5, [])],
+    [M_implementation_tree.Type_node{Int64}(5, []), M_implementation_tree.Type_node{Int64}(5, [])],
   )
 end
 
 @testset " test on tree/impl_tree_Expr " begin
-  tree1 = implementation_tree_Expr.create_tree(:(x[5]))
+  tree1 = M_implementation_tree_Expr.create_tree(:(x[5]))
   @test tree1 == :(x[5])
-  @test implementation_tree._get_node(tree1) == [:x, 5]
+  @test M_implementation_tree._get_node(tree1) == [:x, 5]
 
-  tree2 = implementation_tree_Expr.create_tree(:(x[5]^2))
+  tree2 = M_implementation_tree_Expr.create_tree(:(x[5]^2))
   @test tree2 == :(x[5]^2)
-  @test implementation_tree._get_node(tree2) == [:^, 2]
-  @test implementation_tree._get_children(tree2) == [tree1]
+  @test M_implementation_tree._get_node(tree2) == [:^, 2]
+  @test M_implementation_tree._get_children(tree2) == [tree1]
 
-  tree2 = implementation_tree_Expr.create_tree(:(x[5] + x[3]))
+  tree2 = M_implementation_tree_Expr.create_tree(:(x[5] + x[3]))
   @test tree2 == :(x[5] + x[3])
-  @test implementation_tree._get_node(tree2) == :+
-  @test implementation_tree._get_children(tree2) == [:(x[5]), :(x[3])]
+  @test M_implementation_tree._get_node(tree2) == :+
+  @test M_implementation_tree._get_children(tree2) == [:(x[5]), :(x[3])]
 end

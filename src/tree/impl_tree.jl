@@ -1,7 +1,7 @@
-module implementation_tree
+module M_implementation_tree
 
-import ..abstract_tree: Ab_tree, create_tree
-import ..interface_tree: _get_node, _get_children
+import ..M_abstract_tree: Ab_tree, create_tree
+import ..M_interface_tree: _get_node, _get_children
 import Base.==
 
 """
@@ -46,4 +46,4 @@ function equal_tree(tree1::Type_node{T}, tree2::Type_node{T}) where {T}
   (l1 > 0 ? mapreduce(equal_tree, my_and, children_tree1, children_tree2) : true) : false
 end
 
-end  # module implementation_tree
+end  # module M_implementation_tree

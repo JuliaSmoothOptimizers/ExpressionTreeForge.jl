@@ -1,7 +1,7 @@
 module trait_tree
 
-import ..abstract_tree.Ab_tree
-import ..interface_tree: _get_node, _get_children
+import ..M_abstract_tree.Ab_tree
+import ..M_interface_tree: _get_node, _get_children
 
 export get_node
 export get_children

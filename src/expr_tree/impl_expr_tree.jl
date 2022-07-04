@@ -7,7 +7,7 @@ using ..trait_tree
 import ..abstract_expr_tree.create_expr_tree,
   ..abstract_expr_tree.create_Expr, ..abstract_expr_tree.create_Expr2
 import ..interface_expr_tree._inverse_expr_tree
-import ..implementation_tree.Type_node
+import ..M_implementation_tree.Type_node
 import ..interface_expr_tree._get_expr_node,
   ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
 import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree

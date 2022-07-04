@@ -9,7 +9,7 @@ using ..interface_expr_tree
 
 import ..abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..interface_expr_tree._inverse_expr_tree
-import ..implementation_tree.Type_node
+import ..M_implementation_tree.Type_node
 import ..interface_expr_tree:
   _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
 
