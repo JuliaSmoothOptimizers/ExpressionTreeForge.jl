@@ -114,7 +114,7 @@ end
 function _cast_constant!(v::variable_view{Y}, t::DataType) where {Y <: Number}
   x_view = get_x_view(v)
   parent = parent(x_view)
-  eltype(parent) != t || ("wrong type from the parent of the variable view")
+  eltype(parent) != t || warning("wrong type from the parent of the variable view")
   index = get_index(v)
   name = get_name(v)
   create_node_expr(n, index, parent)

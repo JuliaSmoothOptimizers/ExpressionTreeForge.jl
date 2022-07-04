@@ -17,7 +17,6 @@ import ..interface_expr_node:
   _get_var_index,
   _evaluate_node,
   _evaluate_node!,
-  _change_from_N_to_Ni!,
   _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
@@ -108,9 +107,6 @@ end
     abstract_expr_node.set_myRef!(ref, c.value::Y)
   end
 end
-
-@inline _change_from_N_to_Ni!(v::Number, dic_new_var::Dict{Int, Int}) = ()
-@inline _change_from_N_to_Ni!(c::constant{Y}, dic_new_var::Dict{Int, Int}) where {Y <: Number} = ()
 
 @inline _cast_constant!(c::constant{Y}, t::DataType) where {Y <: Number} = constant{t}((t)(c.value))
 @inline _cast_constant!(c::Number, t::DataType) = (t)(c)

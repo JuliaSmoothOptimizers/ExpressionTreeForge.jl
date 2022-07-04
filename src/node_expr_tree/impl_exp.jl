@@ -17,8 +17,6 @@ import ..interface_expr_node:
   _get_var_index,
   _evaluate_node,
   _evaluate_node!,
-  _change_from_N_to_Ni!,
-  _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
   _node_bound,
@@ -105,6 +103,7 @@ end
 ) where {Y <: Number}
   length(value_ch) == 1 || error("exp has more than one argument")
   abstract_expr_node.set_myRef!(ref, exp(value_ch[1]))
+  return ref
 end
 
 @inline function _evaluate_node!(

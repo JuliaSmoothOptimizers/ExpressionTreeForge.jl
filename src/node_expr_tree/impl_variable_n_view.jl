@@ -19,7 +19,6 @@ import ..interface_expr_node:
   _evaluate_node,
   _evaluate_node!,
   _change_from_N_to_Ni!,
-  _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
   _node_bound,
@@ -117,25 +116,5 @@ function _change_from_N_to_Ni!(
   end
   map(i -> each_view(i, v), [1:length(v.multiple_x_view)])
 end
-
-# non fait
-# function _node_to_Expr(v :: variable_view{Y}) where Y <: Number
-#     return Expr(:ref, v.name,  MathOptInterface.VariableIndex(v.index))
-# end
-
-# non fait
-# function _node_to_Expr2(v :: variable_view{Y}) where Y <: Number
-#     return Expr(:ref, v.name,  v.index)
-# end
-
-# non fait
-# function _cast_constant!(v :: variable_view{Y}, t :: DataType) where Y <: Number
-#     x_view = get_x_view(v)
-#     parent = parent(x_view)
-#     eltype(parent) != t || ("wrong type from the parent of the variable view")
-#     index = get_index(v)
-#     name = get_name(v)
-#     create_node_expr(n, index, parent)
-# end
 
 end

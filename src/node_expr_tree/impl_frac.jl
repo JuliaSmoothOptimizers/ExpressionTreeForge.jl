@@ -17,8 +17,6 @@ import ..interface_expr_node:
   _get_var_index,
   _evaluate_node,
   _evaluate_node!,
-  _change_from_N_to_Ni!,
-  _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
   _node_bound,
