@@ -18,14 +18,40 @@ export t_type_expr_basic,
 @enum t_type_expr_basic constant = 0 linear = 1 quadratic = 2 cubic = 3 more = 4
 
 ############## interface methods ###################
+
+"""
+    bool = _is_constant(t::t_type_expr_basic)
+
+Check if `t` equals `constant`.
+"""
 @inline _is_constant(t::t_type_expr_basic) = (t == constant)
 
+"""
+    bool = _is_linear(t::t_type_expr_basic)
+
+Check if `t` equals `linear`.
+"""
 @inline _is_linear(t::t_type_expr_basic) = (t == linear)
 
+"""
+    bool = _is_quadratic(t::t_type_expr_basic)
+
+Check if `t` equals `quadratic`.
+"""
 @inline _is_quadratic(t::t_type_expr_basic) = (t == quadratic)
 
+"""
+    bool = _is_cubic(t::t_type_expr_basic)
+
+Check if `t` equals `cubic`.
+"""
 @inline _is_cubic(t::t_type_expr_basic) = (t == cubic)
 
+"""
+    bool = _is_more(t::t_type_expr_basic)
+
+Check if `t` equals `more`.
+"""
 @inline _is_more(t::t_type_expr_basic) = (t == more)
 
 """
