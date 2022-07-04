@@ -30,14 +30,14 @@ export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
 @inline get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
-convexity_wrapper = implementation_convexity_type.convexity_wrapper
+convexity_wrapper = implementation_convexity_type.Convexity_wrapper
 
-@inline get_convexity_wrapper(t::implementation_convexity_type.convexity_wrapper) =
+@inline get_convexity_wrapper(t::implementation_convexity_type.Convexity_wrapper) =
   implementation_convexity_type.get_convexity_wrapper(t)
 
 @inline set_convexity_wrapper!(
-  cw::implementation_convexity_type.convexity_wrapper,
-  typ::implementation_convexity_type.convexity_type,
+  cw::implementation_convexity_type.Convexity_wrapper,
+  typ::implementation_convexity_type.Convexity_type,
 ) = implementation_convexity_type.set_convexity_wrapper!(cw, typ)
 
 @inline create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)

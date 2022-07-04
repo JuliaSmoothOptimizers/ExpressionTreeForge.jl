@@ -36,7 +36,7 @@ mutable struct minus_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::minus_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.convexity_type},
+  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   length(son_cvx) == length(son_bound) ||

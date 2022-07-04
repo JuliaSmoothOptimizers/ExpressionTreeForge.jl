@@ -18,13 +18,13 @@ export complete_node
 mutable struct complete_node{T <: Number}
   op::abstract_expr_node.ab_ex_nd
   bounds::abstract_expr_tree.bounds{T}
-  convexity_status::implementation_convexity_type.convexity_wrapper
+  convexity_status::implementation_convexity_type.Convexity_wrapper
 end
 
 @inline create_complete_node(
   op::ab_ex_nd,
   bounds::abstract_expr_tree.bounds{T},
-  cvx_st::implementation_convexity_type.convexity_wrapper,
+  cvx_st::implementation_convexity_type.Convexity_wrapper,
 ) where {T <: Number} = complete_node{T}(op, bounds, cvx_st)
 
 @inline create_complete_node(
@@ -54,7 +54,7 @@ end
 
 @inline set_convexity_status!(
   node::complete_node{T},
-  t::implementation_convexity_type.convexity_type,
+  t::implementation_convexity_type.Convexity_type,
 ) where {T <: Number} =
   implementation_convexity_type.set_convexity_wrapper!(node.convexity_status, t)
 

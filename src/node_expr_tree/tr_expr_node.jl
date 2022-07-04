@@ -55,18 +55,18 @@ struct type_not_expr_node end
   error("This node is not a expr node; node_convexity function")
 @inline node_convexity(
   a,
-  son_convexity::AbstractVector{implementation_convexity_type.convexity_type},
+  son_convexity::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number} = _node_convexity(a, son_convexity, son_bound, is_expr_node(a))
 @inline _node_convexity(
   a,
-  son_convexity::AbstractVector{implementation_convexity_type.convexity_type},
+  son_convexity::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
   ::type_expr_node,
 ) where {T <: Number} = _node_convexity(a, son_convexity, son_bound)
 @inline _node_convexity(
   a,
-  son_convexity::AbstractVector{implementation_convexity_type.convexity_type},
+  son_convexity::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
   ::type_not_expr_node,
 ) where {T <: Number} = error("This node is not a expr node; node_convexity function")

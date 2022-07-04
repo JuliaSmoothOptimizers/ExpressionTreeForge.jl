@@ -39,7 +39,7 @@ end
 @inline my_and(a::Bool, b::Bool) = (a && b)
 function _node_convexity(
   op::power_operator{Y},
-  son_cvx::AbstractVector{implementation_convexity_type.convexity_type},
+  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {Y <: Number} where {T <: Number}
   (length(son_cvx) == 1 && length(son_bound) == 1) ||

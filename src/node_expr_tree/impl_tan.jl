@@ -36,7 +36,7 @@ mutable struct tan_operator <: ab_ex_nd end
 
 _node_convexity(
   op::tan_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.convexity_type},
+  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number} = implementation_convexity_type.unknown_type()
 

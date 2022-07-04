@@ -37,27 +37,27 @@ mutable struct plus_operator <: ab_ex_nd end
 my_and(a::Bool, b::Bool) = (a && b)
 function _node_convexity(
   op::plus_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.convexity_type},
+  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   all_constant = mapreduce(
-    x::implementation_convexity_type.convexity_type ->
+    x::implementation_convexity_type.Convexity_type ->
       implementation_convexity_type.is_constant(x),
     my_and,
     son_cvx,
   )
   all_linear = mapreduce(
-    x::implementation_convexity_type.convexity_type -> implementation_convexity_type.is_linear(x),
+    x::implementation_convexity_type.Convexity_type -> implementation_convexity_type.is_linear(x),
     my_and,
     son_cvx,
   )
   all_convex = mapreduce(
-    x::implementation_convexity_type.convexity_type -> implementation_convexity_type.is_convex(x),
+    x::implementation_convexity_type.Convexity_type -> implementation_convexity_type.is_convex(x),
     my_and,
     son_cvx,
   )
   all_concave = mapreduce(
-    x::implementation_convexity_type.convexity_type ->
+    x::implementation_convexity_type.Convexity_type ->
       implementation_convexity_type.is_concave(x),
     my_and,
     son_cvx,

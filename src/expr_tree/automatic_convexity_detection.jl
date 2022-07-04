@@ -7,7 +7,7 @@ using ..implementation_tree,
   ..implementation_complete_expr_tree, ..implementation_complete_expr_tree
 using ..bound_propagations
 
-convexity_tree{T} = implementation_tree.type_node{implementation_convexity_type.convexity_wrapper}
+convexity_tree{T} = implementation_tree.type_node{implementation_convexity_type.Convexity_wrapper}
 
 @inline create_convex_tree(tree::implementation_tree.type_node) = convexity_tree(
   implementation_convexity_type.init_conv_status(),

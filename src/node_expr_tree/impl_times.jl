@@ -36,7 +36,7 @@ mutable struct time_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::time_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.convexity_type},
+  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   length(son_cvx) == length(son_bound) ||
@@ -52,8 +52,8 @@ function _node_convexity(
 end
 
 function node_convexity_binary_time(
-  status1::implementation_convexity_type.convexity_type,
-  status2::implementation_convexity_type.convexity_type,
+  status1::implementation_convexity_type.Convexity_type,
+  status2::implementation_convexity_type.Convexity_type,
   bounds1::Tuple{T, T},
   bounds2::Tuple{T, T},
 ) where {T <: Number}
