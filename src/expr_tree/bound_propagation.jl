@@ -1,7 +1,7 @@
 module bound_propagations
 
 using ..abstract_expr_tree
-using ..trait_tree, ..trait_expr_tree, ..trait_expr_node
+using ..trait_tree, ..trait_expr_tree, ..M_trait_expr_node
 using ..implementation_tree, ..implementation_complete_expr_tree
 
 bound_tree{T} = implementation_tree.Type_node{abstract_expr_tree.bounds{T}}
@@ -26,8 +26,8 @@ function set_bounds!(
   bounds_tree::bound_tree{T},
 ) where {T <: Number}
   node = trait_tree.get_node(tree)
-  if trait_expr_node.node_is_operator(node) == false # i.e. a constant or a variable
-    (inf_bound_node, sup_bound_node) = trait_expr_node.node_bound(node, T)
+  if M_trait_expr_node.node_is_operator(node) == false # i.e. a constant or a variable
+    (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(node, T)
     bound = trait_tree.get_node(bounds_tree)
     bound.inf_bound = inf_bound_node
     bound.sup_bound = sup_bound_node
@@ -40,7 +40,7 @@ function set_bounds!(
       set_bounds!(children_tree[i], children_bound_tree[i])
     end
     son_bounds = (x::bound_tree -> bound_to_tuple(trait_tree.get_node(x))).(children_bound_tree)
-    (inf_bound_node, sup_bound_node) = trait_expr_node.node_bound(node, son_bounds, T)
+    (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(node, son_bounds, T)
     bound = trait_tree.get_node(bounds_tree)
     bound.inf_bound = inf_bound_node
     bound.sup_bound = sup_bound_node
@@ -52,8 +52,8 @@ function set_bounds!(
 ) where {T <: Number}
   node = trait_tree.get_node(tree)
   op = trait_expr_tree._get_expr_node(tree)
-  if trait_expr_node.node_is_operator(op) == false
-    (inf_bound_node, sup_bound_node) = trait_expr_node.node_bound(op, T)
+  if M_trait_expr_node.node_is_operator(op) == false
+    (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(op, T)
     implementation_complete_expr_tree.set_bound!(node, inf_bound_node, sup_bound_node)
   else
     ch = trait_tree.get_children(tree)
@@ -63,7 +63,7 @@ function set_bounds!(
         x::implementation_complete_expr_tree.complete_expr_tree{T} ->
           implementation_complete_expr_tree.get_bounds(trait_tree.get_node(x))
       ).(ch)
-    (inf_bound_node, sup_bound_node) = trait_expr_node.node_bound(op, son_bounds, T)
+    (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(op, son_bounds, T)
     implementation_complete_expr_tree.set_bound!(node, inf_bound_node, sup_bound_node)
   end
 end

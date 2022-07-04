@@ -1,5 +1,5 @@
-using CalculusTreeTools.trait_expr_tree, CalculusTreeTools.trait_type_expr
-using CalculusTreeTools.abstract_expr_node, CalculusTreeTools.abstract_expr_tree
+using CalculusTreeTools.trait_expr_tree, CalculusTreeTools.M_trait_type_expr
+using CalculusTreeTools.M_abstract_expr_node, CalculusTreeTools.abstract_expr_tree
 using CalculusTreeTools.algo_expr_tree, CalculusTreeTools.algo_tree
 using CalculusTreeTools.implementation_expr_tree
 using CalculusTreeTools.M_evaluation_expr_tree
@@ -21,18 +21,18 @@ using CalculusTreeTools.M_evaluation_expr_tree
   @test trait_expr_tree.expr_tree_equal(expr_2, t2)
   @test trait_expr_tree.expr_tree_equal(t_expr_2, t2)
 
-  n3_1_1 = abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(:x, 1))
-  n3_1_2 = abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(:x, 2))
-  n3_1_op = abstract_expr_node.create_node_expr(:*)
+  n3_1_1 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 1))
+  n3_1_2 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 2))
+  n3_1_op = M_abstract_expr_node.create_node_expr(:*)
   n3_1 = abstract_expr_tree.create_expr_tree(n3_1_op, [n3_1_1, n3_1_2])
 
-  n3_2_1_1 = abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(:x, 3))
-  n3_2_1_2 = abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(:x, 4))
-  n3_2_1_op = abstract_expr_node.create_node_expr(:+)
+  n3_2_1_1 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 3))
+  n3_2_1_2 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 4))
+  n3_2_1_op = M_abstract_expr_node.create_node_expr(:+)
   n3_2_1 = abstract_expr_tree.create_expr_tree(n3_2_1_op, [n3_2_1_1, n3_2_1_2])
-  n3_2_op = abstract_expr_node.create_node_expr(:^, 2, true)
+  n3_2_op = M_abstract_expr_node.create_node_expr(:^, 2, true)
   n3_2 = abstract_expr_tree.create_expr_tree(n3_2_op, [n3_2_1])
-  n3_op = abstract_expr_node.create_node_expr(:+)
+  n3_op = M_abstract_expr_node.create_node_expr(:+)
   t3 = abstract_expr_tree.create_expr_tree(n3_op, [n3_2, n3_1])
   @test trait_expr_tree.expr_tree_equal(t_expr_2, t3)
   @test trait_expr_tree.expr_tree_equal(t2, t3)
@@ -79,7 +79,7 @@ end
   test_res8 = algo_expr_tree.get_type_tree(t_expr_8)
   test_res_t8 = algo_expr_tree.get_type_tree(t8)
   @test test_res8 == test_res_t8
-  @test trait_type_expr.is_more(test_res_t8)
+  @test M_trait_type_expr.is_more(test_res_t8)
 
   t_expr_cubic = abstract_expr_tree.create_expr_tree(:((x[3]^3) + (x[5] * x[4]) - (x[1] - x[2])))
   t_cubic = trait_expr_tree.transform_to_expr_tree(t_expr_cubic)
@@ -87,7 +87,7 @@ end
   res_cubic = algo_expr_tree.get_type_tree(t_expr_cubic)
   res_t_cubic = algo_expr_tree.get_type_tree(t_cubic)
   @test res_cubic == res_t_cubic
-  @test trait_type_expr._is_cubic(res_t_cubic)
+  @test M_trait_type_expr._is_cubic(res_t_cubic)
 
   t_expr_cubic2 =
     abstract_expr_tree.create_expr_tree(:((x[3]^3) + (x[5] * x[4]) - (x[1] - x[2]) + sin(5)))
@@ -96,7 +96,7 @@ end
   res_cubic2 = algo_expr_tree.get_type_tree(t_expr_cubic2)
   res_t_cubic2 = algo_expr_tree.get_type_tree(t_cubic2)
   @test res_cubic2 == res_t_cubic2
-  @test trait_type_expr._is_cubic(res_t_cubic2)
+  @test M_trait_type_expr._is_cubic(res_t_cubic2)
 
   t_expr_sin = abstract_expr_tree.create_expr_tree(:((x[3]^3) + sin(x[5] * x[4]) - (x[1] - x[2])))
   t_sin = trait_expr_tree.transform_to_expr_tree(t_expr_sin)
@@ -104,7 +104,7 @@ end
   res_sin = algo_expr_tree.get_type_tree(t_expr_sin)
   res_t_sin = algo_expr_tree.get_type_tree(t_sin)
   @test res_sin == res_t_sin
-  @test trait_type_expr.is_more(res_t_sin)
+  @test M_trait_type_expr.is_more(res_t_sin)
 
   m = Model()
   n_x = 100
@@ -116,14 +116,14 @@ end
   t_obj = trait_expr_tree.transform_to_expr_tree(obj)
 
   test_res_obj = algo_expr_tree.get_type_tree(t_obj)
-  @test trait_type_expr._is_quadratic(test_res_obj)
-  @test trait_type_expr.is_more(test_res_obj) == false
+  @test M_trait_type_expr._is_quadratic(test_res_obj)
+  @test M_trait_type_expr.is_more(test_res_obj) == false
 
   t_expr_9 = abstract_expr_tree.create_expr_tree(:(x[1] + sin(x[2])))
   res_t_expr_9 = algo_expr_tree.delete_imbricated_plus(t_expr_9)
 
-  @test trait_type_expr.is_linear(algo_expr_tree.get_type_tree(t_expr_9)) == false
-  @test trait_type_expr.is_more(algo_expr_tree.get_type_tree(t_expr_9))
+  @test M_trait_type_expr.is_linear(algo_expr_tree.get_type_tree(t_expr_9)) == false
+  @test M_trait_type_expr.is_more(algo_expr_tree.get_type_tree(t_expr_9))
 end
 
 @testset "test de la récupération des variable élementaires" begin
@@ -194,26 +194,26 @@ end
 
 function expr_tree_factorielle_dif_node(n::Integer)
   if n == 0
-    constant_node = abstract_expr_node.create_node_expr(:x, 1)
+    constant_node = M_abstract_expr_node.create_node_expr(:x, 1)
     new_leaf = abstract_expr_tree.create_expr_tree(constant_node)
     return new_leaf
   else
     if n % 3 == 0
-      op_node = abstract_expr_node.create_node_expr(:+)
+      op_node = M_abstract_expr_node.create_node_expr(:+)
       new_node = abstract_expr_tree.create_expr_tree(
         op_node,
         expr_tree_factorielle_dif_node.((n - 1) * ones(Integer, n)),
       )
       return new_node
     elseif n % 3 == 1
-      op_node = abstract_expr_node.create_node_expr(:-)
+      op_node = M_abstract_expr_node.create_node_expr(:-)
       new_node = abstract_expr_tree.create_expr_tree(
         op_node,
         expr_tree_factorielle_dif_node.((n - 1) * ones(Integer, n)),
       )
       return new_node
     elseif n % 3 == 2
-      op_node = abstract_expr_node.create_node_expr(:*)
+      op_node = M_abstract_expr_node.create_node_expr(:*)
       new_node = abstract_expr_tree.create_expr_tree(
         op_node,
         expr_tree_factorielle_dif_node.((n - 1) * ones(Integer, n)),
@@ -225,11 +225,11 @@ end
 
 function expr_tree_factorielle_plus(n::Integer, op::Symbol)
   if n == 0
-    constant_node = abstract_expr_node.create_node_expr(1)
+    constant_node = M_abstract_expr_node.create_node_expr(1)
     new_leaf = abstract_expr_tree.create_expr_tree(constant_node)
     return new_leaf
   else
-    op_node = abstract_expr_node.create_node_expr(op)
+    op_node = M_abstract_expr_node.create_node_expr(op)
     new_node = abstract_expr_tree.create_expr_tree(
       op_node,
       expr_tree_factorielle_plus.((n - 1) * ones(Integer, n), op),

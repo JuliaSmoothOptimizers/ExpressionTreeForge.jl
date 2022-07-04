@@ -1,4 +1,4 @@
-module implementation_convexity_type
+module M_implementation_convexity_type
 
 # définition of all distinct properties that can have a calculus tree
 """

@@ -1,8 +1,8 @@
 module M_variable
 using MathOptInterface
 
-import ..abstract_expr_node: ab_ex_nd, create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -13,7 +13,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -24,11 +24,11 @@ import ..interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.t_type_expr_basic
 
-using ..implementation_convexity_type
-using ..implementation_type_expr
-using ..abstract_expr_node
+using ..M_implementation_convexity_type
+using ..M_implementation_type_expr
+using ..M_abstract_expr_node
 import Base.(==)
 export variable
 
@@ -43,7 +43,7 @@ end
 
 _node_bound(v::variable, t::DataType) = ((t)(-Inf), (t)(Inf))
 
-_node_convexity(v::variable) = implementation_convexity_type.linear_type()
+_node_convexity(v::variable) = M_implementation_convexity_type.linear_type()
 
 create_node_expr(n::Symbol, id::Int) = variable(n, id)
 create_node_expr(n::Symbol, id::MathOptInterface.VariableIndex) = variable(n, id.value)
@@ -71,7 +71,7 @@ _node_is_variable(v::Symbol) = true
 
 _node_is_constant(v::variable) = false
 
-_get_type_node(v::variable) = implementation_type_expr.return_linear()
+_get_type_node(v::variable) = M_implementation_type_expr.return_linear()
 
 _get_var_index(v::variable) = v.index::Int
 
@@ -86,7 +86,7 @@ end
   v::variable,
   x::AbstractVector{T},
   ref::MyRef{T},
-) where {T <: Number} = abstract_expr_node.set_myRef!(ref, get_value(v, x))
+) where {T <: Number} = M_abstract_expr_node.set_myRef!(ref, get_value(v, x))
 
 function change_index(v::MathOptInterface.VariableIndex, x::AbstractVector{T}) where {T <: Number}
   return x[v.value]

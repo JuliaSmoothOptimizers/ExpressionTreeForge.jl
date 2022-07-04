@@ -1,8 +1,8 @@
 module M_variables_n_view
 using MathOptInterface
 
-import ..abstract_expr_node.ab_ex_nd, ..abstract_expr_node.create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node.ab_ex_nd, ..M_abstract_expr_node.create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -13,7 +13,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -24,10 +24,10 @@ import ..interface_expr_node:
   _node_bound,
   _node_convexity
 
-import ..implementation_type_expr.t_type_expr_basic
-import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
-using ..implementation_convexity_type, ..implementation_type_expr
-using ..abstract_expr_node
+import ..M_implementation_type_expr.t_type_expr_basic
+import ..M_interface_expr_node._node_bound, ..M_interface_expr_node._node_convexity
+using ..M_implementation_convexity_type, ..M_implementation_type_expr
+using ..M_abstract_expr_node
 using ..M_variable
 import Base.(==)
 
@@ -49,7 +49,7 @@ end
 @inline _node_bound(v::variable_n_view{Y}, t::DataType) where {Y <: Number} = ((t)(-Inf), (t)(Inf))
 
 @inline _node_convexity(v::variable_n_view{Y}) where {Y <: Number} =
-  implementation_convexity_type.linear_type()
+  M_implementation_convexity_type.linear_type()
 
 @inline create_node_expr(n::Symbol, id::Int, multiple_x::Vector{Vector{Y}}) where {Y <: Number} =
   variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x))
@@ -82,7 +82,7 @@ end
 @inline _node_is_constant(v::variable_n_view{Y}) where {Y <: Number} = false
 
 @inline _get_type_node(v::variable_n_view{Y}) where {Y <: Number} =
-  implementation_type_expr.return_linear()
+  M_implementation_type_expr.return_linear()
 
 @inline _get_var_index(v::variable_n_view{Y}) where {Y <: Number} = v.index::Int
 
@@ -92,12 +92,12 @@ end
 
 @inline _evaluate_node!(
   v::variable_n_view{Y},
-  ref::abstract_expr_node.MyRef{Y},
+  ref::M_abstract_expr_node.MyRef{Y},
   i::Int,
-) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, get_value(v, i))
+) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, get_value(v, i))
 @inline _evaluate_node!(
   v::variable_n_view{Y},
-  multiple_ref::AbstractVector{abstract_expr_node.MyRef{Y}},
+  multiple_ref::AbstractVector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number} = begin
   for i in [1:length(multiple_ref);]
     _evaluate_node!(v, multiple_ref[i], i)

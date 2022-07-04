@@ -1,9 +1,9 @@
 module algo_expr_tree
 using SparseArrays
 
-using ..trait_expr_node, ..trait_expr_tree, ..trait_tree
-using ..abstract_expr_tree, ..abstract_expr_node, ..abstract_tree
-using ..implementation_tree, ..implementation_type_expr
+using ..M_trait_expr_node, ..trait_expr_tree, ..trait_tree
+using ..abstract_expr_tree, ..M_abstract_expr_node, ..abstract_tree
+using ..implementation_tree, ..M_implementation_type_expr
 using ..hl_trait_expr_tree
 using ..implementation_expr_tree
 
@@ -30,8 +30,8 @@ x[3] * x[4]
 @inline _delete_imbricated_plus(a, ::trait_expr_tree.type_expr_tree) = _delete_imbricated_plus(a)
 function _delete_imbricated_plus(expr_tree::T) where {T}
   nd = trait_expr_tree.get_expr_node(expr_tree)
-  if trait_expr_node.node_is_operator(nd)
-    if trait_expr_node.node_is_plus(nd)
+  if M_trait_expr_node.node_is_operator(nd)
+    if M_trait_expr_node.node_is_plus(nd)
       ch = trait_expr_tree.get_expr_children(expr_tree)
       n = length(ch)
       res = Vector{}(undef, n)
@@ -39,7 +39,7 @@ function _delete_imbricated_plus(expr_tree::T) where {T}
         res[i] = delete_imbricated_plus(ch[i])
       end
       return vcat(res...)
-    elseif trait_expr_node.node_is_minus(nd)
+    elseif M_trait_expr_node.node_is_minus(nd)
       ch = trait_expr_tree.get_expr_children(expr_tree)
       if length(ch) == 1 #moins unaire donc un seul fils
         temp = delete_imbricated_plus(ch)
@@ -78,16 +78,16 @@ function _get_type_tree(expr_tree)
   ch = trait_expr_tree.get_expr_children(expr_tree)
   if isempty(ch)
     nd = trait_expr_tree.get_expr_node(expr_tree)
-    type_node = trait_expr_node.get_type_node(nd)
+    type_node = M_trait_expr_node.get_type_node(nd)
     return type_node
   else
     n = length(ch)
-    ch_type = Vector{implementation_type_expr.t_type_expr_basic}(undef, n)
+    ch_type = Vector{M_implementation_type_expr.t_type_expr_basic}(undef, n)
     for i = 1:n
       ch_type[i] = _get_type_tree(ch[i])
     end
     nd_op = trait_expr_tree.get_expr_node(expr_tree)
-    type_node = trait_expr_node.get_type_node(nd_op, ch_type)
+    type_node = M_trait_expr_node.get_type_node(nd_op, ch_type)
     return type_node
   end
 end
@@ -112,15 +112,15 @@ get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
 
 function _get_elemental_variable(expr_tree)
   nd = trait_expr_tree.get_expr_node(expr_tree)
-  if trait_expr_node.node_is_operator(nd)
+  if M_trait_expr_node.node_is_operator(nd)
     ch = trait_expr_tree.get_expr_children(expr_tree)
     n = length(ch)
     list_var = map(get_elemental_variable, ch)
     res = unique!(vcat(list_var...))
     return res::Vector{Int}
-  elseif trait_expr_node.node_is_variable(nd)
-    return [trait_expr_node.get_var_index(nd)]::Vector{Int}
-  elseif trait_expr_node.node_is_constant(nd)
+  elseif M_trait_expr_node.node_is_variable(nd)
+    return [M_trait_expr_node.get_var_index(nd)]::Vector{Int}
+  elseif M_trait_expr_node.node_is_constant(nd)
     return Vector{Int}([])
   else
     error("the node is neither operator/variable or constant")
@@ -198,7 +198,7 @@ function _element_fun_from_N_to_Ni!(expr_tree, dic_new_var::Dict{Int, Int})
   ch = trait_expr_tree.get_expr_children(expr_tree)
   if isempty(ch) # on est alors dans une feuille
     r_node = trait_expr_tree.get_real_node(expr_tree)
-    trait_expr_node.change_from_N_to_Ni!(r_node, dic_new_var)
+    M_trait_expr_node.change_from_N_to_Ni!(r_node, dic_new_var)
   else
     n = length(ch)
     for i = 1:n

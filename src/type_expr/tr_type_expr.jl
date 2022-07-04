@@ -1,7 +1,7 @@
-module trait_type_expr
+module M_trait_type_expr
 
-using ..implementation_type_expr
-import ..interface_type_expr:
+using ..M_implementation_type_expr
+import ..M_interface_type_expr:
   _is_constant, _is_linear, _is_quadratic, _is_more, _is_cubic, _type_product, _type_power
 
 export is_trait_type_expr, is_linear, is_constant, is_quadratic, is_cubic, is_more_than_quadratic
@@ -19,7 +19,7 @@ struct Type_not_type_expr end
 Return `type::Type_type_expr` if `arg` is an `t_type_expr_basic` otherwise is return `type::Type_not_type_expr`
 """
 @inline is_trait_type_expr(a::Any) = Type_not_type_expr()
-@inline is_trait_type_expr(a::implementation_type_expr.t_type_expr_basic) = Type_type_expr()
+@inline is_trait_type_expr(a::M_implementation_type_expr.t_type_expr_basic) = Type_type_expr()
 
 """
     bool = _is_constant(type)

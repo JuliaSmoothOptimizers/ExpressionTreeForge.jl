@@ -1,7 +1,7 @@
 module M_constant
 
-import ..abstract_expr_node: ab_ex_nd, create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -12,7 +12,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -22,12 +22,12 @@ import ..interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.t_type_expr_basic
 
-using ..implementation_convexity_type
-using ..implementation_type_expr
-using ..trait_type_expr
-using ..abstract_expr_node
+using ..M_implementation_convexity_type
+using ..M_implementation_type_expr
+using ..M_trait_type_expr
+using ..M_abstract_expr_node
 import Base.(==)
 export constant
 
@@ -40,7 +40,7 @@ end
   constant{T}(T(x.value))
 @inline _node_bound(c::constant{T}, t::DataType) where {T <: Number} = ((t)(c.value), (t)(c.value))
 @inline _node_convexity(c::constant{T}) where {T <: Number} =
-  implementation_convexity_type.constant_type()
+  M_implementation_convexity_type.constant_type()
 
 @inline create_node_expr(x::T) where {T <: Number} = constant{T}(x)
 @inline create_node_expr(c::constant{T}) where {T <: Number} = constant{T}(c.value)
@@ -70,7 +70,7 @@ end
 @inline _node_is_constant(c::constant{T}) where {T <: Number} = true
 
 @inline _get_type_node(c::constant{T}) where {T <: Number} =
-  implementation_type_expr.return_constant()
+  M_implementation_type_expr.return_constant()
 
 @inline (==)(a::constant{T}, b::constant{T}) where {T <: Number} = (a.value == b.value)
 
@@ -93,18 +93,18 @@ end
 @inline _evaluate_node!(
   c::constant{Y},
   x::AbstractVector{Y},
-  ref::abstract_expr_node.MyRef{Y},
-) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, c.value::Y)
+  ref::M_abstract_expr_node.MyRef{Y},
+) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, c.value::Y)
 
-@inline _evaluate_node!(c::constant{Y}, ref::abstract_expr_node.MyRef{Y}) where {Y <: Number} =
-  abstract_expr_node.set_myRef!(ref, c.value::Y)
+@inline _evaluate_node!(c::constant{Y}, ref::M_abstract_expr_node.MyRef{Y}) where {Y <: Number} =
+  M_abstract_expr_node.set_myRef!(ref, c.value::Y)
 
 @inline _evaluate_node!(
   c::constant{Y},
-  multiple_ref::AbstractVector{abstract_expr_node.MyRef{Y}},
+  multiple_ref::AbstractVector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number} = begin
   for ref in multiple_ref
-    abstract_expr_node.set_myRef!(ref, c.value::Y)
+    M_abstract_expr_node.set_myRef!(ref, c.value::Y)
   end
 end
 

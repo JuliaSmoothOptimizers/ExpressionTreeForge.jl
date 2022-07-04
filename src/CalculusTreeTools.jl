@@ -5,7 +5,7 @@ include("node_expr_tree/ordered_include.jl")
 include("tree/ordered_include.jl")
 include("expr_tree/ordered_include.jl")
 
-using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .implementation_type_expr
+using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .M_implementation_type_expr
 using .algo_tree
 using .implementation_complete_expr_tree,
   .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
@@ -30,15 +30,15 @@ export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
 @inline get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
 
-convexity_wrapper = implementation_convexity_type.Convexity_wrapper
+convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
 
-@inline get_convexity_wrapper(t::implementation_convexity_type.Convexity_wrapper) =
-  implementation_convexity_type.get_convexity_wrapper(t)
+@inline get_convexity_wrapper(t::M_implementation_convexity_type.Convexity_wrapper) =
+  M_implementation_convexity_type.get_convexity_wrapper(t)
 
 @inline set_convexity_wrapper!(
-  cw::implementation_convexity_type.Convexity_wrapper,
-  typ::implementation_convexity_type.Convexity_type,
-) = implementation_convexity_type.set_convexity_wrapper!(cw, typ)
+  cw::M_implementation_convexity_type.Convexity_wrapper,
+  typ::M_implementation_convexity_type.Convexity_type,
+) = M_implementation_convexity_type.set_convexity_wrapper!(cw, typ)
 
 @inline create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
 
@@ -53,19 +53,19 @@ convexity_wrapper = implementation_convexity_type.Convexity_wrapper
 @inline get_convexity_status(complete_tree::implementation_complete_expr_tree.complete_expr_tree) =
   convexity_detection.get_convexity_status(complete_tree)
 
-@inline constant_type() = implementation_convexity_type.constant_type()
-@inline linear_type() = implementation_convexity_type.linear_type()
-@inline convex_type() = implementation_convexity_type.convex_type()
-@inline concave_type() = implementation_convexity_type.concave_type()
-@inline unknown_type() = implementation_convexity_type.unknown_type()
+@inline constant_type() = M_implementation_convexity_type.constant_type()
+@inline linear_type() = M_implementation_convexity_type.linear_type()
+@inline convex_type() = M_implementation_convexity_type.convex_type()
+@inline concave_type() = M_implementation_convexity_type.concave_type()
+@inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
-@inline is_treated(c) = implementation_convexity_type.is_treated(c)
-@inline is_not_treated(c) = implementation_convexity_type.is_not_treated(c)
-@inline is_constant(c) = implementation_convexity_type.is_constant(c)
-@inline is_linear(c) = implementation_convexity_type.is_linear(c)
-@inline is_convex(c) = implementation_convexity_type.is_convex(c)
-@inline is_concave(c) = implementation_convexity_type.is_concave(c)
-@inline is_unknown(c) = implementation_convexity_type.is_unknown(c)
+@inline is_treated(c) = M_implementation_convexity_type.is_treated(c)
+@inline is_not_treated(c) = M_implementation_convexity_type.is_not_treated(c)
+@inline is_constant(c) = M_implementation_convexity_type.is_constant(c)
+@inline is_linear(c) = M_implementation_convexity_type.is_linear(c)
+@inline is_convex(c) = M_implementation_convexity_type.is_convex(c)
+@inline is_concave(c) = M_implementation_convexity_type.is_concave(c)
+@inline is_unknown(c) = M_implementation_convexity_type.is_unknown(c)
 
 t_expr_tree = implementation_expr_tree.t_expr_tree
 
@@ -90,7 +90,7 @@ pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_comp
 ) where {N} where {T <: Number} =
   implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
-type_calculus_tree = implementation_type_expr.t_type_expr_basic
+type_calculus_tree = M_implementation_type_expr.t_type_expr_basic
 
 @inline is_constant(t::type_calculus_tree) = t == type_calculus_tree(0)
 @inline is_linear(t::type_calculus_tree) = t == type_calculus_tree(1)

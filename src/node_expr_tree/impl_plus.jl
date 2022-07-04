@@ -1,7 +1,7 @@
 module M_plus_operator
 
-import ..abstract_expr_node: ab_ex_nd, create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -12,7 +12,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -21,12 +21,12 @@ import ..interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.t_type_expr_basic
 
-using ..implementation_convexity_type
-using ..implementation_type_expr
-using ..trait_type_expr
-using ..abstract_expr_node
+using ..M_implementation_convexity_type
+using ..M_implementation_type_expr
+using ..M_trait_type_expr
+using ..M_abstract_expr_node
 import Base.(==)
 export plus_operator
 
@@ -35,41 +35,41 @@ mutable struct plus_operator <: ab_ex_nd end
 my_and(a::Bool, b::Bool) = (a && b)
 function _node_convexity(
   op::plus_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
+  son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   all_constant = mapreduce(
-    x::implementation_convexity_type.Convexity_type ->
-      implementation_convexity_type.is_constant(x),
+    x::M_implementation_convexity_type.Convexity_type ->
+      M_implementation_convexity_type.is_constant(x),
     my_and,
     son_cvx,
   )
   all_linear = mapreduce(
-    x::implementation_convexity_type.Convexity_type -> implementation_convexity_type.is_linear(x),
+    x::M_implementation_convexity_type.Convexity_type -> M_implementation_convexity_type.is_linear(x),
     my_and,
     son_cvx,
   )
   all_convex = mapreduce(
-    x::implementation_convexity_type.Convexity_type -> implementation_convexity_type.is_convex(x),
+    x::M_implementation_convexity_type.Convexity_type -> M_implementation_convexity_type.is_convex(x),
     my_and,
     son_cvx,
   )
   all_concave = mapreduce(
-    x::implementation_convexity_type.Convexity_type ->
-      implementation_convexity_type.is_concave(x),
+    x::M_implementation_convexity_type.Convexity_type ->
+      M_implementation_convexity_type.is_concave(x),
     my_and,
     son_cvx,
   )
   if all_constant
-    return implementation_convexity_type.constant_type()
+    return M_implementation_convexity_type.constant_type()
   elseif all_linear
-    return implementation_convexity_type.linear_type()
+    return M_implementation_convexity_type.linear_type()
   elseif all_convex
-    return implementation_convexity_type.convex_type()
+    return M_implementation_convexity_type.convex_type()
   elseif all_concave
-    return implementation_convexity_type.concave_type()
+    return M_implementation_convexity_type.concave_type()
   else
-    return implementation_convexity_type.unknown_type()
+    return M_implementation_convexity_type.unknown_type()
   end
 end
 
@@ -112,15 +112,15 @@ end
   sum(value_ch)
 @inline _evaluate_node!(
   op::plus_operator,
-  value_ch::AbstractVector{abstract_expr_node.MyRef{T}},
-  ref::abstract_expr_node.MyRef{T},
+  value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} =
-  length(value_ch) > 1 ? abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
-            abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
+  length(value_ch) > 1 ? M_abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
+            M_abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
 @inline function _evaluate_node!(
   op::plus_operator,
-  vec_value_ch::Vector{Vector{abstract_expr_node.MyRef{T}}},
-  vec_ref::Vector{abstract_expr_node.MyRef{T}},
+  vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
+  vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
   for i = 1:length(vec_value_ch)
     _evaluate_node!(op, vec_value_ch[i], vec_ref[i])

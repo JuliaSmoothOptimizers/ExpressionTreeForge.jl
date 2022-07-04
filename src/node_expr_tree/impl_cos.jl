@@ -1,7 +1,7 @@
 module M_cos_operator
 
-import ..abstract_expr_node: ab_ex_nd, create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -12,7 +12,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -21,12 +21,12 @@ import ..interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.t_type_expr_basic
 
-using ..implementation_convexity_type
-using ..implementation_type_expr
-using ..trait_type_expr
-using ..abstract_expr_node
+using ..M_implementation_convexity_type
+using ..M_implementation_type_expr
+using ..M_trait_type_expr
+using ..M_abstract_expr_node
 import Base.(==)
 export cos_operator
 
@@ -34,31 +34,31 @@ mutable struct cos_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::cos_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
+  son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   (length(son_cvx) == length(son_bound) && length(son_cvx) == 1) ||
     error("unsuitable length of parameters _node_convexity : exp_operator")
   status = son_cvx[1]
   (bi, bs) = son_bound[1]
-  if implementation_convexity_type.is_constant(status)
-    return implementation_convexity_type.constant_type()
+  if M_implementation_convexity_type.is_constant(status)
+    return M_implementation_convexity_type.constant_type()
   elseif (bs - bi > π) || (cos(bi) * cos(bs) < 0)
-    return implementation_convexity_type.unknown_type()
+    return M_implementation_convexity_type.unknown_type()
   elseif ((bs - bi <= π) && (cos(bi) >= 0) && (cos(bs) >= 0)) && (
-    implementation_convexity_type.is_linear(status) ||
-    (implementation_convexity_type.is_convex(status) && sin(bi) <= 0 && sin(bs <= 0)) ||
-    (implementation_convexity_type.is_concave(status) && sin(bi) >= 0 && sin(bs >= 0))
+    M_implementation_convexity_type.is_linear(status) ||
+    (M_implementation_convexity_type.is_convex(status) && sin(bi) <= 0 && sin(bs <= 0)) ||
+    (M_implementation_convexity_type.is_concave(status) && sin(bi) >= 0 && sin(bs >= 0))
   )
-    return implementation_convexity_type.concave_type()
+    return M_implementation_convexity_type.concave_type()
   elseif ((bs - bi <= π) && (sin(bi) <= 0) && (sin(bs) <= 0)) && (
-    implementation_convexity_type.is_linear(status) ||
-    (implementation_convexity_type.is_convex(status) && sin(bi) >= 0 && sin(bs >= 0)) ||
-    (implementation_convexity_type.is_concave(status) && sin(bi) <= 0 && sin(bs <= 0))
+    M_implementation_convexity_type.is_linear(status) ||
+    (M_implementation_convexity_type.is_convex(status) && sin(bi) >= 0 && sin(bs >= 0)) ||
+    (M_implementation_convexity_type.is_concave(status) && sin(bi) <= 0 && sin(bs <= 0))
   )
-    return implementation_convexity_type.convex_type()
+    return M_implementation_convexity_type.convex_type()
   else
-    return implementation_convexity_type.unknown_type()
+    return M_implementation_convexity_type.unknown_type()
   end
 end
 
@@ -123,10 +123,10 @@ belong(bi, bs, x) = (bi <= x) && (bs >= x)
 function _get_type_node(op::cos_operator, type_ch::Vector{t_type_expr_basic})
   if length(type_ch) == 1
     t_child = type_ch[1]
-    if trait_type_expr._is_constant(t_child)
+    if M_trait_type_expr._is_constant(t_child)
       return t_child
     else
-      return implementation_type_expr.return_more()
+      return M_implementation_type_expr.return_more()
     end
   end
 end
@@ -141,16 +141,16 @@ end
 @inline function _evaluate_node!(
   op::cos_operator,
   value_ch::AbstractVector{MyRef{Y}},
-  ref::abstract_expr_node.MyRef{Y},
+  ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
-  abstract_expr_node.set_myRef!(ref, cos(value_ch[1]))
+  M_abstract_expr_node.set_myRef!(ref, cos(value_ch[1]))
 end
 
 @inline function _evaluate_node!(
   op::cos_operator,
   vec_value_ch::Vector{Vector{MyRef{Y}}},
-  vec_ref::Vector{abstract_expr_node.MyRef{Y}},
+  vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
   for i = 1:length(vec_value_ch)
     _evaluate_node!(op, vec_value_ch[i], vec_ref[i])

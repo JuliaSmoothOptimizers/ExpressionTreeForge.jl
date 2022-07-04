@@ -1,6 +1,6 @@
 module implementation_expr_tree
 
-using ..abstract_expr_node, ..trait_expr_node
+using ..M_abstract_expr_node, ..M_trait_expr_node
 using ..abstract_expr_tree
 using ..trait_tree
 
@@ -18,10 +18,10 @@ function create_Expr(t::t_expr_tree)
   nd = trait_tree.get_node(t)
   ch = trait_tree.get_children(t)
   if isempty(ch)
-    return trait_expr_node.node_to_Expr(nd)
+    return M_trait_expr_node.node_to_Expr(nd)
   else
     children_Expr = create_Expr.(ch)
-    node_Expr = trait_expr_node.node_to_Expr(nd)
+    node_Expr = M_trait_expr_node.node_to_Expr(nd)
     #défférenciation entre les opérateurs simple :+, :- et compliqué comme :^2
     #premier cas, les cas simple :+, :-
     if length(node_Expr) == 1
@@ -39,10 +39,10 @@ function create_Expr2(t::t_expr_tree)
   nd = trait_tree.get_node(t)
   ch = trait_tree.get_children(t)
   if isempty(ch)
-    return trait_expr_node.node_to_Expr2(nd)
+    return M_trait_expr_node.node_to_Expr2(nd)
   else
     children_Expr = create_Expr2.(ch)
-    node_Expr = trait_expr_node.node_to_Expr2(nd)
+    node_Expr = M_trait_expr_node.node_to_Expr2(nd)
     #défférenciation entre les opérateurs simple :+, :- et compliqué comme :^2
     #premier cas, les cas simple :+, :-
     if length(node_Expr) == 1
@@ -66,7 +66,7 @@ _get_expr_node(t::t_expr_tree) = trait_tree.get_node(t)
 _get_expr_children(t::t_expr_tree) = trait_tree.get_children(t)
 
 function _inverse_expr_tree(t::t_expr_tree)
-  op_minus = abstract_expr_node.create_node_expr(:-)
+  op_minus = M_abstract_expr_node.create_node_expr(:-)
   new_node = abstract_expr_tree.create_expr_tree(op_minus, [t])
   return new_node
 end
@@ -85,11 +85,11 @@ function Base.copy(ex::t_expr_tree)
   nd = trait_tree.get_node(ex)
   ch = trait_tree.get_children(ex)
   if isempty(ch)
-    leaf = abstract_expr_tree.create_expr_tree(abstract_expr_node.create_node_expr(nd))
+    leaf = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(nd))
     return leaf
   else
     res_ch = Base.copy.(ch)
-    new_node = abstract_expr_node.create_node_expr(nd)
+    new_node = M_abstract_expr_node.create_node_expr(nd)
     return create_expr_tree(new_node, res_ch)
   end
 end

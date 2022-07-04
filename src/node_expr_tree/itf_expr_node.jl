@@ -1,6 +1,6 @@
-module interface_expr_node
+module M_interface_expr_node
 
-using ..abstract_expr_node
+using ..M_abstract_expr_node
 # This module define the interface that every node must support.
 # All methods are not needed for all nodes.
 
@@ -147,7 +147,7 @@ Return the bounds of `node` given the `children_bounds`.
 _node_bound(node::ab_ex_nd) = error("Should not be called")
 
 """
-    bool = _node_is_operator(node::ab_ex_nd, children_convex_status::AbstractVector{implementation_convexity_type.Convexity_type})
+    bool = _node_is_operator(node::ab_ex_nd, children_convex_status::AbstractVector{M_implementation_convexity_type.Convexity_type})
 
 Return the convexity status of `node` given the `children_convex_status`.
 """

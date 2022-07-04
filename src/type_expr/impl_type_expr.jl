@@ -1,6 +1,6 @@
-module implementation_type_expr
+module M_implementation_type_expr
 
-import ..interface_type_expr:
+import ..M_interface_type_expr:
   _is_constant, _is_linear, _is_quadratic, _is_more, _is_cubic, _type_product, _type_power
 
 export t_type_expr_basic,

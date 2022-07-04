@@ -1,8 +1,8 @@
-module trait_expr_node
+module M_trait_expr_node
 
-using ..abstract_expr_node
+using ..M_abstract_expr_node
 
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -13,7 +13,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -22,10 +22,10 @@ import ..interface_expr_node:
   _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2
-import ..interface_expr_node._node_bound, ..interface_expr_node._node_convexity
+import ..M_interface_expr_node._node_bound, ..M_interface_expr_node._node_convexity
 
-using ..trait_type_expr
-using ..implementation_convexity_type
+using ..M_trait_type_expr
+using ..M_implementation_convexity_type
 
 struct type_expr_node end
 struct type_not_expr_node end
@@ -55,24 +55,24 @@ struct type_not_expr_node end
   error("This node is not a expr node; node_convexity function")
 @inline node_convexity(
   a,
-  son_convexity::AbstractVector{implementation_convexity_type.Convexity_type},
+  son_convexity::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number} = _node_convexity(a, son_convexity, son_bound, is_expr_node(a))
 @inline _node_convexity(
   a,
-  son_convexity::AbstractVector{implementation_convexity_type.Convexity_type},
+  son_convexity::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
   ::type_expr_node,
 ) where {T <: Number} = _node_convexity(a, son_convexity, son_bound)
 @inline _node_convexity(
   a,
-  son_convexity::AbstractVector{implementation_convexity_type.Convexity_type},
+  son_convexity::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
   ::type_not_expr_node,
 ) where {T <: Number} = error("This node is not a expr node; node_convexity function")
 
 #  operators's part
-@inline is_expr_node(a::abstract_expr_node.ab_ex_nd) = type_expr_node()
+@inline is_expr_node(a::M_abstract_expr_node.ab_ex_nd) = type_expr_node()
 @inline is_expr_node(a::Expr) = type_expr_node()
 @inline is_expr_node(a::Number) = type_expr_node()
 @inline is_expr_node(a::Any) = type_not_expr_node()
@@ -131,8 +131,8 @@ struct type_not_expr_node end
   error("nous n'avons pas que des types expr")
 @inline get_type_node(a, b) = _get_type_node(a, is_expr_node(a), b)
 function _get_type_node(a, ::type_expr_node, b::Array)
-  trait_array = trait_type_expr.is_trait_type_expr.(b)
-  preparation_cond = isa.(trait_array, trait_type_expr.Type_type_expr)
+  trait_array = M_trait_type_expr.is_trait_type_expr.(b)
+  preparation_cond = isa.(trait_array, M_trait_type_expr.Type_type_expr)
   foldl(&, preparation_cond) ? _get_type_node(a, b) : error("not only types expr")
 end
 
@@ -169,55 +169,55 @@ end
 @inline evaluate_node!(
   a,
   x::AbstractVector{T},
-  ref::abstract_expr_node.MyRef{T},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, is_expr_node(a), x, ref)
 @inline _evaluate_node!(
   a,
   ::type_expr_node,
   x::AbstractVector{T},
-  ref::abstract_expr_node.MyRef{T},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, x, ref)
 @inline _evaluate_node!(
   a,
   ::type_not_expr_node,
   x::AbstractVector{T},
-  ref::abstract_expr_node.MyRef{T},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = error("This node is not a expr node")
 
 @inline evaluate_node!(
   a,
-  x::AbstractVector{abstract_expr_node.MyRef{T}},
-  ref::abstract_expr_node.MyRef{T},
+  x::AbstractVector{M_abstract_expr_node.MyRef{T}},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, is_expr_node(a), x, ref)
 @inline _evaluate_node!(
   a,
   ::type_expr_node,
-  x::AbstractVector{abstract_expr_node.MyRef{T}},
-  ref::abstract_expr_node.MyRef{T},
+  x::AbstractVector{M_abstract_expr_node.MyRef{T}},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, x, ref)
 @inline _evaluate_node!(
   a,
   ::type_not_expr_node,
-  x::AbstractVector{abstract_expr_node.MyRef{T}},
-  ref::abstract_expr_node.MyRef{T},
+  x::AbstractVector{M_abstract_expr_node.MyRef{T}},
+  ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = error("This node is not a expr node")
 
 @inline evaluate_node!(
   a,
-  x::Vector{Vector{abstract_expr_node.MyRef{T}}},
-  ref::Vector{abstract_expr_node.MyRef{T}},
+  x::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
+  ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number} = _evaluate_node!(a, is_expr_node(a), x, ref)
 @inline _evaluate_node!(
   a,
   ::type_expr_node,
-  x::Vector{Vector{abstract_expr_node.MyRef{T}}},
-  ref::Vector{abstract_expr_node.MyRef{T}},
+  x::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
+  ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number} = _evaluate_node!(a, x, ref)
 @inline _evaluate_node!(
   a,
   ::type_not_expr_node,
-  x::Vector{Vector{abstract_expr_node.MyRef{T}}},
-  ref::Vector{abstract_expr_node.MyRef{T}},
+  x::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
+  ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number} = error("This node is not a expr node")
 
 @inline change_from_N_to_Ni!(a, dic_new_var::Dict{Int, Int}) =
@@ -241,4 +241,4 @@ end
 @inline _cast_constant!(a, ::type_not_expr_node, t::DataType) =
   error("This node is not a expr node")
 
-end  # module trait_expr_node
+end  # module M_trait_expr_node

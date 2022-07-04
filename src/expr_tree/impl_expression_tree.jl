@@ -2,7 +2,7 @@ module implementation_expression_tree_Expr
 
 using ModelingToolkit
 
-using ..abstract_expr_node, ..abstract_expr_tree
+using ..M_abstract_expr_node, ..abstract_expr_tree
 using ..implementation_expr_tree
 
 import ..abstract_expr_tree.create_expr_tree, ..abstract_expr_tree.create_Expr
@@ -43,24 +43,24 @@ end
 function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Variable_counter())
   op = ex.op
   if op == +
-    return abstract_expr_node.create_node_expr(:+)
+    return M_abstract_expr_node.create_node_expr(:+)
   elseif op == -
-    return abstract_expr_node.create_node_expr(:-)
+    return M_abstract_expr_node.create_node_expr(:-)
   elseif op == *
-    return abstract_expr_node.create_node_expr(:*)
+    return M_abstract_expr_node.create_node_expr(:*)
   elseif op == /
-    return abstract_expr_node.create_node_expr(:/)
+    return M_abstract_expr_node.create_node_expr(:/)
   elseif op == ^
     power_value = ex.args[end].value
-    return abstract_expr_node.create_node_expr(:^, power_value, true)
+    return M_abstract_expr_node.create_node_expr(:^, power_value, true)
   elseif op == tan
-    return abstract_expr_node.create_node_expr(:tan)
+    return M_abstract_expr_node.create_node_expr(:tan)
   elseif op == cos
-    return abstract_expr_node.create_node_expr(:cos)
+    return M_abstract_expr_node.create_node_expr(:cos)
   elseif op == sin
-    return abstract_expr_node.create_node_expr(:sin)
+    return M_abstract_expr_node.create_node_expr(:sin)
   elseif op == exp
-    return abstract_expr_node.create_node_expr(:exp)
+    return M_abstract_expr_node.create_node_expr(:exp)
   elseif typeof(op) == ModelingToolkit.Variable
     symbol = op.name
     index = get_value(vc, symbol)
@@ -68,7 +68,7 @@ function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Va
       add_dic_var!(vc, symbol)
       index = get_value(vc, symbol)
     end
-    abstract_expr_node.create_node_expr(:x, index)
+    M_abstract_expr_node.create_node_expr(:x, index)
   elseif typeof(op) == ModelingToolkit.Variable{Number}
     symbol = op.name
     index = get_value(vc, symbol)
@@ -76,13 +76,13 @@ function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Va
       add_dic_var!(vc, symbol)
       index = get_value(vc, symbol)
     end
-    abstract_expr_node.create_node_expr(:x, index)
+    M_abstract_expr_node.create_node_expr(:x, index)
   else
     @error("unsurpported operator (ModelingToolKit Interface)")
   end
 end
 
-@inline _get_expr_node(ex::ModelingToolkit.Constant) = abstract_expr_node.create_node_expr(ex.value)
+@inline _get_expr_node(ex::ModelingToolkit.Constant) = M_abstract_expr_node.create_node_expr(ex.value)
 
 @inline _get_expr_children(ex::ModelingToolkit.Operation) =
   (ex.op == ^) ? ex.args[1:(end - 1)] : ex.args
@@ -95,7 +95,7 @@ function _transform_to_expr_tree(ex::ModelingToolkit.Operation)
 end
 
 function _transform_to_expr_tree2(ex::ModelingToolkit.Operation; vc::Variable_counter)
-  n_node = _get_expr_node(ex; vc)::abstract_expr_node.ab_ex_nd
+  n_node = _get_expr_node(ex; vc)::M_abstract_expr_node.ab_ex_nd
   children = _get_expr_children(ex)
   if isempty(children)
     return abstract_expr_tree.create_expr_tree(n_node)::implementation_expr_tree.t_expr_tree
@@ -110,7 +110,7 @@ function _transform_to_expr_tree2(ex::ModelingToolkit.Operation; vc::Variable_co
 end
 
 _transform_to_expr_tree2(ex::ModelingToolkit.Constant; vc) = abstract_expr_tree.create_expr_tree(
-  abstract_expr_node.create_node_expr(ex.value),
+  M_abstract_expr_node.create_node_expr(ex.value),
 )::implementation_expr_tree.t_expr_tree
 
 end

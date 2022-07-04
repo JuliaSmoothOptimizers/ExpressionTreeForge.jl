@@ -1,7 +1,7 @@
 module M_frac_operator
 
-import ..abstract_expr_node: ab_ex_nd, create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node: ab_ex_nd, create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -12,7 +12,7 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
@@ -21,12 +21,12 @@ import ..interface_expr_node:
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.t_type_expr_basic
 
-using ..implementation_convexity_type
-using ..implementation_type_expr
-using ..trait_type_expr
-using ..abstract_expr_node
+using ..M_implementation_convexity_type
+using ..M_implementation_type_expr
+using ..M_trait_type_expr
+using ..M_abstract_expr_node
 import Base.(==)
 export variable
 
@@ -34,7 +34,7 @@ mutable struct frac_operator <: ab_ex_nd end
 
 function _node_convexity(
   op::frac_operator,
-  son_cvx::AbstractVector{implementation_convexity_type.Convexity_type},
+  son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   length(son_cvx) == length(son_bound) ||
@@ -43,40 +43,40 @@ function _node_convexity(
   st_num = son_cvx[1]
   (bi_num, bs_num) = son_bound[1]
   (bi_denom, bs_denom) = son_bound[2]
-  if implementation_convexity_type.is_constant(st_denom) &&
-     implementation_convexity_type.is_constant(st_num)
-    return implementation_convexity_type.constant_type()
-  elseif implementation_convexity_type.is_constant(st_denom) &&
-         implementation_convexity_type.is_linear(st_num)
-    return implementation_convexity_type.linear_type()
-  elseif implementation_convexity_type.is_constant(st_denom) && (
-    (bi_denom > 0 && implementation_convexity_type.is_convex(st_num)) ||
-    (bi_denom < 0 && implementation_convexity_type.is_concave(st_num))
+  if M_implementation_convexity_type.is_constant(st_denom) &&
+     M_implementation_convexity_type.is_constant(st_num)
+    return M_implementation_convexity_type.constant_type()
+  elseif M_implementation_convexity_type.is_constant(st_denom) &&
+         M_implementation_convexity_type.is_linear(st_num)
+    return M_implementation_convexity_type.linear_type()
+  elseif M_implementation_convexity_type.is_constant(st_denom) && (
+    (bi_denom > 0 && M_implementation_convexity_type.is_convex(st_num)) ||
+    (bi_denom < 0 && M_implementation_convexity_type.is_concave(st_num))
   )
-    return implementation_convexity_type.convex_type()
-  elseif implementation_convexity_type.is_constant(st_denom) && (
-    (bs_denom < 0 && implementation_convexity_type.is_convex(st_num)) ||
-    (bi_denom > 0 && implementation_convexity_type.is_concave(st_num))
+    return M_implementation_convexity_type.convex_type()
+  elseif M_implementation_convexity_type.is_constant(st_denom) && (
+    (bs_denom < 0 && M_implementation_convexity_type.is_convex(st_num)) ||
+    (bi_denom > 0 && M_implementation_convexity_type.is_concave(st_num))
   )
-    return implementation_convexity_type.concave_type()
+    return M_implementation_convexity_type.concave_type()
   elseif !(check_0_in(bi_denom, bs_denom)) &&
-         implementation_convexity_type.is_constant(st_num) &&
+         M_implementation_convexity_type.is_constant(st_num) &&
          (
            (
-             (bi_num >= 0) && (bi_denom > 0) && implementation_convexity_type.is_concave(st_denom)
+             (bi_num >= 0) && (bi_denom > 0) && M_implementation_convexity_type.is_concave(st_denom)
            ) ||
-           ((bs_num <= 0) && (bs_denom < 0) && implementation_convexity_type.is_convex(st_denom))
+           ((bs_num <= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom))
          )
-    return implementation_convexity_type.convex_type()
+    return M_implementation_convexity_type.convex_type()
   elseif !(check_0_in(bi_denom, bs_denom)) &&
-         implementation_convexity_type.is_constant(st_num) &&
+         M_implementation_convexity_type.is_constant(st_num) &&
          (
-           ((bi_num >= 0) && (bs_denom < 0) && implementation_convexity_type.is_convex(st_denom)) ||
-           ((bs_num <= 0) && (bi_denom > 0) && implementation_convexity_type.is_concave(st_denom))
+           ((bi_num >= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom)) ||
+           ((bs_num <= 0) && (bi_denom > 0) && M_implementation_convexity_type.is_concave(st_denom))
          )
-    return implementation_convexity_type.concave_type()
+    return M_implementation_convexity_type.concave_type()
   else
-    return implementation_convexity_type.unknown_type()
+    return M_implementation_convexity_type.unknown_type()
   end
 end
 
@@ -136,10 +136,10 @@ end
 
 function _get_type_node(op::frac_operator, type_ch::Vector{t_type_expr_basic})
   t_denom = type_ch[2]
-  if trait_type_expr._is_constant(t_denom)
+  if M_trait_type_expr._is_constant(t_denom)
     return type_ch[1]
   else
-    implementation_type_expr.return_more()
+    M_implementation_type_expr.return_more()
   end
 end
 
@@ -149,13 +149,13 @@ end
   value_ch[1] / value_ch[2]
 @inline _evaluate_node!(
   op::frac_operator,
-  value_ch::AbstractVector{abstract_expr_node.MyRef{T}},
-  ref::abstract_expr_node.MyRef{T},
-) where {T <: Number} = abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
+  value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
+  ref::M_abstract_expr_node.MyRef{T},
+) where {T <: Number} = M_abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
 @inline function _evaluate_node!(
   op::frac_operator,
-  vec_value_ch::Vector{Vector{abstract_expr_node.MyRef{T}}},
-  vec_ref::Vector{abstract_expr_node.MyRef{T}},
+  vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
+  vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
   for i = 1:length(vec_value_ch)
     _evaluate_node!(op, vec_value_ch[i], vec_ref[i])

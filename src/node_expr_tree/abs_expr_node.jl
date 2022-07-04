@@ -1,4 +1,4 @@
-module abstract_expr_node
+module M_abstract_expr_node
 
 import Base.+, Base.-
 import Base.*, Base./

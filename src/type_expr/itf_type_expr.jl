@@ -1,4 +1,4 @@
-module interface_type_expr
+module M_interface_type_expr
 
 """
     bool = _is_constant(type)
@@ -49,4 +49,4 @@ Return the type resulting of `type` to power `index`.
 """
 _type_power() = ()
 
-end  # module interface_type_expr
+end  # module M_interface_type_expr

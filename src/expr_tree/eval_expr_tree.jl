@@ -1,10 +1,10 @@
 module M_evaluation_expr_tree
 using ForwardDiff, ReverseDiff
 
-using ..trait_expr_tree, ..trait_expr_node
+using ..trait_expr_tree, ..M_trait_expr_node
 using ..implementation_expr_tree,
   ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
-using ..abstract_expr_node
+using ..M_abstract_expr_node
 using ..implementation_pre_n_compiled_tree
 
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
@@ -49,14 +49,14 @@ using ..implementation_pre_n_compiled_tree
 
 function _evaluate_expr_tree(expr_tree::Y, x::AbstractVector{T}) where {T <: Number} where {Y}
   nd = trait_expr_tree._get_expr_node(expr_tree)
-  if trait_expr_node.node_is_operator(nd) == false
-    trait_expr_node.evaluate_node(nd, x)
+  if M_trait_expr_node.node_is_operator(nd) == false
+    M_trait_expr_node.evaluate_node(nd, x)
   else
     ch = trait_expr_tree._get_expr_children(expr_tree)
     n = length(ch)
     temp = Vector{T}(undef, n)
     map!(y -> evaluate_expr_tree(y, x), temp, ch)
-    trait_expr_node.evaluate_node(nd, temp)
+    M_trait_expr_node.evaluate_node(nd, temp)
   end
 end
 
@@ -64,8 +64,8 @@ end
   expr_tree::implementation_expr_tree.t_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number}
-  if trait_expr_node.node_is_operator(expr_tree.field::trait_expr_node.ab_ex_nd)::Bool == false
-    return trait_expr_node._evaluate_node(expr_tree.field, x)
+  if M_trait_expr_node.node_is_operator(expr_tree.field::M_trait_expr_node.ab_ex_nd)::Bool == false
+    return M_trait_expr_node._evaluate_node(expr_tree.field, x)
   else
     n = length(expr_tree.children)
     temp = Vector{T}(undef, n)
@@ -74,7 +74,7 @@ end
       temp,
       expr_tree.children,
     )
-    return trait_expr_node._evaluate_node(expr_tree.field, temp)
+    return M_trait_expr_node._evaluate_node(expr_tree.field, temp)
   end
 end
 
@@ -82,9 +82,9 @@ end
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::trait_expr_node.ab_ex_nd
-  if trait_expr_node.node_is_operator(op)::Bool == false
-    return trait_expr_node._evaluate_node(op, x)
+  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.ab_ex_nd
+  if M_trait_expr_node.node_is_operator(op)::Bool == false
+    return M_trait_expr_node._evaluate_node(op, x)
   else
     children = trait_expr_tree.get_expr_children(expr_tree_cmp)
     n = length(children)::Int
@@ -94,7 +94,7 @@ end
       temp,
       children,
     )
-    return trait_expr_node._evaluate_node(op, temp)
+    return M_trait_expr_node._evaluate_node(op, temp)
   end
 end
 
@@ -111,11 +111,11 @@ function _evaluate_expr_tree_multiple_points(
   expr_tree::implementation_expr_tree.t_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree)::trait_expr_node.ab_ex_nd
+  op = trait_expr_tree.get_expr_node(expr_tree)::M_trait_expr_node.ab_ex_nd
   number_x = length(xs)
-  if trait_expr_node.node_is_operator(op::trait_expr_node.ab_ex_nd)::Bool == false
+  if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.ab_ex_nd)::Bool == false
     temp = Vector{T}(undef, number_x)
-    map!(x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+    map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
     children = trait_expr_tree.get_expr_children(expr_tree)
@@ -127,7 +127,7 @@ function _evaluate_expr_tree_multiple_points(
       view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
     end
     for i = 1:number_x
-      res[i] = trait_expr_node._evaluate_node(op, view(temp, :, i))
+      res[i] = M_trait_expr_node._evaluate_node(op, view(temp, :, i))
     end
     return res
   end
@@ -200,11 +200,11 @@ end
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{Array{T, 1}, 1},
 ) where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::trait_expr_node.ab_ex_nd
+  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.ab_ex_nd
   number_x = length(xs)
-  if trait_expr_node.node_is_operator(op::trait_expr_node.ab_ex_nd)::Bool == false
+  if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.ab_ex_nd)::Bool == false
     temp = Vector{T}(undef, number_x)
-    map!(x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+    map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
     children = trait_expr_tree.get_expr_children(expr_tree_cmp)
@@ -216,7 +216,7 @@ end
       view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
     end
     for i = 1:number_x
-      res[i] = trait_expr_node._evaluate_node(op, view(temp, :, i))
+      res[i] = M_trait_expr_node._evaluate_node(op, view(temp, :, i))
     end
     return res
   end
@@ -226,11 +226,11 @@ function _evaluate_expr_tree_multiple_points(
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::trait_expr_node.ab_ex_nd
+  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.ab_ex_nd
   number_x = length(xs)
-  if trait_expr_node.node_is_operator(op::trait_expr_node.ab_ex_nd)::Bool == false
+  if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.ab_ex_nd)::Bool == false
     temp = Vector{T}(undef, number_x)
-    map!(x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+    map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
     children = trait_expr_tree.get_expr_children(expr_tree_cmp)
@@ -242,7 +242,7 @@ function _evaluate_expr_tree_multiple_points(
       view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
     end
     for i = 1:number_x
-      res[i] = trait_expr_node._evaluate_node(op, view(temp, :, i))
+      res[i] = M_trait_expr_node._evaluate_node(op, view(temp, :, i))
     end
     return res
   end
@@ -252,11 +252,11 @@ function _evaluate_expr_tree_multiple_points(
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::trait_expr_node.ab_ex_nd
+  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.ab_ex_nd
   number_x = length(xs)
-  if trait_expr_node.node_is_operator(op::trait_expr_node.ab_ex_nd)::Bool == false
+  if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.ab_ex_nd)::Bool == false
     temp = Vector{T}(undef, number_x)
-    map!(x -> trait_expr_node._evaluate_node(op, x), temp, xs)
+    map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
     children = trait_expr_tree.get_expr_children(expr_tree_cmp)
@@ -268,7 +268,7 @@ function _evaluate_expr_tree_multiple_points(
       view(temp, i, :) .= _evaluate_expr_tree_multiple_points(children[i], xs)
     end
     for i = 1:number_x
-      res[i] = trait_expr_node._evaluate_node(op, view(temp, :, i))
+      res[i] = M_trait_expr_node._evaluate_node(op, view(temp, :, i))
     end
     return res
   end
@@ -371,16 +371,16 @@ function _evaluate_expr_tree2(
 ) where {T <: Number}
   n_children = length(expr_tree.children)
   if n_children == 0
-    return trait_expr_node._evaluate_node2(expr_tree.field, x)::T
+    return M_trait_expr_node._evaluate_node2(expr_tree.field, x)::T
   elseif n_children == 1
     temp = Vector{T}(undef, 1)
     temp[1] = _evaluate_expr_tree2(expr_tree.children[1], x)::T
-    return trait_expr_node._evaluate_node2(expr_tree.field, temp)::T
+    return M_trait_expr_node._evaluate_node2(expr_tree.field, temp)::T
   else
     field = expr_tree.field
     return mapreduce(
       y::implementation_expr_tree.t_expr_tree -> _evaluate_expr_tree2(y, x)::T,
-      trait_expr_node._evaluate_node2(field),
+      M_trait_expr_node._evaluate_node2(field),
       expr_tree.children::Vector{implementation_expr_tree.t_expr_tree},
     )::T
   end

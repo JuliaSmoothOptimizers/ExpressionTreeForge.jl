@@ -1,19 +1,19 @@
 module implementation_pre_n_compiled_tree
 
-using ..abstract_expr_node, ..trait_tree, ..implementation_expr_tree, ..trait_expr_node
+using ..M_abstract_expr_node, ..trait_tree, ..implementation_expr_tree, ..M_trait_expr_node
 
 mutable struct new_field
-  op::abstract_expr_node.ab_ex_nd
+  op::M_abstract_expr_node.ab_ex_nd
 end
 
-@inline create_new_field(op::abstract_expr_node.ab_ex_nd) = new_field(op)
+@inline create_new_field(op::M_abstract_expr_node.ab_ex_nd) = new_field(op)
 
 @inline get_op_from_field(field::new_field) = field.op
 
 mutable struct eval_n_node{Y <: Number}
   field::new_field
-  vec_tmp_children::Vector{Vector{abstract_expr_node.MyRef{Y}}}
-  vec_tmp_n_eval::Vector{Vector{abstract_expr_node.MyRef{Y}}}
+  vec_tmp_children::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}
+  vec_tmp_n_eval::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}
   children::Vector{eval_n_node{Y}}
   length_children::Int
   length_n_eval::Int
@@ -23,7 +23,7 @@ mutable struct pre_n_compiled_tree{Y <: Number}
   racine::eval_n_node{Y}
   multiple_x::Vector{AbstractVector{Y}}
   multiple::Int
-  vec_tmp::Vector{abstract_expr_node.MyRef{Y}}
+  vec_tmp::Vector{M_abstract_expr_node.MyRef{Y}}
 end
 
 @inline get_racine(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.racine
@@ -95,9 +95,9 @@ function create_eval_n_node(
   n_eval::Int,
 ) where {Y <: Number}
   n_children = length(children)
-  vec_tmp_children = abstract_expr_node.create_vector_of_vector_myRef(n_eval, n_children, Y)
-  vec_tmp_n_eval = abstract_expr_node.create_vector_of_vector_myRef(n_children, n_eval, Y)
-  abstract_expr_node.equalize_vec_vec_myRef!(vec_tmp_n_eval, vec_tmp_children)
+  vec_tmp_children = M_abstract_expr_node.create_vector_of_vector_myRef(n_eval, n_children, Y)
+  vec_tmp_n_eval = M_abstract_expr_node.create_vector_of_vector_myRef(n_children, n_eval, Y)
+  M_abstract_expr_node.equalize_vec_vec_myRef!(vec_tmp_n_eval, vec_tmp_children)
   return create_eval_n_node(field, vec_tmp_children, vec_tmp_n_eval, children, n_children, n_eval)
 end
 
@@ -134,7 +134,7 @@ function _create_pre_n_compiled_tree(
   ch = trait_tree.get_children(tree)
   n_eval = length(multiple_x_view)
   if isempty(ch)
-    new_op = abstract_expr_node.create_node_expr(nd, multiple_x_view)
+    new_op = M_abstract_expr_node.create_node_expr(nd, multiple_x_view)
     new_field = create_new_field(new_op)
     new_node = create_eval_n_node(new_field, n_eval, T)
     return new_node
@@ -163,7 +163,7 @@ function _create_pre_n_compiled_tree(
   ch = trait_tree.get_children(tree)
   n_eval = length(multiple_x)
   if isempty(ch)
-    new_op = abstract_expr_node.create_node_expr(nd, multiple_x)
+    new_op = M_abstract_expr_node.create_node_expr(nd, multiple_x)
     new_field = create_new_field(new_op)
     new_node = create_eval_n_node(new_field, n_eval, T)
     return new_node
@@ -185,7 +185,7 @@ function evaluate_pre_n_compiled_tree(
   racine = get_racine(tree)
   vec_tmp = get_vec_tmp(tree)
   evaluate_eval_n_node!(racine, vec_tmp)
-  length(vec_tmp) == 1 ? res = abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
+  length(vec_tmp) == 1 ? res = M_abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
   return res::T
 end
 
@@ -200,7 +200,7 @@ function evaluate_pre_n_compiled_tree(
   racine = get_racine(tree)
   vec_tmp = get_vec_tmp(tree)
   evaluate_eval_n_node!(racine, vec_tmp)
-  length(vec_tmp) == 1 ? res = abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
+  length(vec_tmp) == 1 ? res = M_abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
   return res::T
 end
 
@@ -208,7 +208,7 @@ function evaluate_pre_n_compiled_tree(tree::pre_n_compiled_tree{T}) where {T <: 
   racine = get_racine(tree)
   vec_tmp = get_vec_tmp(tree)
   evaluate_eval_n_node!(racine, vec_tmp)
-  length(vec_tmp) == 1 ? res = abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
+  length(vec_tmp) == 1 ? res = M_abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
   return res::T
 end
 
@@ -217,8 +217,8 @@ function evaluate_eval_n_node!(
   tmp::AbstractVector{MyRef{T}},
 ) where {T <: Number}
   op = get_op_from_node(node)
-  if trait_expr_node.node_is_operator(op)::Bool == false
-    trait_expr_node._evaluate_node!(op, tmp)
+  if M_trait_expr_node.node_is_operator(op)::Bool == false
+    M_trait_expr_node._evaluate_node!(op, tmp)
   else
     n = get_length_children(node)
     for i = 1:n
@@ -227,7 +227,7 @@ function evaluate_eval_n_node!(
       evaluate_eval_n_node!(child, vector_ref)
     end
     vec_values_children = get_vec_tmp_children(node)
-    trait_expr_node._evaluate_node!(op, vec_values_children, tmp)
+    M_trait_expr_node._evaluate_node!(op, vec_values_children, tmp)
   end
 end
 

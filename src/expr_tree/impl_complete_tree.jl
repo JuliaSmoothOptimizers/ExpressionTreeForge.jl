@@ -2,9 +2,9 @@ module implementation_complete_expr_tree
 
 import Base.==
 
-using ..abstract_expr_node, ..abstract_expr_tree
-using ..trait_tree, ..trait_expr_node
-using ..implementation_convexity_type, ..implementation_expr_tree
+using ..M_abstract_expr_node, ..abstract_expr_tree
+using ..trait_tree, ..M_trait_expr_node
+using ..M_implementation_convexity_type, ..implementation_expr_tree
 using ..interface_expr_tree
 
 import ..abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
@@ -16,22 +16,22 @@ import ..interface_expr_tree:
 export complete_node
 
 mutable struct complete_node{T <: Number}
-  op::abstract_expr_node.ab_ex_nd
+  op::M_abstract_expr_node.ab_ex_nd
   bounds::abstract_expr_tree.bounds{T}
-  convexity_status::implementation_convexity_type.Convexity_wrapper
+  convexity_status::M_implementation_convexity_type.Convexity_wrapper
 end
 
 @inline create_complete_node(
   op::ab_ex_nd,
   bounds::abstract_expr_tree.bounds{T},
-  cvx_st::implementation_convexity_type.Convexity_wrapper,
+  cvx_st::M_implementation_convexity_type.Convexity_wrapper,
 ) where {T <: Number} = complete_node{T}(op, bounds, cvx_st)
 
 @inline create_complete_node(
   op::ab_ex_nd,
   bounds::abstract_expr_tree.bounds{T},
 ) where {T <: Number} =
-  create_complete_node(op, bounds, implementation_convexity_type.init_conv_status())
+  create_complete_node(op, bounds, M_implementation_convexity_type.init_conv_status())
 
 @inline create_complete_node(op::ab_ex_nd, bi::T, bs::T) where {T <: Number} =
   create_complete_node(op, abstract_expr_tree.bounds{T}(bi, bs))
@@ -50,13 +50,13 @@ end
   abstract_expr_tree.get_bounds(node.bounds)
 
 @inline get_convexity_status(node::complete_node{T}) where {T <: Number} =
-  implementation_convexity_type.get_convexity_wrapper(node.convexity_status)
+  M_implementation_convexity_type.get_convexity_wrapper(node.convexity_status)
 
 @inline set_convexity_status!(
   node::complete_node{T},
-  t::implementation_convexity_type.Convexity_type,
+  t::M_implementation_convexity_type.Convexity_type,
 ) where {T <: Number} =
-  implementation_convexity_type.set_convexity_wrapper!(node.convexity_status, t)
+  M_implementation_convexity_type.set_convexity_wrapper!(node.convexity_status, t)
 
 complete_expr_tree{T <: Number} = Type_node{complete_node{T}}
 
@@ -114,10 +114,10 @@ function create_Expr(t::complete_expr_tree)
   ch = trait_tree.get_children(t)
   op = get_op_from_node(nd)
   if isempty(ch)
-    return trait_expr_node.node_to_Expr(op)
+    return M_trait_expr_node.node_to_Expr(op)
   else
     children_Expr = create_Expr.(ch)
-    node_Expr = trait_expr_node.node_to_Expr(op)
+    node_Expr = M_trait_expr_node.node_to_Expr(op)
     if length(node_Expr) == 1 # easy case
       return Expr(:call, node_Expr[1], children_Expr...)
     elseif length(node_Expr) == 2 # :^
@@ -129,7 +129,7 @@ function create_Expr(t::complete_expr_tree)
 end
 
 function _inverse_expr_tree(t::complete_expr_tree{T}) where {T <: Number}
-  op_minus = abstract_expr_node.create_node_expr(:-)
+  op_minus = M_abstract_expr_node.create_node_expr(:-)
   bounds = abstract_expr_tree.create_empty_bounds(T)
   node = create_complete_node(op_minus, bounds)
   return create_complete_expr_tree(node, [t])
