@@ -9,7 +9,7 @@ using ..interface_expr_tree
 
 import ..abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..interface_expr_tree._inverse_expr_tree
-import ..implementation_tree.type_node
+import ..implementation_tree.Type_node
 import ..interface_expr_tree:
   _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
 
@@ -58,7 +58,7 @@ end
 ) where {T <: Number} =
   implementation_convexity_type.set_convexity_wrapper!(node.convexity_status, t)
 
-complete_expr_tree{T <: Number} = type_node{complete_node{T}}
+complete_expr_tree{T <: Number} = Type_node{complete_node{T}}
 
 @inline create_complete_expr_tree(
   cn::complete_node{T},
@@ -70,7 +70,7 @@ complete_expr_tree{T <: Number} = type_node{complete_node{T}}
 
 @inline create_complete_expr_tree(ex::complete_expr_tree{T}) where {T <: Number} = ex
 
-function create_complete_expr_tree(t::implementation_expr_tree.type_node{T}) where {T <: ab_ex_nd}
+function create_complete_expr_tree(t::implementation_expr_tree.Type_node{T}) where {T <: ab_ex_nd}
   nd = trait_tree.get_node(t)
   ch = trait_tree.get_children(t)
   if isempty(ch)

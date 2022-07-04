@@ -12,26 +12,26 @@ using CalculusTreeTools.trait_tree,
   @test trait_tree.get_node(t2_expr) == :+
   @test trait_tree.get_children(t2_expr) == [5, 6]
 
-  @test trait_tree.is_type_trait_tree(t2_expr) == trait_tree.type_trait_tree()
-  @test trait_tree.is_type_trait_tree(:(x[5] + x[4])) == trait_tree.type_trait_tree()
-  @test trait_tree.is_type_trait_tree(4) == trait_tree.type_trait_tree()
-  @test trait_tree.is_type_trait_tree(ones(5)) == trait_tree.type_not_trait_tree()
+  @test trait_tree.is_type_trait_tree(t2_expr) == trait_tree.Type_trait_tree()
+  @test trait_tree.is_type_trait_tree(:(x[5] + x[4])) == trait_tree.Type_trait_tree()
+  @test trait_tree.is_type_trait_tree(4) == trait_tree.Type_trait_tree()
+  @test trait_tree.is_type_trait_tree(ones(5)) == trait_tree.Type_not_trait_tree()
 end
 
 @testset " test on tree/impl_tree " begin
   tree1 = implementation_tree.create_tree(5, [])
-  @test tree1 == implementation_tree.type_node{Int64}(5, [])
+  @test tree1 == implementation_tree.Type_node{Int64}(5, [])
   @test implementation_tree._get_node(tree1) == 5
   @test implementation_tree._get_children(tree1) == []
 
   tree2 = implementation_tree.create_tree(6, [tree1, tree1])
-  @test tree2 == implementation_tree.type_node{Int64}(6, [tree1, tree1])
+  @test tree2 == implementation_tree.Type_node{Int64}(6, [tree1, tree1])
   @test implementation_tree._get_node(tree2) == 6
   @test implementation_tree._get_children(tree2) == [tree1, tree1]
 
-  @test tree2 == implementation_tree.type_node{Int64}(
+  @test tree2 == implementation_tree.Type_node{Int64}(
     6,
-    [implementation_tree.type_node{Int64}(5, []), implementation_tree.type_node{Int64}(5, [])],
+    [implementation_tree.Type_node{Int64}(5, []), implementation_tree.Type_node{Int64}(5, [])],
   )
 end
 

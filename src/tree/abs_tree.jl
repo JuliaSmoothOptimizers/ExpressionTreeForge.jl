@@ -3,14 +3,17 @@ module abstract_tree
 export create_tree
 
 """
-  Define the abstrait type ab_tree
+  Supertype of every tree.
 """
-abstract type ab_tree end
+abstract type Ab_tree end
 
 """
-create_tree()
-    Define a tree, the implementation of the function must be done by the subtype of ab_tree
+    tree = create_tree(field::T, children::Vector{Type_node{T}}) where {T}
+    tree = create_tree(field::T, children::Array{Any, 1}) where {T}
+    tree = create_tree(ex::Expr)
+
+Create a `tree` of type `Type_node` from a `field` for the current node and its `children` or from an `Expr`.
 """
 create_tree() = @error("Should not be called (abstract_tree)")
 
-end  # module abstract_tree
+end

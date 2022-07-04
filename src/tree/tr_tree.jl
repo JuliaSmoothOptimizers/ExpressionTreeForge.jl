@@ -1,26 +1,47 @@
 module trait_tree
 
-import ..abstract_tree.ab_tree
+import ..abstract_tree.Ab_tree
 import ..interface_tree: _get_node, _get_children
 
 export get_node
 export get_children
 
-struct type_trait_tree end
-struct type_not_trait_tree end
+"""Type instantiated dynamically that checks if an argument is a tree."""
+struct Type_trait_tree end
+"""Type instantiated dynamically that checks if an argument is not a tree."""
+struct Type_not_trait_tree end
 
-@inline is_type_trait_tree(a::ab_tree) = type_trait_tree()
-@inline is_type_trait_tree(a::Expr) = type_trait_tree()
-@inline is_type_trait_tree(a::Number) = type_trait_tree()
-@inline is_type_trait_tree(a::Any) = type_not_trait_tree()
+"""
+    Type_trait_tree = is_type_trait_tree(a::Ab_tree)
+    Type_trait_tree = is_type_trait_tree(a::Expr)
+    Type_trait_tree = is_type_trait_tree(a::Number)
+    Type_not_trait_tree = is_type_trait_tree(a::Any)
 
+Return a `Type_trait_tree` only for `Ab_tree, Expr` or `Number` (a leaf of a tree).
+In the other cases it returns `Type_not_trait_tree`.
+"""
+@inline is_type_trait_tree(a::Ab_tree) = Type_trait_tree()
+@inline is_type_trait_tree(a::Expr) = Type_trait_tree()
+@inline is_type_trait_tree(a::Number) = Type_trait_tree()
+@inline is_type_trait_tree(a::Any) = Type_not_trait_tree()
+
+"""
+    node = get_node(tree)
+
+Get the current `node` as a part of `tree`.
+"""
 @inline get_node(a) = _get_node(a, is_type_trait_tree(a))
-@inline _get_node(a, b::type_trait_tree) = _get_node(a)
-@inline _get_node(a, b::type_not_trait_tree) = error(" The parameter is not a Tree")
+@inline _get_node(a, b::Type_trait_tree) = _get_node(a)
+@inline _get_node(a, b::Type_not_trait_tree) = error(" The parameter is not a Tree")
 
+"""
+    children = get_children(tree)
+
+Get the `children` from the current node as part of `tree`.
+"""
 @inline get_children(a) = _get_children(a, is_type_trait_tree(a))
-@inline _get_children(a, ::type_trait_tree) = _get_children(a)
-@inline _get_children(a, ::type_not_trait_tree) = error(" The parameter is not a Tree")
+@inline _get_children(a, ::Type_trait_tree) = _get_children(a)
+@inline _get_children(a, ::Type_not_trait_tree) = error(" The parameter is not a Tree")
 
 end  # module trait_tree
 

@@ -6,16 +6,17 @@ import ..interface_type_expr:
 
 export is_trait_type_expr, is_linear, is_constant, is_quadratic, is_cubic, is_more_than_quadratic
 
-"""Verify dynamically that the argument are `t_type_expr_basic`."""
+
+"""Type instantiated dynamically that checks if an argument is a `t_type_expr_basic`"""
 struct Type_type_expr end
 
-"""Verify dynamically that the argument are not `t_type_expr_basic`."""
+"""Type instantiated dynamically that checks if an argument is not a `t_type_expr_basic`"""
 struct Type_not_type_expr end
 
 """
     type = is_trait_type_expr(arg)
 
-Return `type::Type_type_expr` if arg is an `t_type_expr_basic` otherwise is return `type::Type_not_type_expr`
+Return `type::Type_type_expr` if `arg` is an `t_type_expr_basic` otherwise is return `type::Type_not_type_expr`
 """
 @inline is_trait_type_expr(a::Any) = Type_not_type_expr()
 @inline is_trait_type_expr(a::implementation_type_expr.t_type_expr_basic) = Type_type_expr()
