@@ -39,36 +39,36 @@ end
 @inline get_myRef(ref::myRef{Y}) where {Y <: Number} = ref.value::Y
 
 @inline +(ref1::myRef{Y}, ref2::myRef{Y}) where {Y <: Number} =
-  @fastmath get_myRef(ref1) + get_myRef(ref2)::Y
-@inline +(value::Y, ref::myRef{Y}) where {Y <: Number} = @fastmath value + get_myRef(ref)::Y
-@inline +(ref::myRef{Y}, value::Y) where {Y <: Number} = @fastmath value + get_myRef(ref)::Y
+  get_myRef(ref1) + get_myRef(ref2)::Y
+@inline +(value::Y, ref::myRef{Y}) where {Y <: Number} = value + get_myRef(ref)::Y
+@inline +(ref::myRef{Y}, value::Y) where {Y <: Number} = value + get_myRef(ref)::Y
 @inline +(ref::myRef{Y}) where {Y <: Number} = get_myRef(ref)::Y
 
 @inline -(ref1::myRef{Y}, ref2::myRef{Y}) where {Y <: Number} =
-  @fastmath get_myRef(ref1) - get_myRef(ref2)::Y
-@inline -(value::Y, ref::myRef{Y}) where {Y <: Number} = @fastmath value - get_myRef(ref)::Y
-@inline -(ref::myRef{Y}, value::Y) where {Y <: Number} = @fastmath get_myRef(ref) - value::Y
-@inline -(ref::myRef{Y}) where {Y <: Number} = @fastmath -get_myRef(ref)::Y
+  get_myRef(ref1) - get_myRef(ref2)::Y
+@inline -(value::Y, ref::myRef{Y}) where {Y <: Number} = value - get_myRef(ref)::Y
+@inline -(ref::myRef{Y}, value::Y) where {Y <: Number} = get_myRef(ref) - value::Y
+@inline -(ref::myRef{Y}) where {Y <: Number} = -get_myRef(ref)::Y
 
 @inline *(ref1::myRef{Y}, ref2::myRef{Y}) where {Y <: Number} =
-  @fastmath get_myRef(ref1) * get_myRef(ref2)::Y
-@inline *(value::Y, ref::myRef{Y}) where {Y <: Number} = @fastmath value * get_myRef(ref)::Y
-@inline *(ref::myRef{Y}, value::Y) where {Y <: Number} = @fastmath value * get_myRef(ref)::Y
+  get_myRef(ref1) * get_myRef(ref2)::Y
+@inline *(value::Y, ref::myRef{Y}) where {Y <: Number} = value * get_myRef(ref)::Y
+@inline *(ref::myRef{Y}, value::Y) where {Y <: Number} = value * get_myRef(ref)::Y
 @inline *(ref::myRef{Y}) where {Y <: Number} = get_myRef(ref)::Y
 
 @inline /(ref1::myRef{Y}, ref2::myRef{Y}) where {Y <: Number} =
-  @fastmath get_myRef(ref1) / get_myRef(ref2)::Y
-@inline /(value::Y, ref::myRef{Y}) where {Y <: Number} = @fastmath value / get_myRef(ref)::Y
-@inline /(ref::myRef{Y}, value::Y) where {Y <: Number} = @fastmath get_myRef(ref) / value::Y
+  get_myRef(ref1) / get_myRef(ref2)::Y
+@inline /(value::Y, ref::myRef{Y}) where {Y <: Number} = value / get_myRef(ref)::Y
+@inline /(ref::myRef{Y}, value::Y) where {Y <: Number} = get_myRef(ref) / value::Y
 
 @inline ^(ref1::myRef{Y}, ref2::myRef{Y}) where {Y <: Number} =
-  @fastmath get_myRef(ref1)^get_myRef(ref2)::Y
-@inline ^(value::Y, ref::myRef{Y}) where {Y <: Number} = @fastmath value^get_myRef(ref)::Y
-@inline ^(ref::myRef{Y}, value::Y) where {Y <: Number} = @fastmath get_myRef(ref)^value::Y
+  get_myRef(ref1)^get_myRef(ref2)::Y
+@inline ^(value::Y, ref::myRef{Y}) where {Y <: Number} = value^get_myRef(ref)::Y
+@inline ^(ref::myRef{Y}, value::Y) where {Y <: Number} = get_myRef(ref)^value::Y
 
-@inline sin(ref::myRef{Y}) where {Y <: Number} = @fastmath sin(get_myRef(ref))::Y
-@inline tan(ref::myRef{Y}) where {Y <: Number} = @fastmath tan(get_myRef(ref))::Y
-@inline cos(ref::myRef{Y}) where {Y <: Number} = @fastmath cos(get_myRef(ref))::Y
-@inline exp(ref::myRef{Y}) where {Y <: Number} = @fastmath exp(get_myRef(ref))::Y
+@inline sin(ref::myRef{Y}) where {Y <: Number} = sin(get_myRef(ref))::Y
+@inline tan(ref::myRef{Y}) where {Y <: Number} = tan(get_myRef(ref))::Y
+@inline cos(ref::myRef{Y}) where {Y <: Number} = cos(get_myRef(ref))::Y
+@inline exp(ref::myRef{Y}) where {Y <: Number} = exp(get_myRef(ref))::Y
 
 end

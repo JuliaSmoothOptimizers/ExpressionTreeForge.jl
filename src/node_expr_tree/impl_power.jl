@@ -167,7 +167,7 @@ end
   value_ch::AbstractVector{T},
 ) where {T <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
-  @inbounds @fastmath return value_ch[1]^(op.index)::T
+  return value_ch[1]^(op.index)::T
 end
 
 @inline function _evaluate_node!(
@@ -176,7 +176,7 @@ end
   ref::abstract_expr_node.myRef{Y},
 ) where {Y <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
-  @inbounds @fastmath abstract_expr_node.set_myRef!(ref, value_ch[1]^(op.index)::Y)
+  abstract_expr_node.set_myRef!(ref, value_ch[1]^(op.index)::Y)
 end
 
 @inline function _evaluate_node!(
@@ -190,15 +190,15 @@ end
 end
 
 @inline _evaluate_node(op::power_operator{Z}, value_ch::T) where {T <: Number} where {Z <: Number} =
-  @fastmath (T)(value_ch^(op.index))::T
+  (T)(value_ch^(op.index))::T
 @inline _evaluate_node(op::power_operator{T}, value_ch::T) where {T <: Number} where {Z <: Number} =
-  @fastmath value_ch^(op.index)::T
+  value_ch^(op.index)::T
 
 @inline _evaluate_node!(
   op::power_operator{Y},
   value_ch::Y,
   ref::abstract_expr_node.myRef{Y},
-) where {Y <: Number} = @fastmath abstract_expr_node.set_myRef!(ref, value_ch^(op.index)::Y)
+) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, value_ch^(op.index)::Y)
 
 @inline _node_to_Expr(op::power_operator{T}) where {T <: Number} = [:^, op.index]
 

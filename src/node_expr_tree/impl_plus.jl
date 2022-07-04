@@ -111,13 +111,13 @@ end
 @inline (==)(a::plus_operator, b::plus_operator) = true
 
 @inline _evaluate_node(op::plus_operator, value_ch::AbstractVector{T}) where {T <: Number} =
-  @fastmath sum(value_ch)
+  sum(value_ch)
 @inline _evaluate_node!(
   op::plus_operator,
   value_ch::AbstractVector{abstract_expr_node.myRef{T}},
   ref::abstract_expr_node.myRef{T},
 ) where {T <: Number} =
-  @fastmath length(value_ch) > 1 ? abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
+  length(value_ch) > 1 ? abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
             abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
 @inline function _evaluate_node!(
   op::plus_operator,

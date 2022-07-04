@@ -147,13 +147,13 @@ end
 @inline (==)(a::time_operator, b::time_operator) = true
 
 @inline _evaluate_node(op::time_operator, value_ch::AbstractVector{T}) where {T <: Number} =
-  @fastmath @inbounds foldl(*, value_ch)
+  foldl(*, value_ch)
 
 @inline _evaluate_node!(
   op::time_operator,
   value_ch::AbstractVector{abstract_expr_node.myRef{Y}},
   ref::abstract_expr_node.myRef{Y},
-) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, @fastmath @inbounds foldl(*, value_ch))
+) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, foldl(*, value_ch))
 
 @inline function _evaluate_node!(
   op::time_operator,

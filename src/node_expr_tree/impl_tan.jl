@@ -85,7 +85,7 @@ end
   ref::abstract_expr_node.myRef{Y},
 ) where {Y <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
-  @inbounds @fastmath abstract_expr_node.set_myRef!(ref, tan(value_ch[1]))
+  abstract_expr_node.set_myRef!(ref, tan(value_ch[1]))
 end
 
 @inline function _evaluate_node!(

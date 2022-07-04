@@ -81,8 +81,8 @@ function _evaluate_node(v::variable, dic::Dict{Int, T}) where {T <: Number}
   return dic[v.index]::T
 end
 
-@inline _evaluate_node(v::variable, x::AbstractVector{T}) where {T <: Number} = @inbounds x[v.index]
-@inbounds @inline _evaluate_node!(
+@inline _evaluate_node(v::variable, x::AbstractVector{T}) where {T <: Number} = x[v.index]
+@inline _evaluate_node!(
   v::variable,
   x::AbstractVector{T},
   ref::myRef{T},

@@ -43,7 +43,7 @@ end
 @inline get_name(v::variable_view{Y}) where {Y <: Number} = v.name
 @inline get_index(v::variable_view{Y}) where {Y <: Number} = v.index
 @inline get_x_view(v::variable_view{Y}) where {Y <: Number} = v.x_view
-@inbounds @inline get_value(v::variable_view{Y}) where {Y <: Number} = get_x_view(v)[1]
+@inline get_value(v::variable_view{Y}) where {Y <: Number} = get_x_view(v)[1]
 
 @inline _node_bound(v::variable_view{Y}, t::DataType) where {Y <: Number} = ((t)(-Inf), (t)(Inf))
 

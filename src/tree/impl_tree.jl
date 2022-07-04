@@ -26,7 +26,7 @@ end
 @inline _get_node(tree::Type_node{T}) where {T} = tree.field
 
 @inline _get_children(tree::Type_node{T}) where {T} = tree.children
-@inbounds @inline _get_children(tree::Type_node{T}, i::Int) where {T} = tree.children[i]
+@inline _get_children(tree::Type_node{T}, i::Int) where {T} = tree.children[i]
 @inline _get_length_children(tree::Type_node{T}) where {T} = length(_get_children(tree))
 
 @inline (==)(a::Type_node{T}, b::Type_node{T}) where {T} = equal_tree(a, b)

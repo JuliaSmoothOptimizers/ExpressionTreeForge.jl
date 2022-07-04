@@ -43,9 +43,9 @@ end
 @inline get_name(v::variable_n_view{Y}) where {Y <: Number} = v.name
 @inline get_index(v::variable_n_view{Y}) where {Y <: Number} = v.index
 @inline get_multiple_x_view(v::variable_n_view{Y}) where {Y <: Number} = v.multiple_x_view
-@inline @inbounds get_x_view(v::variable_n_view{Y}, i::Int) where {Y <: Number} =
+@inline get_x_view(v::variable_n_view{Y}, i::Int) where {Y <: Number} =
   get_multiple_x_view(v)[i]
-@inline @inbounds get_value(v::variable_n_view{Y}, i::Int) where {Y <: Number} = get_x_view(v, i)[1]
+@inline get_value(v::variable_n_view{Y}, i::Int) where {Y <: Number} = get_x_view(v, i)[1]
 
 @inline _node_bound(v::variable_n_view{Y}, t::DataType) where {Y <: Number} = ((t)(-Inf), (t)(Inf))
 
