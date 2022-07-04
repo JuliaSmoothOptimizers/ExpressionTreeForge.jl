@@ -132,7 +132,7 @@ struct type_not_expr_node end
 @inline get_type_node(a, b) = _get_type_node(a, is_expr_node(a), b)
 function _get_type_node(a, ::type_expr_node, b::Array)
   trait_array = trait_type_expr.is_trait_type_expr.(b)
-  preparation_cond = isa.(trait_array, trait_type_expr.type_type_expr)
+  preparation_cond = isa.(trait_array, trait_type_expr.Type_type_expr)
   foldl(&, preparation_cond) ? _get_type_node(a, b) : error("not only types expr")
 end
 
