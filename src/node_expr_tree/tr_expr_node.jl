@@ -169,55 +169,55 @@ end
 @inline evaluate_node!(
   a,
   x::AbstractVector{T},
-  ref::abstract_expr_node.myRef{T},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, is_expr_node(a), x, ref)
 @inline _evaluate_node!(
   a,
   ::type_expr_node,
   x::AbstractVector{T},
-  ref::abstract_expr_node.myRef{T},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, x, ref)
 @inline _evaluate_node!(
   a,
   ::type_not_expr_node,
   x::AbstractVector{T},
-  ref::abstract_expr_node.myRef{T},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = error("This node is not a expr node")
 
 @inline evaluate_node!(
   a,
-  x::AbstractVector{abstract_expr_node.myRef{T}},
-  ref::abstract_expr_node.myRef{T},
+  x::AbstractVector{abstract_expr_node.MyRef{T}},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, is_expr_node(a), x, ref)
 @inline _evaluate_node!(
   a,
   ::type_expr_node,
-  x::AbstractVector{abstract_expr_node.myRef{T}},
-  ref::abstract_expr_node.myRef{T},
+  x::AbstractVector{abstract_expr_node.MyRef{T}},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = _evaluate_node!(a, x, ref)
 @inline _evaluate_node!(
   a,
   ::type_not_expr_node,
-  x::AbstractVector{abstract_expr_node.myRef{T}},
-  ref::abstract_expr_node.myRef{T},
+  x::AbstractVector{abstract_expr_node.MyRef{T}},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = error("This node is not a expr node")
 
 @inline evaluate_node!(
   a,
-  x::Vector{Vector{abstract_expr_node.myRef{T}}},
-  ref::Vector{abstract_expr_node.myRef{T}},
+  x::Vector{Vector{abstract_expr_node.MyRef{T}}},
+  ref::Vector{abstract_expr_node.MyRef{T}},
 ) where {T <: Number} = _evaluate_node!(a, is_expr_node(a), x, ref)
 @inline _evaluate_node!(
   a,
   ::type_expr_node,
-  x::Vector{Vector{abstract_expr_node.myRef{T}}},
-  ref::Vector{abstract_expr_node.myRef{T}},
+  x::Vector{Vector{abstract_expr_node.MyRef{T}}},
+  ref::Vector{abstract_expr_node.MyRef{T}},
 ) where {T <: Number} = _evaluate_node!(a, x, ref)
 @inline _evaluate_node!(
   a,
   ::type_not_expr_node,
-  x::Vector{Vector{abstract_expr_node.myRef{T}}},
-  ref::Vector{abstract_expr_node.myRef{T}},
+  x::Vector{Vector{abstract_expr_node.MyRef{T}}},
+  ref::Vector{abstract_expr_node.MyRef{T}},
 ) where {T <: Number} = error("This node is not a expr node")
 
 @inline change_from_N_to_Ni!(a, dic_new_var::Dict{Int, Int}) =

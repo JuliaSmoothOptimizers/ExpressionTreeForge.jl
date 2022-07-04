@@ -92,12 +92,12 @@ end
 
 @inline _evaluate_node!(
   v::variable_n_view{Y},
-  ref::abstract_expr_node.myRef{Y},
+  ref::abstract_expr_node.MyRef{Y},
   i::Int,
 ) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, get_value(v, i))
 @inline _evaluate_node!(
   v::variable_n_view{Y},
-  multiple_ref::AbstractVector{abstract_expr_node.myRef{Y}},
+  multiple_ref::AbstractVector{abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number} = begin
   for i in [1:length(multiple_ref);]
     _evaluate_node!(v, multiple_ref[i], i)

@@ -91,10 +91,10 @@ end
 @inline _evaluate_node!(
   v::variable_view{Y},
   x::AbstractVector{Y},
-  ref::myRef{Y},
+  ref::MyRef{Y},
 ) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, get_value(v, x))
 @inline _evaluate_node(v::variable_view{Y}) where {Y <: Number} = get_values(v)
-@inline _evaluate_node!(v::variable_view{Y}, ref::myRef{Y}) where {Y <: Number} =
+@inline _evaluate_node!(v::variable_view{Y}, ref::MyRef{Y}) where {Y <: Number} =
   abstract_expr_node.set_myRef!(ref, get_value(v))
 
 function change_index(v::MathOptInterface.VariableIndex, x::AbstractVector{T}) where {T <: Number}

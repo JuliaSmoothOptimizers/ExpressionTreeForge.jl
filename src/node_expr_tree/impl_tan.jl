@@ -79,8 +79,8 @@ end
 
 @inline function _evaluate_node!(
   op::tan_operator,
-  value_ch::AbstractVector{myRef{Y}},
-  ref::abstract_expr_node.myRef{Y},
+  value_ch::AbstractVector{MyRef{Y}},
+  ref::abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
   abstract_expr_node.set_myRef!(ref, tan(value_ch[1]))
@@ -88,8 +88,8 @@ end
 
 @inline function _evaluate_node!(
   op::tan_operator,
-  vec_value_ch::Vector{Vector{myRef{Y}}},
-  vec_ref::Vector{abstract_expr_node.myRef{Y}},
+  vec_value_ch::Vector{Vector{MyRef{Y}}},
+  vec_ref::Vector{abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
   for i = 1:length(vec_value_ch)
     _evaluate_node!(op, vec_value_ch[i], vec_ref[i])

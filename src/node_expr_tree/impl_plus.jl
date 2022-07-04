@@ -112,15 +112,15 @@ end
   sum(value_ch)
 @inline _evaluate_node!(
   op::plus_operator,
-  value_ch::AbstractVector{abstract_expr_node.myRef{T}},
-  ref::abstract_expr_node.myRef{T},
+  value_ch::AbstractVector{abstract_expr_node.MyRef{T}},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} =
   length(value_ch) > 1 ? abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
             abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
 @inline function _evaluate_node!(
   op::plus_operator,
-  vec_value_ch::Vector{Vector{abstract_expr_node.myRef{T}}},
-  vec_ref::Vector{abstract_expr_node.myRef{T}},
+  vec_value_ch::Vector{Vector{abstract_expr_node.MyRef{T}}},
+  vec_ref::Vector{abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
   for i = 1:length(vec_value_ch)
     _evaluate_node!(op, vec_value_ch[i], vec_ref[i])

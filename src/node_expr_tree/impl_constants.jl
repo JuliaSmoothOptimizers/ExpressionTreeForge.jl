@@ -93,15 +93,15 @@ end
 @inline _evaluate_node!(
   c::constant{Y},
   x::AbstractVector{Y},
-  ref::abstract_expr_node.myRef{Y},
+  ref::abstract_expr_node.MyRef{Y},
 ) where {Y <: Number} = abstract_expr_node.set_myRef!(ref, c.value::Y)
 
-@inline _evaluate_node!(c::constant{Y}, ref::abstract_expr_node.myRef{Y}) where {Y <: Number} =
+@inline _evaluate_node!(c::constant{Y}, ref::abstract_expr_node.MyRef{Y}) where {Y <: Number} =
   abstract_expr_node.set_myRef!(ref, c.value::Y)
 
 @inline _evaluate_node!(
   c::constant{Y},
-  multiple_ref::AbstractVector{abstract_expr_node.myRef{Y}},
+  multiple_ref::AbstractVector{abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number} = begin
   for ref in multiple_ref
     abstract_expr_node.set_myRef!(ref, c.value::Y)

@@ -99,7 +99,7 @@ Evaluate `node` depending `value_children`.
 _evaluate_node(node::ab_ex_nd) = error("Should not be called")
 
 """
-    _evaluate_node!(node::ab_ex_nd, value_children::AbstractVector{T}, ref::myRef{T}) where T<:Number
+    _evaluate_node!(node::ab_ex_nd, value_children::AbstractVector{T}, ref::MyRef{T}) where T<:Number
 
 Evaluate `node` depending `value_children` and store the result in `ref`.
 """

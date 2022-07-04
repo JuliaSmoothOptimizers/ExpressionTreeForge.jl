@@ -12,8 +12,8 @@ end
 
 mutable struct eval_n_node{Y <: Number}
   field::new_field
-  vec_tmp_children::Vector{Vector{abstract_expr_node.myRef{Y}}}
-  vec_tmp_n_eval::Vector{Vector{abstract_expr_node.myRef{Y}}}
+  vec_tmp_children::Vector{Vector{abstract_expr_node.MyRef{Y}}}
+  vec_tmp_n_eval::Vector{Vector{abstract_expr_node.MyRef{Y}}}
   children::Vector{eval_n_node{Y}}
   length_children::Int
   length_n_eval::Int
@@ -23,7 +23,7 @@ mutable struct pre_n_compiled_tree{Y <: Number}
   racine::eval_n_node{Y}
   multiple_x::Vector{AbstractVector{Y}}
   multiple::Int
-  vec_tmp::Vector{abstract_expr_node.myRef{Y}}
+  vec_tmp::Vector{abstract_expr_node.MyRef{Y}}
 end
 
 @inline get_racine(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.racine
@@ -81,8 +81,8 @@ end
 
 @inline create_eval_n_node(
   field::new_field,
-  vec_tmp_children::Vector{Vector{myRef{Y}}},
-  vec_tmp_n_eval::Vector{Vector{myRef{Y}}},
+  vec_tmp_children::Vector{Vector{MyRef{Y}}},
+  vec_tmp_n_eval::Vector{Vector{MyRef{Y}}},
   children::Vector{eval_n_node{Y}},
   n_children::Int,
   n_eval::Int,
@@ -214,7 +214,7 @@ end
 
 function evaluate_eval_n_node!(
   node::eval_n_node{T},
-  tmp::AbstractVector{myRef{T}},
+  tmp::AbstractVector{MyRef{T}},
 ) where {T <: Number}
   op = get_op_from_node(node)
   if trait_expr_node.node_is_operator(op)::Bool == false

@@ -149,13 +149,13 @@ end
   value_ch[1] / value_ch[2]
 @inline _evaluate_node!(
   op::frac_operator,
-  value_ch::AbstractVector{abstract_expr_node.myRef{T}},
-  ref::abstract_expr_node.myRef{T},
+  value_ch::AbstractVector{abstract_expr_node.MyRef{T}},
+  ref::abstract_expr_node.MyRef{T},
 ) where {T <: Number} = abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
 @inline function _evaluate_node!(
   op::frac_operator,
-  vec_value_ch::Vector{Vector{abstract_expr_node.myRef{T}}},
-  vec_ref::Vector{abstract_expr_node.myRef{T}},
+  vec_value_ch::Vector{Vector{abstract_expr_node.MyRef{T}}},
+  vec_ref::Vector{abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
   for i = 1:length(vec_value_ch)
     _evaluate_node!(op, vec_value_ch[i], vec_ref[i])

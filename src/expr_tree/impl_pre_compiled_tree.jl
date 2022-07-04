@@ -12,7 +12,7 @@ end
 
 mutable struct new_node{Y <: Number}
   field::new_field
-  tmp::Vector{abstract_expr_node.myRef{Y}}
+  tmp::Vector{abstract_expr_node.MyRef{Y}}
   children::Vector{new_node{Y}}
   length_children::Int
 end
@@ -43,7 +43,7 @@ end
 
 @inline create_new_node(
   field::new_field,
-  tmp::Vector{myRef{Y}},
+  tmp::Vector{MyRef{Y}},
   children::Vector{new_node{Y}},
 ) where {Y <: Number} = new_node{Y}(field, tmp, children, length(children))
 
@@ -113,7 +113,7 @@ end
 function evaluate_new_node(
   node::new_node{T},
   x::AbstractVector{T},
-  tmp::myRef{T},
+  tmp::MyRef{T},
 ) where {T <: Number}
   op = get_op_from_node(node)
   if trait_expr_node.node_is_operator(op)::Bool == false
@@ -135,7 +135,7 @@ end
 function evaluate_new_node!(
   node::new_node{T},
   x::AbstractVector{T},
-  tmp::myRef{T},
+  tmp::MyRef{T},
 ) where {T <: Number}
   op = get_op_from_node(node)
   if trait_expr_node.node_is_operator(op)::Bool == false
@@ -151,7 +151,7 @@ function evaluate_new_node!(
   end
 end
 
-function evaluate_new_node!(node::new_node{T}, tmp::myRef{T}) where {T <: Number}
+function evaluate_new_node!(node::new_node{T}, tmp::MyRef{T}) where {T <: Number}
   op = get_op_from_node(node)
   if trait_expr_node.node_is_operator(op)::Bool == false
     trait_expr_node._evaluate_node!(op, tmp)
