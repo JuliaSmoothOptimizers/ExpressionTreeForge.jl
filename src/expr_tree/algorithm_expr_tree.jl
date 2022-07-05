@@ -4,7 +4,7 @@ using SparseArrays
 using ..M_trait_expr_node, ..M_trait_expr_tree, ..M_trait_tree
 using ..M_abstract_expr_tree, ..M_abstract_expr_node, ..M_abstract_tree
 using ..M_implementation_tree, ..M_implementation_type_expr
-using ..hl_M_trait_expr_tree
+using ..M_hl_trait_expr_tree
 using ..M_implementation_expr_tree
 
 """
@@ -223,7 +223,7 @@ Cast the constant of the expression tree expr_tree to the type t.
 
 # Cast the type t by walking into the expr_tree
 @inline _cast_type_of_constant(expr_tree, t::DataType) =
-  hl_M_trait_expr_tree._cast_type_of_constant(expr_tree, t)
+  M_hl_trait_expr_tree._cast_type_of_constant(expr_tree, t)
 
 struct function_wrapper{T <: Number}
   my_fun::Function

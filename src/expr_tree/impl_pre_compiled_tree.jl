@@ -1,78 +1,78 @@
-module implementation_pre_compiled_tree
+module M_implementation_pre_compiled_tree
 
 using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node
 
-mutable struct new_field
+mutable struct New_field
   op::M_abstract_expr_node.Abstract_expr_node
 end
 
-@inline create_new_field(op::M_abstract_expr_node.Abstract_expr_node) = new_field(op)
+@inline create_New_field(op::M_abstract_expr_node.Abstract_expr_node) = New_field(op)
 
-@inline get_op_from_field(field::new_field) = field.op
+@inline get_op_from_field(field::New_field) = field.op
 
-mutable struct new_node{Y <: Number}
-  field::new_field
+mutable struct New_node{Y <: Number}
+  field::New_field
   tmp::Vector{M_abstract_expr_node.MyRef{Y}}
-  children::Vector{new_node{Y}}
+  children::Vector{New_node{Y}}
   length_children::Int
 end
 
-mutable struct pre_compiled_tree{Y <: Number}
-  racine::new_node{Y}
+mutable struct Pre_compiled_tree{Y <: Number}
+  racine::New_node{Y}
   x::AbstractVector{Y}
 end
 
-@inline get_x(tree::pre_compiled_tree{Y}) where {Y <: Number} = tree.x
+@inline get_x(tree::Pre_compiled_tree{Y}) where {Y <: Number} = tree.x
 
-@inline get_racine(tree::pre_compiled_tree{Y}) where {Y <: Number} = tree.racine
+@inline get_racine(tree::Pre_compiled_tree{Y}) where {Y <: Number} = tree.racine
 
-@inline get_field_from_node(node::new_node{Y}) where {Y <: Number} = node.field
+@inline get_field_from_node(node::New_node{Y}) where {Y <: Number} = node.field
 
-@inline get_children_vector_from_node(node::new_node{Y}) where {Y <: Number} = node.children
+@inline get_children_vector_from_node(node::New_node{Y}) where {Y <: Number} = node.children
 
-@inline get_children_from_node(node::new_node{Y}, i::Int) where {Y <: Number} = node.children[i]
+@inline get_children_from_node(node::New_node{Y}, i::Int) where {Y <: Number} = node.children[i]
 
-@inline get_tmp_vector_from_node(node::new_node{Y}) where {Y <: Number} = node.tmp
+@inline get_tmp_vector_from_node(node::New_node{Y}) where {Y <: Number} = node.tmp
 
-@inline get_tmp_from_node(node::new_node{Y}, i::Int) where {Y <: Number} = node.tmp[i]
+@inline get_tmp_from_node(node::New_node{Y}, i::Int) where {Y <: Number} = node.tmp[i]
 
-@inline get_op_from_node(node::new_node{Y}) where {Y <: Number} =
+@inline get_op_from_node(node::New_node{Y}) where {Y <: Number} =
   get_op_from_field(get_field_from_node(node))
 
-@inline get_length_children(node::new_node{Y}) where {Y <: Number} = node.length_children
+@inline get_length_children(node::New_node{Y}) where {Y <: Number} = node.length_children
 
 @inline create_new_node(
-  field::new_field,
+  field::New_field,
   tmp::Vector{MyRef{Y}},
-  children::Vector{new_node{Y}},
-) where {Y <: Number} = new_node{Y}(field, tmp, children, length(children))
+  children::Vector{New_node{Y}},
+) where {Y <: Number} = New_node{Y}(field, tmp, children, length(children))
 
-@inline create_new_node(field::new_field, children::Vector{new_node{Y}}) where {Y <: Number} =
+@inline create_new_node(field::New_field, children::Vector{New_node{Y}}) where {Y <: Number} =
   create_new_node(field, M_abstract_expr_node.create_new_vector_myRef(length(children), Y), children)
 
-@inline create_new_node(field::new_field, type::DataType = Float64) =
-  create_new_node(field, Vector{new_node{type}}(undef, 0))
+@inline create_new_node(field::New_field, type::DataType = Float64) =
+  create_new_node(field, Vector{New_node{type}}(undef, 0))
 
-@inline create_pre_compiled_tree(tree::pre_compiled_tree{T}) where {T <: Number} = tree
+@inline create_pre_compiled_tree(tree::Pre_compiled_tree{T}) where {T <: Number} = tree
 
 function create_pre_compiled_tree(tree::M_implementation_expr_tree.Type_expr_tree, t::DataType = Float64)
   nd = M_trait_tree.get_node(tree)
   ch = M_trait_tree.get_children(tree)
   if isempty(ch)
-    new_field = create_new_field(nd)
-    new_node = create_new_node(new_field, t)
+    New_field = create_New_field(nd)
+    new_node = create_new_node(New_field, t)
     return new_node
   else
     new_ch = create_pre_compiled_tree.(ch)
-    new_field = create_new_field(nd)
-    return create_new_node(new_field, new_ch)
+    New_field = create_New_field(nd)
+    return create_new_node(New_field, new_ch)
   end
 end
 
 create_pre_compiled_tree(
   tree::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
-) where {T <: Number} = pre_compiled_tree{T}(_create_pre_compiled_tree(tree, x), x)
+) where {T <: Number} = Pre_compiled_tree{T}(_create_pre_compiled_tree(tree, x), x)
 function _create_pre_compiled_tree(
   tree::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
@@ -81,26 +81,26 @@ function _create_pre_compiled_tree(
   ch = M_trait_tree.get_children(tree)
   if isempty(ch)
     new_op = M_abstract_expr_node.create_node_expr(nd, x)
-    new_field = create_new_field(new_op)
-    new_node = create_new_node(new_field, T)
+    New_field = create_New_field(new_op)
+    new_node = create_new_node(New_field, T)
     return new_node
   else
     # new_ch = create_pre_compiled_tree.(ch, x)
-    # new_ch = Vector{new_node{T}}(undef, length(ch))
+    # new_ch = Vector{New_node{T}}(undef, length(ch))
     new_ch = map(child -> _create_pre_compiled_tree(child, x), ch)
-    new_field = create_new_field(nd)
-    return create_new_node(new_field, new_ch)
+    New_field = create_New_field(nd)
+    return create_new_node(New_field, new_ch)
   end
 end
 
-function evaluate_new_tree(tree::pre_compiled_tree{T}, x::AbstractVector{T}) where {T <: Number}
+function evaluate_new_tree(tree::Pre_compiled_tree{T}, x::AbstractVector{T}) where {T <: Number}
   res = M_abstract_expr_node.new_ref(T)
   evaluate_new_node!(tree, x, res)
   return M_abstract_expr_node.get_myRef(res)
 end
 
 function evaluate_pre_compiled_tree(
-  tree::pre_compiled_tree{T},
+  tree::Pre_compiled_tree{T},
   v::AbstractVector{T},
 ) where {T <: Number}
   res = M_abstract_expr_node.new_ref(T)
@@ -111,7 +111,7 @@ function evaluate_pre_compiled_tree(
 end
 
 function evaluate_new_node(
-  node::new_node{T},
+  node::New_node{T},
   x::AbstractVector{T},
   tmp::MyRef{T},
 ) where {T <: Number}
@@ -133,7 +133,7 @@ function evaluate_new_node(
 end
 
 function evaluate_new_node!(
-  node::new_node{T},
+  node::New_node{T},
   x::AbstractVector{T},
   tmp::MyRef{T},
 ) where {T <: Number}
@@ -151,7 +151,7 @@ function evaluate_new_node!(
   end
 end
 
-function evaluate_new_node!(node::new_node{T}, tmp::MyRef{T}) where {T <: Number}
+function evaluate_new_node!(node::New_node{T}, tmp::MyRef{T}) where {T <: Number}
   op = get_op_from_node(node)
   if M_trait_expr_node.node_is_operator(op)::Bool == false
     M_trait_expr_node._evaluate_node!(op, tmp)

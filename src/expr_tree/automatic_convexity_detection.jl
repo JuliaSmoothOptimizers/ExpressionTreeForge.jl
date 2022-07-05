@@ -20,7 +20,7 @@ Convexity_tree{T} = M_implementation_tree.Type_node{M_implementation_convexity_t
 @inline get_convexity_status(cvx_tree::Convexity_tree) =
   M_implementation_convexity_type.get_convexity_wrapper(M_trait_tree.get_node(cvx_tree))
 
-@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.complete_expr_tree) =
+@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree) =
   M_implementation_complete_expr_tree.get_convexity_status(M_trait_tree.get_node(complete_tree))
 
 @inline constant_type() = M_implementation_convexity_type.constant_type()
@@ -62,7 +62,7 @@ function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::Convexi
 end
 
 function set_convexity!(
-  tree::M_implementation_complete_expr_tree.complete_expr_tree{T},
+  tree::M_implementation_complete_expr_tree.Complete_expr_tree{T},
 ) where {T <: Number}
   node = M_trait_tree.get_node(tree)
   op = M_implementation_complete_expr_tree.get_op_from_node(node)

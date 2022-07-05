@@ -5,9 +5,9 @@ using Base.Threads
 using ..M_abstract_expr_tree,
   ..M_implementation_expr_tree,
   ..M_implementation_complete_expr_tree,
-  ..implementation_pre_compiled_tree,
-  ..implementation_pre_n_compiled_tree,
-  ..implementation_expression_tree_Expr
+  ..M_implementation_pre_compiled_tree,
+  ..M_implementation_pre_n_compiled_tree,
+  ..M_implementation_expression_tree_Expr
 
 import ..M_interface_expr_tree._get_expr_node,
   ..M_interface_expr_tree._get_expr_children, ..M_interface_expr_tree._inverse_expr_tree
@@ -16,7 +16,6 @@ import ..M_interface_expr_tree._transform_to_expr_tree, ..M_interface_expr_tree.
 import Base.==
 
 export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
-export Is_expr_tree, Is_not_expr_tree
 
 struct Is_expr_tree end
 struct Is_not_expr_tree end
@@ -27,14 +26,14 @@ struct Is_not_expr_tree end
 @inline is_expr_tree(a::Number) = Is_expr_tree()
 @inline is_expr_tree(::Number) = Is_expr_tree()
 @inline is_expr_tree(
-  a::M_implementation_complete_expr_tree.complete_expr_tree{T},
+  a::M_implementation_complete_expr_tree.Complete_expr_tree{T},
 ) where {T <: Number} = Is_expr_tree()
 
-@inline is_expr_tree(a::implementation_pre_compiled_tree.pre_compiled_tree{T}) where {T <: Number} =
+@inline is_expr_tree(a::M_implementation_pre_compiled_tree.Pre_compiled_tree{T}) where {T <: Number} =
   Is_expr_tree()
 
 @inline is_expr_tree(
-  a::implementation_pre_n_compiled_tree.pre_n_compiled_tree{T},
+  a::M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T},
 ) where {T <: Number} = Is_expr_tree()
 
 @inline is_expr_tree(a::ModelingToolkit.Operation) = Is_expr_tree()

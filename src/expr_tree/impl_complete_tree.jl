@@ -27,6 +27,8 @@ mutable struct Complete_node{T <: Number}
   convexity_status::M_implementation_convexity_type.Convexity_wrapper
 end
 
+Complete_expr_tree{T <: Number} = Type_node{Complete_node{T}}
+
 @inline create_complete_node(
   op::Abstract_expr_node,
   bounds::M_abstract_expr_tree.Bounds{T},
@@ -64,17 +66,15 @@ end
 ) where {T <: Number} =
   M_implementation_convexity_type.set_convexity_wrapper!(node.convexity_status, t)
 
-complete_expr_tree{T <: Number} = Type_node{Complete_node{T}}
-
 @inline create_complete_expr_tree(
   cn::Complete_node{T},
-  ch::AbstractVector{complete_expr_tree{T}},
-) where {T <: Number} = complete_expr_tree{T}(cn, ch)
+  ch::AbstractVector{Complete_expr_tree{T}},
+) where {T <: Number} = Complete_expr_tree{T}(cn, ch)
 
 @inline create_complete_expr_tree(cn::Complete_node{T}) where {T <: Number} =
-  create_complete_expr_tree(cn, Vector{complete_expr_tree{T}}(undef, 0))
+  create_complete_expr_tree(cn, Vector{Complete_expr_tree{T}}(undef, 0))
 
-@inline create_complete_expr_tree(ex::complete_expr_tree{T}) where {T <: Number} = ex
+@inline create_complete_expr_tree(ex::Complete_expr_tree{T}) where {T <: Number} = ex
 
 function create_complete_expr_tree(t::M_implementation_expr_tree.Type_node{T}) where {T <: Abstract_expr_node}
   nd = M_trait_tree.get_node(t)
@@ -89,12 +89,12 @@ function create_complete_expr_tree(t::M_implementation_expr_tree.Type_node{T}) w
   end
 end
 
-@inline create_expr_tree(tree::complete_expr_tree{T}) where {T <: Number} =
+@inline create_expr_tree(tree::Complete_expr_tree{T}) where {T <: Number} =
   create_expr_tree(M_trait_tree.get_node(tree), M_trait_tree.get_children(tree))
 
 @inline create_expr_tree(
   field::Complete_node{T},
-  children::Vector{complete_expr_tree{T}},
+  children::Vector{Complete_expr_tree{T}},
 ) where {T <: Number} = M_abstract_expr_tree.create_expr_tree(
   get_op_from_node(field),
   Vector{M_implementation_expr_tree.Type_expr_tree}(create_expr_tree.(children)),
@@ -103,19 +103,19 @@ end
 @inline create_expr_tree(field::Complete_node{T}) where {T <: Number} =
   M_abstract_expr_tree.create_expr_tree(get_op_from_node(field))::M_implementation_expr_tree.Type_expr_tree
 
-@inline _get_expr_node(t::complete_expr_tree) = get_op_from_node(M_trait_tree.get_node(t))
+@inline _get_expr_node(t::Complete_expr_tree) = get_op_from_node(M_trait_tree.get_node(t))
 
-@inline _get_expr_children(t::complete_expr_tree) = M_trait_tree.get_children(t)
+@inline _get_expr_children(t::Complete_expr_tree) = M_trait_tree.get_children(t)
 
-@inline _get_real_node(ex::complete_expr_tree{T}) where {T <: Number} = _get_expr_node(ex)
+@inline _get_real_node(ex::Complete_expr_tree{T}) where {T <: Number} = _get_expr_node(ex)
 
-@inline tuple_bound_from_tree(ex::complete_expr_tree{T}) where {T <: Number} =
+@inline tuple_bound_from_tree(ex::Complete_expr_tree{T}) where {T <: Number} =
   get_bounds(M_trait_tree._get_node(ex))
 
-@inline _transform_to_expr_tree(ex::complete_expr_tree{T}) where {T <: Number} =
+@inline _transform_to_expr_tree(ex::Complete_expr_tree{T}) where {T <: Number} =
   create_expr_tree(ex)
 
-function create_Expr(t::complete_expr_tree)
+function create_Expr(t::Complete_expr_tree)
   nd = M_trait_tree.get_node(t)
   ch = M_trait_tree.get_children(t)
   op = get_op_from_node(nd)
@@ -134,16 +134,16 @@ function create_Expr(t::complete_expr_tree)
   end
 end
 
-function _inverse_expr_tree(t::complete_expr_tree{T}) where {T <: Number}
+function _inverse_expr_tree(t::Complete_expr_tree{T}) where {T <: Number}
   op_minus = M_abstract_expr_node.create_node_expr(:-)
   bounds = M_abstract_expr_tree.create_empty_bounds(T)
   node = create_complete_node(op_minus, bounds)
   return create_complete_expr_tree(node, [t])
 end
 
-function Base.copy(ex::complete_expr_tree{T}) where {T <: Number}
+function Base.copy(ex::Complete_expr_tree{T}) where {T <: Number}
   nd = M_trait_tree.get_node(ex)
-  ch = M_trait_tree.get_children(ex)::Vector{complete_expr_tree{T}}
+  ch = M_trait_tree.get_children(ex)::Vector{Complete_expr_tree{T}}
   if isempty(ch)
     leaf = create_complete_expr_tree(nd)
     return leaf
@@ -161,7 +161,7 @@ end
   (node1.convexity_status == node2.convexity_status)
 )
 
-function (==)(ex1::complete_expr_tree{T}, ex2::complete_expr_tree{T}) where {T <: Number}
+function (==)(ex1::Complete_expr_tree{T}, ex2::Complete_expr_tree{T}) where {T <: Number}
   ch1 = M_trait_tree.get_children(ex1)
   ch2 = M_trait_tree.get_children(ex2)
   nd1 = _get_expr_node(ex1)

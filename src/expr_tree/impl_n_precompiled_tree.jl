@@ -1,39 +1,39 @@
-module implementation_pre_n_compiled_tree
+module M_implementation_pre_n_compiled_tree
 
 using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node
 
-mutable struct new_field
+mutable struct New_field
   op::M_abstract_expr_node.Abstract_expr_node
 end
 
-@inline create_new_field(op::M_abstract_expr_node.Abstract_expr_node) = new_field(op)
+@inline create_New_field(op::M_abstract_expr_node.Abstract_expr_node) = New_field(op)
 
-@inline get_op_from_field(field::new_field) = field.op
+@inline get_op_from_field(field::New_field) = field.op
 
-mutable struct eval_n_node{Y <: Number}
-  field::new_field
+mutable struct Eval_n_node{Y <: Number}
+  field::New_field
   vec_tmp_children::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}
   vec_tmp_n_eval::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}
-  children::Vector{eval_n_node{Y}}
+  children::Vector{Eval_n_node{Y}}
   length_children::Int
   length_n_eval::Int
 end
 
-mutable struct pre_n_compiled_tree{Y <: Number}
-  racine::eval_n_node{Y}
+mutable struct Pre_n_compiled_tree{Y <: Number}
+  racine::Eval_n_node{Y}
   multiple_x::Vector{AbstractVector{Y}}
   multiple::Int
   vec_tmp::Vector{M_abstract_expr_node.MyRef{Y}}
 end
 
-@inline get_racine(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.racine
+@inline get_racine(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.racine
 
-@inline get_multiple(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple
+@inline get_multiple(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple
 
-@inline get_multiple_x(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple_x
+@inline get_multiple_x(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple_x
 
 function set_multiple_x!(
-  tree::pre_n_compiled_tree{Y},
+  tree::Pre_n_compiled_tree{Y},
   new_multiple_x::Vector{Vector{Y}},
 ) where {Y <: Number}
   n = length(new_multiple_x)
@@ -44,7 +44,7 @@ function set_multiple_x!(
 end
 
 function set_multiple_x!(
-  tree::pre_n_compiled_tree{T},
+  tree::Pre_n_compiled_tree{T},
   new_multiple_x::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number}
   n = length(new_multiple_x)
@@ -54,44 +54,44 @@ function set_multiple_x!(
   end
 end
 
-@inline get_vec_tmp(tree::pre_n_compiled_tree{Y}) where {Y <: Number} = tree.vec_tmp
+@inline get_vec_tmp(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.vec_tmp
 
-@inline get_field_from_node(node::eval_n_node{Y}) where {Y <: Number} = node.field
+@inline get_field_from_node(node::Eval_n_node{Y}) where {Y <: Number} = node.field
 
-@inline get_children_vector_from_node(node::eval_n_node{Y}) where {Y <: Number} = node.children
+@inline get_children_vector_from_node(node::Eval_n_node{Y}) where {Y <: Number} = node.children
 
-@inline get_children_from_node(node::eval_n_node{Y}, i::Int) where {Y <: Number} = node.children[i]
+@inline get_children_from_node(node::Eval_n_node{Y}, i::Int) where {Y <: Number} = node.children[i]
 
-@inline get_vec_tmp_children(node::eval_n_node{Y}) where {Y <: Number} = node.vec_tmp_children
+@inline get_vec_tmp_children(node::Eval_n_node{Y}) where {Y <: Number} = node.vec_tmp_children
 
-@inline get_vec_tmp_n_eval(node::eval_n_node{Y}) where {Y <: Number} = node.vec_tmp_n_eval
+@inline get_vec_tmp_n_eval(node::Eval_n_node{Y}) where {Y <: Number} = node.vec_tmp_n_eval
 
-@inline get_tmp_for_n_eval_child(node::eval_n_node{Y}, i::Int) where {Y <: Number} =
+@inline get_tmp_for_n_eval_child(node::Eval_n_node{Y}, i::Int) where {Y <: Number} =
   get_vec_tmp_n_eval(node)[i]
 
-@inline get_tmp_eval_node(node::eval_n_node{Y}, i::Int) where {Y <: Number} =
+@inline get_tmp_eval_node(node::Eval_n_node{Y}, i::Int) where {Y <: Number} =
   get_vec_tmp_children(node)[i]
 
-@inline get_op_from_node(node::eval_n_node{Y}) where {Y <: Number} =
+@inline get_op_from_node(node::Eval_n_node{Y}) where {Y <: Number} =
   get_op_from_field(get_field_from_node(node))
 
-@inline get_length_children(node::eval_n_node{Y}) where {Y <: Number} = node.length_children
+@inline get_length_children(node::Eval_n_node{Y}) where {Y <: Number} = node.length_children
 
-@inline get_length_n_eval(node::eval_n_node{Y}) where {Y <: Number} = node.length_n_eval
+@inline get_length_n_eval(node::Eval_n_node{Y}) where {Y <: Number} = node.length_n_eval
 
 @inline create_eval_n_node(
-  field::new_field,
+  field::New_field,
   vec_tmp_children::Vector{Vector{MyRef{Y}}},
   vec_tmp_n_eval::Vector{Vector{MyRef{Y}}},
-  children::Vector{eval_n_node{Y}},
+  children::Vector{Eval_n_node{Y}},
   n_children::Int,
   n_eval::Int,
 ) where {Y <: Number} =
-  eval_n_node{Y}(field, vec_tmp_children, vec_tmp_n_eval, children, n_children, n_eval)
+  Eval_n_node{Y}(field, vec_tmp_children, vec_tmp_n_eval, children, n_children, n_eval)
 
 function create_eval_n_node(
-  field::new_field,
-  children::Vector{eval_n_node{Y}},
+  field::New_field,
+  children::Vector{Eval_n_node{Y}},
   n_eval::Int,
 ) where {Y <: Number}
   n_children = length(children)
@@ -101,8 +101,8 @@ function create_eval_n_node(
   return create_eval_n_node(field, vec_tmp_children, vec_tmp_n_eval, children, n_children, n_eval)
 end
 
-@inline create_eval_n_node(field::new_field, n_eval::Int, type::DataType = Float64) =
-  create_eval_n_node(field, Vector{eval_n_node{type}}(undef, 0), n_eval)
+@inline create_eval_n_node(field::New_field, n_eval::Int, type::DataType = Float64) =
+  create_eval_n_node(field, Vector{Eval_n_node{type}}(undef, 0), n_eval)
 
 function create_pre_n_compiled_tree(
   tree::M_implementation_expr_tree.Type_expr_tree,
@@ -111,7 +111,7 @@ function create_pre_n_compiled_tree(
   view_of_view = big_view(multiple_x_view)
   compiled_tree = _create_pre_n_compiled_tree(tree, view_of_view)
   tmp = create_new_vector_myRef(length(view_of_view), T)
-  pre_n_compiled_tree{T}(compiled_tree, view_of_view, length(multiple_x_view), tmp)
+  Pre_n_compiled_tree{T}(compiled_tree, view_of_view, length(multiple_x_view), tmp)
 end
 
 function big_view(
@@ -135,13 +135,13 @@ function _create_pre_n_compiled_tree(
   n_eval = length(multiple_x_view)
   if isempty(ch)
     new_op = M_abstract_expr_node.create_node_expr(nd, multiple_x_view)
-    new_field = create_new_field(new_op)
-    new_node = create_eval_n_node(new_field, n_eval, T)
+    New_field = create_New_field(new_op)
+    new_node = create_eval_n_node(New_field, n_eval, T)
     return new_node
   else
     new_ch = map(child -> _create_pre_n_compiled_tree(child, multiple_x_view), ch)
-    new_field = create_new_field(nd)
-    return create_eval_n_node(new_field, new_ch, n_eval)
+    New_field = create_New_field(nd)
+    return create_eval_n_node(New_field, new_ch, n_eval)
   end
 end
 
@@ -152,7 +152,7 @@ function create_pre_n_compiled_tree(
   new_multiple_x = copy(multiple_x)
   compiled_tree = _create_pre_n_compiled_tree(tree, new_multiple_x)
   tmp = create_new_vector_myRef(length(new_multiple_x), T)
-  pre_n_compiled_tree{T}(compiled_tree, new_multiple_x, length(new_multiple_x), tmp)
+  Pre_n_compiled_tree{T}(compiled_tree, new_multiple_x, length(new_multiple_x), tmp)
 end
 
 function _create_pre_n_compiled_tree(
@@ -164,18 +164,18 @@ function _create_pre_n_compiled_tree(
   n_eval = length(multiple_x)
   if isempty(ch)
     new_op = M_abstract_expr_node.create_node_expr(nd, multiple_x)
-    new_field = create_new_field(new_op)
-    new_node = create_eval_n_node(new_field, n_eval, T)
+    New_field = create_New_field(new_op)
+    new_node = create_eval_n_node(New_field, n_eval, T)
     return new_node
   else
     new_ch = map(child -> _create_pre_n_compiled_tree(child, multiple_x), ch)
-    new_field = create_new_field(nd)
-    return create_eval_n_node(new_field, new_ch, n_eval)
+    New_field = create_New_field(nd)
+    return create_eval_n_node(New_field, new_ch, n_eval)
   end
 end
 
 function evaluate_pre_n_compiled_tree(
-  tree::pre_n_compiled_tree{T},
+  tree::Pre_n_compiled_tree{T},
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number}
   n_eval = length(multiple_x_view)
@@ -190,7 +190,7 @@ function evaluate_pre_n_compiled_tree(
 end
 
 function evaluate_pre_n_compiled_tree(
-  tree::pre_n_compiled_tree{T},
+  tree::Pre_n_compiled_tree{T},
   multiple_v::Vector{Vector{T}},
 ) where {T <: Number}
   n_eval = length(multiple_v)
@@ -204,7 +204,7 @@ function evaluate_pre_n_compiled_tree(
   return res::T
 end
 
-function evaluate_pre_n_compiled_tree(tree::pre_n_compiled_tree{T}) where {T <: Number}
+function evaluate_pre_n_compiled_tree(tree::Pre_n_compiled_tree{T}) where {T <: Number}
   racine = get_racine(tree)
   vec_tmp = get_vec_tmp(tree)
   evaluate_eval_n_node!(racine, vec_tmp)
@@ -213,7 +213,7 @@ function evaluate_pre_n_compiled_tree(tree::pre_n_compiled_tree{T}) where {T <: 
 end
 
 function evaluate_eval_n_node!(
-  node::eval_n_node{T},
+  node::Eval_n_node{T},
   tmp::AbstractVector{MyRef{T}},
 ) where {T <: Number}
   op = get_op_from_node(node)

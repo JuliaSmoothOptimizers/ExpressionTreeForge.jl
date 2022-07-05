@@ -48,7 +48,7 @@ function set_bounds!(
 end
 
 function set_bounds!(
-  tree::M_implementation_complete_expr_tree.complete_expr_tree{T},
+  tree::M_implementation_complete_expr_tree.Complete_expr_tree{T},
 ) where {T <: Number}
   node = M_trait_tree.get_node(tree)
   op = M_trait_expr_tree._get_expr_node(tree)
@@ -60,7 +60,7 @@ function set_bounds!(
     set_bounds!.(ch)
     son_bounds =
       (
-        x::M_implementation_complete_expr_tree.complete_expr_tree{T} ->
+        x::M_implementation_complete_expr_tree.Complete_expr_tree{T} ->
           M_implementation_complete_expr_tree.get_bounds(M_trait_tree.get_node(x))
       ).(ch)
     (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(op, son_bounds, T)
@@ -72,7 +72,7 @@ end
   (b.inf_bound, b.sup_bound)
 
 @inline get_bound(b::Bound_tree{T}) where {T <: Number} = bound_to_tuple(M_trait_tree.get_node(b))
-@inline get_bound(ex::M_implementation_complete_expr_tree.complete_expr_tree{T}) where {T <: Number} =
+@inline get_bound(ex::M_implementation_complete_expr_tree.Complete_expr_tree{T}) where {T <: Number} =
   M_implementation_complete_expr_tree.tuple_bound_from_tree(ex)
 
 end

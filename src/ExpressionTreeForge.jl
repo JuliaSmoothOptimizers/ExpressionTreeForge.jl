@@ -8,11 +8,11 @@ include("expr_tree/ordered_include.jl")
 using .algo_expr_tree, .M_evaluation_expr_tree, .M_trait_expr_tree, .M_implementation_type_expr
 using .algo_tree
 using .M_implementation_complete_expr_tree,
-  .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
+  .M_implementation_pre_compiled_tree, .M_implementation_pre_n_compiled_tree
 using .M_bound_propagations, .M_convexity_detection
 
 export create_bound_tree, get_bound, set_bounds!
-export complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree, type_calculus_tree
+export Complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree, type_calculus_tree
 export concave_type, constant_type, convex_type, linear_type, not_treated_type, unknown_type
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
 export get_convexity_status, set_convexity!, create_convex_tree
@@ -50,7 +50,7 @@ convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
 @inline get_convexity_status(cvx_tree::M_convexity_detection.Convexity_tree) =
   M_convexity_detection.get_convexity_status(cvx_tree)
 
-@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.complete_expr_tree) =
+@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree) =
   M_convexity_detection.get_convexity_status(complete_tree)
 
 @inline constant_type() = M_implementation_convexity_type.constant_type()
@@ -72,23 +72,23 @@ Type_expr_tree = M_implementation_expr_tree.Type_expr_tree
 @inline create_complete_tree(tree) =
   M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
-complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.complete_expr_tree{T}
+complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.Complete_expr_tree{T}
 
-pre_compiled_tree{T <: Number} = implementation_pre_compiled_tree.pre_compiled_tree{T}
+pre_compiled_tree{T <: Number} = M_implementation_pre_compiled_tree.Pre_compiled_tree{T}
 
 @inline create_pre_compiled_tree(tree, x) =
-  implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
+  M_implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
 
-pre_n_compiled_tree{T <: Number} = implementation_pre_n_compiled_tree.pre_n_compiled_tree{T}
+pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T}
 
 @inline create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number} =
-  implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
+  M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
 
 @inline create_pre_n_compiled_tree(
   tree,
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number} =
-  implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
+  M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
 type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 
@@ -220,7 +220,7 @@ julia> evaluate_expr_tree(:(x[1] + x[2]), [0,1])
   M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
 
 @inline evaluate_expr_tree_multiple_points(e::Any) =
-  implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
+  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
 
 """
     calcul_gradient_expr_tree(t, x)

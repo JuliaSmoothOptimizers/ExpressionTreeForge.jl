@@ -1,5 +1,5 @@
 
-module hl_M_trait_expr_tree
+module M_hl_trait_expr_tree
 
 import ..M_interface_expr_tree._expr_tree_to_create
 
@@ -46,7 +46,7 @@ function _cast_type_of_constant(ex::Expr, t::DataType)
 end
 
 function _cast_type_of_constant(
-  ex::M_implementation_complete_expr_tree.complete_expr_tree,
+  ex::M_implementation_complete_expr_tree.Complete_expr_tree,
   t::DataType,
 )
   ch = M_trait_expr_tree.get_expr_children(ex)

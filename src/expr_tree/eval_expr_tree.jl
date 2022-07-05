@@ -3,9 +3,9 @@ using ForwardDiff, ReverseDiff
 
 using ..M_trait_expr_tree, ..M_trait_expr_node
 using ..M_implementation_expr_tree,
-  ..M_implementation_complete_expr_tree, ..implementation_pre_compiled_tree
+  ..M_implementation_complete_expr_tree, ..M_implementation_pre_compiled_tree
 using ..M_abstract_expr_node
-using ..implementation_pre_n_compiled_tree
+using ..M_implementation_pre_n_compiled_tree
 
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
 # IT requires that the M_constant have the same type of x
@@ -79,7 +79,7 @@ end
 end
 
 @inline function _evaluate_expr_tree(
-  expr_tree_cmp::M_implementation_complete_expr_tree.complete_expr_tree,
+  expr_tree_cmp::M_implementation_complete_expr_tree.Complete_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number}
   op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
@@ -90,7 +90,7 @@ end
     n = length(children)::Int
     temp = Vector{T}(undef, n)
     map!(
-      y::M_implementation_complete_expr_tree.complete_expr_tree -> _evaluate_expr_tree(y, x),
+      y::M_implementation_complete_expr_tree.Complete_expr_tree -> _evaluate_expr_tree(y, x),
       temp,
       children,
     )
@@ -99,9 +99,9 @@ end
 end
 
 @inline _evaluate_expr_tree(
-  tree::implementation_pre_compiled_tree.pre_compiled_tree{T},
+  tree::M_implementation_pre_compiled_tree.Pre_compiled_tree{T},
   x::AbstractVector{T},
-) where {T <: Number} = implementation_pre_compiled_tree.evaluate_pre_compiled_tree(tree, x)
+) where {T <: Number} = M_implementation_pre_compiled_tree.evaluate_pre_compiled_tree(tree, x)
 
 """
   _evaluate_expr_tree_multiple_points(expr_tree, vec_x)
@@ -134,16 +134,16 @@ function _evaluate_expr_tree_multiple_points(
 end
 
 @inline evaluate_expr_tree_multiple_points(
-  tree::implementation_pre_n_compiled_tree.pre_n_compiled_tree{T},
+  tree::M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T},
   multiple_x::Vector{Vector{T}},
 ) where {T <: Number} =
-  implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x)
+  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x)
 
 @inline evaluate_expr_tree_multiple_points(
-  tree::implementation_pre_n_compiled_tree.pre_n_compiled_tree{T},
+  tree::M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T},
   multiple_x_view::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} =
-  implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x_view)
+  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x_view)
 
 @inline evaluate_expr_tree_multiple_points(a::Any, x::Array{Array{T, 1}, 1}) where {T <: Number} =
   _evaluate_expr_tree_multiple_points(a, M_trait_expr_tree.is_expr_tree(a), x)
@@ -197,7 +197,7 @@ end
 ) where {N} where {T <: Number} = _evaluate_expr_tree_multiple_points(a, x)
 
 @inline function _evaluate_expr_tree_multiple_points(
-  expr_tree_cmp::M_implementation_complete_expr_tree.complete_expr_tree,
+  expr_tree_cmp::M_implementation_complete_expr_tree.Complete_expr_tree,
   xs::Array{Array{T, 1}, 1},
 ) where {T <: Number}
   op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
@@ -223,7 +223,7 @@ end
 end
 
 function _evaluate_expr_tree_multiple_points(
-  expr_tree_cmp::M_implementation_complete_expr_tree.complete_expr_tree,
+  expr_tree_cmp::M_implementation_complete_expr_tree.Complete_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number}
   op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
@@ -249,7 +249,7 @@ function _evaluate_expr_tree_multiple_points(
 end
 
 function _evaluate_expr_tree_multiple_points(
-  expr_tree_cmp::M_implementation_complete_expr_tree.complete_expr_tree,
+  expr_tree_cmp::M_implementation_complete_expr_tree.Complete_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number}
   op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
