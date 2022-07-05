@@ -28,17 +28,17 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export minus_operator
+export Minus_operator
 
-mutable struct minus_operator <: Abstract_expr_node end
+mutable struct Minus_operator <: Abstract_expr_node end
 
 function _node_convexity(
-  op::minus_operator,
+  op::Minus_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   length(son_cvx) == length(son_bound) ||
-    error("unsuitable parameter _node_convexity : minus_operator")
+    error("unsuitable parameter _node_convexity : Minus_operator")
   if length(son_cvx) == 1
     st_ch = son_cvx[1]
     if M_implementation_convexity_type.is_constant(st_ch)
@@ -88,7 +88,7 @@ function _node_convexity(
 end
 
 function _node_bound(
-  op::minus_operator,
+  op::Minus_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {T <: Number}
@@ -106,22 +106,22 @@ function _node_bound(
   end
 end
 
-@inline create_node_expr(op::minus_operator) = minus_operator()
+@inline create_node_expr(op::Minus_operator) = Minus_operator()
 
-@inline _node_is_operator(op::minus_operator) = true
-@inline _node_is_plus(op::minus_operator) = false
-@inline _node_is_minus(op::minus_operator) = true
-@inline _node_is_times(op::minus_operator) = false
-@inline _node_is_power(op::minus_operator) = false
-@inline _node_is_sin(op::minus_operator) = false
-@inline _node_is_cos(op::minus_operator) = false
-@inline _node_is_tan(op::minus_operator) = false
+@inline _node_is_operator(op::Minus_operator) = true
+@inline _node_is_plus(op::Minus_operator) = false
+@inline _node_is_minus(op::Minus_operator) = true
+@inline _node_is_times(op::Minus_operator) = false
+@inline _node_is_power(op::Minus_operator) = false
+@inline _node_is_sin(op::Minus_operator) = false
+@inline _node_is_cos(op::Minus_operator) = false
+@inline _node_is_tan(op::Minus_operator) = false
 
-@inline _node_is_variable(op::minus_operator) = false
+@inline _node_is_variable(op::Minus_operator) = false
 
-@inline _node_is_constant(op::minus_operator) = false
+@inline _node_is_constant(op::Minus_operator) = false
 
-function _get_type_node(op::minus_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Minus_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     return type_ch[1]
   else
@@ -129,9 +129,9 @@ function _get_type_node(op::minus_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::minus_operator, b::minus_operator) = true
+@inline (==)(a::Minus_operator, b::Minus_operator) = true
 
-function _evaluate_node(op::minus_operator, value_ch::AbstractVector{T}) where {T <: Number}
+function _evaluate_node(op::Minus_operator, value_ch::AbstractVector{T}) where {T <: Number}
   if length(value_ch) == 1
     return -value_ch[1]
   else
@@ -140,7 +140,7 @@ function _evaluate_node(op::minus_operator, value_ch::AbstractVector{T}) where {
 end
 
 @inline function _evaluate_node!(
-  op::minus_operator,
+  op::Minus_operator,
   value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
   ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number}
@@ -152,7 +152,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::minus_operator,
+  op::Minus_operator,
   vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
@@ -161,6 +161,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::minus_operator) = [:-]
+@inline _node_to_Expr(op::Minus_operator) = [:-]
 
 end

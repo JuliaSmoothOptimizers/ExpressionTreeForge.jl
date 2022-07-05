@@ -38,7 +38,7 @@ function _node_convexity(
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   (length(son_cvx) == length(son_bound) && length(son_cvx) == 1) ||
-    error("unsuitable length of parameters _node_convexity : exp_operator")
+    error("unsuitable length of parameters _node_convexity : sin_operator")
   status = son_cvx[1]
   (bi, bs) = son_bound[1]
   if M_implementation_convexity_type.is_constant(status)

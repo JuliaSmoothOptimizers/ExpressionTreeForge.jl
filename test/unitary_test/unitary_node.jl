@@ -11,7 +11,7 @@ using CalculusTreeTools.M_plus_operator,
   CalculusTreeTools.M_exp_operator
 
 @testset "Node constructors" begin
-  @test M_abstract_expr_node.create_node_expr(4) == M_constant.constant(4)
+  @test M_abstract_expr_node.create_node_expr(4) == M_constant.Constant(4)
   @test M_abstract_expr_node.create_node_expr(:x, 5) ==M_variable.variable(:x, 5)
   @test M_abstract_expr_node.create_node_expr(:x, MathOptInterface.VariableIndex(5)) ==
        M_variable.variable(:x, 5)
@@ -19,12 +19,12 @@ using CalculusTreeTools.M_plus_operator,
         M_abstract_expr_node.create_node_expr(:x, 5)
 
   @test M_abstract_expr_node.create_node_expr(:+) == M_plus_operator.plus_operator()
-  @test M_abstract_expr_node.create_node_expr(:-) == M_minus_operator.minus_operator()
+  @test M_abstract_expr_node.create_node_expr(:-) == M_minus_operator.Minus_operator()
   @test M_abstract_expr_node.create_node_expr(:*) == M_times_operator.time_operator()
   @test M_abstract_expr_node.create_node_expr(:sin) == M_sinus_operator.sinus_operator()
   @test M_abstract_expr_node.create_node_expr(:tan) == M_tan_operator.tan_operator()
-  @test M_abstract_expr_node.create_node_expr(:exp) == M_exp_operator.exp_operator()
-  @test M_abstract_expr_node.create_node_expr(:/) == M_frac_operator.frac_operator()
+  @test M_abstract_expr_node.create_node_expr(:exp) == M_exp_operator.Exp_operator()
+  @test M_abstract_expr_node.create_node_expr(:/) == M_frac_operator.Frac_operator()
 
   @test M_abstract_expr_node.create_node_expr(:^, 2, true) == M_power_operator.power_operator(2)
 end

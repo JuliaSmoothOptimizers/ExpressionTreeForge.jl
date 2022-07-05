@@ -36,15 +36,15 @@ using CalculusTreeTools.M_implementation_type_expr,
   @test M_implementation_type_expr._is_more(M_implementation_type_expr.return_more())
 
   # défintion de variable étant du même type que leur nom
-  constante = M_implementation_type_expr.return_constant()
+  constant = M_implementation_type_expr.return_constant()
   linear = M_implementation_type_expr.return_linear()
   quadratic = M_implementation_type_expr.return_quadratic()
   cubic = M_implementation_type_expr.return_cubic()
   more = M_implementation_type_expr.return_more()
-  all_types = [constante, linear, quadratic, cubic, more]
+  all_types = [constant, linear, quadratic, cubic, more]
 
   # test de la fonction _type_product
-  @test (x -> M_implementation_type_expr._type_product(constante, x)).(all_types) == all_types
+  @test (x -> M_implementation_type_expr._type_product(constant, x)).(all_types) == all_types
   @test (x -> M_implementation_type_expr._type_product(linear, x)).(all_types) ==
         [linear, quadratic, cubic, more, more]
   @test (x -> M_implementation_type_expr._type_product(quadratic, x)).(all_types) ==
@@ -58,14 +58,14 @@ using CalculusTreeTools.M_implementation_type_expr,
 
   # test de _type_power
   @test (x -> M_implementation_type_expr._type_power(0, x)).(all_types) ==
-        [constante, constante, constante, constante, constante]
+        [constant, constant, constant, constant, constant]
   @test (x -> M_implementation_type_expr._type_power(1, x)).(all_types) == all_types
   @test (x -> M_implementation_type_expr._type_power(2, x)).(all_types) ==
-        [constante, quadratic, more, more, more]
+        [constant, quadratic, more, more, more]
   @test (x -> M_implementation_type_expr._type_power(3, x)).(all_types) ==
-        [constante, cubic, more, more, more]
+        [constant, cubic, more, more, more]
   @test (x -> M_implementation_type_expr._type_power(4, x)).(all_types) ==
-        [constante, more, more, more, more]
+        [constant, more, more, more, more]
 
   #=-----------------------------------------------------------------------------------------------------------------------------------=#
 
@@ -102,7 +102,7 @@ using CalculusTreeTools.M_implementation_type_expr,
 
   # test de la fonction _type_product
 
-  @test (x -> M_trait_type_expr.type_product(constante, x)).(all_types) == all_types
+  @test (x -> M_trait_type_expr.type_product(constant, x)).(all_types) == all_types
   @test (x -> M_trait_type_expr.type_product(linear, x)).(all_types) ==
         [linear, quadratic, cubic, more, more]
   @test (x -> M_trait_type_expr.type_product(quadratic, x)).(all_types) ==
@@ -113,12 +113,12 @@ using CalculusTreeTools.M_implementation_type_expr,
 
   # test de _type_power
   @test (x -> M_trait_type_expr.type_power(0, x)).(all_types) ==
-        [constante, constante, constante, constante, constante]
+        [constant, constant, constant, constant, constant]
   @test (x -> M_trait_type_expr.type_power(1, x)).(all_types) == all_types
   @test (x -> M_trait_type_expr.type_power(2, x)).(all_types) ==
-        [constante, quadratic, more, more, more]
-  @test (x -> M_trait_type_expr.type_power(3, x)).(all_types) == [constante, cubic, more, more, more]
-  @test (x -> M_trait_type_expr.type_power(4, x)).(all_types) == [constante, more, more, more, more]
+        [constant, quadratic, more, more, more]
+  @test (x -> M_trait_type_expr.type_power(3, x)).(all_types) == [constant, cubic, more, more, more]
+  @test (x -> M_trait_type_expr.type_power(4, x)).(all_types) == [constant, more, more, more, more]
 end
 
 @testset "Convexity" begin

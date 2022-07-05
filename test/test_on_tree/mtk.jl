@@ -37,7 +37,7 @@
                   CalculusTreeTools.M_implementation_tree.Type_node{
                     CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                   }(
-                    CalculusTreeTools.M_minus_operator.minus_operator(),
+                    CalculusTreeTools.M_minus_operator.Minus_operator(),
                     CalculusTreeTools.M_implementation_tree.Type_node{
                       CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                     }[
@@ -62,7 +62,7 @@
                   CalculusTreeTools.M_implementation_tree.Type_node{
                     CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                   }(
-                    CalculusTreeTools.M_minus_operator.minus_operator(),
+                    CalculusTreeTools.M_minus_operator.Minus_operator(),
                     CalculusTreeTools.M_implementation_tree.Type_node{
                       CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                     }[
@@ -89,7 +89,7 @@
               CalculusTreeTools.M_implementation_tree.Type_node{
                 CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
               }(
-                CalculusTreeTools.M_minus_operator.minus_operator(),
+                CalculusTreeTools.M_minus_operator.Minus_operator(),
                 CalculusTreeTools.M_implementation_tree.Type_node{
                   CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                 }[
@@ -116,7 +116,7 @@
           CalculusTreeTools.M_implementation_tree.Type_node{
             CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
           }(
-            CalculusTreeTools.M_minus_operator.minus_operator(),
+            CalculusTreeTools.M_minus_operator.Minus_operator(),
             CalculusTreeTools.M_implementation_tree.Type_node{
               CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
             }[
@@ -141,7 +141,7 @@
         ],
       ),
       CalculusTreeTools.M_implementation_tree.Type_node{CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node}(
-        CalculusTreeTools.M_minus_operator.minus_operator(),
+        CalculusTreeTools.M_minus_operator.Minus_operator(),
         CalculusTreeTools.M_implementation_tree.Type_node{
           CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
         }[

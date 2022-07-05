@@ -41,19 +41,19 @@ function create_node_expr(op::Symbol)
   if op == :+
     M_plus_operator.plus_operator()
   elseif op == :-
-    M_minus_operator.minus_operator()
+    M_minus_operator.Minus_operator()
   elseif op == :*
     M_times_operator.time_operator()
   elseif op == :/
-    M_frac_operator.frac_operator()
+    M_frac_operator.Frac_operator()
   elseif op == :sin
     M_sinus_operator.sinus_operator()
   elseif op == :tan
     M_tan_operator.tan_operator()
   elseif op == :cos
-    M_cos_operator.cos_operator()
+    M_cos_operator.Cos_operator()
   elseif op == :exp
-    M_exp_operator.exp_operator()
+    M_exp_operator.Exp_operator()
   else
     return simple_operator(op)
   end
@@ -63,19 +63,19 @@ function create_node_expr(op::Symbol, x::AbstractVector{Y}) where {Y <: Number}
   if op == :+
     M_plus_operator.plus_operator()
   elseif op == :-
-    M_minus_operator.minus_operator()
+    M_minus_operator.Minus_operator()
   elseif op == :*
     M_times_operator.time_operator()
   elseif op == :/
-    M_frac_operator.frac_operator()
+    M_frac_operator.Frac_operator()
   elseif op == :sin
     M_sinus_operator.sinus_operator()
   elseif op == :tan
     M_tan_operator.tan_operator()
   elseif op == :cos
-    M_cos_operator.cos_operator()
+    M_cos_operator.Cos_operator()
   elseif op == :exp
-    M_exp_operator.exp_operator()
+    M_exp_operator.Exp_operator()
   else
     return simple_operator(op)
   end

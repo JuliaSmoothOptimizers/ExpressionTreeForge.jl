@@ -28,17 +28,17 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export cos_operator
+export Cos_operator
 
-mutable struct cos_operator <: Abstract_expr_node end
+mutable struct Cos_operator <: Abstract_expr_node end
 
 function _node_convexity(
-  op::cos_operator,
+  op::Cos_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   (length(son_cvx) == length(son_bound) && length(son_cvx) == 1) ||
-    error("unsuitable length of parameters _node_convexity : exp_operator")
+    error("unsuitable length of parameters _node_convexity : cos_operator")
   status = son_cvx[1]
   (bi, bs) = son_bound[1]
   if M_implementation_convexity_type.is_constant(status)
@@ -63,7 +63,7 @@ function _node_convexity(
 end
 
 function _node_bound(
-  op::cos_operator,
+  op::Cos_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {T <: Number}
@@ -105,22 +105,22 @@ end
 
 belong(bi, bs, x) = (bi <= x) && (bs >= x)
 
-@inline create_node_expr(op::cos_operator) = cos_operator()
+@inline create_node_expr(op::Cos_operator) = Cos_operator()
 
-@inline _node_is_operator(op::cos_operator) = true
-@inline _node_is_plus(op::cos_operator) = false
-@inline _node_is_minus(op::cos_operator) = false
-@inline _node_is_times(op::cos_operator) = false
-@inline _node_is_power(op::cos_operator) = false
-@inline _node_is_sin(op::cos_operator) = false
-@inline _node_is_cos(op::cos_operator) = true
-@inline _node_is_tan(op::cos_operator) = false
+@inline _node_is_operator(op::Cos_operator) = true
+@inline _node_is_plus(op::Cos_operator) = false
+@inline _node_is_minus(op::Cos_operator) = false
+@inline _node_is_times(op::Cos_operator) = false
+@inline _node_is_power(op::Cos_operator) = false
+@inline _node_is_sin(op::Cos_operator) = false
+@inline _node_is_cos(op::Cos_operator) = true
+@inline _node_is_tan(op::Cos_operator) = false
 
-@inline _node_is_variable(op::cos_operator) = false
+@inline _node_is_variable(op::Cos_operator) = false
 
-@inline _node_is_constant(op::cos_operator) = false
+@inline _node_is_constant(op::Cos_operator) = false
 
-function _get_type_node(op::cos_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Cos_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     t_child = type_ch[1]
     if M_trait_type_expr._is_constant(t_child)
@@ -131,15 +131,15 @@ function _get_type_node(op::cos_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::cos_operator, b::cos_operator) = true
+@inline (==)(a::Cos_operator, b::Cos_operator) = true
 
-@inline function _evaluate_node(op::cos_operator, value_ch::AbstractVector{T}) where {T <: Number}
+@inline function _evaluate_node(op::Cos_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for tan")
   return cos(value_ch[1])
 end
 
 @inline function _evaluate_node!(
-  op::cos_operator,
+  op::Cos_operator,
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
@@ -148,7 +148,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::cos_operator,
+  op::Cos_operator,
   vec_value_ch::Vector{Vector{MyRef{Y}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
@@ -157,6 +157,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::cos_operator) = [:cos]
+@inline _node_to_Expr(op::Cos_operator) = [:cos]
 
 end

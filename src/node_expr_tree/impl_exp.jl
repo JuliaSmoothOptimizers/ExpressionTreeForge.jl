@@ -28,17 +28,17 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export exp_operator
+export Exp_operator
 
-mutable struct exp_operator <: Abstract_expr_node end
+mutable struct Exp_operator <: Abstract_expr_node end
 
 function _node_convexity(
-  op::exp_operator,
+  op::Exp_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   (length(son_cvx) == length(son_bound) && length(son_cvx) == 1) ||
-    error("unsuitable length of parameters _node_convexity : exp_operator")
+    error("unsuitable length of parameters _node_convexity : Exp_operator")
   status = son_cvx[1]
   if M_implementation_convexity_type.is_constant(status)
     return M_implementation_convexity_type.constant_type()
@@ -50,7 +50,7 @@ function _node_convexity(
 end
 
 function _node_bound(
-  op::exp_operator,
+  op::Exp_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {Y <: Number} where {T <: Number}
@@ -63,22 +63,22 @@ function _node_bound(
   return (exp(bi), exp(bs))
 end
 
-@inline create_node_expr(op::exp_operator) = exp_operator()
+@inline create_node_expr(op::Exp_operator) = Exp_operator()
 
-@inline _node_is_operator(op::exp_operator) = true
-@inline _node_is_plus(op::exp_operator) = false
-@inline _node_is_minus(op::exp_operator) = false
-@inline _node_is_times(op::exp_operator) = false
-@inline _node_is_power(op::exp_operator) = false
-@inline _node_is_sin(op::exp_operator) = false
-@inline _node_is_cos(op::exp_operator) = false
-@inline _node_is_tan(op::exp_operator) = false
+@inline _node_is_operator(op::Exp_operator) = true
+@inline _node_is_plus(op::Exp_operator) = false
+@inline _node_is_minus(op::Exp_operator) = false
+@inline _node_is_times(op::Exp_operator) = false
+@inline _node_is_power(op::Exp_operator) = false
+@inline _node_is_sin(op::Exp_operator) = false
+@inline _node_is_cos(op::Exp_operator) = false
+@inline _node_is_tan(op::Exp_operator) = false
 
-@inline _node_is_variable(op::exp_operator) = false
+@inline _node_is_variable(op::Exp_operator) = false
 
-@inline _node_is_constant(op::exp_operator) = false
+@inline _node_is_constant(op::Exp_operator) = false
 
-function _get_type_node(op::exp_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Exp_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     t_child = type_ch[1]
     if M_trait_type_expr._is_constant(t_child)
@@ -89,15 +89,15 @@ function _get_type_node(op::exp_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::exp_operator, b::exp_operator) = true
+@inline (==)(a::Exp_operator, b::Exp_operator) = true
 
-@inline function _evaluate_node(op::exp_operator, value_ch::AbstractVector{T}) where {T <: Number}
+@inline function _evaluate_node(op::Exp_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for exp")
   return exp(value_ch[1])
 end
 
 @inline function _evaluate_node!(
-  op::exp_operator,
+  op::Exp_operator,
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
@@ -107,7 +107,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::exp_operator,
+  op::Exp_operator,
   vec_value_ch::Vector{Vector{MyRef{Y}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
@@ -116,6 +116,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::exp_operator) = [:exp]
+@inline _node_to_Expr(op::Exp_operator) = [:exp]
 
 end

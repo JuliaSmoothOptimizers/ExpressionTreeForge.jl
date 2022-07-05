@@ -30,10 +30,10 @@ using ..M_abstract_expr_node
 import Base.(==)
 export variable
 
-mutable struct frac_operator <: Abstract_expr_node end
+mutable struct Frac_operator <: Abstract_expr_node end
 
 function _node_convexity(
-  op::frac_operator,
+  op::Frac_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
@@ -87,7 +87,7 @@ check_positive(bi::T, bs::T) where {T <: Number} = (bi >= 0)
 check_negative(bi::T, bs::T) where {T <: Number} = (bs <= 0)
 check_positive_negative(bi::T, bs::T) where {T <: Number} = (bi < 0) && (bs > 0)
 function _node_bound(
-  op::frac_operator,
+  op::Frac_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {T <: Number}
@@ -118,23 +118,23 @@ function brut_force_bound_frac(bi1::T, bs1::T, bi2::T, bs2::T) where {T <: Numbe
   return (bi, bs)
 end
 
-@inline create_node_expr(op::frac_operator) = frac_operator()
+@inline create_node_expr(op::Frac_operator) = Frac_operator()
 
-@inline _node_is_operator(op::frac_operator) = true
-@inline _node_is_plus(op::frac_operator) = false
-@inline _node_is_minus(op::frac_operator) = false
-@inline _node_is_times(op::frac_operator) = false
-@inline _node_is_power(op::frac_operator) = false
-@inline _node_is_sin(op::frac_operator) = false
-@inline _node_is_cos(op::frac_operator) = false
-@inline _node_is_tan(op::frac_operator) = false
-@inline _node_is_frac(op::frac_operator) = true
+@inline _node_is_operator(op::Frac_operator) = true
+@inline _node_is_plus(op::Frac_operator) = false
+@inline _node_is_minus(op::Frac_operator) = false
+@inline _node_is_times(op::Frac_operator) = false
+@inline _node_is_power(op::Frac_operator) = false
+@inline _node_is_sin(op::Frac_operator) = false
+@inline _node_is_cos(op::Frac_operator) = false
+@inline _node_is_tan(op::Frac_operator) = false
+@inline _node_is_frac(op::Frac_operator) = true
 
-@inline _node_is_variable(op::frac_operator) = false
+@inline _node_is_variable(op::Frac_operator) = false
 
-@inline _node_is_constant(op::frac_operator) = false
+@inline _node_is_constant(op::Frac_operator) = false
 
-function _get_type_node(op::frac_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Frac_operator, type_ch::Vector{Type_expr_basic})
   t_denom = type_ch[2]
   if M_trait_type_expr._is_constant(t_denom)
     return type_ch[1]
@@ -143,17 +143,17 @@ function _get_type_node(op::frac_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::frac_operator, b::frac_operator) = true
+@inline (==)(a::Frac_operator, b::Frac_operator) = true
 
-@inline _evaluate_node(op::frac_operator, value_ch::AbstractVector{T}) where {T <: Number} =
+@inline _evaluate_node(op::Frac_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   value_ch[1] / value_ch[2]
 @inline _evaluate_node!(
-  op::frac_operator,
+  op::Frac_operator,
   value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
   ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} = M_abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
 @inline function _evaluate_node!(
-  op::frac_operator,
+  op::Frac_operator,
   vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
@@ -162,6 +162,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::frac_operator) = [:/]
+@inline _node_to_Expr(op::Frac_operator) = [:/]
 
 end
