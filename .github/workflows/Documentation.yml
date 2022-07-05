@@ -21,7 +21,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
         run: julia --project=docs --color=yes docs/make.jl
-
-
-# using DocumenterTools
-# DocumenterTools.genkeys(user="paraynaud", repo="ExpressionTreeForge.jl")
