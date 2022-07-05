@@ -5,13 +5,19 @@ import Base.==
 using ..M_abstract_expr_node, ..M_abstract_expr_tree
 using ..trait_tree, ..M_trait_expr_node
 using ..M_implementation_convexity_type, ..implementation_expr_tree
-using ..interface_expr_tree
+using ..M_interface_expr_tree
 
-import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
-import ..interface_expr_tree._inverse_expr_tree
+import ..M_abstract_expr_tree:
+  create_expr_tree,
+  create_Expr,
+  create_Expr2
 import ..M_implementation_tree.Type_node
-import ..interface_expr_tree:
-  _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
+import ..M_interface_expr_tree:
+  _get_expr_node,
+  _get_expr_children,
+  _inverse_expr_tree,
+  _get_real_node,
+  _transform_to_expr_tree
 
 export complete_node
 

@@ -1,7 +1,7 @@
 
 module hl_M_trait_expr_tree
 
-import ..interface_expr_tree._expr_tree_to_create
+import ..M_interface_expr_tree._expr_tree_to_create
 
 using ..M_trait_expr_tree, ..M_trait_expr_node
 using ..implementation_expr_tree,

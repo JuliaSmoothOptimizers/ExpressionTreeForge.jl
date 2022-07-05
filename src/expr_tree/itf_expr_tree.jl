@@ -1,4 +1,4 @@
-module interface_expr_tree
+module M_interface_expr_tree
 
 _get_expr_node() = ()
 

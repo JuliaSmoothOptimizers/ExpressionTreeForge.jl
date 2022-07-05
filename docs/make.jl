@@ -4,7 +4,7 @@ using ExpressionTreeForge
 using ExpressionTreeForge:
   M_abstract_expr_tree,
   M_trait_expr_tree,
-  interface_expr_tree,
+  M_interface_expr_tree,
   implementation_pre_compiled_tree,
   implementation_pre_n_compiled_tree,
   implementation_expression_tree_Expr,
@@ -48,7 +48,7 @@ makedocs(
     ExpressionTreeForge,
     M_abstract_expr_tree,
     M_trait_expr_tree,
-    interface_expr_tree,
+    M_interface_expr_tree,
     implementation_pre_compiled_tree,
     implementation_pre_n_compiled_tree,
     implementation_expression_tree_Expr,

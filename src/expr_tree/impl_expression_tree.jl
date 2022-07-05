@@ -5,11 +5,15 @@ using ModelingToolkit
 using ..M_abstract_expr_node, ..M_abstract_expr_tree
 using ..implementation_expr_tree
 
-import ..M_abstract_expr_tree.create_expr_tree, ..M_abstract_expr_tree.create_Expr
-
-import ..interface_expr_tree._get_expr_node,
-  ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
-import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
+import ..M_abstract_expr_tree:
+  create_expr_tree
+  create_Expr
+import ..M_interface_expr_tree:
+  _inverse_expr_tree,
+  _get_expr_node,
+  _get_expr_children,
+  _get_real_node,
+  _transform_to_expr_tree
 
 mutable struct Variable_counter
   current_var::Int

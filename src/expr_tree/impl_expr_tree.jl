@@ -4,13 +4,17 @@ using ..M_abstract_expr_node, ..M_trait_expr_node
 using ..M_abstract_expr_tree
 using ..trait_tree
 
-import ..M_abstract_expr_tree.create_expr_tree,
-  ..M_abstract_expr_tree.create_Expr, ..M_abstract_expr_tree.create_Expr2
-import ..interface_expr_tree._inverse_expr_tree
+import ..M_abstract_expr_tree:
+  create_expr_tree,
+  create_Expr,
+  create_Expr2
 import ..M_implementation_tree.Type_node
-import ..interface_expr_tree._get_expr_node,
-  ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
-import ..interface_expr_tree._get_real_node, ..interface_expr_tree._transform_to_expr_tree
+import ..M_interface_expr_tree:
+  _inverse_expr_tree,
+  _get_expr_node,
+  _get_expr_children,
+  _get_real_node,
+  _transform_to_expr_tree
 
 t_expr_tree = Type_node{Abstract_expr_node}
 

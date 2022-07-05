@@ -9,10 +9,10 @@ using ..M_abstract_expr_tree,
 using ..implementation_pre_n_compiled_tree
 using ..implementation_expression_tree_Expr
 
-import ..interface_expr_tree._get_expr_node,
-  ..interface_expr_tree._get_expr_children, ..interface_expr_tree._inverse_expr_tree
-import ..implementation_expr_tree.t_expr_tree, ..interface_expr_tree._get_real_node
-import ..interface_expr_tree._transform_to_expr_tree, ..interface_expr_tree._expr_tree_to_create
+import ..M_interface_expr_tree._get_expr_node,
+  ..M_interface_expr_tree._get_expr_children, ..M_interface_expr_tree._inverse_expr_tree
+import ..implementation_expr_tree.t_expr_tree, ..M_interface_expr_tree._get_real_node
+import ..M_interface_expr_tree._transform_to_expr_tree, ..M_interface_expr_tree._expr_tree_to_create
 import Base.==
 
 export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
