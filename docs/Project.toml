@@ -1,5 +1,5 @@
 [deps]
-ExpressionTreeForge = "995bfbc1-c62b-4971-a5e3-ef0aad32e8da"
+ExpressionTreeForge = "93090adf-0e31-445f-8c8f-44d91f61d7ad"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 
 [compat]
