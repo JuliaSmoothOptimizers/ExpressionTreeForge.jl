@@ -1,12 +1,12 @@
 using ExpressionTreeForge.trait_expr_tree, ExpressionTreeForge.M_trait_type_expr
-using ExpressionTreeForge.M_abstract_expr_node, ExpressionTreeForge.abstract_expr_tree
+using ExpressionTreeForge.M_abstract_expr_node, ExpressionTreeForge.M_abstract_expr_tree
 using ExpressionTreeForge.algo_expr_tree, ExpressionTreeForge.algo_tree
 using ExpressionTreeForge.implementation_expr_tree
 using ExpressionTreeForge.M_evaluation_expr_tree
 
 @testset "test building of trees and equality" begin
   expr_1 = :(x[1] + x[2])
-  t_expr_1 = abstract_expr_tree.create_expr_tree(expr_1)
+  t_expr_1 = M_abstract_expr_tree.create_expr_tree(expr_1)
   @test t_expr_1 == expr_1
   @test trait_expr_tree.expr_tree_equal(t_expr_1, expr_1)
 
@@ -15,31 +15,31 @@ using ExpressionTreeForge.M_evaluation_expr_tree
 
   expr_2 = :((x[3] + x[4])^2 + x[1] * x[2])
   @test trait_expr_tree.expr_tree_equal(expr_1, expr_2) == false
-  t_expr_2 = abstract_expr_tree.create_expr_tree(expr_2)
+  t_expr_2 = M_abstract_expr_tree.create_expr_tree(expr_2)
   @test t_expr_2 == expr_2
   t2 = trait_expr_tree.transform_to_expr_tree(t_expr_2)
   @test trait_expr_tree.expr_tree_equal(expr_2, t2)
   @test trait_expr_tree.expr_tree_equal(t_expr_2, t2)
 
-  n3_1_1 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 1))
-  n3_1_2 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 2))
+  n3_1_1 = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 1))
+  n3_1_2 = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 2))
   n3_1_op = M_abstract_expr_node.create_node_expr(:*)
-  n3_1 = abstract_expr_tree.create_expr_tree(n3_1_op, [n3_1_1, n3_1_2])
+  n3_1 = M_abstract_expr_tree.create_expr_tree(n3_1_op, [n3_1_1, n3_1_2])
 
-  n3_2_1_1 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 3))
-  n3_2_1_2 = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 4))
+  n3_2_1_1 = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 3))
+  n3_2_1_2 = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 4))
   n3_2_1_op = M_abstract_expr_node.create_node_expr(:+)
-  n3_2_1 = abstract_expr_tree.create_expr_tree(n3_2_1_op, [n3_2_1_1, n3_2_1_2])
+  n3_2_1 = M_abstract_expr_tree.create_expr_tree(n3_2_1_op, [n3_2_1_1, n3_2_1_2])
   n3_2_op = M_abstract_expr_node.create_node_expr(:^, 2, true)
-  n3_2 = abstract_expr_tree.create_expr_tree(n3_2_op, [n3_2_1])
+  n3_2 = M_abstract_expr_tree.create_expr_tree(n3_2_op, [n3_2_1])
   n3_op = M_abstract_expr_node.create_node_expr(:+)
-  t3 = abstract_expr_tree.create_expr_tree(n3_op, [n3_2, n3_1])
+  t3 = M_abstract_expr_tree.create_expr_tree(n3_op, [n3_2, n3_1])
   @test trait_expr_tree.expr_tree_equal(t_expr_2, t3)
   @test trait_expr_tree.expr_tree_equal(t2, t3)
 end
 
 @testset " Deletion of imbricated +" begin
-  t_expr_4 = abstract_expr_tree.create_expr_tree(:((x[3] + x[4]) + (x[1] + x[2])))
+  t_expr_4 = M_abstract_expr_tree.create_expr_tree(:((x[3] + x[4]) + (x[1] + x[2])))
   t4 = trait_expr_tree.transform_to_expr_tree(t_expr_4)
   res_t4 = algo_expr_tree.delete_imbricated_plus(t4)
   res_t_expr_4 = algo_expr_tree.delete_imbricated_plus(t_expr_4)
@@ -47,7 +47,7 @@ end
   @test res_t_expr_4 == test_res_t_expr_4
   @test foldl(&, trait_expr_tree.expr_tree_equal.(res_t4, res_t_expr_4))
 
-  t_expr_5 = abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) + (x[1] + x[2])))
+  t_expr_5 = M_abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) + (x[1] + x[2])))
   t5 = trait_expr_tree.transform_to_expr_tree(t_expr_5)
   res_t_expr_5 = algo_expr_tree.delete_imbricated_plus(t_expr_5)
   res_t5 = algo_expr_tree.delete_imbricated_plus(t5)
@@ -55,7 +55,7 @@ end
   @test res_t_expr_5 == test_res_t_expr_5
   @test foldl(&, trait_expr_tree.expr_tree_equal.(res_t5, res_t_expr_5))
 
-  t_expr_6 = abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) - (x[1] + x[2])))
+  t_expr_6 = M_abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) - (x[1] + x[2])))
   t6 = trait_expr_tree.transform_to_expr_tree(t_expr_6)
   res_t_expr_6 = algo_expr_tree.delete_imbricated_plus(t_expr_6)
   res_t6 = algo_expr_tree.delete_imbricated_plus(t6)
@@ -63,7 +63,7 @@ end
   @test res_t_expr_6 == test_res_t_expr_6
   @test foldl(&, trait_expr_tree.expr_tree_equal.(res_t6, res_t_expr_6))
 
-  t_expr_7 = abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) - (x[1] - x[2])))
+  t_expr_7 = M_abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) - (x[1] - x[2])))
   t7 = trait_expr_tree.transform_to_expr_tree(t_expr_7)
   res_t_expr_7 = algo_expr_tree.delete_imbricated_plus(t_expr_7)
   res_t7 = algo_expr_tree.delete_imbricated_plus(t7)
@@ -73,7 +73,7 @@ end
 end
 
 @testset "get type of a expr tree" begin
-  t_expr_8 = abstract_expr_tree.create_expr_tree(:((x[3]^4) + (x[5] * x[4]) - (x[1] - x[2])))
+  t_expr_8 = M_abstract_expr_tree.create_expr_tree(:((x[3]^4) + (x[5] * x[4]) - (x[1] - x[2])))
   t8 = trait_expr_tree.transform_to_expr_tree(t_expr_8)
 
   test_res8 = algo_expr_tree.get_type_tree(t_expr_8)
@@ -81,7 +81,7 @@ end
   @test test_res8 == test_res_t8
   @test M_trait_type_expr.is_more(test_res_t8)
 
-  t_expr_cubic = abstract_expr_tree.create_expr_tree(:((x[3]^3) + (x[5] * x[4]) - (x[1] - x[2])))
+  t_expr_cubic = M_abstract_expr_tree.create_expr_tree(:((x[3]^3) + (x[5] * x[4]) - (x[1] - x[2])))
   t_cubic = trait_expr_tree.transform_to_expr_tree(t_expr_cubic)
 
   res_cubic = algo_expr_tree.get_type_tree(t_expr_cubic)
@@ -90,7 +90,7 @@ end
   @test M_trait_type_expr._is_cubic(res_t_cubic)
 
   t_expr_cubic2 =
-    abstract_expr_tree.create_expr_tree(:((x[3]^3) + (x[5] * x[4]) - (x[1] - x[2]) + sin(5)))
+    M_abstract_expr_tree.create_expr_tree(:((x[3]^3) + (x[5] * x[4]) - (x[1] - x[2]) + sin(5)))
   t_cubic2 = trait_expr_tree.transform_to_expr_tree(t_expr_cubic2)
 
   res_cubic2 = algo_expr_tree.get_type_tree(t_expr_cubic2)
@@ -98,7 +98,7 @@ end
   @test res_cubic2 == res_t_cubic2
   @test M_trait_type_expr._is_cubic(res_t_cubic2)
 
-  t_expr_sin = abstract_expr_tree.create_expr_tree(:((x[3]^3) + sin(x[5] * x[4]) - (x[1] - x[2])))
+  t_expr_sin = M_abstract_expr_tree.create_expr_tree(:((x[3]^3) + sin(x[5] * x[4]) - (x[1] - x[2])))
   t_sin = trait_expr_tree.transform_to_expr_tree(t_expr_sin)
 
   res_sin = algo_expr_tree.get_type_tree(t_expr_sin)
@@ -119,7 +119,7 @@ end
   @test M_trait_type_expr._is_quadratic(test_res_obj)
   @test M_trait_type_expr.is_more(test_res_obj) == false
 
-  t_expr_9 = abstract_expr_tree.create_expr_tree(:(x[1] + sin(x[2])))
+  t_expr_9 = M_abstract_expr_tree.create_expr_tree(:(x[1] + sin(x[2])))
   res_t_expr_9 = algo_expr_tree.delete_imbricated_plus(t_expr_9)
 
   @test M_trait_type_expr.is_linear(algo_expr_tree.get_type_tree(t_expr_9)) == false
@@ -127,13 +127,13 @@ end
 end
 
 @testset "test de la récupération des variable élementaires" begin
-  t_expr_var = abstract_expr_tree.create_expr_tree(:((x[1]^3) + sin(x[1] * x[2]) - (x[3] - x[2])))
+  t_expr_var = M_abstract_expr_tree.create_expr_tree(:((x[1]^3) + sin(x[1] * x[2]) - (x[3] - x[2])))
   t_var = trait_expr_tree.transform_to_expr_tree(t_expr_var)
   res = algo_expr_tree.get_elemental_variable(t_var)
   res2 = algo_expr_tree.get_elemental_variable(t_expr_var)
   @test res == res2
   @test res == [1, 2, 3]
-  t_expr_var1 = abstract_expr_tree.create_expr_tree(:((x[1]^3)))
+  t_expr_var1 = M_abstract_expr_tree.create_expr_tree(:((x[1]^3)))
   t_var1 = trait_expr_tree.transform_to_expr_tree(t_expr_var1)
   res_expr_var1 = algo_expr_tree.get_elemental_variable(t_expr_var1)
   res_var1 = algo_expr_tree.get_elemental_variable(t_var1)
@@ -195,26 +195,26 @@ end
 function expr_tree_factorielle_dif_node(n::Integer)
   if n == 0
     constant_node = M_abstract_expr_node.create_node_expr(:x, 1)
-    new_leaf = abstract_expr_tree.create_expr_tree(constant_node)
+    new_leaf = M_abstract_expr_tree.create_expr_tree(constant_node)
     return new_leaf
   else
     if n % 3 == 0
       op_node = M_abstract_expr_node.create_node_expr(:+)
-      new_node = abstract_expr_tree.create_expr_tree(
+      new_node = M_abstract_expr_tree.create_expr_tree(
         op_node,
         expr_tree_factorielle_dif_node.((n - 1) * ones(Integer, n)),
       )
       return new_node
     elseif n % 3 == 1
       op_node = M_abstract_expr_node.create_node_expr(:-)
-      new_node = abstract_expr_tree.create_expr_tree(
+      new_node = M_abstract_expr_tree.create_expr_tree(
         op_node,
         expr_tree_factorielle_dif_node.((n - 1) * ones(Integer, n)),
       )
       return new_node
     elseif n % 3 == 2
       op_node = M_abstract_expr_node.create_node_expr(:*)
-      new_node = abstract_expr_tree.create_expr_tree(
+      new_node = M_abstract_expr_tree.create_expr_tree(
         op_node,
         expr_tree_factorielle_dif_node.((n - 1) * ones(Integer, n)),
       )
@@ -226,11 +226,11 @@ end
 function expr_tree_factorielle_plus(n::Integer, op::Symbol)
   if n == 0
     constant_node = M_abstract_expr_node.create_node_expr(1)
-    new_leaf = abstract_expr_tree.create_expr_tree(constant_node)
+    new_leaf = M_abstract_expr_tree.create_expr_tree(constant_node)
     return new_leaf
   else
     op_node = M_abstract_expr_node.create_node_expr(op)
-    new_node = abstract_expr_tree.create_expr_tree(
+    new_node = M_abstract_expr_tree.create_expr_tree(
       op_node,
       expr_tree_factorielle_plus.((n - 1) * ones(Integer, n), op),
     )

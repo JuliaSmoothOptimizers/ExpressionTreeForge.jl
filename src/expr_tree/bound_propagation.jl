@@ -1,21 +1,21 @@
 module bound_propagations
 
-using ..abstract_expr_tree
+using ..M_abstract_expr_tree
 using ..trait_tree, ..trait_expr_tree, ..M_trait_expr_node
 using ..M_implementation_tree, ..implementation_complete_expr_tree
 
-bound_tree{T} = M_implementation_tree.Type_node{abstract_expr_tree.bounds{T}}
+bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
 
-@inline craete_empty_bounds(t::DataType) = bounds{t}(-Inf, Inf)
+@inline craete_empty_bounds(t::DataType) = Bounds{t}(-Inf, Inf)
 
 @inline create_bound_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
   return bound_tree{type}(
-    abstract_expr_tree.bounds{type}((type)(0), (type)(0)),
+    M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)),
     create_bound_tree.(trait_tree.get_children(tree)),
   )
 
 @inline create_bound_tree(cst::T, type = Float64::DataType) where {T <: Number} =
-  return bound_tree{type}(abstract_expr_tree.bounds{type}((type)(0), (type)(0)), [])
+  return bound_tree{type}(M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)), [])
 
 """
     set_bounds!(tree,bound_tre)
@@ -68,7 +68,7 @@ function set_bounds!(
   end
 end
 
-@inline bound_to_tuple(b::abstract_expr_tree.bounds{T}) where {T <: Number} =
+@inline bound_to_tuple(b::M_abstract_expr_tree.Bounds{T}) where {T <: Number} =
   (b.inf_bound, b.sup_bound)
 
 @inline get_bound(b::bound_tree{T}) where {T <: Number} = bound_to_tuple(trait_tree.get_node(b))

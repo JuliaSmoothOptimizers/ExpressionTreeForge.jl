@@ -1,11 +1,11 @@
 module implementation_expr_tree
 
 using ..M_abstract_expr_node, ..M_trait_expr_node
-using ..abstract_expr_tree
+using ..M_abstract_expr_tree
 using ..trait_tree
 
-import ..abstract_expr_tree.create_expr_tree,
-  ..abstract_expr_tree.create_Expr, ..abstract_expr_tree.create_Expr2
+import ..M_abstract_expr_tree.create_expr_tree,
+  ..M_abstract_expr_tree.create_Expr, ..M_abstract_expr_tree.create_Expr2
 import ..interface_expr_tree._inverse_expr_tree
 import ..M_implementation_tree.Type_node
 import ..interface_expr_tree._get_expr_node,
@@ -67,7 +67,7 @@ _get_expr_children(t::t_expr_tree) = trait_tree.get_children(t)
 
 function _inverse_expr_tree(t::t_expr_tree)
   op_minus = M_abstract_expr_node.create_node_expr(:-)
-  new_node = abstract_expr_tree.create_expr_tree(op_minus, [t])
+  new_node = M_abstract_expr_tree.create_expr_tree(op_minus, [t])
   return new_node
 end
 
@@ -85,7 +85,7 @@ function Base.copy(ex::t_expr_tree)
   nd = trait_tree.get_node(ex)
   ch = trait_tree.get_children(ex)
   if isempty(ch)
-    leaf = abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(nd))
+    leaf = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(nd))
     return leaf
   else
     res_ch = Base.copy.(ch)

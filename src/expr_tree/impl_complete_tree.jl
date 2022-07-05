@@ -2,12 +2,12 @@ module implementation_complete_expr_tree
 
 import Base.==
 
-using ..M_abstract_expr_node, ..abstract_expr_tree
+using ..M_abstract_expr_node, ..M_abstract_expr_tree
 using ..trait_tree, ..M_trait_expr_node
 using ..M_implementation_convexity_type, ..implementation_expr_tree
 using ..interface_expr_tree
 
-import ..abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
+import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..interface_expr_tree._inverse_expr_tree
 import ..M_implementation_tree.Type_node
 import ..interface_expr_tree:
@@ -17,24 +17,24 @@ export complete_node
 
 mutable struct complete_node{T <: Number}
   op::M_abstract_expr_node.Abstract_expr_node
-  bounds::abstract_expr_tree.bounds{T}
+  bounds::M_abstract_expr_tree.Bounds{T}
   convexity_status::M_implementation_convexity_type.Convexity_wrapper
 end
 
 @inline create_complete_node(
   op::Abstract_expr_node,
-  bounds::abstract_expr_tree.bounds{T},
+  bounds::M_abstract_expr_tree.Bounds{T},
   cvx_st::M_implementation_convexity_type.Convexity_wrapper,
 ) where {T <: Number} = complete_node{T}(op, bounds, cvx_st)
 
 @inline create_complete_node(
   op::Abstract_expr_node,
-  bounds::abstract_expr_tree.bounds{T},
+  bounds::M_abstract_expr_tree.Bounds{T},
 ) where {T <: Number} =
   create_complete_node(op, bounds, M_implementation_convexity_type.init_conv_status())
 
 @inline create_complete_node(op::Abstract_expr_node, bi::T, bs::T) where {T <: Number} =
-  create_complete_node(op, abstract_expr_tree.bounds{T}(bi, bs))
+  create_complete_node(op, M_abstract_expr_tree.Bounds{T}(bi, bs))
 
 @inline create_complete_node(op::Abstract_expr_node, t = Float64::DataType) =
   create_complete_node(op, (t)(-Inf), (t)(Inf))
@@ -44,10 +44,10 @@ end
 @inline get_bounds_from_node(cmp_nope::complete_node) = cmp_nope.bounds
 
 @inline set_bound!(node::complete_node{T}, bi::T, bs::T) where {T <: Number} =
-  abstract_expr_tree.set_bound!(node.bounds, bi, bs)
+  M_abstract_expr_tree.set_bound!(node.bounds, bi, bs)
 
 @inline get_bounds(node::complete_node{T}) where {T <: Number} =
-  abstract_expr_tree.get_bounds(node.bounds)
+  M_abstract_expr_tree.get_bounds(node.bounds)
 
 @inline get_convexity_status(node::complete_node{T}) where {T <: Number} =
   M_implementation_convexity_type.get_convexity_wrapper(node.convexity_status)
@@ -89,13 +89,13 @@ end
 @inline create_expr_tree(
   field::complete_node{T},
   children::Vector{complete_expr_tree{T}},
-) where {T <: Number} = abstract_expr_tree.create_expr_tree(
+) where {T <: Number} = M_abstract_expr_tree.create_expr_tree(
   get_op_from_node(field),
   Vector{implementation_expr_tree.t_expr_tree}(create_expr_tree.(children)),
 )
 
 @inline create_expr_tree(field::complete_node{T}) where {T <: Number} =
-  abstract_expr_tree.create_expr_tree(get_op_from_node(field))::implementation_expr_tree.t_expr_tree
+  M_abstract_expr_tree.create_expr_tree(get_op_from_node(field))::implementation_expr_tree.t_expr_tree
 
 @inline _get_expr_node(t::complete_expr_tree) = get_op_from_node(trait_tree.get_node(t))
 
@@ -130,7 +130,7 @@ end
 
 function _inverse_expr_tree(t::complete_expr_tree{T}) where {T <: Number}
   op_minus = M_abstract_expr_node.create_node_expr(:-)
-  bounds = abstract_expr_tree.create_empty_bounds(T)
+  bounds = M_abstract_expr_tree.create_empty_bounds(T)
   node = create_complete_node(op_minus, bounds)
   return create_complete_expr_tree(node, [t])
 end

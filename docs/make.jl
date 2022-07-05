@@ -2,7 +2,7 @@ using Documenter
 using ExpressionTreeForge
 
 using ExpressionTreeForge:
-  abstract_expr_tree,
+  M_abstract_expr_tree,
   trait_expr_tree,
   interface_expr_tree,
   implementation_pre_compiled_tree,
@@ -46,7 +46,7 @@ using ExpressionTreeForge:
 makedocs(
   modules = [
     ExpressionTreeForge,
-    abstract_expr_tree,
+    M_abstract_expr_tree,
     trait_expr_tree,
     interface_expr_tree,
     implementation_pre_compiled_tree,

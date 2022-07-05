@@ -1,7 +1,7 @@
 module convexity_detection
 
 using ..M_implementation_convexity_type
-using ..abstract_expr_tree
+using ..M_abstract_expr_tree
 using ..trait_tree, ..trait_expr_tree, ..M_trait_expr_node
 using ..M_implementation_tree,
   ..implementation_complete_expr_tree, ..implementation_complete_expr_tree

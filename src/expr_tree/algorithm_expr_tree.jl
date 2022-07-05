@@ -2,7 +2,7 @@ module algo_expr_tree
 using SparseArrays
 
 using ..M_trait_expr_node, ..trait_expr_tree, ..trait_tree
-using ..abstract_expr_tree, ..M_abstract_expr_node, ..M_abstract_tree
+using ..M_abstract_expr_tree, ..M_abstract_expr_node, ..M_abstract_tree
 using ..M_implementation_tree, ..M_implementation_type_expr
 using ..hl_trait_expr_tree
 using ..implementation_expr_tree

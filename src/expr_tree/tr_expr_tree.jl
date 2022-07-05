@@ -2,7 +2,7 @@ module trait_expr_tree
 
 using ModelingToolkit
 using Base.Threads
-using ..abstract_expr_tree,
+using ..M_abstract_expr_tree,
   ..implementation_expr_tree,
   ..implementation_complete_expr_tree,
   ..implementation_pre_compiled_tree
@@ -20,7 +20,7 @@ export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
 struct type_expr_tree end
 struct type_not_expr_tree end
 
-@inline is_expr_tree(a::abstract_expr_tree.AbstractExprTree) = type_expr_tree()
+@inline is_expr_tree(a::M_abstract_expr_tree.AbstractExprTree) = type_expr_tree()
 @inline is_expr_tree(a::t_expr_tree) = type_expr_tree()
 @inline is_expr_tree(a::Expr) = type_expr_tree()
 @inline is_expr_tree(a::Number) = type_expr_tree()
@@ -41,7 +41,7 @@ struct type_not_expr_tree end
 @inline is_expr_tree(a::ModelingToolkit.Variable) = type_expr_tree()
 @inline is_expr_tree(a::Any) = type_not_expr_tree()
 function is_expr_tree(t::DataType)
-  if t == abstract_expr_tree.AbstractExprTree || t == t_expr_tree || t == Expr || t == Number
+  if t == M_abstract_expr_tree.AbstractExprTree || t == t_expr_tree || t == Expr || t == Number
     type_expr_tree()
   else
     type_not_expr_tree()
@@ -127,14 +127,14 @@ This function transform an expr_tree and transform it in Expr.
 @inline _transform_to_Expr(::trait_expr_tree.type_not_expr_tree, ex) =
   error("notre parametre n'est pas un arbre d'expression")
 
-@inline _transform_to_Expr(ex) = abstract_expr_tree.create_Expr(ex)
+@inline _transform_to_Expr(ex) = M_abstract_expr_tree.create_Expr(ex)
 
 @inline transform_to_Expr2(ex) = _transform_to_Expr2(trait_expr_tree.is_expr_tree(ex), ex)
 
 @inline _transform_to_Expr2(::trait_expr_tree.type_expr_tree, ex) = _transform_to_Expr2(ex)
 @inline _transform_to_Expr2(::trait_expr_tree.type_not_expr_tree, ex) =
   error("notre parametre n'est pas un arbre d'expression")
-@inline _transform_to_Expr2(ex) = abstract_expr_tree.create_Expr2(ex)
+@inline _transform_to_Expr2(ex) = M_abstract_expr_tree.create_Expr2(ex)
 
 """
   expr_tree_to_create(arbre créé, arbre d'origine)
