@@ -1,24 +1,24 @@
 
-module hl_trait_expr_tree
+module hl_M_trait_expr_tree
 
 import ..interface_expr_tree._expr_tree_to_create
 
-using ..trait_expr_tree, ..M_trait_expr_node
+using ..M_trait_expr_tree, ..M_trait_expr_node
 using ..implementation_expr_tree,
   ..implementation_expr_tree_Expr, ..implementation_complete_expr_tree
 
 @inline _expr_tree_to_create(
   original_ex::implementation_expr_tree.t_expr_tree,
   tree_of_needed_type::Expr,
-) = trait_expr_tree.transform_to_Expr(original_ex)
+) = M_trait_expr_tree.transform_to_Expr(original_ex)
 @inline _expr_tree_to_create(
   original_ex::implementation_expr_tree.t_expr_tree,
   tree_of_needed_type::implementation_expr_tree.t_expr_tree,
 ) = original_ex
 
 function _cast_type_of_constant(ex::implementation_expr_tree.t_expr_tree, t::DataType)
-  ch = trait_expr_tree.get_expr_children(ex)
-  nd = trait_expr_tree.get_expr_node(ex)
+  ch = M_trait_expr_tree.get_expr_children(ex)
+  nd = M_trait_expr_tree.get_expr_node(ex)
   if isempty(ch)
     node = M_trait_expr_node._cast_constant!(nd, t)
     return implementation_expr_tree.create_expr_tree(node)
@@ -33,9 +33,9 @@ function _cast_type_of_constant(ex::implementation_expr_tree.t_expr_tree, t::Dat
 end
 
 function _cast_type_of_constant(ex::Expr, t::DataType)
-  ch = trait_expr_tree.get_expr_children(ex)
+  ch = M_trait_expr_tree.get_expr_children(ex)
   for i = 1:length(ch)
-    node_i = trait_expr_tree.get_expr_node(ch[i])
+    node_i = M_trait_expr_tree.get_expr_node(ch[i])
     if M_trait_expr_node.node_is_constant(node_i)
       ex.args[i + 1] = M_trait_expr_node._cast_constant!(i, t) #manipulation assez bas niveau des Expr
     # @show i, ch[i]
@@ -49,8 +49,8 @@ function _cast_type_of_constant(
   ex::implementation_complete_expr_tree.complete_expr_tree,
   t::DataType,
 )
-  ch = trait_expr_tree.get_expr_children(ex)
-  nd = trait_expr_tree.get_expr_node(ex)
+  ch = M_trait_expr_tree.get_expr_children(ex)
+  nd = M_trait_expr_tree.get_expr_node(ex)
   if isempty(ch)
     treated_nd = M_trait_expr_node._cast_constant!(nd, t)
     new_nd = implementation_complete_expr_tree.create_complete_node(treated_nd, t)

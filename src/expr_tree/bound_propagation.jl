@@ -1,7 +1,7 @@
 module bound_propagations
 
 using ..M_abstract_expr_tree
-using ..trait_tree, ..trait_expr_tree, ..M_trait_expr_node
+using ..trait_tree, ..M_trait_expr_tree, ..M_trait_expr_node
 using ..M_implementation_tree, ..implementation_complete_expr_tree
 
 bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
@@ -51,7 +51,7 @@ function set_bounds!(
   tree::implementation_complete_expr_tree.complete_expr_tree{T},
 ) where {T <: Number}
   node = trait_tree.get_node(tree)
-  op = trait_expr_tree._get_expr_node(tree)
+  op = M_trait_expr_tree._get_expr_node(tree)
   if M_trait_expr_node.node_is_operator(op) == false
     (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(op, T)
     implementation_complete_expr_tree.set_bound!(node, inf_bound_node, sup_bound_node)

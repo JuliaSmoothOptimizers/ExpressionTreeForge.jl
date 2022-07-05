@@ -3,7 +3,7 @@ using ExpressionTreeForge
 
 using ExpressionTreeForge:
   M_abstract_expr_tree,
-  trait_expr_tree,
+  M_trait_expr_tree,
   interface_expr_tree,
   implementation_pre_compiled_tree,
   implementation_pre_n_compiled_tree,
@@ -47,7 +47,7 @@ makedocs(
   modules = [
     ExpressionTreeForge,
     M_abstract_expr_tree,
-    trait_expr_tree,
+    M_trait_expr_tree,
     interface_expr_tree,
     implementation_pre_compiled_tree,
     implementation_pre_n_compiled_tree,

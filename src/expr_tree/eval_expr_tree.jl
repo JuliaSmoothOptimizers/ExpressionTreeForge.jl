@@ -1,7 +1,7 @@
 module M_evaluation_expr_tree
 using ForwardDiff, ReverseDiff
 
-using ..trait_expr_tree, ..M_trait_expr_node
+using ..M_trait_expr_tree, ..M_trait_expr_node
 using ..implementation_expr_tree,
   ..implementation_complete_expr_tree, ..implementation_pre_compiled_tree
 using ..M_abstract_expr_node
@@ -15,44 +15,44 @@ using ..implementation_pre_n_compiled_tree
   (x::AbstractVector{} -> evaluate_expr_tree(a, view(x, elmt_var)))
 
 @inline evaluate_expr_tree(a::Any, x::AbstractVector{T}) where {T <: Number} =
-  _evaluate_expr_tree(a, trait_expr_tree.is_expr_tree(a), x)
+  _evaluate_expr_tree(a, M_trait_expr_tree.is_expr_tree(a), x)
 
 @inline evaluate_expr_tree(a::Any, x::AbstractVector) =
-  _evaluate_expr_tree(a, trait_expr_tree.is_expr_tree(a), x)
+  _evaluate_expr_tree(a, M_trait_expr_tree.is_expr_tree(a), x)
 
 @inline evaluate_expr_tree(a::Any, x::AbstractArray) =
-  _evaluate_expr_tree(a, trait_expr_tree.is_expr_tree(a), x)
+  _evaluate_expr_tree(a, M_trait_expr_tree.is_expr_tree(a), x)
 
 @inline _evaluate_expr_tree(
   a,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = error(" This is not an Expr tree")
 
 @inline _evaluate_expr_tree(
   a,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = _evaluate_expr_tree(a, x)
 
-@inline _evaluate_expr_tree(a, ::trait_expr_tree.type_not_expr_tree, x::AbstractVector) =
+@inline _evaluate_expr_tree(a, ::M_trait_expr_tree.Type_not_expr_tree, x::AbstractVector) =
   error(" This is not an Expr tree")
 
-@inline _evaluate_expr_tree(a, ::trait_expr_tree.type_expr_tree, x::AbstractVector) =
+@inline _evaluate_expr_tree(a, ::M_trait_expr_tree.Type_expr_tree, x::AbstractVector) =
   _evaluate_expr_tree(a, x)
 
-@inline _evaluate_expr_tree(a, ::trait_expr_tree.type_not_expr_tree, x::AbstractArray) =
+@inline _evaluate_expr_tree(a, ::M_trait_expr_tree.Type_not_expr_tree, x::AbstractArray) =
   error(" This is not an Expr tree")
 
-@inline _evaluate_expr_tree(a, ::trait_expr_tree.type_expr_tree, x::AbstractArray) =
+@inline _evaluate_expr_tree(a, ::M_trait_expr_tree.Type_expr_tree, x::AbstractArray) =
   _evaluate_expr_tree(a, x)
 
 function _evaluate_expr_tree(expr_tree::Y, x::AbstractVector{T}) where {T <: Number} where {Y}
-  nd = trait_expr_tree._get_expr_node(expr_tree)
+  nd = M_trait_expr_tree._get_expr_node(expr_tree)
   if M_trait_expr_node.node_is_operator(nd) == false
     M_trait_expr_node.evaluate_node(nd, x)
   else
-    ch = trait_expr_tree._get_expr_children(expr_tree)
+    ch = M_trait_expr_tree._get_expr_children(expr_tree)
     n = length(ch)
     temp = Vector{T}(undef, n)
     map!(y -> evaluate_expr_tree(y, x), temp, ch)
@@ -82,11 +82,11 @@ end
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
+  op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
   if M_trait_expr_node.node_is_operator(op)::Bool == false
     return M_trait_expr_node._evaluate_node(op, x)
   else
-    children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+    children = M_trait_expr_tree.get_expr_children(expr_tree_cmp)
     n = length(children)::Int
     temp = Vector{T}(undef, n)
     map!(
@@ -111,14 +111,14 @@ function _evaluate_expr_tree_multiple_points(
   expr_tree::implementation_expr_tree.t_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree)::M_trait_expr_node.Abstract_expr_node
+  op = M_trait_expr_tree.get_expr_node(expr_tree)::M_trait_expr_node.Abstract_expr_node
   number_x = length(xs)
   if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.Abstract_expr_node)::Bool == false
     temp = Vector{T}(undef, number_x)
     map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
-    children = trait_expr_tree.get_expr_children(expr_tree)
+    children = M_trait_expr_tree.get_expr_children(expr_tree)
     n = length(children)
     lx = length(xs[1])
     res = Vector{T}(undef, number_x)
@@ -146,17 +146,17 @@ end
   implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x_view)
 
 @inline evaluate_expr_tree_multiple_points(a::Any, x::Array{Array{T, 1}, 1}) where {T <: Number} =
-  _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+  _evaluate_expr_tree_multiple_points(a, M_trait_expr_tree.is_expr_tree(a), x)
 
 @inline _evaluate_expr_tree_multiple_points(
   a,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::Array{Array{T, 1}, 1},
 ) where {T <: Number} = error(" This is not an Expr tree")
 
 @inline _evaluate_expr_tree_multiple_points(
   a,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::Array{Array{T, 1}, 1},
 ) where {T <: Number} = _evaluate_expr_tree_multiple_points(a, x)
 
@@ -164,17 +164,17 @@ end
   a::Any,
   x::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number} =
-  _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+  _evaluate_expr_tree_multiple_points(a, M_trait_expr_tree.is_expr_tree(a), x)
 
 @inline _evaluate_expr_tree_multiple_points(
   a,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number} = error(" This is not an Expr tree")
 
 @inline _evaluate_expr_tree_multiple_points(
   a,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number} = _evaluate_expr_tree_multiple_points(a, x)
 
@@ -182,17 +182,17 @@ end
   a::Any,
   x::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} =
-  _evaluate_expr_tree_multiple_points(a, trait_expr_tree.is_expr_tree(a), x)
+  _evaluate_expr_tree_multiple_points(a, M_trait_expr_tree.is_expr_tree(a), x)
 
 @inline _evaluate_expr_tree_multiple_points(
   a,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} = error(" This is not an Expr tree")
 
 @inline _evaluate_expr_tree_multiple_points(
   a,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number} = _evaluate_expr_tree_multiple_points(a, x)
 
@@ -200,14 +200,14 @@ end
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{Array{T, 1}, 1},
 ) where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
+  op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
   number_x = length(xs)
   if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.Abstract_expr_node)::Bool == false
     temp = Vector{T}(undef, number_x)
     map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
-    children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+    children = M_trait_expr_tree.get_expr_children(expr_tree_cmp)
     n = length(children)
     lx = length(xs[1])
     res = Vector{T}(undef, number_x)
@@ -226,14 +226,14 @@ function _evaluate_expr_tree_multiple_points(
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, true}, 1},
 ) where {N} where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
+  op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
   number_x = length(xs)
   if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.Abstract_expr_node)::Bool == false
     temp = Vector{T}(undef, number_x)
     map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
-    children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+    children = M_trait_expr_tree.get_expr_children(expr_tree_cmp)
     n = length(children)
     lx = length(xs[1])
     res = Vector{T}(undef, number_x)
@@ -252,14 +252,14 @@ function _evaluate_expr_tree_multiple_points(
   expr_tree_cmp::implementation_complete_expr_tree.complete_expr_tree,
   xs::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
 ) where {N} where {T <: Number}
-  op = trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
+  op = M_trait_expr_tree.get_expr_node(expr_tree_cmp)::M_trait_expr_node.Abstract_expr_node
   number_x = length(xs)
   if M_trait_expr_node.node_is_operator(op::M_trait_expr_node.Abstract_expr_node)::Bool == false
     temp = Vector{T}(undef, number_x)
     map!(x -> M_trait_expr_node._evaluate_node(op, x), temp, xs)
     return temp
   else
-    children = trait_expr_tree.get_expr_children(expr_tree_cmp)
+    children = M_trait_expr_tree.get_expr_children(expr_tree_cmp)
     n = length(children)
     lx = length(xs[1])
     res = Vector{T}(undef, number_x)
@@ -280,21 +280,21 @@ Evaluation the gradient of the function represented by expr_tree at the point x
 """
 @inline calcul_gradient_expr_tree(a::Any, x::Vector{}) =
   _calcul_gradient_expr_tree(a, is_expr_tree(a), x)
-@inline _calcul_gradient_expr_tree(a::Any, ::trait_expr_tree.type_not_expr_tree, x::Vector{}) =
+@inline _calcul_gradient_expr_tree(a::Any, ::M_trait_expr_tree.Type_not_expr_tree, x::Vector{}) =
   error("ce n'est pas un arbre d'expression")
-@inline _calcul_gradient_expr_tree(a::Any, ::trait_expr_tree.type_expr_tree, x::Vector{}) =
+@inline _calcul_gradient_expr_tree(a::Any, ::M_trait_expr_tree.Type_expr_tree, x::Vector{}) =
   _calcul_gradient_expr_tree(a, x)
 @inline calcul_gradient_expr_tree(a::Any, x::Vector{}, elmt_var::Vector{Int}) =
   _calcul_gradient_expr_tree(a, is_expr_tree(a), x, elmt_var)
 @inline _calcul_gradient_expr_tree(
   a::Any,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = error("ce n'est pas un arbre d'expression")
 @inline _calcul_gradient_expr_tree(
   a::Any,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = _calcul_gradient_expr_tree(a, x, elmt_var)
@@ -307,19 +307,19 @@ Evaluation the gradient of the function represented by expr_tree at the point x
   _calcul_gradient_expr_tree2(a, is_expr_tree(a), x, elmt_var)
 @inline calcul_gradient_expr_tree2(a::Any, x::Vector{}) =
   _calcul_gradient_expr_tree2(a, is_expr_tree(a), x)
-@inline _calcul_gradient_expr_tree2(a::Any, ::trait_expr_tree.type_not_expr_tree, x::Vector{}) =
+@inline _calcul_gradient_expr_tree2(a::Any, ::M_trait_expr_tree.Type_not_expr_tree, x::Vector{}) =
   error("ce n'est pas un arbre d'expression")
-@inline _calcul_gradient_expr_tree2(a::Any, ::trait_expr_tree.type_expr_tree, x::Vector{}) =
+@inline _calcul_gradient_expr_tree2(a::Any, ::M_trait_expr_tree.Type_expr_tree, x::Vector{}) =
   _calcul_gradient_expr_tree2(a, x)
 @inline _calcul_gradient_expr_tree2(
   a::Any,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = error("ce n'est pas un arbre d'expression")
 @inline _calcul_gradient_expr_tree2(
   a::Any,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = _calcul_gradient_expr_tree2(a, x, elmt_var)
@@ -334,9 +334,9 @@ Compute the hessian matrix of the function represented by expr_tree at the point
 """
 @inline calcul_Hessian_expr_tree(a::Any, x::Vector{}) =
   _calcul_Hessian_expr_tree(a, is_expr_tree(a), x)
-@inline _calcul_Hessian_expr_tree(a::Any, ::trait_expr_tree.type_not_expr_tree, x::Vector{}) =
+@inline _calcul_Hessian_expr_tree(a::Any, ::M_trait_expr_tree.Type_not_expr_tree, x::Vector{}) =
   error("ce n'est pas un arbre d'expression")
-@inline _calcul_Hessian_expr_tree(a::Any, ::trait_expr_tree.type_expr_tree, x::Vector{}) =
+@inline _calcul_Hessian_expr_tree(a::Any, ::M_trait_expr_tree.Type_expr_tree, x::Vector{}) =
   _calcul_Hessian_expr_tree(a, x)
 @inline _calcul_Hessian_expr_tree(expr_tree, x::Vector{}) =
   ForwardDiff.hessian(evaluate_expr_tree(expr_tree), x)
@@ -354,15 +354,15 @@ Fonction de test pour améliorer
 @inline evaluate_expr_tree2(
   a::implementation_expr_tree.t_expr_tree,
   x::AbstractVector{T},
-) where {T <: Number} = _evaluate_expr_tree2(a, trait_expr_tree.is_expr_tree(a), x)
+) where {T <: Number} = _evaluate_expr_tree2(a, M_trait_expr_tree.is_expr_tree(a), x)
 @inline _evaluate_expr_tree2(
   a::implementation_expr_tree.t_expr_tree,
-  ::trait_expr_tree.type_not_expr_tree,
+  ::M_trait_expr_tree.Type_not_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = error(" This is not an Expr tree")
 @inline _evaluate_expr_tree2(
   a::implementation_expr_tree.t_expr_tree,
-  ::trait_expr_tree.type_expr_tree,
+  ::M_trait_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = _evaluate_expr_tree2(a, x)
 function _evaluate_expr_tree2(

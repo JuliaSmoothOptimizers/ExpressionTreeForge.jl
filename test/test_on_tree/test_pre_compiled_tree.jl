@@ -20,7 +20,7 @@ complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
 
 x = ones(Float64, n)
 compiled_tree = ExpressionTreeForge.create_pre_compiled_tree(expr_tree, x)
-@show ExpressionTreeForge.trait_expr_tree.is_expr_tree(compiled_tree)
+@show ExpressionTreeForge.M_trait_expr_tree.is_expr_tree(compiled_tree)
 
 t = Float64
 n_eval = 200

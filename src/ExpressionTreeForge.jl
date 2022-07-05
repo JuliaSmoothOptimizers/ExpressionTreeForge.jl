@@ -5,7 +5,7 @@ include("node_expr_tree/ordered_include.jl")
 include("tree/ordered_include.jl")
 include("expr_tree/ordered_include.jl")
 
-using .algo_expr_tree, .M_evaluation_expr_tree, .trait_expr_tree, .M_implementation_type_expr
+using .algo_expr_tree, .M_evaluation_expr_tree, .M_trait_expr_tree, .M_implementation_type_expr
 using .algo_tree
 using .implementation_complete_expr_tree,
   .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
@@ -103,25 +103,25 @@ type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 """
     transform_to_Expr(expr_tree)
 
-Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait defined in trait_expr_tree.
+Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait defined in M_trait_expr_tree.
 ATTENTION: This function return an Expr with variable as MathOptInterface.VariableIndex
 In order to get an standard Expr use transform_to_Expr_julia.
 """
-@inline transform_to_Expr(e::Any) = trait_expr_tree.transform_to_Expr(e::Any)
+@inline transform_to_Expr(e::Any) = M_trait_expr_tree.transform_to_Expr(e::Any)
 
 """
     transform_to_Expr_julia(expr_tree)
 
-Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in trait_expr_tree.
+Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in M_trait_expr_tree.
 """
-@inline transform_to_Expr_julia(e::Any) = trait_expr_tree.transform_to_Expr2(e::Any)
+@inline transform_to_Expr_julia(e::Any) = M_trait_expr_tree.transform_to_Expr2(e::Any)
 
 """
     transform_to_expr_tree(Expr)
 
-Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in trait_expr_tree
+Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in M_trait_expr_tree
 """
-@inline transform_to_expr_tree(e::Any) = trait_expr_tree.transform_to_expr_tree(e)::t_expr_tree
+@inline transform_to_expr_tree(e::Any) = M_trait_expr_tree.transform_to_expr_tree(e)::t_expr_tree
 
 """
     delete_imbricated_plus(e)
