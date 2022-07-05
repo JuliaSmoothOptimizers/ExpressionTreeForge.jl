@@ -7,9 +7,9 @@ include("expr_tree/ordered_include.jl")
 
 using .algo_expr_tree, .M_evaluation_expr_tree, .M_trait_expr_tree, .M_implementation_type_expr
 using .algo_tree
-using .implementation_complete_expr_tree,
+using .M_implementation_complete_expr_tree,
   .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
-using .bound_propagations, .M_convexity_detection
+using .M_bound_propagations, .M_convexity_detection
 
 export create_bound_tree, get_bound, set_bounds!
 export complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree, type_calculus_tree
@@ -22,13 +22,13 @@ export delete_imbricated_plus,
   get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
 export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
-@inline create_bound_tree(t) = bound_propagations.create_bound_tree(t)
+@inline create_bound_tree(t) = M_bound_propagations.create_bound_tree(t)
 
-@inline set_bounds!(tree, bound_tree) = bound_propagations.set_bounds!(tree, bound_tree)
+@inline set_bounds!(tree, bound_tree) = M_bound_propagations.set_bounds!(tree, bound_tree)
 
-@inline set_bounds!(tree) = bound_propagations.set_bounds!(tree)
+@inline set_bounds!(tree) = M_bound_propagations.set_bounds!(tree)
 
-@inline get_bound(bound_tree) = bound_propagations.get_bound(bound_tree)
+@inline get_bound(bound_tree) = M_bound_propagations.get_bound(bound_tree)
 
 convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
 
@@ -50,7 +50,7 @@ convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
 @inline get_convexity_status(cvx_tree::M_convexity_detection.Convexity_tree) =
   M_convexity_detection.get_convexity_status(cvx_tree)
 
-@inline get_convexity_status(complete_tree::implementation_complete_expr_tree.complete_expr_tree) =
+@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.complete_expr_tree) =
   M_convexity_detection.get_convexity_status(complete_tree)
 
 @inline constant_type() = M_implementation_convexity_type.constant_type()
@@ -67,12 +67,12 @@ convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
 @inline is_concave(c) = M_implementation_convexity_type.is_concave(c)
 @inline is_unknown(c) = M_implementation_convexity_type.is_unknown(c)
 
-t_expr_tree = implementation_expr_tree.t_expr_tree
+Type_expr_tree = M_implementation_expr_tree.Type_expr_tree
 
 @inline create_complete_tree(tree) =
-  implementation_complete_expr_tree.create_complete_expr_tree(tree)
+  M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
-complete_expr_tree{T <: Number} = implementation_complete_expr_tree.complete_expr_tree{T}
+complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.complete_expr_tree{T}
 
 pre_compiled_tree{T <: Number} = implementation_pre_compiled_tree.pre_compiled_tree{T}
 
@@ -121,7 +121,7 @@ Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait 
 
 Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in M_trait_expr_tree
 """
-@inline transform_to_expr_tree(e::Any) = M_trait_expr_tree.transform_to_expr_tree(e)::t_expr_tree
+@inline transform_to_expr_tree(e::Any) = M_trait_expr_tree.transform_to_expr_tree(e)::Type_expr_tree
 
 """
     delete_imbricated_plus(e)
@@ -262,7 +262,7 @@ julia> calcul_Hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
 
 Return a evaluation function of ex with better performance than the actual evaluate_expr_tree.
 """
-@inline get_function_of_evaluation(ex::implementation_expr_tree.t_expr_tree) =
+@inline get_function_of_evaluation(ex::M_implementation_expr_tree.Type_expr_tree) =
   algo_expr_tree.get_function_of_evaluation(ex)
 
 end

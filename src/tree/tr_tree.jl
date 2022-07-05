@@ -1,4 +1,4 @@
-module trait_tree
+module M_trait_tree
 
 import ..M_abstract_tree.AbstractTree
 import ..M_interface_tree: _get_node, _get_children
@@ -47,7 +47,7 @@ end  # module trait_tree
 
 module algo_tree
 
-using ..trait_tree
+using ..M_trait_tree
 export printer_tree
 
 function printer_tree(tree, deepth = 0)

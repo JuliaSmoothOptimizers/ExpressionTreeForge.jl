@@ -1,12 +1,12 @@
-using ..M_trait_expr_tree, ..M_abstract_expr_tree, ..trait_tree, ..M_abstract_expr_node
-using ..implementation_expr_tree
+using ..M_trait_expr_tree, ..M_abstract_expr_tree, ..M_abstract_expr_node
+using ..M_implementation_expr_tree
 
 @testset " Unitary tests about expr_tree" begin
   @test M_abstract_expr_tree.create_expr_tree(:(x[5] + 4)) == :(x[5] + 4)
   @test M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 5)) ==
-        implementation_expr_tree.t_expr_tree(M_abstract_expr_node.create_node_expr(:x, 5), [])
+        M_implementation_expr_tree.Type_expr_tree(M_abstract_expr_node.create_node_expr(:x, 5), [])
   @test M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(4)) ==
-        implementation_expr_tree.t_expr_tree(M_abstract_expr_node.create_node_expr(4), [])
+        M_implementation_expr_tree.Type_expr_tree(M_abstract_expr_node.create_node_expr(4), [])
 
   tree = M_abstract_expr_tree.create_expr_tree(:(x[5] + 4))
   b1 = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, 5))

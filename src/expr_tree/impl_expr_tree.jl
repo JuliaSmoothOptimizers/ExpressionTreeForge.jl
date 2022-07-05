@@ -1,8 +1,8 @@
-module implementation_expr_tree
+module M_implementation_expr_tree
 
 using ..M_abstract_expr_node, ..M_trait_expr_node
 using ..M_abstract_expr_tree
-using ..trait_tree
+using ..M_trait_tree
 
 import ..M_abstract_expr_tree:
   create_expr_tree,
@@ -16,11 +16,13 @@ import ..M_interface_expr_tree:
   _get_real_node,
   _transform_to_expr_tree
 
-t_expr_tree = Type_node{Abstract_expr_node}
+export Type_expr_tree
 
-function create_Expr(t::t_expr_tree)
-  nd = trait_tree.get_node(t)
-  ch = trait_tree.get_children(t)
+Type_expr_tree = Type_node{Abstract_expr_node}
+
+function create_Expr(t::Type_expr_tree)
+  nd = M_trait_tree.get_node(t)
+  ch = M_trait_tree.get_children(t)
   if isempty(ch)
     return M_trait_expr_node.node_to_Expr(nd)
   else
@@ -39,9 +41,9 @@ function create_Expr(t::t_expr_tree)
   end
 end
 
-function create_Expr2(t::t_expr_tree)
-  nd = trait_tree.get_node(t)
-  ch = trait_tree.get_children(t)
+function create_Expr2(t::Type_expr_tree)
+  nd = M_trait_tree.get_node(t)
+  ch = M_trait_tree.get_children(t)
   if isempty(ch)
     return M_trait_expr_node.node_to_Expr2(nd)
   else
@@ -61,21 +63,21 @@ function create_Expr2(t::t_expr_tree)
 end
 
 create_expr_tree(field::T, children::Vector{Type_node{T}}) where {T <: Abstract_expr_node} =
-  length(children) == 0 ? create_expr_tree(field) : t_expr_tree(field, children)
+  length(children) == 0 ? create_expr_tree(field) : Type_expr_tree(field, children)
 
-create_expr_tree(field::T) where {T <: Abstract_expr_node} = t_expr_tree(field, Vector{t_expr_tree}(undef, 0))
+create_expr_tree(field::T) where {T <: Abstract_expr_node} = Type_expr_tree(field, Vector{Type_expr_tree}(undef, 0))
 
-_get_expr_node(t::t_expr_tree) = trait_tree.get_node(t)
+_get_expr_node(t::Type_expr_tree) = M_trait_tree.get_node(t)
 
-_get_expr_children(t::t_expr_tree) = trait_tree.get_children(t)
+_get_expr_children(t::Type_expr_tree) = M_trait_tree.get_children(t)
 
-function _inverse_expr_tree(t::t_expr_tree)
+function _inverse_expr_tree(t::Type_expr_tree)
   op_minus = M_abstract_expr_node.create_node_expr(:-)
   new_node = M_abstract_expr_tree.create_expr_tree(op_minus, [t])
   return new_node
 end
 
-function _get_real_node(ex::t_expr_tree)
+function _get_real_node(ex::Type_expr_tree)
   if isempty(_get_expr_children(ex))
     return ex.field
   else
@@ -83,11 +85,11 @@ function _get_real_node(ex::t_expr_tree)
   end
 end
 
-_transform_to_expr_tree(ex::t_expr_tree) = copy(ex)::t_expr_tree
+_transform_to_expr_tree(ex::Type_expr_tree) = copy(ex)::Type_expr_tree
 
-function Base.copy(ex::t_expr_tree)
-  nd = trait_tree.get_node(ex)
-  ch = trait_tree.get_children(ex)
+function Base.copy(ex::Type_expr_tree)
+  nd = M_trait_tree.get_node(ex)
+  ch = M_trait_tree.get_children(ex)
   if isempty(ch)
     leaf = M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(nd))
     return leaf
@@ -98,6 +100,4 @@ function Base.copy(ex::t_expr_tree)
   end
 end
 
-export t_expr_tree
-
-end  # moduleimplementation_expr_tree
+end  # moduleM_implementation_expr_tree

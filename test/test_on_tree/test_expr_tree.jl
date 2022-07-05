@@ -1,7 +1,7 @@
 using ExpressionTreeForge.M_trait_expr_tree, ExpressionTreeForge.M_trait_type_expr
 using ExpressionTreeForge.M_abstract_expr_node, ExpressionTreeForge.M_abstract_expr_tree
 using ExpressionTreeForge.algo_expr_tree, ExpressionTreeForge.algo_tree
-using ExpressionTreeForge.implementation_expr_tree
+using ExpressionTreeForge.M_implementation_expr_tree
 using ExpressionTreeForge.M_evaluation_expr_tree
 
 @testset "test building of trees and equality" begin
@@ -241,7 +241,7 @@ end
 @testset "test arbres factorielle désimbriqué les + et get_type " begin
   n = 5
   @time test_fac_expr_tree_plus =
-    expr_tree_factorielle_plus(n, :+)::implementation_expr_tree.t_expr_tree
+    expr_tree_factorielle_plus(n, :+)::M_implementation_expr_tree.Type_expr_tree
   test_fac_expr_tree_plus_no_plus = algo_expr_tree.delete_imbricated_plus(test_fac_expr_tree_plus)
   algo_expr_tree.get_type_tree(test_fac_expr_tree_plus)
   res3 = algo_expr_tree.get_elemental_variable(test_fac_expr_tree_plus)

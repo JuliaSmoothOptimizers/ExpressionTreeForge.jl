@@ -1,21 +1,21 @@
-using ExpressionTreeForge.trait_tree,
+using ExpressionTreeForge.M_trait_tree,
   ExpressionTreeForge.M_abstract_tree,
   ExpressionTreeForge.M_implementation_tree,
   ExpressionTreeForge.M_implementation_tree_Expr
 
 @testset "test on tree/tr_tree" begin
   t1 = M_abstract_tree.create_tree(5, [])
-  @test trait_tree.get_node(t1) == 5
-  @test trait_tree.get_children(t1) == []
+  @test M_trait_tree.get_node(t1) == 5
+  @test M_trait_tree.get_children(t1) == []
 
   t2_expr = M_abstract_tree.create_tree(:(5 + 6))
-  @test trait_tree.get_node(t2_expr) == :+
-  @test trait_tree.get_children(t2_expr) == [5, 6]
+  @test M_trait_tree.get_node(t2_expr) == :+
+  @test M_trait_tree.get_children(t2_expr) == [5, 6]
 
-  @test trait_tree.is_type_trait_tree(t2_expr) == trait_tree.Type_trait_tree()
-  @test trait_tree.is_type_trait_tree(:(x[5] + x[4])) == trait_tree.Type_trait_tree()
-  @test trait_tree.is_type_trait_tree(4) == trait_tree.Type_trait_tree()
-  @test trait_tree.is_type_trait_tree(ones(5)) == trait_tree.Type_not_trait_tree()
+  @test M_trait_tree.is_type_trait_tree(t2_expr) == M_trait_tree.Type_trait_tree()
+  @test M_trait_tree.is_type_trait_tree(:(x[5] + x[4])) == M_trait_tree.Type_trait_tree()
+  @test M_trait_tree.is_type_trait_tree(4) == M_trait_tree.Type_trait_tree()
+  @test M_trait_tree.is_type_trait_tree(ones(5)) == M_trait_tree.Type_not_trait_tree()
 end
 
 @testset " test on tree/impl_tree " begin

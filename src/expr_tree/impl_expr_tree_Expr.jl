@@ -1,8 +1,8 @@
-module implementation_expr_tree_Expr
+module M_implementation_expr_tree_Expr
 
 using ..M_abstract_expr_node
 using ..M_abstract_expr_tree
-using ..implementation_expr_tree
+using ..M_implementation_expr_tree
 
 import ..M_abstract_expr_tree:
   create_expr_tree,
@@ -87,18 +87,18 @@ function _transform_to_expr_tree(ex::Expr)
   n_node = _get_expr_node(ex)::M_abstract_expr_node.Abstract_expr_node
   children = _get_expr_children(ex)
   if isempty(children)
-    return M_abstract_expr_tree.create_expr_tree(n_node)::implementation_expr_tree.t_expr_tree
+    return M_abstract_expr_tree.create_expr_tree(n_node)::M_implementation_expr_tree.Type_expr_tree
   else
-    n_children = _transform_to_expr_tree.(children)::Vector{implementation_expr_tree.t_expr_tree}
+    n_children = _transform_to_expr_tree.(children)::Vector{M_implementation_expr_tree.Type_expr_tree}
     return M_abstract_expr_tree.create_expr_tree(
       n_node,
       n_children,
-    )::implementation_expr_tree.t_expr_tree
+    )::M_implementation_expr_tree.Type_expr_tree
   end
 end
 
 _transform_to_expr_tree(ex::Number) = M_abstract_expr_tree.create_expr_tree(
   M_abstract_expr_node.create_node_expr(ex),
-)::implementation_expr_tree.t_expr_tree
+)::M_implementation_expr_tree.Type_expr_tree
 
 end

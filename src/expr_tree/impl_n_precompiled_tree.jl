@@ -1,6 +1,6 @@
 module implementation_pre_n_compiled_tree
 
-using ..M_abstract_expr_node, ..trait_tree, ..implementation_expr_tree, ..M_trait_expr_node
+using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node
 
 mutable struct new_field
   op::M_abstract_expr_node.Abstract_expr_node
@@ -105,7 +105,7 @@ end
   create_eval_n_node(field, Vector{eval_n_node{type}}(undef, 0), n_eval)
 
 function create_pre_n_compiled_tree(
-  tree::implementation_expr_tree.t_expr_tree,
+  tree::M_implementation_expr_tree.Type_expr_tree,
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number}
   view_of_view = big_view(multiple_x_view)
@@ -127,11 +127,11 @@ function big_view(
 end
 
 function _create_pre_n_compiled_tree(
-  tree::implementation_expr_tree.t_expr_tree,
+  tree::M_implementation_expr_tree.Type_expr_tree,
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number}
-  nd = trait_tree.get_node(tree)
-  ch = trait_tree.get_children(tree)
+  nd = M_trait_tree.get_node(tree)
+  ch = M_trait_tree.get_children(tree)
   n_eval = length(multiple_x_view)
   if isempty(ch)
     new_op = M_abstract_expr_node.create_node_expr(nd, multiple_x_view)
@@ -146,7 +146,7 @@ function _create_pre_n_compiled_tree(
 end
 
 function create_pre_n_compiled_tree(
-  tree::implementation_expr_tree.t_expr_tree,
+  tree::M_implementation_expr_tree.Type_expr_tree,
   multiple_x::Vector{Vector{T}},
 ) where {T <: Number}
   new_multiple_x = copy(multiple_x)
@@ -156,11 +156,11 @@ function create_pre_n_compiled_tree(
 end
 
 function _create_pre_n_compiled_tree(
-  tree::implementation_expr_tree.t_expr_tree,
+  tree::M_implementation_expr_tree.Type_expr_tree,
   multiple_x::Vector{Vector{T}},
 ) where {T <: Number}
-  nd = trait_tree.get_node(tree)
-  ch = trait_tree.get_children(tree)
+  nd = M_trait_tree.get_node(tree)
+  ch = M_trait_tree.get_children(tree)
   n_eval = length(multiple_x)
   if isempty(ch)
     new_op = M_abstract_expr_node.create_node_expr(nd, multiple_x)

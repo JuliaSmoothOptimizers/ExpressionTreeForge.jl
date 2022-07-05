@@ -1,6 +1,6 @@
 module implementation_pre_compiled_tree
 
-using ..M_abstract_expr_node, ..trait_tree, ..implementation_expr_tree, ..M_trait_expr_node
+using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node
 
 mutable struct new_field
   op::M_abstract_expr_node.Abstract_expr_node
@@ -55,9 +55,9 @@ end
 
 @inline create_pre_compiled_tree(tree::pre_compiled_tree{T}) where {T <: Number} = tree
 
-function create_pre_compiled_tree(tree::implementation_expr_tree.t_expr_tree, t::DataType = Float64)
-  nd = trait_tree.get_node(tree)
-  ch = trait_tree.get_children(tree)
+function create_pre_compiled_tree(tree::M_implementation_expr_tree.Type_expr_tree, t::DataType = Float64)
+  nd = M_trait_tree.get_node(tree)
+  ch = M_trait_tree.get_children(tree)
   if isempty(ch)
     new_field = create_new_field(nd)
     new_node = create_new_node(new_field, t)
@@ -70,15 +70,15 @@ function create_pre_compiled_tree(tree::implementation_expr_tree.t_expr_tree, t:
 end
 
 create_pre_compiled_tree(
-  tree::implementation_expr_tree.t_expr_tree,
+  tree::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = pre_compiled_tree{T}(_create_pre_compiled_tree(tree, x), x)
 function _create_pre_compiled_tree(
-  tree::implementation_expr_tree.t_expr_tree,
+  tree::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number}
-  nd = trait_tree.get_node(tree)
-  ch = trait_tree.get_children(tree)
+  nd = M_trait_tree.get_node(tree)
+  ch = M_trait_tree.get_children(tree)
   if isempty(ch)
     new_op = M_abstract_expr_node.create_node_expr(nd, x)
     new_field = create_new_field(new_op)
