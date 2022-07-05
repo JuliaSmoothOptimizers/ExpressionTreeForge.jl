@@ -28,12 +28,12 @@ using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
 
-export time_operator
+export Time_operator
 
-mutable struct time_operator <: Abstract_expr_node end
+mutable struct Time_operator <: Abstract_expr_node end
 
 function _node_convexity(
-  op::time_operator,
+  op::Time_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
@@ -101,7 +101,7 @@ function node_convexity_binary_time(
 end
 
 function _node_bound(
-  op::time_operator,
+  op::Time_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {Y <: Number} where {T <: Number}
@@ -124,37 +124,37 @@ function bound_binary_times(bi1::T, bs1::T, bi2::T, bs2::T) where {T <: Number}
   return (bi, bs)
 end
 
-@inline create_node_expr(op::time_operator) = time_operator()
+@inline create_node_expr(op::Time_operator) = Time_operator()
 
-@inline _node_is_operator(op::time_operator) = true
-@inline _node_is_plus(op::time_operator) = false
-@inline _node_is_minus(op::time_operator) = false
-@inline _node_is_times(op::time_operator) = true
-@inline _node_is_power(op::time_operator) = false
-@inline _node_is_sin(op::time_operator) = false
-@inline _node_is_cos(op::time_operator) = false
-@inline _node_is_tan(op::time_operator) = false
+@inline _node_is_operator(op::Time_operator) = true
+@inline _node_is_plus(op::Time_operator) = false
+@inline _node_is_minus(op::Time_operator) = false
+@inline _node_is_times(op::Time_operator) = true
+@inline _node_is_power(op::Time_operator) = false
+@inline _node_is_sin(op::Time_operator) = false
+@inline _node_is_cos(op::Time_operator) = false
+@inline _node_is_tan(op::Time_operator) = false
 
-@inline _node_is_variable(op::time_operator) = false
+@inline _node_is_variable(op::Time_operator) = false
 
-@inline _node_is_constant(op::time_operator) = false
+@inline _node_is_constant(op::Time_operator) = false
 
-@inline _get_type_node(op::time_operator, type_ch::Vector{Type_expr_basic}) =
+@inline _get_type_node(op::Time_operator, type_ch::Vector{Type_expr_basic}) =
   foldl(M_trait_type_expr.type_product, type_ch)
 
-@inline (==)(a::time_operator, b::time_operator) = true
+@inline (==)(a::Time_operator, b::Time_operator) = true
 
-@inline _evaluate_node(op::time_operator, value_ch::AbstractVector{T}) where {T <: Number} =
+@inline _evaluate_node(op::Time_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   foldl(*, value_ch)
 
 @inline _evaluate_node!(
-  op::time_operator,
+  op::Time_operator,
   value_ch::AbstractVector{M_abstract_expr_node.MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, foldl(*, value_ch))
 
 @inline function _evaluate_node!(
-  op::time_operator,
+  op::Time_operator,
   vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{Y}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
@@ -163,6 +163,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::time_operator) = [:*]
+@inline _node_to_Expr(op::Time_operator) = [:*]
 
 end

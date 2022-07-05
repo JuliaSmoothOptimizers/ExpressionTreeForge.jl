@@ -29,15 +29,15 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export power_operator
+export Power_operator
 
-mutable struct power_operator{T <: Number} <: Abstract_expr_node
+mutable struct Power_operator{T <: Number} <: Abstract_expr_node
   index::T
 end
 
 @inline my_and(a::Bool, b::Bool) = (a && b)
 function _node_convexity(
-  op::power_operator{Y},
+  op::Power_operator{Y},
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {Y <: Number} where {T <: Number}
@@ -94,7 +94,7 @@ function _node_convexity(
 end
 
 function _node_bound(
-  op::power_operator{Y},
+  op::Power_operator{Y},
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {Y <: Number} where {T <: Number}
@@ -123,38 +123,38 @@ function _node_bound(
   end
 end
 
-@inline create_node_expr(op::Symbol, arg::T, ::Bool) where {T <: Number} = power_operator{T}(arg)
-@inline create_node_expr(op::power_operator{T}) where {T <: Number} = power_operator{T}(op.index)
+@inline create_node_expr(op::Symbol, arg::T, ::Bool) where {T <: Number} = Power_operator{T}(arg)
+@inline create_node_expr(op::Power_operator{T}) where {T <: Number} = Power_operator{T}(op.index)
 @inline create_node_expr(op::Symbol, arg::T, x::AbstractVector{T}, ::Bool) where {T <: Number} =
-  power_operator{T}(arg)
-@inline create_node_expr(op::power_operator{T}, x::AbstractVector{T}) where {T <: Number} =
-  power_operator{T}(op.index)
+  Power_operator{T}(arg)
+@inline create_node_expr(op::Power_operator{T}, x::AbstractVector{T}) where {T <: Number} =
+  Power_operator{T}(op.index)
 
-@inline _node_is_operator(op::power_operator{T}) where {T <: Number} = true
-@inline _node_is_plus(op::power_operator{T}) where {T <: Number} = false
-@inline _node_is_minus(op::power_operator{T}) where {T <: Number} = false
-@inline _node_is_times(op::power_operator{T}) where {T <: Number} = false
-@inline _node_is_power(op::power_operator{T}) where {T <: Number} = true
-@inline _node_is_sin(op::power_operator{T}) where {T <: Number} = false
-@inline _node_is_cos(op::power_operator{T}) where {T <: Number} = false
-@inline _node_is_tan(op::power_operator{T}) where {T <: Number} = false
+@inline _node_is_operator(op::Power_operator{T}) where {T <: Number} = true
+@inline _node_is_plus(op::Power_operator{T}) where {T <: Number} = false
+@inline _node_is_minus(op::Power_operator{T}) where {T <: Number} = false
+@inline _node_is_times(op::Power_operator{T}) where {T <: Number} = false
+@inline _node_is_power(op::Power_operator{T}) where {T <: Number} = true
+@inline _node_is_sin(op::Power_operator{T}) where {T <: Number} = false
+@inline _node_is_cos(op::Power_operator{T}) where {T <: Number} = false
+@inline _node_is_tan(op::Power_operator{T}) where {T <: Number} = false
 
-@inline _node_is_variable(op::power_operator{T}) where {T <: Number} = false
+@inline _node_is_variable(op::Power_operator{T}) where {T <: Number} = false
 
-@inline _node_is_constant(op::power_operator{T}) where {T <: Number} = false
+@inline _node_is_constant(op::Power_operator{T}) where {T <: Number} = false
 
 function _get_type_node(
-  op::power_operator{T},
+  op::Power_operator{T},
   type_ch::Vector{Type_expr_basic},
 ) where {T <: Number}
   length(type_ch) == 1 || error("power has more than one argument")
   return M_trait_type_expr.type_power(op.index, type_ch[1])
 end
 
-@inline (==)(a::power_operator{T}, b::power_operator{T}) where {T <: Number} = (a.index == b.index)
+@inline (==)(a::Power_operator{T}, b::Power_operator{T}) where {T <: Number} = (a.index == b.index)
 
 @inline function _evaluate_node(
-  op::power_operator{Z},
+  op::Power_operator{Z},
   value_ch::AbstractVector{T},
 ) where {T <: Number} where {Z <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
@@ -162,7 +162,7 @@ end
 end
 
 @inline function _evaluate_node(
-  op::power_operator{T},
+  op::Power_operator{T},
   value_ch::AbstractVector{T},
 ) where {T <: Number}
   length(value_ch) == 1 || error("power has more than one argument")
@@ -170,7 +170,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::power_operator{Y},
+  op::Power_operator{Y},
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
@@ -179,7 +179,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::power_operator{Y},
+  op::Power_operator{Y},
   vec_value_ch::Vector{Vector{MyRef{Y}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
@@ -188,22 +188,22 @@ end
   end
 end
 
-@inline _evaluate_node(op::power_operator{Z}, value_ch::T) where {T <: Number} where {Z <: Number} =
+@inline _evaluate_node(op::Power_operator{Z}, value_ch::T) where {T <: Number} where {Z <: Number} =
   (T)(value_ch^(op.index))::T
-@inline _evaluate_node(op::power_operator{T}, value_ch::T) where {T <: Number} where {Z <: Number} =
+@inline _evaluate_node(op::Power_operator{T}, value_ch::T) where {T <: Number} where {Z <: Number} =
   value_ch^(op.index)::T
 
 @inline _evaluate_node!(
-  op::power_operator{Y},
+  op::Power_operator{Y},
   value_ch::Y,
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, value_ch^(op.index)::Y)
 
-@inline _node_to_Expr(op::power_operator{T}) where {T <: Number} = [:^, op.index]
+@inline _node_to_Expr(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
 
-function _cast_constant!(op::power_operator{T}, t::DataType) where {T <: Number}
+function _cast_constant!(op::Power_operator{T}, t::DataType) where {T <: Number}
   new_index = (t)(op.index)
-  return power_operator{t}(new_index)
+  return Power_operator{t}(new_index)
 end
 
 end

@@ -28,38 +28,38 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export tan_operator
+export Tan_operator
 
-mutable struct tan_operator <: Abstract_expr_node end
+mutable struct Tan_operator <: Abstract_expr_node end
 
 _node_convexity(
-  op::tan_operator,
+  op::Tan_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number} = M_implementation_convexity_type.unknown_type()
 
 @inline _node_bound(
-  op::tan_operator,
+  op::Tan_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {T <: Number} = ((t)(-Inf), (t)(Inf))
 
-@inline create_node_expr(op::tan_operator) = tan_operator()
+@inline create_node_expr(op::Tan_operator) = Tan_operator()
 
-@inline _node_is_operator(op::tan_operator) = true
-@inline _node_is_plus(op::tan_operator) = false
-@inline _node_is_minus(op::tan_operator) = false
-@inline _node_is_times(op::tan_operator) = false
-@inline _node_is_power(op::tan_operator) = false
-@inline _node_is_sin(op::tan_operator) = false
-@inline _node_is_cos(op::tan_operator) = false
-@inline _node_is_tan(op::tan_operator) = true
+@inline _node_is_operator(op::Tan_operator) = true
+@inline _node_is_plus(op::Tan_operator) = false
+@inline _node_is_minus(op::Tan_operator) = false
+@inline _node_is_times(op::Tan_operator) = false
+@inline _node_is_power(op::Tan_operator) = false
+@inline _node_is_sin(op::Tan_operator) = false
+@inline _node_is_cos(op::Tan_operator) = false
+@inline _node_is_tan(op::Tan_operator) = true
 
-@inline _node_is_variable(op::tan_operator) = false
+@inline _node_is_variable(op::Tan_operator) = false
 
-@inline _node_is_constant(op::tan_operator) = false
+@inline _node_is_constant(op::Tan_operator) = false
 
-function _get_type_node(op::tan_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Tan_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     t_child = type_ch[1]
     if M_trait_type_expr._is_constant(t_child)
@@ -70,15 +70,15 @@ function _get_type_node(op::tan_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::tan_operator, b::tan_operator) = true
+@inline (==)(a::Tan_operator, b::Tan_operator) = true
 
-@inline function _evaluate_node(op::tan_operator, value_ch::AbstractVector{T}) where {T <: Number}
+@inline function _evaluate_node(op::Tan_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for tan")
   return tan(value_ch[1])
 end
 
 @inline function _evaluate_node!(
-  op::tan_operator,
+  op::Tan_operator,
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
@@ -87,7 +87,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::tan_operator,
+  op::Tan_operator,
   vec_value_ch::Vector{Vector{MyRef{Y}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
@@ -96,6 +96,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::tan_operator) = [:tan]
+@inline _node_to_Expr(op::Tan_operator) = [:tan]
 
 end

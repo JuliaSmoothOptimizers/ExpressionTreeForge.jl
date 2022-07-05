@@ -28,12 +28,12 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export sinus_operator
+export Sinus_operator
 
-mutable struct sinus_operator <: Abstract_expr_node end
+mutable struct Sinus_operator <: Abstract_expr_node end
 
 function _node_convexity(
-  op::sinus_operator,
+  op::Sinus_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
@@ -63,7 +63,7 @@ function _node_convexity(
 end
 
 function _node_bound(
-  op::sinus_operator,
+  op::Sinus_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {T <: Number}
@@ -104,22 +104,22 @@ end
 
 @inline belong(bi, bs, x) = (bi <= x) && (bs >= x)
 
-@inline create_node_expr(op::sinus_operator) = sinus_operator()
+@inline create_node_expr(op::Sinus_operator) = Sinus_operator()
 
-@inline _node_is_operator(op::sinus_operator) = true
-@inline _node_is_plus(op::sinus_operator) = false
-@inline _node_is_minus(op::sinus_operator) = false
-@inline _node_is_times(op::sinus_operator) = false
-@inline _node_is_power(op::sinus_operator) = false
-@inline _node_is_sin(op::sinus_operator) = true
-@inline _node_is_cos(op::sinus_operator) = false
-@inline _node_is_tan(op::sinus_operator) = false
+@inline _node_is_operator(op::Sinus_operator) = true
+@inline _node_is_plus(op::Sinus_operator) = false
+@inline _node_is_minus(op::Sinus_operator) = false
+@inline _node_is_times(op::Sinus_operator) = false
+@inline _node_is_power(op::Sinus_operator) = false
+@inline _node_is_sin(op::Sinus_operator) = true
+@inline _node_is_cos(op::Sinus_operator) = false
+@inline _node_is_tan(op::Sinus_operator) = false
 
-@inline _node_is_variable(op::sinus_operator) = false
+@inline _node_is_variable(op::Sinus_operator) = false
 
-@inline _node_is_constant(op::sinus_operator) = false
+@inline _node_is_constant(op::Sinus_operator) = false
 
-function _get_type_node(op::sinus_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Sinus_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     t_child = type_ch[1]
     if M_trait_type_expr._is_constant(t_child)
@@ -130,15 +130,15 @@ function _get_type_node(op::sinus_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::sinus_operator, b::sinus_operator) = true
+@inline (==)(a::Sinus_operator, b::Sinus_operator) = true
 
-@inline function _evaluate_node(op::sinus_operator, value_ch::AbstractVector{T}) where {T <: Number}
+@inline function _evaluate_node(op::Sinus_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for sin")
   return sin(value_ch[1])
 end
 
 @inline function _evaluate_node!(
-  op::sinus_operator,
+  op::Sinus_operator,
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
@@ -147,7 +147,7 @@ end
 end
 
 @inline function _evaluate_node!(
-  op::sinus_operator,
+  op::Sinus_operator,
   vec_value_ch::Vector{Vector{MyRef{Y}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
 ) where {Y <: Number}
@@ -156,6 +156,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::sinus_operator) = [:sin]
+@inline _node_to_Expr(op::Sinus_operator) = [:sin]
 
 end

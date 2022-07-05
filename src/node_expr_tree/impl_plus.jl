@@ -28,13 +28,13 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export plus_operator
+export Plus_operator
 
-mutable struct plus_operator <: Abstract_expr_node end
+mutable struct Plus_operator <: Abstract_expr_node end
 
 my_and(a::Bool, b::Bool) = (a && b)
 function _node_convexity(
-  op::plus_operator,
+  op::Plus_operator,
   son_cvx::AbstractVector{M_implementation_convexity_type.Convexity_type},
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
@@ -74,7 +74,7 @@ function _node_convexity(
 end
 
 function _node_bound(
-  op::plus_operator,
+  op::Plus_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
 ) where {T <: Number}
@@ -83,22 +83,22 @@ function _node_bound(
   return (sum(vector_inf_bound), sum(vector_sup_bound))
 end
 
-@inline create_node_expr(op::plus_operator) = plus_operator()
+@inline create_node_expr(op::Plus_operator) = Plus_operator()
 
-@inline _node_is_operator(op::plus_operator) = true
-@inline _node_is_plus(op::plus_operator) = true
-@inline _node_is_minus(op::plus_operator) = false
-@inline _node_is_times(op::plus_operator) = false
-@inline _node_is_power(op::plus_operator) = false
-@inline _node_is_sin(op::plus_operator) = false
-@inline _node_is_cos(op::plus_operator) = false
-@inline _node_is_tan(op::plus_operator) = false
+@inline _node_is_operator(op::Plus_operator) = true
+@inline _node_is_plus(op::Plus_operator) = true
+@inline _node_is_minus(op::Plus_operator) = false
+@inline _node_is_times(op::Plus_operator) = false
+@inline _node_is_power(op::Plus_operator) = false
+@inline _node_is_sin(op::Plus_operator) = false
+@inline _node_is_cos(op::Plus_operator) = false
+@inline _node_is_tan(op::Plus_operator) = false
 
-@inline _node_is_variable(op::plus_operator) = false
+@inline _node_is_variable(op::Plus_operator) = false
 
-@inline _node_is_constant(op::plus_operator) = false
+@inline _node_is_constant(op::Plus_operator) = false
 
-function _get_type_node(op::plus_operator, type_ch::Vector{Type_expr_basic})
+function _get_type_node(op::Plus_operator, type_ch::Vector{Type_expr_basic})
   if length(type_ch) == 1
     return type_ch[1]
   else
@@ -106,19 +106,19 @@ function _get_type_node(op::plus_operator, type_ch::Vector{Type_expr_basic})
   end
 end
 
-@inline (==)(a::plus_operator, b::plus_operator) = true
+@inline (==)(a::Plus_operator, b::Plus_operator) = true
 
-@inline _evaluate_node(op::plus_operator, value_ch::AbstractVector{T}) where {T <: Number} =
+@inline _evaluate_node(op::Plus_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   sum(value_ch)
 @inline _evaluate_node!(
-  op::plus_operator,
+  op::Plus_operator,
   value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
   ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} =
   length(value_ch) > 1 ? M_abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
             M_abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
 @inline function _evaluate_node!(
-  op::plus_operator,
+  op::Plus_operator,
   vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
   vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
 ) where {T <: Number}
@@ -127,6 +127,6 @@ end
   end
 end
 
-@inline _node_to_Expr(op::plus_operator) = [:+]
+@inline _node_to_Expr(op::Plus_operator) = [:+]
 
 end

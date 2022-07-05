@@ -28,7 +28,6 @@ using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
 import Base.(==)
-export variable
 
 mutable struct Frac_operator <: Abstract_expr_node end
 

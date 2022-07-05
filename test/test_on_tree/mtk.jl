@@ -13,24 +13,24 @@
   @test expr_tree == CalculusTreeTools.M_implementation_tree.Type_node{
     CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
   }(
-    CalculusTreeTools.M_plus_operator.plus_operator(),
+    CalculusTreeTools.M_plus_operator.Plus_operator(),
     CalculusTreeTools.M_implementation_tree.Type_node{CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node}[
       CalculusTreeTools.M_implementation_tree.Type_node{CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node}(
-        CalculusTreeTools.M_plus_operator.plus_operator(),
+        CalculusTreeTools.M_plus_operator.Plus_operator(),
         CalculusTreeTools.M_implementation_tree.Type_node{
           CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
         }[
           CalculusTreeTools.M_implementation_tree.Type_node{
             CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
           }(
-            CalculusTreeTools.M_plus_operator.plus_operator(),
+            CalculusTreeTools.M_plus_operator.Plus_operator(),
             CalculusTreeTools.M_implementation_tree.Type_node{
               CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
             }[
               CalculusTreeTools.M_implementation_tree.Type_node{
                 CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
               }(
-                CalculusTreeTools.M_plus_operator.plus_operator(),
+                CalculusTreeTools.M_plus_operator.Plus_operator(),
                 CalculusTreeTools.M_implementation_tree.Type_node{
                   CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                 }[
@@ -44,7 +44,7 @@
                       CalculusTreeTools.M_implementation_tree.Type_node{
                         CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                       }(
-                        CalculusTreeTools.M_variable.variable(:x, 5),
+                        CalculusTreeTools.M_variable.Variable(:x, 5),
                         CalculusTreeTools.M_implementation_tree.Type_node{
                           CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                         }[],
@@ -52,7 +52,7 @@
                       CalculusTreeTools.M_implementation_tree.Type_node{
                         CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                       }(
-                        CalculusTreeTools.M_variable.variable(:x, 1),
+                        CalculusTreeTools.M_variable.Variable(:x, 1),
                         CalculusTreeTools.M_implementation_tree.Type_node{
                           CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                         }[],
@@ -69,7 +69,7 @@
                       CalculusTreeTools.M_implementation_tree.Type_node{
                         CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                       }(
-                        CalculusTreeTools.M_variable.variable(:x, 4),
+                        CalculusTreeTools.M_variable.Variable(:x, 4),
                         CalculusTreeTools.M_implementation_tree.Type_node{
                           CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                         }[],
@@ -77,7 +77,7 @@
                       CalculusTreeTools.M_implementation_tree.Type_node{
                         CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                       }(
-                        CalculusTreeTools.M_variable.variable(:x, 2),
+                        CalculusTreeTools.M_variable.Variable(:x, 2),
                         CalculusTreeTools.M_implementation_tree.Type_node{
                           CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                         }[],
@@ -96,7 +96,7 @@
                   CalculusTreeTools.M_implementation_tree.Type_node{
                     CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                   }(
-                    CalculusTreeTools.M_variable.variable(:x, 3),
+                    CalculusTreeTools.M_variable.Variable(:x, 3),
                     CalculusTreeTools.M_implementation_tree.Type_node{
                       CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                     }[],
@@ -104,7 +104,7 @@
                   CalculusTreeTools.M_implementation_tree.Type_node{
                     CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                   }(
-                    CalculusTreeTools.M_variable.variable(:x, 3),
+                    CalculusTreeTools.M_variable.Variable(:x, 3),
                     CalculusTreeTools.M_implementation_tree.Type_node{
                       CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                     }[],
@@ -123,7 +123,7 @@
               CalculusTreeTools.M_implementation_tree.Type_node{
                 CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
               }(
-                CalculusTreeTools.M_variable.variable(:x, 2),
+                CalculusTreeTools.M_variable.Variable(:x, 2),
                 CalculusTreeTools.M_implementation_tree.Type_node{
                   CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                 }[],
@@ -131,7 +131,7 @@
               CalculusTreeTools.M_implementation_tree.Type_node{
                 CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
               }(
-                CalculusTreeTools.M_variable.variable(:x, 4),
+                CalculusTreeTools.M_variable.Variable(:x, 4),
                 CalculusTreeTools.M_implementation_tree.Type_node{
                   CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
                 }[],
@@ -148,7 +148,7 @@
           CalculusTreeTools.M_implementation_tree.Type_node{
             CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
           }(
-            CalculusTreeTools.M_variable.variable(:x, 1),
+            CalculusTreeTools.M_variable.Variable(:x, 1),
             CalculusTreeTools.M_implementation_tree.Type_node{
               CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
             }[],
@@ -156,7 +156,7 @@
           CalculusTreeTools.M_implementation_tree.Type_node{
             CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
           }(
-            CalculusTreeTools.M_variable.variable(:x, 5),
+            CalculusTreeTools.M_variable.Variable(:x, 5),
             CalculusTreeTools.M_implementation_tree.Type_node{
               CalculusTreeTools.M_abstract_expr_node.Abstract_expr_node,
             }[],
