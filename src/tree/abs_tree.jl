@@ -5,7 +5,7 @@ export create_tree
 """
   Supertype of every tree.
 """
-abstract type Ab_tree end
+abstract type AbstractTree end
 
 """
     tree = create_tree(field::T, children::Vector{Type_node{T}}) where {T}

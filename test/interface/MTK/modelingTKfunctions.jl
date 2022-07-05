@@ -1,5 +1,5 @@
 using ModelingToolkit
-using CalculusTreeTools
+using ExpressionTreeForge
 using ADNLPModels
 
 # include("test\\script_dvpt\\modelingTKfunctions.jl")
@@ -66,13 +66,13 @@ tmp = f(x)
 function produce_complete_tree_from_julia_function(f, n)
   @variables x[1:n]
   tmp = f(x)
-  ex = CalculusTreeTools.transform_to_expr_tree(tmp)
-  CalculusTreeTools.print_tree(ex)
-  complete_ex = CalculusTreeTools.create_complete_tree(ex)
-  CalculusTreeTools.set_convexity!(complete_ex)
-  CalculusTreeTools.get_convexity_status(complete_ex)
-  CalculusTreeTools.set_bounds!(complete_ex)
-  CalculusTreeTools.get_bound(complete_ex)
+  ex = ExpressionTreeForge.transform_to_expr_tree(tmp)
+  ExpressionTreeForge.print_tree(ex)
+  complete_ex = ExpressionTreeForge.create_complete_tree(ex)
+  ExpressionTreeForge.set_convexity!(complete_ex)
+  ExpressionTreeForge.get_convexity_status(complete_ex)
+  ExpressionTreeForge.set_bounds!(complete_ex)
+  ExpressionTreeForge.get_bound(complete_ex)
 
   return ex, complete_ex
 end
@@ -80,16 +80,16 @@ end
 (tmp_tree, tmp_ctree) = produce_complete_tree_from_julia_function(f, n)
 
 (arwhead_tree, arwhead_ctree) = produce_complete_tree_from_julia_function(arwhead, n)
-CalculusTreeTools.print_tree(arwhead_tree)
+ExpressionTreeForge.print_tree(arwhead_tree)
 
 (cragglvy_tree, cragglvy_ctree) = produce_complete_tree_from_julia_function(cragglvy, n)
-CalculusTreeTools.print_tree(cragglvy_tree)
+ExpressionTreeForge.print_tree(cragglvy_tree)
 
 (chainwoo_tree, chainwoo_ctree) = produce_complete_tree_from_julia_function(chainwoo, n)
-CalculusTreeTools.print_tree(chainwoo_tree)
+ExpressionTreeForge.print_tree(chainwoo_tree)
 
 (srosenbr_tree, srosenbr_ctree) = produce_complete_tree_from_julia_function(srosenbr, n)
-CalculusTreeTools.print_tree(srosenbr_tree)
+ExpressionTreeForge.print_tree(srosenbr_tree)
 
 (nondquar_tree, nondquar_ctree) = produce_complete_tree_from_julia_function(nondquar, n)
-CalculusTreeTools.print_tree(nondquar_tree)
+ExpressionTreeForge.print_tree(nondquar_tree)

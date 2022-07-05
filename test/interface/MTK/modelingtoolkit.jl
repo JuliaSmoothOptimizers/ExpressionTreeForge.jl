@@ -1,5 +1,5 @@
 
-using CalculusTreeTools
+using ExpressionTreeForge
 using ModelingToolkit
 
 @variables x y t
@@ -11,16 +11,16 @@ tmp = _square_sum(u)
 
 z = -x^2 + y
 
-ex = CalculusTreeTools.transform_to_expr_tree(z)
-complete_ex = CalculusTreeTools.create_complete_tree(ex)
-CalculusTreeTools.set_convexity!(complete_ex)
-CalculusTreeTools.get_convexity_status(complete_ex)
-CalculusTreeTools.set_bounds!(complete_ex)
-CalculusTreeTools.get_bound(complete_ex)
+ex = ExpressionTreeForge.transform_to_expr_tree(z)
+complete_ex = ExpressionTreeForge.create_complete_tree(ex)
+ExpressionTreeForge.set_convexity!(complete_ex)
+ExpressionTreeForge.get_convexity_status(complete_ex)
+ExpressionTreeForge.set_bounds!(complete_ex)
+ExpressionTreeForge.get_bound(complete_ex)
 
-ex = CalculusTreeTools.transform_to_expr_tree(tmp)
-complete_ex = CalculusTreeTools.create_complete_tree(ex)
-CalculusTreeTools.set_convexity!(complete_ex)
-CalculusTreeTools.get_convexity_status(complete_ex)
-CalculusTreeTools.set_bounds!(complete_ex)
-CalculusTreeTools.get_bound(complete_ex)
+ex = ExpressionTreeForge.transform_to_expr_tree(tmp)
+complete_ex = ExpressionTreeForge.create_complete_tree(ex)
+ExpressionTreeForge.set_convexity!(complete_ex)
+ExpressionTreeForge.get_convexity_status(complete_ex)
+ExpressionTreeForge.set_bounds!(complete_ex)
+ExpressionTreeForge.get_bound(complete_ex)

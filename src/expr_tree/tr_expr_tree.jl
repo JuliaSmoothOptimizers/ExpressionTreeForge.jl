@@ -20,7 +20,7 @@ export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
 struct type_expr_tree end
 struct type_not_expr_tree end
 
-@inline is_expr_tree(a::abstract_expr_tree.ab_ex_tr) = type_expr_tree()
+@inline is_expr_tree(a::abstract_expr_tree.AbstractExprTree) = type_expr_tree()
 @inline is_expr_tree(a::t_expr_tree) = type_expr_tree()
 @inline is_expr_tree(a::Expr) = type_expr_tree()
 @inline is_expr_tree(a::Number) = type_expr_tree()
@@ -41,7 +41,7 @@ struct type_not_expr_tree end
 @inline is_expr_tree(a::ModelingToolkit.Variable) = type_expr_tree()
 @inline is_expr_tree(a::Any) = type_not_expr_tree()
 function is_expr_tree(t::DataType)
-  if t == abstract_expr_tree.ab_ex_tr || t == t_expr_tree || t == Expr || t == Number
+  if t == abstract_expr_tree.AbstractExprTree || t == t_expr_tree || t == Expr || t == Number
     type_expr_tree()
   else
     type_not_expr_tree()

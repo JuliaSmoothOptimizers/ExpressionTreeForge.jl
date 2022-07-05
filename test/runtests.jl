@@ -1,6 +1,5 @@
 using Test
-using Test
-using CalculusTreeTools
+using ExpressionTreeForge
 using JuMP, LinearAlgebra, MathOptInterface, ModelingToolkit, SparseArrays
 
 include("first_test.jl")

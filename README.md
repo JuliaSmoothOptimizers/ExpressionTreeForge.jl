@@ -1,23 +1,23 @@
-# CalculusTreeTools: A manipulator of expression graph
+# ExpressionTreeForge: A manipulator of expression graph
 
 | **Documentation** | **Linux/macOS/Windows/FreeBSD** | **Coverage** | **DOI** |
 |:-----------------:|:-------------------------------:|:------------:|:-------:|
 | [![docs-stable][docs-stable-img]][docs-stable-url] [![docs-dev][docs-dev-img]][docs-dev-url] | [![build-gh][build-gh-img]][build-gh-url] [![build-cirrus][build-cirrus-img]][build-cirrus-url] | [![codecov][codecov-img]][codecov-url] | [![doi][doi-img]][doi-url] |
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: https://paraynaud.github.io/CalculusTreeTools.jl/stable
+[docs-stable-url]: https://paraynaud.github.io/ExpressionTreeForge.jl/stable
 [docs-dev-img]: https://img.shields.io/badge/docs-dev-purple.svg
-[docs-dev-url]: https://paraynaud.github.io/CalculusTreeTools.jl/dev
-[build-gh-img]: https://github.com/paraynaud/CalculusTreeTools.jl/workflows/CI/badge.svg?branch=master
-[build-gh-url]: https://github.com/paraynaud/CalculusTreeTools.jl/actions
-[build-cirrus-img]: https://img.shields.io/cirrus/github/paraynaud/CalculusTreeTools.jl?logo=Cirrus%20CI
-[build-cirrus-url]: https://cirrus-ci.com/github/paraynaud/CalculusTreeTools.jl
-[codecov-img]: https://codecov.io/gh/paraynaud/CalculusTreeTools.jl/branch/master/graph/badge.svg
-[codecov-url]: https://app.codecov.io/gh/paraynaud/CalculusTreeTools.jl
+[docs-dev-url]: https://paraynaud.github.io/ExpressionTreeForge.jl/dev
+[build-gh-img]: https://github.com/paraynaud/ExpressionTreeForge.jl/workflows/CI/badge.svg?branch=master
+[build-gh-url]: https://github.com/paraynaud/ExpressionTreeForge.jl/actions
+[build-cirrus-img]: https://img.shields.io/cirrus/github/paraynaud/ExpressionTreeForge.jl?logo=Cirrus%20CI
+[build-cirrus-url]: https://cirrus-ci.com/github/paraynaud/ExpressionTreeForge.jl
+[codecov-img]: https://codecov.io/gh/paraynaud/ExpressionTreeForge.jl/branch/master/graph/badge.svg
+[codecov-url]: https://app.codecov.io/gh/paraynaud/ExpressionTreeForge.jl
 [doi-img]: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.822073-blue.svg
 [doi-url]: https://doi.org/10.5281/zenodo.822073
 
-CalculusTreeTools.jl is made to detect automatically the partially separable structure of a function
+ExpressionTreeForge.jl is made to detect automatically the partially separable structure of a function
 $$
 f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad f \in \R^n \to \R, \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}.
 $$
@@ -43,19 +43,19 @@ By using this structure [PartiallySeparableSolvers.jl](https://github.com/parayn
 * A. Griewank and P. Toint, [*Partitioned variable metric updates for large structured optimization problems*](10.1007/BF01399316), Numerische Mathematik volume, 39, pp. 119--137, 1982.
 
 ## Content
-CalculusTreeTools.jl analyse the expression tree of $f$	to define automatically : every $\hat{f}_i$ and every $U_i$.
+ExpressionTreeForge.jl analyse the expression tree of $f$	to define automatically : every $\hat{f}_i$ and every $U_i$.
 Moreover, it performs a bound propagation over any expression tree supported, and it can detect if $f$ is strongly convex.
 In practice, it applies these analyses after the detection of the $\hat{f}_i$.
 
-CalculusTreeTools develop its own representation of an expression graph, it supports also two other types of expression trees: the ones from the type julia `Expr`
+ExpressionTreeForge develop its own representation of an expression graph, it supports also two other types of expression trees: the ones from the type julia `Expr`
 ```julia
 expr_julia = :(x[1] + x[2]) # ::Expr
-expr = CalculusTreeTools.transform_to_expr_tree(expr_julia)
+expr = ExpressionTreeForge.transform_to_expr_tree(expr_julia)
 ```
  and those extract from a `JuMP` model
 ```julia
 using JuMP, MathOptInterface
-using CalculusTreeTools
+using ExpressionTreeForge
 
 m = Model()
 n = 10
@@ -64,7 +64,7 @@ n = 10
 evaluator = JuMP.NLPEvaluator(m)
 MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
-expr = CalculusTreeTools.transform_to_expr_tree(expr_jump)
+expr = ExpressionTreeForge.transform_to_expr_tree(expr_jump)
 ```
 
 You detect the element functions with `delete_imbricated_plus`
@@ -78,7 +78,7 @@ element_Ui = get_elemental_variable.(element_functions)
 
 To detect the bounds and the convexity you have to define a `complete_tree`
 ```julia
-complete_tree = CalculusTreeTools.create_complete_tree(expr)
+complete_tree = ExpressionTreeForge.create_complete_tree(expr)
 ```
 and retrieve the bounds and the convexity status afterward
 ```julia
@@ -98,6 +98,6 @@ to define a trust-region method exploiting the partial separabiliy through parti
 ## How to install
 ```
 julia> ]
-pkg> add https://github.com/paraynaud/CalculusTreeTools.jl
-pkg> test CalculusTreeTools
+pkg> add https://github.com/paraynaud/ExpressionTreeForge.jl
+pkg> test ExpressionTreeForge
 ```

@@ -32,7 +32,7 @@ function add_dic_var!(vc::Variable_counter, sym::Symbol)
     int_chain[id] = Int(v) # transform unicode to Int
   end
   dec_basis = (x -> x - 8320).(int_chain) # Int('₁') = 8321
-  index = mapreduce(x -> x, decimal_basis, dec_basis) # calcul le nombre à parti de la base décimal.
+  index = mapreduce(x -> x, decimal_basis, dec_basis) # compute the numbre from the decimal basis
   vc.dic_var[sym] = index
 end
 

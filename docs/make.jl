@@ -1,7 +1,7 @@
 using Documenter
-using CalculusTreeTools
+using ExpressionTreeForge
 
-using CalculusTreeTools:
+using ExpressionTreeForge:
   abstract_expr_tree,
   trait_expr_tree,
   interface_expr_tree,
@@ -17,7 +17,7 @@ using CalculusTreeTools:
   algo_expr_tree,
   M_trait_expr_node,
   M_interface_expr_node,
- M_variable,
+  M_variable,
   M_variables_view,
   M_variables_n_view,
   M_times_operator,
@@ -45,7 +45,7 @@ using CalculusTreeTools:
 
 makedocs(
   modules = [
-    CalculusTreeTools,
+    ExpressionTreeForge,
     abstract_expr_tree,
     trait_expr_tree,
     interface_expr_tree,
@@ -61,7 +61,7 @@ makedocs(
     algo_expr_tree,
     M_trait_expr_node,
     M_interface_expr_node,
-   M_variable,
+    M_variable,
     M_variables_view,
     M_variables_n_view,
     M_times_operator,
@@ -94,8 +94,8 @@ makedocs(
     assets = ["assets/style.css"],
     prettyurls = get(ENV, "CI", nothing) == "true",
   ),
-  sitename = "CalculusTreeTools.jl",
+  sitename = "ExpressionTreeForge.jl",
   pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
 )
 
-deploydocs(repo = "github.com/paraynaud/CalculusTreeTools.jl.git", devbranch = "master")
+deploydocs(repo = "github.com/paraynaud/ExpressionTreeForge.jl.git", devbranch = "master")

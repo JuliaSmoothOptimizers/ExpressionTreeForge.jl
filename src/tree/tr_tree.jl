@@ -1,6 +1,6 @@
 module trait_tree
 
-import ..M_abstract_tree.Ab_tree
+import ..M_abstract_tree.AbstractTree
 import ..M_interface_tree: _get_node, _get_children
 
 export get_node
@@ -12,15 +12,15 @@ struct Type_trait_tree end
 struct Type_not_trait_tree end
 
 """
-    Type_trait_tree = is_type_trait_tree(a::Ab_tree)
+    Type_trait_tree = is_type_trait_tree(a::AbstractTree)
     Type_trait_tree = is_type_trait_tree(a::Expr)
     Type_trait_tree = is_type_trait_tree(a::Number)
     Type_not_trait_tree = is_type_trait_tree(a::Any)
 
-Return a `Type_trait_tree` only for `Ab_tree, Expr` or `Number` (a leaf of a tree).
+Return a `Type_trait_tree` only for `AbstractTree, Expr` or `Number` (a leaf of a tree).
 In the other cases it returns `Type_not_trait_tree`.
 """
-@inline is_type_trait_tree(a::Ab_tree) = Type_trait_tree()
+@inline is_type_trait_tree(a::AbstractTree) = Type_trait_tree()
 @inline is_type_trait_tree(a::Expr) = Type_trait_tree()
 @inline is_type_trait_tree(a::Number) = Type_trait_tree()
 @inline is_type_trait_tree(a::Any) = Type_not_trait_tree()

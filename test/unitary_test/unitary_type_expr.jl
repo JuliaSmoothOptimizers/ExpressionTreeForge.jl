@@ -1,6 +1,6 @@
-using CalculusTreeTools.M_trait_type_expr
-using CalculusTreeTools.M_implementation_type_expr,
-  CalculusTreeTools.M_implementation_convexity_type, CalculusTreeTools.M_implementation_convexity_type
+using ExpressionTreeForge.M_trait_type_expr
+using ExpressionTreeForge.M_implementation_type_expr,
+  ExpressionTreeForge.M_implementation_convexity_type, ExpressionTreeForge.M_implementation_convexity_type
 
 @testset "test M_implementation_type_expr" begin
 

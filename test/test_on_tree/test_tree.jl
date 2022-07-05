@@ -1,7 +1,7 @@
-using CalculusTreeTools.trait_tree,
-  CalculusTreeTools.M_abstract_tree,
-  CalculusTreeTools.M_implementation_tree,
-  CalculusTreeTools.M_implementation_tree_Expr
+using ExpressionTreeForge.trait_tree,
+  ExpressionTreeForge.M_abstract_tree,
+  ExpressionTreeForge.M_implementation_tree,
+  ExpressionTreeForge.M_implementation_tree_Expr
 
 @testset "test on tree/tr_tree" begin
   t1 = M_abstract_tree.create_tree(5, [])

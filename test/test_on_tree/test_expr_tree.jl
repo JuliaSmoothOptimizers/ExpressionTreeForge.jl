@@ -1,8 +1,8 @@
-using CalculusTreeTools.trait_expr_tree, CalculusTreeTools.M_trait_type_expr
-using CalculusTreeTools.M_abstract_expr_node, CalculusTreeTools.abstract_expr_tree
-using CalculusTreeTools.algo_expr_tree, CalculusTreeTools.algo_tree
-using CalculusTreeTools.implementation_expr_tree
-using CalculusTreeTools.M_evaluation_expr_tree
+using ExpressionTreeForge.trait_expr_tree, ExpressionTreeForge.M_trait_type_expr
+using ExpressionTreeForge.M_abstract_expr_node, ExpressionTreeForge.abstract_expr_tree
+using ExpressionTreeForge.algo_expr_tree, ExpressionTreeForge.algo_tree
+using ExpressionTreeForge.implementation_expr_tree
+using ExpressionTreeForge.M_evaluation_expr_tree
 
 @testset "test building of trees and equality" begin
   expr_1 = :(x[1] + x[2])
@@ -262,9 +262,9 @@ function create_trees(n::Int)
   evaluator = JuMP.NLPEvaluator(m)
   MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
   Expr_j = MathOptInterface.objective_expr(evaluator)
-  expr_tree = CalculusTreeTools.transform_to_expr_tree(Expr_j)
+  expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
-  complete_tree = CalculusTreeTools.create_complete_tree(expr_tree_j)
+  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
 
   return Expr_j, expr_tree_j, complete_tree, evaluator
 end
@@ -272,10 +272,10 @@ end
 @testset "test de la création de la fonction d'évaluation" begin
   n = 50
   expr, expr_tree, comp_tree, evaluator = create_trees(n)
-  f = CalculusTreeTools.get_function_of_evaluation(expr_tree)
+  f = ExpressionTreeForge.get_function_of_evaluation(expr_tree)
   x = ones(50)
   obj_MOI_x = MathOptInterface.eval_objective(evaluator, x)
-  obj_f = CalculusTreeTools.algo_expr_tree.eval_function_wrapper(f, x)
+  obj_f = ExpressionTreeForge.algo_expr_tree.eval_function_wrapper(f, x)
   @test obj_f == obj_MOI_x
   @test obj_f ≈ obj_MOI_x
 end

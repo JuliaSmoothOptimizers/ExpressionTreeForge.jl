@@ -1,14 +1,14 @@
-using CalculusTreeTools.M_abstract_expr_node, CalculusTreeTools.M_trait_expr_node
-using CalculusTreeTools.M_variable, CalculusTreeTools.M_constant
-using CalculusTreeTools.M_simple_operator
-using CalculusTreeTools.M_plus_operator,
-  CalculusTreeTools.M_minus_operator,
-  CalculusTreeTools.M_times_operator,
-  CalculusTreeTools.M_sinus_operator,
-  CalculusTreeTools.M_tan_operator,
-  CalculusTreeTools.M_power_operator,
-  CalculusTreeTools.M_frac_operator,
-  CalculusTreeTools.M_exp_operator
+using ExpressionTreeForge.M_abstract_expr_node, ExpressionTreeForge.M_trait_expr_node
+using ExpressionTreeForge.M_variable, ExpressionTreeForge.M_constant
+using ExpressionTreeForge.M_simple_operator
+using ExpressionTreeForge.M_plus_operator,
+  ExpressionTreeForge.M_minus_operator,
+  ExpressionTreeForge.M_times_operator,
+  ExpressionTreeForge.M_sinus_operator,
+  ExpressionTreeForge.M_tan_operator,
+  ExpressionTreeForge.M_power_operator,
+  ExpressionTreeForge.M_frac_operator,
+  ExpressionTreeForge.M_exp_operator
 
 @testset "Node constructors" begin
   @test M_abstract_expr_node.create_node_expr(4) == M_constant.Constant(4)

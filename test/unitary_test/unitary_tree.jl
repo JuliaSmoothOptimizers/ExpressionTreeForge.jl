@@ -1,4 +1,4 @@
-using CalculusTreeTools.M_abstract_tree, CalculusTreeTools.trait_tree
+using ExpressionTreeForge.M_abstract_tree, ExpressionTreeForge.trait_tree
 
 @testset "test sur les arbre Expr" begin
   @test M_abstract_tree.create_tree(:(x[2] + 5 * x[3])) == :(x[2] + 5 * x[3])

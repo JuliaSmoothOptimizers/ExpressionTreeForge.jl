@@ -1,5 +1,5 @@
 using ModelingToolkit
-using CalculusTreeTools
+using ExpressionTreeForge
 using ADNLPModels
 
 function produce_complete_tree_from_ADNLP(adnlp::ADNLPModel)
@@ -12,12 +12,12 @@ end
 function produce_complete_tree_from_julia_function(f, n)
   ModelingToolkit.@variables x[1:n]
   tmp = f(x)
-  ex = CalculusTreeTools.transform_to_expr_tree(tmp)
-  complete_ex = CalculusTreeTools.create_complete_tree(ex)
-  CalculusTreeTools.set_convexity!(complete_ex)
-  CalculusTreeTools.get_convexity_status(complete_ex)
-  CalculusTreeTools.set_bounds!(complete_ex)
-  CalculusTreeTools.get_bound(complete_ex)
+  ex = ExpressionTreeForge.transform_to_expr_tree(tmp)
+  complete_ex = ExpressionTreeForge.create_complete_tree(ex)
+  ExpressionTreeForge.set_convexity!(complete_ex)
+  ExpressionTreeForge.get_convexity_status(complete_ex)
+  ExpressionTreeForge.set_bounds!(complete_ex)
+  ExpressionTreeForge.get_bound(complete_ex)
 
   return ex, complete_ex
 end

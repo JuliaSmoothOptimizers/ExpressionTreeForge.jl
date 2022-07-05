@@ -1,10 +1,10 @@
 module abstract_expr_tree
-import ..M_abstract_tree.Ab_tree
+import ..M_abstract_tree.AbstractTree
 
-export ab_ex_tr
+export AbstractExprTree
 export create_expr_tree, create_Expr, create_Expr2
 
-abstract type ab_ex_tr <: Ab_tree end
+abstract type AbstractExprTree <: AbstractTree end
 
 mutable struct bounds{T <: Number}
   inf_bound::T

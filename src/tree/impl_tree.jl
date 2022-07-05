@@ -1,11 +1,11 @@
 module M_implementation_tree
 
-import ..M_abstract_tree: Ab_tree, create_tree
+import ..M_abstract_tree: AbstractTree, create_tree
 import ..M_interface_tree: _get_node, _get_children
 import Base.==
 
 """
-    Type_node{T} <: Ab_tree
+    Type_node{T} <: AbstractTree
 
 Basic implementation of a tree.
 A Type_node has fields:
@@ -13,7 +13,7 @@ A Type_node has fields:
 * `field` gathering the informations about the current node;
 * `children` a vector of child, each of them being a Type_node.
 """
-mutable struct Type_node{T} <: Ab_tree
+mutable struct Type_node{T} <: AbstractTree
   field::T
   children::Vector{Type_node{T}}
 end

@@ -1,5 +1,5 @@
-name = "CalculusTreeTools"
-uuid = "995bfbc1-c62b-4971-a5e3-ef0aad32e8da"
+name = "ExpressionTreeForge"
+uuid = "93090adf-0e31-445f-8c8f-44d91f61d7ad"
 authors = ["raynaudp "]
 version = "0.1.0"
 
