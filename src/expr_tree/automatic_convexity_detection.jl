@@ -1,4 +1,4 @@
-module convexity_detection
+module M_convexity_detection
 
 using ..M_implementation_convexity_type
 using ..M_abstract_expr_tree
@@ -7,17 +7,17 @@ using ..M_implementation_tree,
   ..implementation_complete_expr_tree, ..implementation_complete_expr_tree
 using ..bound_propagations
 
-convexity_tree{T} = M_implementation_tree.Type_node{M_implementation_convexity_type.Convexity_wrapper}
+Convexity_tree{T} = M_implementation_tree.Type_node{M_implementation_convexity_type.Convexity_wrapper}
 
-@inline create_convex_tree(tree::M_implementation_tree.Type_node) = convexity_tree(
+@inline create_convex_tree(tree::M_implementation_tree.Type_node) = Convexity_tree(
   M_implementation_convexity_type.init_conv_status(),
   create_convex_tree.(trait_tree.get_children(tree)),
 )
 
 @inline create_convex_tree(cst::T) where {T <: Number} =
-  convexity_tree(M_implementation_convexity_type.init_conv_status(), [])
+  Convexity_tree(M_implementation_convexity_type.init_conv_status(), [])
 
-@inline get_convexity_status(cvx_tree::convexity_tree) =
+@inline get_convexity_status(cvx_tree::Convexity_tree) =
   M_implementation_convexity_type.get_convexity_wrapper(trait_tree.get_node(cvx_tree))
 
 @inline get_convexity_status(complete_tree::implementation_complete_expr_tree.complete_expr_tree) =
@@ -29,7 +29,7 @@ convexity_tree{T} = M_implementation_tree.Type_node{M_implementation_convexity_t
 @inline concave_type() = M_implementation_convexity_type.concave_type()
 @inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
-function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::convexity_tree, bounds_tree)
+function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::Convexity_tree, bounds_tree)
   node = trait_tree.get_node(tree)
   if M_trait_expr_node.node_is_operator(node) == false
     (length(trait_tree.get_children(tree)) == length(trait_tree.get_children(cvx_tree))) ||
@@ -50,7 +50,7 @@ function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::convexi
     end
     son_cvxs =
       (
-        x::convexity_tree ->
+        x::Convexity_tree ->
           M_implementation_convexity_type.get_convexity_wrapper(trait_tree.get_node(x))
       ).(children_convex_tree)
     convex_wrapper = trait_tree.get_node(cvx_tree)

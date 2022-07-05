@@ -9,7 +9,7 @@ using .algo_expr_tree, .M_evaluation_expr_tree, .M_trait_expr_tree, .M_implement
 using .algo_tree
 using .implementation_complete_expr_tree,
   .implementation_pre_compiled_tree, .implementation_pre_n_compiled_tree
-using .bound_propagations, .convexity_detection
+using .bound_propagations, .M_convexity_detection
 
 export create_bound_tree, get_bound, set_bounds!
 export complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree, type_calculus_tree
@@ -40,18 +40,18 @@ convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
   typ::M_implementation_convexity_type.Convexity_type,
 ) = M_implementation_convexity_type.set_convexity_wrapper!(cw, typ)
 
-@inline create_convex_tree(tree) = convexity_detection.create_convex_tree(tree)
+@inline create_convex_tree(tree) = M_convexity_detection.create_convex_tree(tree)
 
 @inline set_convexity!(tree, cvx_tree, bound_tree) =
-  convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
+  M_convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
 
-@inline set_convexity!(complete_tree) = convexity_detection.set_convexity!(complete_tree)
+@inline set_convexity!(complete_tree) = M_convexity_detection.set_convexity!(complete_tree)
 
-@inline get_convexity_status(cvx_tree::convexity_detection.convexity_tree) =
-  convexity_detection.get_convexity_status(cvx_tree)
+@inline get_convexity_status(cvx_tree::M_convexity_detection.Convexity_tree) =
+  M_convexity_detection.get_convexity_status(cvx_tree)
 
 @inline get_convexity_status(complete_tree::implementation_complete_expr_tree.complete_expr_tree) =
-  convexity_detection.get_convexity_status(complete_tree)
+  M_convexity_detection.get_convexity_status(complete_tree)
 
 @inline constant_type() = M_implementation_convexity_type.constant_type()
 @inline linear_type() = M_implementation_convexity_type.linear_type()
