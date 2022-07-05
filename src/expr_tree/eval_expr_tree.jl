@@ -104,7 +104,9 @@ end
 ) where {T <: Number} = M_implementation_pre_compiled_tree.evaluate_pre_compiled_tree(tree, x)
 
 """
-  _evaluate_expr_tree_multiple_points(expr_tree, vec_x)
+    _evaluate_expr_tree_multiple_points(expr_tree, vec_x)
+
+
 Evaluate the expr_tree as many times as there is vector in vec_x
 """
 function _evaluate_expr_tree_multiple_points(
@@ -276,6 +278,7 @@ end
 
 """
     calcul_gradient_expr_tree(expr_tree, x)
+
 Evaluation the gradient of the function represented by expr_tree at the point x
 """
 @inline calcul_gradient_expr_tree(a::Any, x::Vector{}) =
@@ -337,6 +340,7 @@ Evaluation the gradient of the function represented by expr_tree at the point x
 
 """
     calcul_Hessian_expr_tree(expr_tree, x)
+    
 Compute the hessian matrix of the function represented by expr_tree at the point x
 """
 @inline calcul_Hessian_expr_tree(a::Any, x::Vector{}) =

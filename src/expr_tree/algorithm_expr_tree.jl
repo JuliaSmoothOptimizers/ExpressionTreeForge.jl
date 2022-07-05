@@ -63,12 +63,12 @@ end
 """
     get_type_tree(t)
 
-    Return the type of the expression tree t, whose the type is inside the M_trait_expr_tree
+Return the type of the expression tree t, whose the type is inside the M_trait_expr_tree
 
-    get_type_tree(:(5+4)) = constant
-    get_type_tree(:(x[1])) = linear
-    get_type_tree(:(x[1]* x[2])) = quadratic
-
+Example:
+get_type_tree(:(5+4)) = constant
+get_type_tree(:(x[1])) = linear
+get_type_tree(:(x[1]* x[2])) = quadratic
 """
 @inline get_type_tree(a::Any) = _get_type_tree(a, M_trait_expr_tree.is_expr_tree(a))
 @inline _get_type_tree(a, ::M_trait_expr_tree.Is_not_expr_tree) = error(" This is not an Expr tree")

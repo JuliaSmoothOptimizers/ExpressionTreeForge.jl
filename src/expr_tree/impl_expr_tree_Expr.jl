@@ -15,9 +15,11 @@ import ..M_interface_expr_tree:
   _transform_to_expr_tree
 
 @inline create_expr_tree(ex::Expr) = ex
+
 @inline create_Expr(ex::Expr) = ex
 
 @inline _get_expr_node(ex::Number) = M_abstract_expr_node.create_node_expr(ex)
+
 function _get_expr_node(ex::Expr)
   hd = ex.head
   args = ex.args
@@ -39,6 +41,7 @@ function _get_expr_node(ex::Expr)
 end
 
 @inline _get_expr_children(t::Number) = []
+
 function _get_expr_children(ex::Expr)
   hd = ex.head
   args = ex.args
@@ -57,6 +60,7 @@ function _get_expr_children(ex::Expr)
 end
 
 @inline _inverse_expr_tree(ex::Expr) = Expr(:call, :-, ex)
+
 @inline _inverse_expr_tree(ex::Number) = Expr(:call, :-, ex)
 
 #Fonction à reprendre potetiellement, pourle moment ca marche

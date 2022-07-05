@@ -12,7 +12,7 @@ using .M_implementation_complete_expr_tree,
 using .M_bound_propagations, .M_convexity_detection
 
 export create_bound_tree, get_bound, set_bounds!
-export Complete_expr_tree, pre_compiled_tree, pre_n_compiled_tree, type_calculus_tree
+export Complete_expr_tree, re_compiled_tree, Pre_n_compiled_tree, Type_calculus_tree
 export concave_type, constant_type, convex_type, linear_type, not_treated_type, unknown_type
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
 export get_convexity_status, set_convexity!, create_convex_tree
@@ -30,7 +30,7 @@ export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
 @inline get_bound(bound_tree) = M_bound_propagations.get_bound(bound_tree)
 
-convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
+Convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
 
 @inline get_convexity_wrapper(t::M_implementation_convexity_type.Convexity_wrapper) =
   M_implementation_convexity_type.get_convexity_wrapper(t)
@@ -72,14 +72,14 @@ Type_expr_tree = M_implementation_expr_tree.Type_expr_tree
 @inline create_complete_tree(tree) =
   M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
-complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.Complete_expr_tree{T}
+Complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.Complete_expr_tree{T}
 
-pre_compiled_tree{T <: Number} = M_implementation_pre_compiled_tree.Pre_compiled_tree{T}
+Pre_compiled_tree{T <: Number} = M_implementation_pre_compiled_tree.Pre_compiled_tree{T}
 
 @inline create_pre_compiled_tree(tree, x) =
   M_implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
 
-pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T}
+Pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T}
 
 @inline create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number} =
   M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
@@ -90,13 +90,13 @@ pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_co
 ) where {N} where {T <: Number} =
   M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
-type_calculus_tree = M_implementation_type_expr.Type_expr_basic
+Type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 
-@inline is_constant(t::type_calculus_tree) = t == type_calculus_tree(0)
-@inline is_linear(t::type_calculus_tree) = t == type_calculus_tree(1)
-@inline is_quadratic(t::type_calculus_tree) = t == type_calculus_tree(2)
-@inline is_cubic(t::type_calculus_tree) = t == type_calculus_tree(3)
-@inline is_more_than_quadratic(t::type_calculus_tree) = t == type_calculus_tree(4)
+@inline is_constant(t::Type_calculus_tree) = t == Type_calculus_tree(0)
+@inline is_linear(t::Type_calculus_tree) = t == Type_calculus_tree(1)
+@inline is_quadratic(t::Type_calculus_tree) = t == Type_calculus_tree(2)
+@inline is_cubic(t::Type_calculus_tree) = t == Type_calculus_tree(3)
+@inline is_more_than_quadratic(t::Type_calculus_tree) = t == Type_calculus_tree(4)
 
 @inline print_tree(t) = algo_tree.printer_tree(t)
 # trait_expr_tree's functions
