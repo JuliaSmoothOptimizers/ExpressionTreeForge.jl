@@ -4,7 +4,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
 
 @testset "test M_implementation_type_expr" begin
 
-  # vérification des fonction renvoyant des booléens
+  # Check predicates
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_constant())
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_linear()) == false
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_quadratic()) == false
@@ -35,7 +35,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
   @test M_implementation_type_expr._is_more(M_implementation_type_expr.return_cubic()) == false
   @test M_implementation_type_expr._is_more(M_implementation_type_expr.return_more())
 
-  # défintion de variable étant du même type que leur nom
+  # Type variables
   constant = M_implementation_type_expr.return_constant()
   linear = M_implementation_type_expr.return_linear()
   quadratic = M_implementation_type_expr.return_quadratic()
@@ -43,7 +43,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
   more = M_implementation_type_expr.return_more()
   all_types = [constant, linear, quadratic, cubic, more]
 
-  # test de la fonction _type_product
+  # test of _type_product
   @test (x -> M_implementation_type_expr._type_product(constant, x)).(all_types) == all_types
   @test (x -> M_implementation_type_expr._type_product(linear, x)).(all_types) ==
         [linear, quadratic, cubic, more, more]
@@ -56,7 +56,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
   @test (x -> M_implementation_type_expr._type_product(more, x)).(all_types) ==
         [more, more, more, more, more]
 
-  # test de _type_power
+  # test of _type_power
   @test (x -> M_implementation_type_expr._type_power(0, x)).(all_types) ==
         [constant, constant, constant, constant, constant]
   @test (x -> M_implementation_type_expr._type_power(1, x)).(all_types) == all_types
@@ -67,9 +67,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
   @test (x -> M_implementation_type_expr._type_power(4, x)).(all_types) ==
         [constant, more, more, more, more]
 
-  #=-----------------------------------------------------------------------------------------------------------------------------------=#
-
-  # vérification des fonction renvoyant des booléens
+  # same tests applied on the trait
   @test M_trait_type_expr.is_constant(M_implementation_type_expr.return_constant())
   @test M_trait_type_expr.is_constant(M_implementation_type_expr.return_linear()) == false
   @test M_trait_type_expr.is_constant(M_implementation_type_expr.return_quadratic()) == false
@@ -100,8 +98,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
   @test M_trait_type_expr.is_more(M_implementation_type_expr.return_cubic()) == false
   @test M_trait_type_expr.is_more(M_implementation_type_expr.return_more())
 
-  # test de la fonction _type_product
-
+  # test of type_product
   @test (x -> M_trait_type_expr.type_product(constant, x)).(all_types) == all_types
   @test (x -> M_trait_type_expr.type_product(linear, x)).(all_types) ==
         [linear, quadratic, cubic, more, more]
@@ -111,7 +108,7 @@ using ExpressionTreeForge.M_implementation_type_expr,
   @test (x -> M_trait_type_expr.type_product(cubic, x)).(all_types) == [cubic, more, more, more, more]
   @test (x -> M_trait_type_expr.type_product(more, x)).(all_types) == [more, more, more, more, more]
 
-  # test de _type_power
+  # test of type_power
   @test (x -> M_trait_type_expr.type_power(0, x)).(all_types) ==
         [constant, constant, constant, constant, constant]
   @test (x -> M_trait_type_expr.type_power(1, x)).(all_types) == all_types
