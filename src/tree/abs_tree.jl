@@ -1,6 +1,7 @@
 module M_abstract_tree
 
 export create_tree
+export AbstractTree
 
 """
   Supertype of every tree.
@@ -14,6 +15,6 @@ abstract type AbstractTree end
 
 Create a `tree` of type `Type_node` from a `field` for the current node and its `children` or from an `Expr`.
 """
-create_tree() = @error("Should not be called (abstract_tree)")
+create_tree(tree::AbstractTree) = @error("Should not be called (abstract_tree)")
 
 end

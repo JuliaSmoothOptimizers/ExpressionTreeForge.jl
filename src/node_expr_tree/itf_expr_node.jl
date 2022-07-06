@@ -70,9 +70,9 @@ It could be also an operator or a constant.
 _node_is_variable(node::Abstract_expr_node) = false
 
 """
-    bool = _get_var_index(variable::Abstract_expr_node)
+    index = _get_var_index(variable::Abstract_expr_node)
 
-Return the index of the `variable`.
+Return the `index` of the `variable`.
 """
 _get_var_index(node::Abstract_expr_node) = ()
 
