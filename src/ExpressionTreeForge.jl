@@ -16,11 +16,11 @@ export Type_node, Complete_expr_tree, Pre_compiled_tree, Pre_n_compiled_tree, Ty
 export concave_type, constant_type, convex_type, linear_type, not_treated_type, unknown_type
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
 export get_convexity_status, set_convexity!, create_convex_tree
-export is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
+export is_constant, is_linear, is_quadratic, is_cubic, is_more
 export transform_to_Expr, transform_to_Expr_julia, transform_to_expr_tree
 export delete_imbricated_plus,
   get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
-export evaluate_expr_tree, calcul_gradient_expr_tree, hessian_expr_tree
+export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_gradient_expr_tree_reverse, hessian_expr_tree
 
 """
     Type_node{T} <: AbstractTree
@@ -192,20 +192,77 @@ Return the value of `unknown` from the enumerative type `M_implementation_convex
 """
 @inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
-@inline is_treated(c) = M_implementation_convexity_type.is_treated(c)
-@inline is_not_treated(c) = M_implementation_convexity_type.is_not_treated(c)
-@inline is_constant(c) = M_implementation_convexity_type.is_constant(c)
-@inline is_linear(c) = M_implementation_convexity_type.is_linear(c)
-@inline is_convex(c) = M_implementation_convexity_type.is_convex(c)
-@inline is_concave(c) = M_implementation_convexity_type.is_concave(c)
-@inline is_unknown(c) = M_implementation_convexity_type.is_unknown(c)
+"""
+    bool = is_treated(convexity_status)
 
+Check if `convexity_status` is different of `not_treated`.
+"""
+@inline is_treated(convexity_status) = M_implementation_convexity_type.is_treated(convexity_status)
+
+"""
+    bool = is_not_treated(convexity_status)
+
+Check if `convexity_status` is `not_treated`.
+"""
+@inline is_not_treated(convexity_status) = M_implementation_convexity_type.is_not_treated(convexity_status)
+
+"""
+    bool = is_constant(convexity_status)
+
+Check if `convexity_status` is `constant`.
+"""
+@inline is_constant(convexity_status) = M_implementation_convexity_type.is_constant(convexity_status)
+
+"""
+    bool = is_linear(convexity_status)
+
+Check if `convexity_status` is `linear`.
+"""
+@inline is_linear(convexity_status) = M_implementation_convexity_type.is_linear(convexity_status)
+
+"""
+    bool = is_convex(convexity_status)
+
+Check if `convexity_status` is strictly `convex`.
+"""
+@inline is_convex(convexity_status) = M_implementation_convexity_type.is_convex(convexity_status)
+
+"""
+    bool = is_concave(convexity_status)
+
+Check if `convexity_status` is strictly `concave`.
+"""
+@inline is_concave(convexity_status) = M_implementation_convexity_type.is_concave(convexity_status)
+
+"""
+    bool = is_unknown(convexity_status)
+
+Check if `convexity_status` is `unknown`.
+"""
+@inline is_unknown(convexity_status) = M_implementation_convexity_type.is_unknown(convexity_status)
+
+"""
+    complete_tree = create_complete_tree(expression_tree)
+
+Create a `complete_tree::Complete_expr_tree` from `expression_tree` (`::Type_expr_tree` for now).
+"""
 @inline create_complete_tree(tree) =
   M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
-@inline create_pre_compiled_tree(tree, x) =
+"""
+    precompiled_tree = create_pre_compiled_tree(expression_tree, x::AbstractVector)
+
+Create a `precompiled_tree::Pre_compiled_tree` from `expression_tree` (`::Type_expr_tree` for now).
+"""
+@inline create_pre_compiled_tree(tree, x::AbstractVector) =
   M_implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
 
+"""
+    pre_n_compiled_tree = create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number}
+    pre_n_compiled_tree = create_pre_n_compiled_tree(tree, multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}}) where {N} where {T <: Number}
+
+Create a `pre_n_compiled_tree::Pre_n_compiled_tree` from `expression_tree` (`::Type_expr_tree` for now).
+"""
 @inline create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number} =
   M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
 
@@ -215,12 +272,46 @@ Return the value of `unknown` from the enumerative type `M_implementation_convex
 ) where {N} where {T <: Number} =
   M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
-@inline is_constant(t::Type_calculus_tree) = t == Type_calculus_tree(0)
-@inline is_linear(t::Type_calculus_tree) = t == Type_calculus_tree(1)
-@inline is_quadratic(t::Type_calculus_tree) = t == Type_calculus_tree(2)
-@inline is_cubic(t::Type_calculus_tree) = t == Type_calculus_tree(3)
-@inline is_more_than_quadratic(t::Type_calculus_tree) = t == Type_calculus_tree(4)
+"""
+    bool = is_constant(type::Type_calculus_tree)
 
+Check if `type` have the value `constant` from the enumerative type `Type_calculus_tree`.
+"""
+@inline is_constant(type::Type_calculus_tree) = type == Type_calculus_tree(0)
+
+"""
+    bool = is_linear(type::Type_calculus_tree)
+
+Check if `type` have the value `linear` from the enumerative type `Type_calculus_tree`.
+"""
+@inline is_linear(type::Type_calculus_tree) = type == Type_calculus_tree(1)
+
+"""
+    bool = is_quadratic(type::Type_calculus_tree)
+
+Check if `type` have the value `quadratic` from the enumerative type `Type_calculus_tree`.
+"""
+@inline is_quadratic(type::Type_calculus_tree) = type == Type_calculus_tree(2)
+
+"""
+    bool = is_cubic(type::Type_calculus_tree)
+
+Check if `type` have the value `cubic` from the enumerative type `Type_calculus_tree`.
+"""
+@inline is_cubic(type::Type_calculus_tree) = type == Type_calculus_tree(3)
+
+"""
+    bool = is_more(type::Type_calculus_tree)
+
+Check if `type` have the value `more` from the enumerative type `Type_calculus_tree`.
+"""
+@inline is_more(type::Type_calculus_tree) = type == Type_calculus_tree(4)
+
+"""
+    print_tree(tree::AbstractTree)
+
+Print a tree as long as it satisfies the interface `M_interface_tree`.
+"""
 @inline print_tree(t) = algo_tree.printer_tree(t)
 
 # trait_expr_tree's functions
@@ -228,7 +319,7 @@ Return the value of `unknown` from the enumerative type `M_implementation_convex
     expr = transform_to_Expr(expr_tree)
 
 Transform `expr_tree` into an `Expr`.
-Warning: This function return an `Expr` with variables as MathOptInterface.VariableIndex.
+Warning: This function return an `Expr` with variables as `MathOptInterface.VariableIndex`.
 In order to get an standard `Expr` use `transform_to_Expr_julia`.
 """
 @inline transform_to_Expr(e::Any) = M_trait_expr_tree.transform_to_Expr(e::Any)
@@ -251,16 +342,15 @@ Transform `expr` into an `expr_tree::Type_expr_tree`.
     separated_terms = delete_imbricated_plus(expr_tree)
 
 Divide the expression tree as a terms of a sum if possible.
-It returns a vector where each component is a sub expression tree of `expr_tree`.
+It returns a vector where each component is a subexpression tree of `expr_tree`.
 
 Example:
 ```julia
 julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
-[
-x[1],
-x[2],
-x[3] * x[4]
-]
+3-element Vector{Expr}:
+ :(x[1])
+ :(x[2])
+ :(x[3] * x[4])
 ```
 """
 @inline delete_imbricated_plus(a::Any) = algo_expr_tree.delete_imbricated_plus(a)
@@ -286,8 +376,8 @@ true
 """
     indices = get_elemental_variable(expr_tree)
 
-Return the `indices` of the variable appearing in the `expr_tree`.
-This function find the elemental variable from the expression tree of an element function.
+Return the `indices` of the variable appearing in `expr_tree`.
+This function find the elemental variables from the expression tree of an element function.
 
 Example:
 ```julia
@@ -311,7 +401,7 @@ Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Eucli
     element_fun_from_N_to_Ni!(expr_tree, vector_indices)
 
 Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
-It it paired with `get_elemental_variable` to define the elemental element functions.
+It it paired with `get_elemental_variable` to define the elemental element functions expression tree.
 
 Example:
 ```julia
@@ -323,9 +413,9 @@ julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
   algo_expr_tree.element_fun_from_N_to_Ni!(a, v)
 
 """
-    cast_type_of_constant(expr_tree, type)
+    cast_type_of_constant(expr_tree, type::DataType)
 
-Cast the constant of `expr_tree` to `type`.
+Cast the `type` to the constants of `expr_tree`.
 """
 @inline cast_type_of_constant(ex::Any, t::DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
 
@@ -348,16 +438,22 @@ julia> evaluate_expr_tree(:(x[1] + x[2]), ones(2))
 
 @inline evaluate_expr_tree(e::Any) = (x::AbstractVector{} -> evaluate_expr_tree(e, x))
 
-@inline evaluate_expr_tree_multiple_points(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(e, x)
+"""
+    evaluate_expr_tree_multiple_points(expression_tree::Any, x::AbstractVector{AbstractVector}})
+    evaluate_expr_tree_multiple_points(expression_tree::Any)
 
-@inline evaluate_expr_tree_multiple_points(e::Any) =
-  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
+Evaluate the `expression_tree` with several points, represented as `x`.
+"""
+@inline evaluate_expr_tree_multiple_points(expression_tree::Any, x::AbstractVector) =
+  M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(expression_tree, x)
+
+@inline evaluate_expr_tree_multiple_points(expression_tree::Any) =
+  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(expression_tree)
 
 """
     gradient = calcul_gradient_expr_tree(expr_tree, x)
 
-Evaluate the `gradient` of `expr_tree` at the point `x` with a forward diff method.
+Evaluate the `gradient` of `expr_tree` at the point `x` with a forward automatic differentiation method.
 
 Example:
 ```julia
@@ -371,11 +467,13 @@ julia> calcul_gradient_expr_tree(:(x[1] + x[2]), rand(2))
 """
     gradient = calcul_gradient_expr_tree_reverse(expr_tree, x)
 
-Evaluate the `gradient` of `expr_tree` at the point `x` with a reverse diff method.
+Evaluate the `gradient` of `expr_tree` at the point `x` with a reverse automatic differentiation method.
 
 Example:
+```julia
 julia> calcul_gradient_expr_tree_reverse(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
+```
 """
 @inline calcul_gradient_expr_tree_reverse(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_gradient_expr_tree2(e, x)
@@ -383,7 +481,7 @@ julia> calcul_gradient_expr_tree_reverse(:(x[1] + x[2]), rand(2))
 """
     hessian = hessian_expr_tree(expr_tree, x)
 
-Evaluate the Hessian of `expr_tree` at the point x.
+Evaluate the Hessian of `expr_tree` at the point `x`.
 
 Example:
 ```julia
@@ -395,11 +493,11 @@ julia> hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
   M_evaluation_expr_tree.hessian_expr_tree(e, x)
 
 """
-    get_function_of_evaluation(ex)
+    eval_expression_tree = get_function_of_evaluation(expression_tree)
 
-Return a evaluation function of ex with better performance than the actual evaluate_expr_tree.
+Return and evaluation function of `expression_tree` with better performance than the actual `evaluate_expr_tree`.
 """
-@inline get_function_of_evaluation(ex::M_implementation_expr_tree.Type_expr_tree) =
-  algo_expr_tree.get_function_of_evaluation(ex)
+@inline get_function_of_evaluation(expression_tree::M_implementation_expr_tree.Type_expr_tree) =
+  algo_expr_tree.get_function_of_evaluation(expression_tree)
 
 end

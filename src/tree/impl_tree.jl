@@ -10,7 +10,7 @@ export Type_node
     Type_node{T} <: AbstractTree
 
 Basic implementation of a tree.
-A Type_node has fields:
+A `Type_node` has fields:
 
 * `field` gathering the informations about the current node;
 * `children` a vector of children, each of them being a `Type_node`.
@@ -29,7 +29,6 @@ end
 
 @inline _get_children(tree::Type_node{T}) where {T} = tree.children
 @inline _get_children(tree::Type_node{T}, i::Int) where {T} = tree.children[i]
-@inline _get_length_children(tree::Type_node{T}) where {T} = length(_get_children(tree))
 
 @inline (==)(a::Type_node{T}, b::Type_node{T}) where {T} = equal_tree(a, b)
 @inline my_and(x, y) = x && y

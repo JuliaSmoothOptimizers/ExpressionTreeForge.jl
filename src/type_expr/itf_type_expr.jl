@@ -3,35 +3,35 @@ module M_interface_type_expr
 """
     bool = _is_constant(type)
 
-Return `true` if `type` is a constant type.
+Return `true` if `type` is a `constant` type.
 """
 _is_constant() = ()
 
 """
     bool = _is_linear(type)
 
-Return `true` if `type` is a linear type.
+Return `true` if `type` is a `linear` type.
 """
 _is_linear() = ()
 
 """
     bool = _is_quadratic(type)
 
-Return `true` if `type` is a quadratic type.
+Return `true` if `type` is a `quadratic` type.
 """
 _is_quadratic() = ()
 
 """
     bool = _is_cubic(type)
 
-Return `true` if `type` is a cubic type.
+Return `true` if `type` is a `cubic` type.
 """
 _is_cubic() = ()
 
 """
     bool = _is_more(type)
 
-Return `true` if `type` is more than a quadratic type.
+Return `true` if `type` is `more` than a culib type.
 """
 _is_more() = ()
 

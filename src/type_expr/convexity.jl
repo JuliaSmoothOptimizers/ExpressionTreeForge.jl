@@ -4,13 +4,13 @@ module M_implementation_convexity_type
 """
     Convexity_type
 
-Type definition representing wether an expression is `not_treated, constant, linear, convex, concave` or `unknown`.
+Type representing wether an expression is `not_treated, constant, linear, convex, concave` or `unknown`.
 """
 @enum Convexity_type not_treated = 0 constant = 1 linear = 2 convex = 3 concave = 4 unknown = 5
 
 """
     Convexity_wrapper
-
+Wrapper around `Convexity_type`.
 """
 mutable struct Convexity_wrapper
   status::Convexity_type

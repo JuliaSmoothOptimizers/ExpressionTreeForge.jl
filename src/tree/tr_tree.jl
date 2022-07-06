@@ -6,9 +6,9 @@ import ..M_interface_tree: _get_node, _get_children
 export get_node
 export get_children
 
-"""Type instantiated dynamically that checks if an argument is a tree."""
+"""Type instantiated dynamically checking if an argument is a tree."""
 struct Type_trait_tree end
-"""Type instantiated dynamically that checks if an argument is not a tree."""
+"""Type instantiated dynamically checking if an argument is not a tree."""
 struct Type_not_trait_tree end
 
 """
@@ -31,6 +31,12 @@ In the other cases it returns `Type_not_trait_tree`.
 Get the current `node` as a part of `tree`.
 """
 @inline get_node(a) = _get_node(a, is_type_trait_tree(a))
+
+"""
+    node = _get_node(tree, trait_tree)
+
+Get the current `node` as a part of `tree`, if `trait_tree::Type_trait_tree`.
+"""
 @inline _get_node(a, b::Type_trait_tree) = _get_node(a)
 @inline _get_node(a, b::Type_not_trait_tree) = error(" The parameter is not a Tree")
 
@@ -40,6 +46,12 @@ Get the current `node` as a part of `tree`.
 Get the `children` from the current node as part of `tree`.
 """
 @inline get_children(a) = _get_children(a, is_type_trait_tree(a))
+
+"""
+    children = _get_children(tree, trait_tree)
+
+Get the `children` from the current node as part of `tree`, if `trait_tree::Type_trait_tree`..
+"""
 @inline _get_children(a, ::Type_trait_tree) = _get_children(a)
 @inline _get_children(a, ::Type_not_trait_tree) = error(" The parameter is not a Tree")
 
@@ -50,6 +62,11 @@ module algo_tree
 using ..M_trait_tree
 export printer_tree
 
+"""
+    print_tree(tree::AbstractTree)
+
+Print a tree as long as it satisfies the interface `M_interface_tree`.
+"""
 function printer_tree(tree, deepth = 0)
   ident = "\t"^deepth
   nd = get_node(tree)

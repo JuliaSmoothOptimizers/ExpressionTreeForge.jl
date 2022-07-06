@@ -4,7 +4,7 @@ using ..M_implementation_type_expr
 import ..M_interface_type_expr:
   _is_constant, _is_linear, _is_quadratic, _is_more, _is_cubic, _type_product, _type_power
 
-export is_trait_type_expr, is_linear, is_constant, is_quadratic, is_cubic, is_more_than_quadratic
+export is_trait_type_expr, is_linear, is_constant, is_quadratic, is_cubic, is_more
 
 
 """Type instantiated dynamically that checks if an argument is a `Type_expr_basic`"""

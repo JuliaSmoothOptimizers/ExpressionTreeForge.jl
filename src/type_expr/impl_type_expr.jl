@@ -7,7 +7,7 @@ export Type_expr_basic,
   _is_constant,
   _is_linear,
   _is_quadratic,
-  _is_more_than_quadratic,
+  _is_more,
   _is_cubic,
   return_constant,
   return_linear,
@@ -18,7 +18,6 @@ export Type_expr_basic,
 @enum Type_expr_basic constant = 0 linear = 1 quadratic = 2 cubic = 3 more = 4
 
 ############## interface methods ###################
-
 """
     bool = _is_constant(t::Type_expr_basic)
 
