@@ -22,23 +22,30 @@ export delete_imbricated_plus,
   get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
 export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
 
+"""
+    bound_tree = create_bound_tree(tree)
+
+Return a `similar` expression tree to `tree`, where each node correspond to the undefined bounds of the nodes of `tree`.
+"""
 @inline create_bound_tree(t) = M_bound_propagations.create_bound_tree(t)
 
+"""
+    set_bounds!(tree, bound_tree::Bound_tree)
+    set_bounds!(complete_tree::Complete_expr_tree)
+
+Set the bounds of `bound_tree` by walking `tree` and propagate the computation from the leaves to the root.
+A `Complete_expr_tree` contains a precompiled `bound_tree`, and then can be use alone.
+"""
 @inline set_bounds!(tree, bound_tree) = M_bound_propagations.set_bounds!(tree, bound_tree)
 
-@inline set_bounds!(tree) = M_bound_propagations.set_bounds!(tree)
+@inline set_bounds!(complete_tree) = M_bound_propagations.set_bounds!(complete_tree)
 
+"""
+    (inf_bound, sup_bound) = get_bound(bound_tree::Bound_tree)
+
+Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
+"""
 @inline get_bound(bound_tree) = M_bound_propagations.get_bound(bound_tree)
-
-Convexity_wrapper = M_implementation_convexity_type.Convexity_wrapper
-
-@inline get_convexity_wrapper(t::M_implementation_convexity_type.Convexity_wrapper) =
-  M_implementation_convexity_type.get_convexity_wrapper(t)
-
-@inline set_convexity_wrapper!(
-  cw::M_implementation_convexity_type.Convexity_wrapper,
-  typ::M_implementation_convexity_type.Convexity_type,
-) = M_implementation_convexity_type.set_convexity_wrapper!(cw, typ)
 
 @inline create_convex_tree(tree) = M_convexity_detection.create_convex_tree(tree)
 
@@ -101,117 +108,125 @@ Type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 @inline print_tree(t) = algo_tree.printer_tree(t)
 # trait_expr_tree's functions
 """
-    transform_to_Expr(expr_tree)
+    expr = transform_to_Expr(expr_tree)
 
-Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait defined in M_trait_expr_tree.
-ATTENTION: This function return an Expr with variable as MathOptInterface.VariableIndex
-In order to get an standard Expr use transform_to_Expr_julia.
+Transform `expr_tree` into an `Expr`.
+Warning: This function return an `Expr` with variables as MathOptInterface.VariableIndex.
+In order to get an standard `Expr` use `transform_to_Expr_julia`.
 """
 @inline transform_to_Expr(e::Any) = M_trait_expr_tree.transform_to_Expr(e::Any)
 
 """
-    transform_to_Expr_julia(expr_tree)
+    expr = transform_to_Expr_julia(expr_tree)
 
-Transform into an Expr the parameter expr_tree if expr_tree satisfies the trait define in M_trait_expr_tree.
+Transform `expr_tree` into an `Expr`.
 """
 @inline transform_to_Expr_julia(e::Any) = M_trait_expr_tree.transform_to_Expr2(e::Any)
 
 """
-    transform_to_expr_tree(Expr)
+    expr_tree = transform_to_expr_tree(expr)
 
-Transform into an expr_tree the parameter Expr if expr_tree satisfies the trait define in M_trait_expr_tree
+Transform `expr` into an `expr_tree::Type_expr_tree`.
 """
 @inline transform_to_expr_tree(e::Any) = M_trait_expr_tree.transform_to_expr_tree(e)::Type_expr_tree
 
 """
-    delete_imbricated_plus(e)
+    separated_terms = delete_imbricated_plus(expr_tree)
 
-If e represent a calculus tree, delete_imbricated_plus(e) will split that function into element function if it is possible.
-concretely if divides the tree into subtrees as long as top nodes are + or -
+Divide the expression tree as a terms of a sum if possible.
+It returns a vector where each component is a sub expression tree of `expr_tree`.
 
 Example:
+```julia
 julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
 [
 x[1],
 x[2],
 x[3] * x[4]
 ]
+```
 """
 @inline delete_imbricated_plus(a::Any) = algo_expr_tree.delete_imbricated_plus(a)
 
 """
-    get_type_tree(t)
+    type = get_type_tree(expr_tree)
 
-Return the type of the expression tree t, whose the types are defined in type_expr/impl_type_expr.jl
+Return the type of `expr_tree`.
+It can either be: `constant`, `linear`, `quadratic`, `cubic` or `more`.
 
 Example:
+```julia
 julia> get_type_tree(:(5+4)) == constant
 true
 julia> get_type_tree(:(x[1])) == linear
 true
 julia> get_type_tree(:(x[1]* x[2])) == quadratic
 true
+```
 """
 @inline get_type_tree(a::Any) = algo_expr_tree.get_type_tree(a)
 
 """
-    get_elemental_variable(expr_tree)
+    indices = get_elemental_variable(expr_tree)
 
-Return the index of the variable appearing in the expression tree.
+Return the `indices` of the variable appearing in the `expr_tree`.
+This function find the elemental variable from the expression tree of an element function.
 
 Example:
+```julia
 julia> get_elemental_variable(:(x[1] + x[3]) )
 [1, 3]
 julia> get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
 [1, 6, 2]
+```
 """
 @inline get_elemental_variable(a::Any) = algo_expr_tree.get_elemental_variable(a)
 
 """
-    get_Ui(index_new_var, n)
+    Ui = get_Ui(indices::Vector{Int}, n::Int)
 
-Create a the matrix U associated to the variable appearing in index_new_var.
-This function create a sparse matrix of size length(index_new_var)×n.
+Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variable`.
+Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
-@inline get_Ui(a::Vector{Int}, n::Int) = algo_expr_tree.get_Ui(a, n)
+@inline get_Ui(indices::Vector{Int}, n::Int) = algo_expr_tree.get_Ui(indices, n)
 
 """
-    element_fun_from_N_to_Ni!(expr_tree, v)
+    element_fun_from_N_to_Ni!(expr_tree, vector_indices)
 
-Transform the tree expr_tree, which represent a function from Rⁿ ⇢ R, to an element, function from Rⁱ → R, where i is the length of the vector v .
-This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,x₉ for example
-element_fun_from_N_to_Ni!(:(x[4] + x[5]), [1,2])
-> :(x[1] + x[2])
+Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
+It it paired with `get_elemental_variable` to define the elemental element functions.
+
+Example:
+```julia
+julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
+:(x[1] + x[2])
+```
 """
 @inline element_fun_from_N_to_Ni!(a::Any, v::AbstractVector{Int}) =
   algo_expr_tree.element_fun_from_N_to_Ni!(a, v)
 
 """
-    cast_type_of_constant(expr_tree, t)
+    cast_type_of_constant(expr_tree, type)
 
-Cast the constant of the Calculus tree expr_tree to the type t.
+Cast the constant of `expr_tree` to `type`.
 """
 @inline cast_type_of_constant(ex::Any, t::DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
 
-# M_evaluation_expr_tree's functions
 """
-    evaluate_expr_tree(t, x)
+    evaluate_expr_tree(expr_tree, x::AbstractVector)
 
-Evaluate the Calculus tree t given the vector x, the value of the variables in t.
+Evaluate the `expr_tree` given the vector `x`.
 
 Example:
+```julia
 julia> evaluate_expr_tree(:(x[1] + x[2]), ones(2))
-2
-julia> evaluate_expr_tree(:(x[1] + x[2]), [0,1])
-1
+2.
+```
 """
-@inline evaluate_expr_tree(e::Any, x::AbstractVector{T}) where {T <: Number} =
-  M_evaluation_expr_tree.evaluate_expr_tree(e, x)
+@inline evaluate_expr_tree(expr_tree::Any, x::AbstractVector{T}) where {T <: Number} =
+  M_evaluation_expr_tree.evaluate_expr_tree(expr_tree, x)
 
 @inline evaluate_expr_tree(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.evaluate_expr_tree(e, x)
-
-@inline evaluate_expr_tree(e::Any, x::AbstractArray) =
   M_evaluation_expr_tree.evaluate_expr_tree(e, x)
 
 @inline evaluate_expr_tree(e::Any) = (x::AbstractVector{} -> evaluate_expr_tree(e, x))
@@ -223,36 +238,41 @@ julia> evaluate_expr_tree(:(x[1] + x[2]), [0,1])
   M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(e)
 
 """
-    calcul_gradient_expr_tree(t, x)
+    gradient = calcul_gradient_expr_tree(expr_tree, x)
 
-Evaluate the gradient of the calculus tree t as the point x
+Evaluate the `gradient` of `expr_tree` at the point `x`.
 
 Example:
+```julia
 julia> calcul_gradient_expr_tree(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
+```
 """
 @inline calcul_gradient_expr_tree(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_gradient_expr_tree(e, x)
 
 """
-    calcul_gradient_expr_tree2(t, x)
+    gradient = calcul_gradient_expr_tree_reverse(expr_tree, x)
 
-Evaluate the gradient of the calculus tree t as the point x.
+Evaluate the `gradient` of `expr_tree` at the point `x`.
 
 Example:
-julia> calcul_gradient_expr_tree2(:(x[1] + x[2]), rand(2))
+julia> calcul_gradient_expr_tree_reverse(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
 """
-@inline calcul_gradient_expr_tree2(e::Any, x::AbstractVector) =
+@inline calcul_gradient_expr_tree_reverse(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_gradient_expr_tree2(e, x)
 
 """
-    calcul_Hessian_expr_tree(t, x)
+    hessian = calcul_Hessian_expr_tree(expr_tree, x)
 
-Evaluate the Hessian of the calculus tree t as the point x.
+Evaluate the Hessian of `expr_tree` at the point x.
 
+Example:
+```julia
 julia> calcul_Hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
 [2.0 0.0; 0.0 0.0]
+```
 """
 @inline calcul_Hessian_expr_tree(e::Any, x::AbstractVector) =
   M_evaluation_expr_tree.calcul_Hessian_expr_tree(e, x)

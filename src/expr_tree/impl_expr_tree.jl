@@ -36,7 +36,7 @@ function create_Expr(t::Type_expr_tree)
     elseif length(node_Expr) == 2
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else
-      error("non traité")
+      error("unsupported")
     end
   end
 end
@@ -57,7 +57,7 @@ function create_Expr2(t::Type_expr_tree)
     elseif length(node_Expr) == 2
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else
-      error("non traité")
+      error("unsupported")
     end
   end
 end

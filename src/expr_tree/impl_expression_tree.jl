@@ -82,7 +82,7 @@ function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Va
     end
     M_abstract_expr_node.create_node_expr(:x, index)
   else
-    @error("unsurpported operator (ModelingToolKit Interface)")
+    @error("unsupported operator (ModelingToolKit Interface)")
   end
 end
 

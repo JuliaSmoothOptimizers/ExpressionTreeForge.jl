@@ -327,14 +327,17 @@ Evaluation the gradient of the function represented by expr_tree at the point x
   x::Vector{},
   elmt_var::Vector{Int},
 ) = error("ce n'est pas un arbre d'expression")
+
 @inline _calcul_gradient_expr_tree2(
   a::Any,
   ::M_trait_expr_tree.Is_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = _calcul_gradient_expr_tree2(a, x, elmt_var)
+
 @inline _calcul_gradient_expr_tree2(expr_tree, x::Vector{T}) where {T <: Number} =
   ReverseDiff.gradient(evaluate_expr_tree(expr_tree), x)
+  
 @inline _calcul_gradient_expr_tree2(expr_tree, x::Vector{}, elmt_var::Vector{Int}) =
   ReverseDiff.gradient(evaluate_element_expr_tree(expr_tree, elmt_var), x)
 

@@ -6,8 +6,6 @@ using ..M_implementation_tree, ..M_implementation_complete_expr_tree
 
 Bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
 
-@inline craete_empty_bounds(t::DataType) = Bounds{t}(-Inf, Inf)
-
 @inline create_bound_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
   return Bound_tree{type}(
     M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)),

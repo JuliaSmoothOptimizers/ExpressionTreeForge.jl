@@ -61,7 +61,7 @@ function _delete_imbricated_plus(expr_tree::T) where {T}
 end
 
 """
-    get_type_tree(t)
+    type = get_type_tree(t)
 
 Return the type of the expression tree t, whose the type is inside the M_trait_expr_tree
 
@@ -128,7 +128,7 @@ function _get_elemental_variable(expr_tree)
 end
 
 """
-    get_Ui(index_new_var, n)
+    get_Ui(index_vars::Vector{Int}, n::Int)
 
 Create a the matrix U associated to the variable appearing in index_new_var.
 This function create a sparse matrix of size length(index_new_var)×n.
