@@ -1,6 +1,6 @@
 module M_implementation_pre_compiled_tree
 
-using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node
+using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node, ..M_abstract_expr_tree
 
 mutable struct New_field
   op::M_abstract_expr_node.Abstract_expr_node
@@ -10,6 +10,16 @@ end
 
 @inline get_op_from_field(field::New_field) = field.op
 
+"""
+    New_node{Y <: Number}
+
+Represent a node with:
+
+* `field::New_field` representing an operator;
+* `tmp::Vector{M_abstract_expr_node.MyRef{Y}}` representing the value of the children;
+* `children::Vector{New_node{Y}}` the collection of the children;
+* `length_children::Int` the number of children.
+"""
 mutable struct New_node{Y <: Number}
   field::New_field
   tmp::Vector{M_abstract_expr_node.MyRef{Y}}
@@ -17,14 +27,23 @@ mutable struct New_node{Y <: Number}
   length_children::Int
 end
 
-mutable struct Pre_compiled_tree{Y <: Number}
-  racine::New_node{Y}
+"""
+    Pre_compiled_tree{T} <: AbstractExprTree
+
+Implementation of an expression tree where the value of the children is accessible from the parent using `MyRef`.
+A `Pre_compiled_tree` has fields:
+
+* `root::New_node{Y}` representing an expression tree;
+* `x::AbstractVector{Y}` the vector evaluating `root`.
+"""
+mutable struct Pre_compiled_tree{Y <: Number} <: AbstractExprTree
+  root::New_node{Y}
   x::AbstractVector{Y}
 end
 
 @inline get_x(tree::Pre_compiled_tree{Y}) where {Y <: Number} = tree.x
 
-@inline get_racine(tree::Pre_compiled_tree{Y}) where {Y <: Number} = tree.racine
+@inline get_root(tree::Pre_compiled_tree{Y}) where {Y <: Number} = tree.root
 
 @inline get_field_from_node(node::New_node{Y}) where {Y <: Number} = node.field
 
@@ -85,8 +104,6 @@ function _create_pre_compiled_tree(
     new_node = create_new_node(New_field, T)
     return new_node
   else
-    # new_ch = create_pre_compiled_tree.(ch, x)
-    # new_ch = Vector{New_node{T}}(undef, length(ch))
     new_ch = map(child -> _create_pre_compiled_tree(child, x), ch)
     New_field = create_New_field(nd)
     return create_new_node(New_field, new_ch)
@@ -105,8 +122,8 @@ function evaluate_pre_compiled_tree(
 ) where {T <: Number}
   res = M_abstract_expr_node.new_ref(T)
   tree.x .= v
-  racine = get_racine(tree)
-  evaluate_new_node!(racine, res)
+  root = get_root(tree)
+  evaluate_new_node!(root, res)
   return M_abstract_expr_node.get_myRef(res)
 end
 
@@ -162,8 +179,6 @@ function evaluate_new_node!(node::New_node{T}, tmp::MyRef{T}) where {T <: Number
       ref = get_tmp_from_node(node, i)
       evaluate_new_node!(child, ref)
     end
-    tmp_vector = get_tmp_vector_from_node(node)
-    # @show op , tmp, tmp_vector[1] / tmp_vector[2]
     M_trait_expr_node._evaluate_node!(op, get_tmp_vector_from_node(node), tmp)
   end
 end

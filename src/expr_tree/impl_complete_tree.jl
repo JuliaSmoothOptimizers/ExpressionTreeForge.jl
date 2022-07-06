@@ -21,13 +21,31 @@ import ..M_interface_expr_tree:
 
 export Complete_node
 
-""" """
+""" 
+    Complete_node{T <: Number} 
+
+Gather in a single structure:
+
+* `op::M_abstract_expr_node.Abstract_expr_node` an arithmetic operator;
+* `bounds::M_abstract_expr_tree.Bounds{T}` the bounds of this operator depending its children;
+* `convexity_status::M_implementation_convexity_type.Convexity_wrapper` the convexity status of this operator depending its children.
+"""
 mutable struct Complete_node{T <: Number}
   op::M_abstract_expr_node.Abstract_expr_node
   bounds::M_abstract_expr_tree.Bounds{T}
   convexity_status::M_implementation_convexity_type.Convexity_wrapper
 end
 
+"""
+    Complete_expr_tree{T} <: AbstractTree
+
+Implementation of an expression tree.
+`Complete_expr_tree` is the same than `Type_expr_tree` with the additions in each node of a `Bounds` and `Convexity_wrapper`.
+A `Complete_expr_tree` has fields:
+
+* `field::Complete_node{T}` representing an operator, a constant or a variable alongide its bounds and its convexity status;
+* `children::Vector{Complete_expr_tree{T}}` a vector of children, each of them being a `Complete_expr_tree{T}`.
+"""
 Complete_expr_tree{T <: Number} = Type_node{Complete_node{T}}
 
 @inline create_complete_node(

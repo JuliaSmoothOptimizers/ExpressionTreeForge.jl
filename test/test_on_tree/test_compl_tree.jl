@@ -54,11 +54,11 @@ using Test
   MOI_half_hessian_en_x = sparse(row, column, values, n, n)
   MOI_hessian_en_x = Symmetric(MOI_half_hessian_en_x)
 
-  H = ExpressionTreeForge.calcul_Hessian_expr_tree(complete_tree, v)
+  H = ExpressionTreeForge.hessian_expr_tree(complete_tree, v)
   @test (norm(MOI_hessian_en_x) - norm(H)) < θ
 
   ExpressionTreeForge.set_bounds!(complete_tree)
-  bound_tree = ExpressionTreeForge.create_bound_tree(expr_tree)
+  bound_tree = ExpressionTreeForge.create_bounds_tree(expr_tree)
   ExpressionTreeForge.set_bounds!(expr_tree, bound_tree)
   @test ExpressionTreeForge.get_bound(complete_tree) == ExpressionTreeForge.get_bound(bound_tree)
 

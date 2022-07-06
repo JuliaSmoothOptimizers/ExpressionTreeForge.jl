@@ -9,7 +9,7 @@
 
     obj = MathOptInterface.objective_expr(evaluator)
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
-    bound_expr_tree = ExpressionTreeForge.create_bound_tree(expr_tree_obj)
+    bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
     @test ExpressionTreeForge.get_bound(bound_expr_tree) == (-1, 1)
   end
@@ -17,19 +17,19 @@
   @testset "Product" begin
     e1 = :(x[1] * x[2])
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
-    bound_tree = ExpressionTreeForge.create_bound_tree(et1)
+    bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
     @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
 
     e1 = :(sin(x[1]) * 3 * x[2]^2)
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
-    bound_tree = ExpressionTreeForge.create_bound_tree(et1)
+    bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
     @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
 
     e1 = :(sin(x[1]) * 3)
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
-    bound_tree = ExpressionTreeForge.create_bound_tree(et1)
+    bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
     @test ExpressionTreeForge.get_bound(bound_tree) == (-3, 3)
   end
@@ -37,13 +37,13 @@
   @testset "Tan" begin
     e1 = :(tan(x[2]))
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
-    bound_tree = ExpressionTreeForge.create_bound_tree(et1)
+    bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
     @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
 
     e1 = :(tan(4))
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
-    bound_tree = ExpressionTreeForge.create_bound_tree(et1)
+    bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
     @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
   end
@@ -57,7 +57,7 @@
     MathOptInterface.initialize(evaluator, [:ExprGraph])
     obj = MathOptInterface.objective_expr(evaluator)
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
-    bound_expr_tree = ExpressionTreeForge.create_bound_tree(expr_tree_obj)
+    bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
     @test ExpressionTreeForge.get_bound(bound_expr_tree) == (0, Inf)
 
@@ -69,7 +69,7 @@
     MathOptInterface.initialize(evaluator, [:ExprGraph])
     obj = MathOptInterface.objective_expr(evaluator)
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
-    bound_expr_tree = ExpressionTreeForge.create_bound_tree(expr_tree_obj)
+    bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
     @test ExpressionTreeForge.get_bound(bound_expr_tree) == (0, Inf)
 
@@ -81,7 +81,7 @@
     MathOptInterface.initialize(evaluator, [:ExprGraph])
     obj = MathOptInterface.objective_expr(evaluator)
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
-    bound_expr_tree = ExpressionTreeForge.create_bound_tree(expr_tree_obj)
+    bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
     @test ExpressionTreeForge.get_bound(bound_expr_tree) == (0, Inf)
 
@@ -93,7 +93,7 @@
     MathOptInterface.initialize(evaluator, [:ExprGraph])
     obj = MathOptInterface.objective_expr(evaluator)
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
-    bound_expr_tree = ExpressionTreeForge.create_bound_tree(expr_tree_obj)
+    bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
     @test ExpressionTreeForge.get_bound(bound_expr_tree) == (-Inf, Inf)
   end

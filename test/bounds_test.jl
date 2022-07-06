@@ -5,13 +5,13 @@ using Test
 @testset "Bounds test" begin
   e1 = :(x[1] - x[2])
   et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
-  bound_tree = ExpressionTreeForge.create_bound_tree(et1)
+  bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
   ExpressionTreeForge.set_bounds!(et1, bound_tree)
   @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
 
   e2 = :(4 - (sin(x[3]) - sin(x[4]) * 3))
   et2 = ExpressionTreeForge.transform_to_expr_tree(e2)
-  bound_tree2 = ExpressionTreeForge.create_bound_tree(et2)
+  bound_tree2 = ExpressionTreeForge.create_bounds_tree(et2)
   ExpressionTreeForge.set_bounds!(et2, bound_tree2)
   ExpressionTreeForge.print_tree(bound_tree2)
 
@@ -32,7 +32,7 @@ using Test
   Expr_j = MathOptInterface.objective_expr(evaluator)
   expr_tree_j = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
 
-  bound_expr_tree = ExpressionTreeForge.create_bound_tree(expr_tree_j)
+  bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_j)
   ExpressionTreeForge.set_bounds!(expr_tree_j, bound_expr_tree)
   ExpressionTreeForge.print_tree(bound_expr_tree)
 end

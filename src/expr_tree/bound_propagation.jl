@@ -6,13 +6,13 @@ using ..M_implementation_tree, ..M_implementation_complete_expr_tree
 
 Bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
 
-@inline create_bound_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
+@inline create_bounds_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
   return Bound_tree{type}(
     M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)),
-    create_bound_tree.(M_trait_tree.get_children(tree)),
+    create_bounds_tree.(M_trait_tree.get_children(tree)),
   )
 
-@inline create_bound_tree(cst::T, type = Float64::DataType) where {T <: Number} =
+@inline create_bounds_tree(cst::T, type = Float64::DataType) where {T <: Number} =
   return Bound_tree{type}(M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)), [])
 
 """

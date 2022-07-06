@@ -1,6 +1,6 @@
 module M_implementation_pre_n_compiled_tree
 
-using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node
+using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node, ..M_abstract_expr_tree
 
 mutable struct New_field
   op::M_abstract_expr_node.Abstract_expr_node
@@ -10,6 +10,18 @@ end
 
 @inline get_op_from_field(field::New_field) = field.op
 
+"""
+    Eval_n_node{Y <: Number}
+
+Represent a node with:
+
+* `field::New_field` an operator;
+* `vec_tmp_children::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}` the value of the children;
+* `vec_tmp_n_eval::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}` the value of the current node;
+* `children::Vector{Eval_n_node{Y}}` the children of the current node;
+* `length_children::Int` the number of children;
+* `length_n_eval::Int` the number of simultaneous evaluation supported.
+"""
 mutable struct Eval_n_node{Y <: Number}
   field::New_field
   vec_tmp_children::Vector{Vector{M_abstract_expr_node.MyRef{Y}}}
@@ -19,14 +31,25 @@ mutable struct Eval_n_node{Y <: Number}
   length_n_eval::Int
 end
 
-mutable struct Pre_n_compiled_tree{Y <: Number}
-  racine::Eval_n_node{Y}
+"""
+    Pre_n_compiled_tree{Y <: Number} <: AbstractExprTree
+
+Represent an expression tree that can be evaluate simultaneously by several points.
+It has the fields:
+
+* `root::Eval_n_node{Y}` the root of the expression tree;
+* `multiple_x::Vector{AbstractVector{Y}}` the multiple inputs `x` of the `Pre_n_compiled_tree`
+* `multiple::Int` the number of simultaneous evaluation supported;
+* `vec_tmp::Vector{M_abstract_expr_node.MyRef{Y}}` the result of the `multiple` evaluations.
+"""
+mutable struct Pre_n_compiled_tree{Y <: Number} <: AbstractExprTree
+  root::Eval_n_node{Y}
   multiple_x::Vector{AbstractVector{Y}}
   multiple::Int
   vec_tmp::Vector{M_abstract_expr_node.MyRef{Y}}
 end
 
-@inline get_racine(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.racine
+@inline get_root(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.root
 
 @inline get_multiple(tree::Pre_n_compiled_tree{Y}) where {Y <: Number} = tree.multiple
 
@@ -180,11 +203,11 @@ function evaluate_pre_n_compiled_tree(
 ) where {N} where {T <: Number}
   n_eval = length(multiple_x_view)
   n_eval == get_multiple(tree) ||
-    error("mismatch of the vector of point and the pre_compilation of the tree")
+    error("mismatch between the vector of points and the pre_compilation of the tree")
   set_multiple_x!(tree, multiple_x_view)
-  racine = get_racine(tree)
+  root = get_root(tree)
   vec_tmp = get_vec_tmp(tree)
-  evaluate_eval_n_node!(racine, vec_tmp)
+  evaluate_eval_n_node!(root, vec_tmp)
   length(vec_tmp) == 1 ? res = M_abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
   return res::T
 end
@@ -195,19 +218,19 @@ function evaluate_pre_n_compiled_tree(
 ) where {T <: Number}
   n_eval = length(multiple_v)
   n_eval == get_multiple(tree) ||
-    error("mismatch of the vector of point and the pre_compilation of the tree")
+    error("mismatch between the vector of points and the pre_compilation of the tree")
   set_multiple_x!(tree, multiple_v)
-  racine = get_racine(tree)
+  root = get_root(tree)
   vec_tmp = get_vec_tmp(tree)
-  evaluate_eval_n_node!(racine, vec_tmp)
+  evaluate_eval_n_node!(root, vec_tmp)
   length(vec_tmp) == 1 ? res = M_abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
   return res::T
 end
 
 function evaluate_pre_n_compiled_tree(tree::Pre_n_compiled_tree{T}) where {T <: Number}
-  racine = get_racine(tree)
+  root = get_root(tree)
   vec_tmp = get_vec_tmp(tree)
-  evaluate_eval_n_node!(racine, vec_tmp)
+  evaluate_eval_n_node!(root, vec_tmp)
   length(vec_tmp) == 1 ? res = M_abstract_expr_node.get_myRef(vec_tmp[1])::T : res = sum(vec_tmp)::T
   return res::T
 end

@@ -4,6 +4,8 @@ import ..M_abstract_tree: AbstractTree, create_tree
 import ..M_interface_tree: _get_node, _get_children
 import Base.==
 
+export Type_node
+
 """
     Type_node{T} <: AbstractTree
 
@@ -11,7 +13,7 @@ Basic implementation of a tree.
 A Type_node has fields:
 
 * `field` gathering the informations about the current node;
-* `children` a vector of child, each of them being a Type_node.
+* `children` a vector of children, each of them being a `Type_node`.
 """
 mutable struct Type_node{T} <: AbstractTree
   field::T

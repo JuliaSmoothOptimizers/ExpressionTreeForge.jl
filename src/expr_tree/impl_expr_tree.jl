@@ -18,6 +18,16 @@ import ..M_interface_expr_tree:
 
 export Type_expr_tree
 
+"""
+    Type_expr_tree{T} <: AbstractTree
+
+Basic implementation of an expression tree.`
+Every expression tree supported must be able to return `Type_expr_tree`.
+A `Type_expr_tree` has fields:
+
+* `field::Abstract_expr_node` representing an operator, a constant or a variable;
+* `children::Vector{Type_expr_tree{T}}` a vector of children, each of them being a `Type_expr_tree{T}`.
+"""
 Type_expr_tree = Type_node{Abstract_expr_node}
 
 function create_Expr(t::Type_expr_tree)
@@ -28,11 +38,11 @@ function create_Expr(t::Type_expr_tree)
   else
     children_Expr = create_Expr.(ch)
     node_Expr = M_trait_expr_node.node_to_Expr(nd)
-    #défférenciation entre les opérateurs simple :+, :- et compliqué comme :^2
-    #premier cas, les cas simple :+, :-
+    # differentiate the simple operators :+, :- and the more complicated :^2
+    # simple operators
     if length(node_Expr) == 1
       return Expr(:call, node_Expr[1], children_Expr...)
-      #les cas compliqués, pour le moment :^
+    # complicate operators
     elseif length(node_Expr) == 2
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else
@@ -49,11 +59,11 @@ function create_Expr2(t::Type_expr_tree)
   else
     children_Expr = create_Expr2.(ch)
     node_Expr = M_trait_expr_node.node_to_Expr2(nd)
-    #défférenciation entre les opérateurs simple :+, :- et compliqué comme :^2
-    #premier cas, les cas simple :+, :-
+    # differentiate the simple operators :+, :- and the more complicated :^2
+    # simple operators
     if length(node_Expr) == 1
       return Expr(:call, node_Expr[1], children_Expr...)
-      #les cas compliqués, pour le moment :^
+    # complicate operators
     elseif length(node_Expr) == 2
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else

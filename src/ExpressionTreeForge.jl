@@ -11,8 +11,8 @@ using .M_implementation_complete_expr_tree,
   .M_implementation_pre_compiled_tree, .M_implementation_pre_n_compiled_tree
 using .M_bound_propagations, .M_convexity_detection
 
-export create_bound_tree, get_bound, set_bounds!
-export Complete_expr_tree, re_compiled_tree, Pre_n_compiled_tree, Type_calculus_tree
+export create_bounds_tree, get_bound, set_bounds!
+export Type_node, Complete_expr_tree, Pre_compiled_tree, Pre_n_compiled_tree, Type_calculus_tree
 export concave_type, constant_type, convex_type, linear_type, not_treated_type, unknown_type
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
 export get_convexity_status, set_convexity!, create_convex_tree
@@ -20,14 +20,86 @@ export is_constant, is_linear, is_quadratic, is_cubic, is_more_than_quadratic
 export transform_to_Expr, transform_to_Expr_julia, transform_to_expr_tree
 export delete_imbricated_plus,
   get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
-export evaluate_expr_tree, calcul_gradient_expr_tree, calcul_Hessian_expr_tree
+export evaluate_expr_tree, calcul_gradient_expr_tree, hessian_expr_tree
 
 """
-    bound_tree = create_bound_tree(tree)
+    Type_node{T} <: AbstractTree
 
-Return a `similar` expression tree to `tree`, where each node correspond to the undefined bounds of the nodes of `tree`.
+Basic implementation of a tree.
+A Type_node has fields:
+
+* `field` gathering the informations about the current node;
+* `children` a vector of children, each of them being a `Type_node`.
 """
-@inline create_bound_tree(t) = M_bound_propagations.create_bound_tree(t)
+Type_node = M_implementation_tree.Type_node
+
+"""
+    Type_expr_tree{T} <: AbstractTree
+
+Basic implementation of an expression tree.
+Every expression tree supported must be able to return `Type_expr_tree`.
+A `Type_expr_tree` has fields:
+
+* `field::Abstract_expr_node` representing an operator, a constant or a variable;
+* `children::Vector{Type_expr_tree{T}}` a vector of children, each of them being a `Type_expr_tree{T}`.
+"""
+Type_expr_tree = M_implementation_expr_tree.Type_expr_tree
+
+"""
+    Complete_expr_tree{T} <: AbstractTree
+
+Implementation of an expression tree.
+`Complete_expr_tree` is the same than `Type_expr_tree` with the additions in each node of a `Bounds` and `Convexity_wrapper`.
+A `Complete_expr_tree` has fields:
+
+* `field::Complete_node{T}` representing an operator, a constant or a variable alongide its bounds and its convexity status;
+* `children::Vector{Complete_expr_tree{T}}` a vector of children, each of them being a `Complete_expr_tree{T}`.
+"""
+Complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.Complete_expr_tree{T}
+
+"""
+    Pre_compiled_tree{T} <: AbstractExprTree
+
+Implementation of an expression tree where the value of the children is accessible from the parent using `MyRef`.
+A `Pre_compiled_tree` has fields:
+
+* `root::New_node{Y}` representing an expression tree;
+* `x::AbstractVector{Y}` the vector evaluating `root`.
+"""
+Pre_compiled_tree{T <: Number} = M_implementation_pre_compiled_tree.Pre_compiled_tree{T}
+
+"""
+    Pre_n_compiled_tree{Y <: Number} <: AbstractExprTree
+
+Represent an expression tree that can be evaluate simultaneously by several points.
+It has the fields:
+
+* `root::Eval_n_node{Y}` the root of the expression tree;
+* `multiple_x::Vector{AbstractVector{Y}}` the multiple inputs `x` of the `Pre_n_compiled_tree`
+* `multiple::Int` the number of simultaneous evaluation supported;
+* `vec_tmp::Vector{M_abstract_expr_node.MyRef{Y}}` the result of the `multiple` evaluations.
+"""
+Pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T}
+
+"""
+    Type_calculus_tree
+
+Represent the different types that a expression can be :
+
+* `constant`
+* `linear`
+* `quadratic`
+* `cubic`
+* `more` which means non-linear, non-quadratic and non-cubic. 
+"""
+Type_calculus_tree = M_implementation_type_expr.Type_expr_basic
+
+"""
+    bound_tree = create_bounds_tree(tree)
+
+Return a `similar` expression tree to `tree`, where each node has an undefined bounds.
+"""
+@inline create_bounds_tree(t) = M_bound_propagations.create_bounds_tree(t)
 
 """
     set_bounds!(tree, bound_tree::Bound_tree)
@@ -47,23 +119,77 @@ Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
 """
 @inline get_bound(bound_tree) = M_bound_propagations.get_bound(bound_tree)
 
+"""
+    convex_tree = create_convex_tree(tree::Type_node)
+
+Return a `similar` expression tree to `tree`, where each node has an undefined convexity status.
+"""
 @inline create_convex_tree(tree) = M_convexity_detection.create_convex_tree(tree)
 
-@inline set_convexity!(tree, cvx_tree, bound_tree) =
-  M_convexity_detection.set_convexity!(tree, cvx_tree, bound_tree)
+"""
+    set_convexity!(tree, convexity_tree, bound_tree)
+    set_convexity!(complete_tree)
+
+Deduce from elementary rules the convexity status of `tree` nodes or `complete_tree` nodes.
+`complete_tree` integrate a bounds tree and can run alone the convexity detection whereas `tree`
+ require the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
+"""
+@inline set_convexity!(tree, convexity_tree, bound_tree) =
+  M_convexity_detection.set_convexity!(tree, convexity_tree, bound_tree)
 
 @inline set_convexity!(complete_tree) = M_convexity_detection.set_convexity!(complete_tree)
 
-@inline get_convexity_status(cvx_tree::M_convexity_detection.Convexity_tree) =
-  M_convexity_detection.get_convexity_status(cvx_tree)
+"""
+    convexity_status = get_convexity_status(convexity_tree::M_convexity_detection.Convexity_tree)
+    convexity_status = get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree)
+
+Return the convexity status of either `convexity_tree` or `complete_tree`.
+The status can be:
+* `constant`
+* `linear`
+* strictly `convex`
+* strictly `concave`
+* `unknown`
+"""
+@inline get_convexity_status(convexity_tree::M_convexity_detection.Convexity_tree) =
+  M_convexity_detection.get_convexity_status(convexity_tree)
 
 @inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree) =
   M_convexity_detection.get_convexity_status(complete_tree)
 
+"""
+    constant = constant_type() 
+
+Return the value of `constant` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+"""
 @inline constant_type() = M_implementation_convexity_type.constant_type()
+
+"""
+    linear = linear_type() 
+
+Return the value of `linear` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+"""
 @inline linear_type() = M_implementation_convexity_type.linear_type()
+
+"""
+    convex = convex_type() 
+
+Return the value of `convex` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+"""
 @inline convex_type() = M_implementation_convexity_type.convex_type()
+
+"""
+    concave = concave_type() 
+
+Return the value of `concave` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+"""
 @inline concave_type() = M_implementation_convexity_type.concave_type()
+
+"""
+    unknown = unknown_type() 
+
+Return the value of `unknown` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+"""
 @inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
 @inline is_treated(c) = M_implementation_convexity_type.is_treated(c)
@@ -74,19 +200,11 @@ Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
 @inline is_concave(c) = M_implementation_convexity_type.is_concave(c)
 @inline is_unknown(c) = M_implementation_convexity_type.is_unknown(c)
 
-Type_expr_tree = M_implementation_expr_tree.Type_expr_tree
-
 @inline create_complete_tree(tree) =
   M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
-Complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.Complete_expr_tree{T}
-
-Pre_compiled_tree{T <: Number} = M_implementation_pre_compiled_tree.Pre_compiled_tree{T}
-
 @inline create_pre_compiled_tree(tree, x) =
   M_implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
-
-Pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T}
 
 @inline create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number} =
   M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
@@ -97,8 +215,6 @@ Pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_co
 ) where {N} where {T <: Number} =
   M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
-Type_calculus_tree = M_implementation_type_expr.Type_expr_basic
-
 @inline is_constant(t::Type_calculus_tree) = t == Type_calculus_tree(0)
 @inline is_linear(t::Type_calculus_tree) = t == Type_calculus_tree(1)
 @inline is_quadratic(t::Type_calculus_tree) = t == Type_calculus_tree(2)
@@ -106,6 +222,7 @@ Type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 @inline is_more_than_quadratic(t::Type_calculus_tree) = t == Type_calculus_tree(4)
 
 @inline print_tree(t) = algo_tree.printer_tree(t)
+
 # trait_expr_tree's functions
 """
     expr = transform_to_Expr(expr_tree)
@@ -240,7 +357,7 @@ julia> evaluate_expr_tree(:(x[1] + x[2]), ones(2))
 """
     gradient = calcul_gradient_expr_tree(expr_tree, x)
 
-Evaluate the `gradient` of `expr_tree` at the point `x`.
+Evaluate the `gradient` of `expr_tree` at the point `x` with a forward diff method.
 
 Example:
 ```julia
@@ -254,7 +371,7 @@ julia> calcul_gradient_expr_tree(:(x[1] + x[2]), rand(2))
 """
     gradient = calcul_gradient_expr_tree_reverse(expr_tree, x)
 
-Evaluate the `gradient` of `expr_tree` at the point `x`.
+Evaluate the `gradient` of `expr_tree` at the point `x` with a reverse diff method.
 
 Example:
 julia> calcul_gradient_expr_tree_reverse(:(x[1] + x[2]), rand(2))
@@ -264,18 +381,18 @@ julia> calcul_gradient_expr_tree_reverse(:(x[1] + x[2]), rand(2))
   M_evaluation_expr_tree.calcul_gradient_expr_tree2(e, x)
 
 """
-    hessian = calcul_Hessian_expr_tree(expr_tree, x)
+    hessian = hessian_expr_tree(expr_tree, x)
 
 Evaluate the Hessian of `expr_tree` at the point x.
 
 Example:
 ```julia
-julia> calcul_Hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
+julia> hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
 [2.0 0.0; 0.0 0.0]
 ```
 """
-@inline calcul_Hessian_expr_tree(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.calcul_Hessian_expr_tree(e, x)
+@inline hessian_expr_tree(e::Any, x::AbstractVector) =
+  M_evaluation_expr_tree.hessian_expr_tree(e, x)
 
 """
     get_function_of_evaluation(ex)

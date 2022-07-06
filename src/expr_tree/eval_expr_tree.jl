@@ -283,18 +283,22 @@ Evaluation the gradient of the function represented by expr_tree at the point x
 """
 @inline calcul_gradient_expr_tree(a::Any, x::Vector{}) =
   _calcul_gradient_expr_tree(a, is_expr_tree(a), x)
+
 @inline _calcul_gradient_expr_tree(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
-  error("ce n'est pas un arbre d'expression")
+  error("The first argument is not an expression tree")
+
 @inline _calcul_gradient_expr_tree(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
   _calcul_gradient_expr_tree(a, x)
+
 @inline calcul_gradient_expr_tree(a::Any, x::Vector{}, elmt_var::Vector{Int}) =
   _calcul_gradient_expr_tree(a, is_expr_tree(a), x, elmt_var)
+
 @inline _calcul_gradient_expr_tree(
   a::Any,
   ::M_trait_expr_tree.Is_not_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
-) = error("ce n'est pas un arbre d'expression")
+) = error("The first argument is not an expression tree")
 
 @inline _calcul_gradient_expr_tree(
   a::Any,
@@ -316,7 +320,7 @@ Evaluation the gradient of the function represented by expr_tree at the point x
   _calcul_gradient_expr_tree2(a, is_expr_tree(a), x)
 
 @inline _calcul_gradient_expr_tree2(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
-  error("ce n'est pas un arbre d'expression")
+  error("The first argument is not an expression tree")
 
 @inline _calcul_gradient_expr_tree2(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
   _calcul_gradient_expr_tree2(a, x)
@@ -326,7 +330,7 @@ Evaluation the gradient of the function represented by expr_tree at the point x
   ::M_trait_expr_tree.Is_not_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
-) = error("ce n'est pas un arbre d'expression")
+) = error("The first argument is not an expression tree")
 
 @inline _calcul_gradient_expr_tree2(
   a::Any,
@@ -342,17 +346,17 @@ Evaluation the gradient of the function represented by expr_tree at the point x
   ReverseDiff.gradient(evaluate_element_expr_tree(expr_tree, elmt_var), x)
 
 """
-    calcul_Hessian_expr_tree(expr_tree, x)
+    hessian_expr_tree(expr_tree, x)
     
-Compute the hessian matrix of the function represented by expr_tree at the point x
+Compute the hessian matrix of the function represented by `expr_tree` at the point `x`.
 """
-@inline calcul_Hessian_expr_tree(a::Any, x::Vector{}) =
-  _calcul_Hessian_expr_tree(a, is_expr_tree(a), x)
-@inline _calcul_Hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
-  error("ce n'est pas un arbre d'expression")
-@inline _calcul_Hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
-  _calcul_Hessian_expr_tree(a, x)
-@inline _calcul_Hessian_expr_tree(expr_tree, x::Vector{}) =
+@inline hessian_expr_tree(a::Any, x::Vector{}) =
+  _hessian_expr_tree(a, is_expr_tree(a), x)
+@inline _hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
+  error("The first argument is not an expression tree")
+@inline _hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
+  _hessian_expr_tree(a, x)
+@inline _hessian_expr_tree(expr_tree, x::Vector{}) =
   ForwardDiff.hessian(evaluate_expr_tree(expr_tree), x)
 
 #=-----------------------------------------------------------------------------------------------------------------------------------
