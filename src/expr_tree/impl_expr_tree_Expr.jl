@@ -36,7 +36,7 @@ function _get_expr_node(ex::Expr)
     index_variable = args[2]
     return M_abstract_expr_node.create_node_expr(name_variable, index_variable)
   else
-    error("partie non traite des Expr pour le moment ")
+    error("Unsupported")
   end
 end
 
@@ -55,7 +55,7 @@ function _get_expr_children(ex::Expr)
       return args[2:(end - 1)]
     end
   else
-    error("partie non traité des expr")
+    error("Unsupported")
   end
 end
 
@@ -73,15 +73,12 @@ function _get_real_node(ex::Expr)
       return op
     else
       index_power = args[end]
-      error("pas encore fait")
+      error("Not done yet, _get_real_node")
     end
   elseif hd == :ref
-    # name_variable = args[1]
-    # index_variable = args[2]
-    # return [name_variable, index_variable]
     return ex
   else
-    error("partie non traite des Expr pour le moment ")
+    error("Unsupported, _get_real_node")
   end
 end
 

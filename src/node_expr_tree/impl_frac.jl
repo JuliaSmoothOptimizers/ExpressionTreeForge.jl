@@ -103,7 +103,7 @@ function _node_bound(
   elseif check_positive(bi_denom, bs_denom) || check_negative(bi_denom, bs_denom)
     brut_force_bound_frac(bi_num, bs_num, bi_denom, bs_denom)
   else
-    println("non traité _node_bound frac")
+    println("unsupported _node_bound frac")
     return (t(-Inf), t(Inf))
   end
 end

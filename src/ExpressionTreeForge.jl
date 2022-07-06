@@ -415,7 +415,7 @@ julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
 """
     cast_type_of_constant(expr_tree, type::DataType)
 
-Cast the `type` to the constants of `expr_tree`.
+Cast to `type` the constants of `expr_tree`.
 """
 @inline cast_type_of_constant(ex::Any, t::DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
 

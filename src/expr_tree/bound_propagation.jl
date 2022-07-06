@@ -4,8 +4,19 @@ using ..M_abstract_expr_tree
 using ..M_trait_tree, ..M_trait_expr_tree, ..M_trait_expr_node
 using ..M_implementation_tree, ..M_implementation_complete_expr_tree
 
+"""
+    Bound_tree
+
+A tree where each node is pair `(bound_inf, bound_sup)`.
+Must be paired with an expression tree.
+"""
 Bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
 
+"""
+    bound_tree = create_bounds_tree(tree)
+
+Return a `similar` expression tree to `tree`, where each node has an undefined bounds.
+"""
 @inline create_bounds_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
   return Bound_tree{type}(
     M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)),
@@ -15,9 +26,12 @@ Bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
 @inline create_bounds_tree(cst::T, type = Float64::DataType) where {T <: Number} =
   return Bound_tree{type}(M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)), [])
 
-"""
-    set_bounds!(tree,bound_tre)
-Propagate the bounds for each node of tree
+ """
+    set_bounds!(tree, bound_tree::Bound_tree)
+    set_bounds!(complete_tree::Complete_expr_tree)
+
+Set the bounds of `bound_tree` by walking `tree` and propagate the computation from the leaves to the root.
+A `Complete_expr_tree` contains a precompiled `bound_tree`, and then can be use alone.
 """
 function set_bounds!(
   tree::M_implementation_tree.Type_node,
@@ -69,6 +83,11 @@ end
 @inline bound_to_tuple(b::M_abstract_expr_tree.Bounds{T}) where {T <: Number} =
   (b.inf_bound, b.sup_bound)
 
+"""
+    (inf_bound, sup_bound) = get_bound(bound_tree::Bound_tree)
+
+Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
+"""
 @inline get_bound(b::Bound_tree{T}) where {T <: Number} = bound_to_tuple(M_trait_tree.get_node(b))
 @inline get_bound(ex::M_implementation_complete_expr_tree.Complete_expr_tree{T}) where {T <: Number} =
   M_implementation_complete_expr_tree.tuple_bound_from_tree(ex)

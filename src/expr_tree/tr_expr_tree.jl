@@ -134,6 +134,7 @@ This function transform an expr_tree and transform it in Expr.
 @inline _transform_to_Expr2(::M_trait_expr_tree.Is_expr_tree, ex) = _transform_to_Expr2(ex)
 @inline _transform_to_Expr2(::M_trait_expr_tree.Is_not_expr_tree, ex) =
   error("notre parametre n'est pas un arbre d'expression")
+  
 @inline _transform_to_Expr2(ex) = M_abstract_expr_tree.create_Expr2(ex)
 
 """

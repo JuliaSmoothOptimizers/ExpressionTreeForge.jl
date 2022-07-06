@@ -8,19 +8,19 @@ using ..M_hl_trait_expr_tree
 using ..M_implementation_expr_tree
 
 """
-    delete_imbricated_plus(t)
+    separated_terms = delete_imbricated_plus(expr_tree)
 
-t must be a type which satisfies the trait_expr_tree. In that case if
-t represent a function, delete_imbricated_plus(t) will split that function
-into element function if it is possible.
+Divide the expression tree as a terms of a sum if possible.
+It returns a vector where each component is a subexpression tree of `expr_tree`.
 
 Example:
-delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
-[
-x[1],
-x[2],
-x[3] * x[4]
-]
+```julia
+julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
+3-element Vector{Expr}:
+ :(x[1])
+ :(x[2])
+ :(x[3] * x[4])
+```
 """
 @inline delete_imbricated_plus(a::Any) = _delete_imbricated_plus(a, M_trait_expr_tree.is_expr_tree(a))
 
@@ -28,6 +28,7 @@ x[3] * x[4]
   error(" This is not an expr tree")
 
 @inline _delete_imbricated_plus(a, ::M_trait_expr_tree.Is_expr_tree) = _delete_imbricated_plus(a)
+
 function _delete_imbricated_plus(expr_tree::T) where {T}
   nd = M_trait_expr_tree.get_expr_node(expr_tree)
   if M_trait_expr_node.node_is_operator(nd)
@@ -61,14 +62,20 @@ function _delete_imbricated_plus(expr_tree::T) where {T}
 end
 
 """
-    type = get_type_tree(t)
+    type = get_type_tree(expr_tree)
 
-Return the type of the expression tree t, whose the type is inside the M_trait_expr_tree
+Return the type of `expr_tree`.
+It can either be: `constant`, `linear`, `quadratic`, `cubic` or `more`.
 
 Example:
-get_type_tree(:(5+4)) = constant
-get_type_tree(:(x[1])) = linear
-get_type_tree(:(x[1]* x[2])) = quadratic
+```julia
+julia> get_type_tree(:(5+4)) == constant
+true
+julia> get_type_tree(:(x[1])) == linear
+true
+julia> get_type_tree(:(x[1]* x[2])) == quadratic
+true
+```
 """
 @inline get_type_tree(a::Any) = _get_type_tree(a, M_trait_expr_tree.is_expr_tree(a))
 @inline _get_type_tree(a, ::M_trait_expr_tree.Is_not_expr_tree) = error(" This is not an Expr tree")
@@ -93,15 +100,18 @@ function _get_type_tree(expr_tree)
 end
 
 """
-    get_elemental_variable(expr_tree)
+    indices = get_elemental_variable(expr_tree)
 
-Return the index of the variable appearing in the expression tree
+Return the `indices` of the variable appearing in `expr_tree`.
+This function find the elemental variables from the expression tree of an element function.
 
 Example:
-get_elemental_variable(:(x[1] + x[3]) )
-> [1, 3]
-get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
-> [1, 6, 2]
+```julia
+julia> get_elemental_variable(:(x[1] + x[3]) )
+[1, 3]
+julia> get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
+[1, 6, 2]
+```
 """
 @inline get_elemental_variable(a::Any) = _get_elemental_variable(a, M_trait_expr_tree.is_expr_tree(a))
 
@@ -128,10 +138,10 @@ function _get_elemental_variable(expr_tree)
 end
 
 """
-    get_Ui(index_vars::Vector{Int}, n::Int)
+    Ui = get_Ui(indices::Vector{Int}, n::Int)
 
-Create a the matrix U associated to the variable appearing in index_new_var.
-This function create a sparse matrix of size length(index_new_var)×n.
+Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variable`.
+Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
 function get_Ui(index_vars::Vector{Int}, n::Int)
   m = length(index_vars)
@@ -146,12 +156,16 @@ function get_Ui(index_vars::Vector{Int}, n::Int)
 end
 
 """
-    element_fun_from_N_to_Ni!(expr_tree, vector)
+    element_fun_from_N_to_Ni!(expr_tree, vector_indices)
 
-Transform the tree expr_tree, which represent a function from Rⁿ ⇢ R, to an element
-function from Rⁱ → R .
-This function rename the variable of expr_tree to x₁,x₂,... instead of x₇,x₉ for example
+Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
+It it paired with `get_elemental_variable` to define the elemental element functions expression tree.
 
+Example:
+```julia
+julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
+:(x[1] + x[2])
+```
 """
 @inline element_fun_from_N_to_Ni!(expr_tree, a::Vector{Int}) =
   _element_fun_from_N_to_Ni!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
@@ -208,9 +222,9 @@ function _element_fun_from_N_to_Ni!(expr_tree, dic_new_var::Dict{Int, Int})
 end
 
 """
-    cast_type_of_constant(expr_tree, t)
+    cast_type_of_constant(expr_tree, type::DataType)
 
-Cast the constant of the expression tree expr_tree to the type t.
+Cast to `type` the constants of `expr_tree`.
 """
 @inline cast_type_of_constant(expr_tree, t::DataType) =
   _cast_type_of_constant(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), t)
