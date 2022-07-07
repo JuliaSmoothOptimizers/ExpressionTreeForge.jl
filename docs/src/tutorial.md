@@ -3,7 +3,7 @@
 ExpressionTreeForge.jl is a manipulator of expression tree.
 It supports several expression trees and define methods to analyze and manipulate them.
 
-It interfaces several types with `transform_to_expr_tree` with create the internal expression tree structure `Type_expr_tree`:
+It interfaces to the internal expression tree structure `Type_expr_tree` several implementations of expression tree with `transform_to_expr_tree`:
 - julia `Expr`
 ```@example ExpressionTreeForge
 using ExpressionTreeForge
@@ -22,7 +22,7 @@ MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
 expr_tree_JuMP = transform_to_expr_tree(expr_jump)
 ```
-- julia function by using [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0)
+- expression tree from a julia function created by [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0)
 ```@example ExpressionTreeForge
 using ModelingToolkit
 function f(y)    
@@ -44,17 +44,12 @@ expr_tree_MTK == expr_tree_JuMP
 expr_tree_MTK == expr_tree_Expr
 ```
 
-If you need to visualize a tree, use `print_tree()`
-```@example ExpressionTreeForge
-print_tree(expr_tree_MTK)
-```
-
 From any expression tree `Type_expr_tree`, you can achieve:
 - partial separability detection;
 - bounds propagations;
 - strict convexity detection.
 
-## Detection of the partially separable structure
+### Detection of the partially separable structure
 Originally, it is made to detect automatically the partially separable structure of a function $f : \R^n \to \R$
 $$
 f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}, \; n_i \ll n.
@@ -72,6 +67,7 @@ and you extract the elemental variables by applying `get_elemental_variable()` o
 element_Ui = get_elemental_variable.(element_functions)
 ```
 
+### Bounds and convexity
 To detect the bounds and the convexity you have to define a `Complete_tree` a richer structure than `Type_expr_tree`.
 A `Complete_tree` is similar `expr_tree_Expr` but in addition it stores for each node its bounds and its convexity status.
 You must define it from `expr_tree_Expr`
@@ -90,3 +86,9 @@ convexity_status = get_convexity_status(complete_tree)
 ```
 
 
+
+# Tools 
+If you need to visualize a tree, use `print_tree()`
+```@example ExpressionTreeForge
+print_tree(expr_tree_MTK)
+```
