@@ -193,11 +193,6 @@ julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
 @inline _element_fun_from_N_to_Ni!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Dict{Int, Int}) =
   _element_fun_from_N_to_Ni!(expr_tree, a)
 
-# Pour les 2 fonction suivantes.
-#     - La première prend en entrée un vecteur d'entier, la fonction N_to_Ni créé le dictionnaire qui sera nécessaire pour la seconde fonction,
-#     la première fonction défini juste le dictionnaire nécessaire pour la seconde fonction.
-#     - La seconde fonction est la fonction qui va réellement modifier l'arbre d'expression expr_tree, en modifiant les indices des variables
-#     en accord avec les valeurs dans le dictionnaire.
 """
     dic = N_to_Ni(elemental_var::Vector{Int})
 
