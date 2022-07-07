@@ -82,11 +82,8 @@ function _evaluate_node(v::Variable, dic::Dict{Int, T}) where {T <: Number}
 end
 
 @inline _evaluate_node(v::Variable, x::AbstractVector{T}) where {T <: Number} = x[v.index]
-@inline _evaluate_node!(
-  v::Variable,
-  x::AbstractVector{T},
-  ref::MyRef{T},
-) where {T <: Number} = M_abstract_expr_node.set_myRef!(ref, get_value(v, x))
+@inline _evaluate_node!(v::Variable, x::AbstractVector{T}, ref::MyRef{T}) where {T <: Number} =
+  M_abstract_expr_node.set_myRef!(ref, get_value(v, x))
 
 function change_index(v::MathOptInterface.VariableIndex, x::AbstractVector{T}) where {T <: Number}
   return x[v.value]

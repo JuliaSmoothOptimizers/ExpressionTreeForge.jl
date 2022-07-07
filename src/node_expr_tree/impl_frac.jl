@@ -62,7 +62,9 @@ function _node_convexity(
          M_implementation_convexity_type.is_constant(st_num) &&
          (
            (
-             (bi_num >= 0) && (bi_denom > 0) && M_implementation_convexity_type.is_concave(st_denom)
+             (bi_num >= 0) &&
+             (bi_denom > 0) &&
+             M_implementation_convexity_type.is_concave(st_denom)
            ) ||
            ((bs_num <= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom))
          )
@@ -70,8 +72,13 @@ function _node_convexity(
   elseif !(check_0_in(bi_denom, bs_denom)) &&
          M_implementation_convexity_type.is_constant(st_num) &&
          (
-           ((bi_num >= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom)) ||
-           ((bs_num <= 0) && (bi_denom > 0) && M_implementation_convexity_type.is_concave(st_denom))
+           (
+             (bi_num >= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom)
+           ) || (
+             (bs_num <= 0) &&
+             (bi_denom > 0) &&
+             M_implementation_convexity_type.is_concave(st_denom)
+           )
          )
     return M_implementation_convexity_type.concave_type()
   else

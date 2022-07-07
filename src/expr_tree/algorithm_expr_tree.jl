@@ -22,7 +22,8 @@ julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
  :(x[3] * x[4])
 ```
 """
-@inline delete_imbricated_plus(a::Any) = _delete_imbricated_plus(a, M_trait_expr_tree.is_expr_tree(a))
+@inline delete_imbricated_plus(a::Any) =
+  _delete_imbricated_plus(a, M_trait_expr_tree.is_expr_tree(a))
 
 @inline _delete_imbricated_plus(a, ::M_trait_expr_tree.Is_not_expr_tree) =
   error(" This is not an expr tree")
@@ -113,7 +114,8 @@ julia> get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
 [1, 6, 2]
 ```
 """
-@inline get_elemental_variable(a::Any) = _get_elemental_variable(a, M_trait_expr_tree.is_expr_tree(a))
+@inline get_elemental_variable(a::Any) =
+  _get_elemental_variable(a, M_trait_expr_tree.is_expr_tree(a))
 
 @inline _get_elemental_variable(a, ::M_trait_expr_tree.Is_not_expr_tree) =
   error(" This is not an Expr tree")

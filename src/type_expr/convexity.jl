@@ -29,7 +29,8 @@ Return the convexity status of `convexity`.
 
 Set the convexity status of `convexity` to `type`.
 """
-@inline set_convexity_wrapper!(convexity::Convexity_wrapper, type::Convexity_type) = convexity.status = type
+@inline set_convexity_wrapper!(convexity::Convexity_wrapper, type::Convexity_type) =
+  convexity.status = type
 
 """
     untreated_wrapper = init_conv_status()
@@ -149,7 +150,8 @@ Check if `status` or `convexity.status` equals `constant`.
 Check if `status` or `convexity.status` equals `linear`.
 """
 @inline is_linear(status::Convexity_type) = (status == linear) || is_constant(status)
-@inline is_linear(convexity::Convexity_wrapper) = convexity.status == linear || is_constant(convexity)
+@inline is_linear(convexity::Convexity_wrapper) =
+  convexity.status == linear || is_constant(convexity)
 
 """
     bool = is_convex(status::Convexity_type)
@@ -158,7 +160,8 @@ Check if `status` or `convexity.status` equals `linear`.
 Check if `status` or `convexity.status` equals `convex`.
 """
 @inline is_convex(status::Convexity_type) = (status == convex) || is_linear(status)
-@inline is_convex(convexity::Convexity_wrapper) = (convexity.status == convex) || is_linear(convexity)
+@inline is_convex(convexity::Convexity_wrapper) =
+  (convexity.status == convex) || is_linear(convexity)
 
 """
     bool = is_concave(status::Convexity_type)
@@ -167,7 +170,8 @@ Check if `status` or `convexity.status` equals `convex`.
 Check if `status` or `convexity.status` equals `concave`.
 """
 @inline is_concave(status::Convexity_type) = (status == concave) || is_linear(status)
-@inline is_concave(convexity::Convexity_wrapper) = (convexity.status == concave) || is_linear(convexity)
+@inline is_concave(convexity::Convexity_wrapper) =
+  (convexity.status == concave) || is_linear(convexity)
 
 """
     bool = is_unknown(status::Convexity_type)

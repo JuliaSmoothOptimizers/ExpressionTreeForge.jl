@@ -7,17 +7,10 @@ using ..M_trait_tree, ..M_trait_expr_node
 using ..M_implementation_convexity_type, ..M_implementation_expr_tree
 using ..M_interface_expr_tree
 
-import ..M_abstract_expr_tree:
-  create_expr_tree,
-  create_Expr,
-  create_Expr2
+import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..M_implementation_tree.Type_node
 import ..M_interface_expr_tree:
-  _get_expr_node,
-  _get_expr_children,
-  _inverse_expr_tree,
-  _get_real_node,
-  _transform_to_expr_tree
+  _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
 
 export Complete_node
 
@@ -95,7 +88,9 @@ Complete_expr_tree{T <: Number} = Type_node{Complete_node{T}}
 
 @inline create_complete_expr_tree(ex::Complete_expr_tree{T}) where {T <: Number} = ex
 
-function create_complete_expr_tree(t::M_implementation_expr_tree.Type_node{T}) where {T <: Abstract_expr_node}
+function create_complete_expr_tree(
+  t::M_implementation_expr_tree.Type_node{T},
+) where {T <: Abstract_expr_node}
   nd = M_trait_tree.get_node(t)
   ch = M_trait_tree.get_children(t)
   if isempty(ch)
@@ -120,7 +115,9 @@ end
 )
 
 @inline create_expr_tree(field::Complete_node{T}) where {T <: Number} =
-  M_abstract_expr_tree.create_expr_tree(get_op_from_node(field))::M_implementation_expr_tree.Type_expr_tree
+  M_abstract_expr_tree.create_expr_tree(
+    get_op_from_node(field),
+  )::M_implementation_expr_tree.Type_expr_tree
 
 @inline _get_expr_node(t::Complete_expr_tree) = get_op_from_node(M_trait_tree.get_node(t))
 

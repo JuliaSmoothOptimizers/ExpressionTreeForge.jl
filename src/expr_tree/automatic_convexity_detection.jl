@@ -13,7 +13,8 @@ using ..M_bound_propagations
 A tree where each node is a convexity status.
 Must be paired with an expression tree.
 """
-Convexity_tree{T} = M_implementation_tree.Type_node{M_implementation_convexity_type.Convexity_wrapper}
+Convexity_tree{T} =
+  M_implementation_tree.Type_node{M_implementation_convexity_type.Convexity_wrapper}
 
 """
     convex_tree = create_convex_tree(tree::Type_node)
@@ -43,8 +44,9 @@ The status can be:
 @inline get_convexity_status(cvx_tree::Convexity_tree) =
   M_implementation_convexity_type.get_convexity_wrapper(M_trait_tree.get_node(cvx_tree))
 
-@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree) =
-  M_implementation_complete_expr_tree.get_convexity_status(M_trait_tree.get_node(complete_tree))
+@inline get_convexity_status(
+  complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree,
+) = M_implementation_complete_expr_tree.get_convexity_status(M_trait_tree.get_node(complete_tree))
 
 """
     constant = constant_type() 
@@ -89,7 +91,11 @@ Deduce from elementary rules the convexity status of `tree` nodes or `complete_t
 `complete_tree` integrate a bounds tree and can run alone the convexity detection whereas `tree`
 require the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
 """
-function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::Convexity_tree, bounds_tree)
+function set_convexity!(
+  tree::M_implementation_tree.Type_node,
+  cvx_tree::Convexity_tree,
+  bounds_tree,
+)
   node = M_trait_tree.get_node(tree)
   if M_trait_expr_node.node_is_operator(node) == false
     (length(M_trait_tree.get_children(tree)) == length(M_trait_tree.get_children(cvx_tree))) ||

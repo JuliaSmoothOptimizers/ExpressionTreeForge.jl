@@ -1,24 +1,29 @@
 using ExpressionTreeForge.M_trait_type_expr
 using ExpressionTreeForge.M_implementation_type_expr,
-  ExpressionTreeForge.M_implementation_convexity_type, ExpressionTreeForge.M_implementation_convexity_type
+  ExpressionTreeForge.M_implementation_convexity_type,
+  ExpressionTreeForge.M_implementation_convexity_type
 
 @testset "test M_implementation_type_expr" begin
 
   # Check predicates
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_constant())
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_linear()) == false
-  @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_quadratic()) == false
+  @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_quadratic()) ==
+        false
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_cubic()) == false
   @test M_implementation_type_expr._is_constant(M_implementation_type_expr.return_more()) == false
 
   @test M_implementation_type_expr._is_linear(M_implementation_type_expr.return_constant()) == false
   @test M_implementation_type_expr._is_linear(M_implementation_type_expr.return_linear())
-  @test M_implementation_type_expr._is_linear(M_implementation_type_expr.return_quadratic()) == false
+  @test M_implementation_type_expr._is_linear(M_implementation_type_expr.return_quadratic()) ==
+        false
   @test M_implementation_type_expr._is_linear(M_implementation_type_expr.return_cubic()) == false
   @test M_implementation_type_expr._is_linear(M_implementation_type_expr.return_more()) == false
 
-  @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_constant()) == false
-  @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_linear()) == false
+  @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_constant()) ==
+        false
+  @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_linear()) ==
+        false
   @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_quadratic())
   @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_cubic()) == false
   @test M_implementation_type_expr._is_quadratic(M_implementation_type_expr.return_more()) == false
@@ -104,8 +109,10 @@ using ExpressionTreeForge.M_implementation_type_expr,
         [linear, quadratic, cubic, more, more]
   @test (x -> M_trait_type_expr.type_product(quadratic, x)).(all_types) ==
         [quadratic, cubic, more, more, more]
-  @test (x -> M_trait_type_expr.type_product(cubic, x)).(all_types) == [cubic, more, more, more, more]
-  @test (x -> M_trait_type_expr.type_product(cubic, x)).(all_types) == [cubic, more, more, more, more]
+  @test (x -> M_trait_type_expr.type_product(cubic, x)).(all_types) ==
+        [cubic, more, more, more, more]
+  @test (x -> M_trait_type_expr.type_product(cubic, x)).(all_types) ==
+        [cubic, more, more, more, more]
   @test (x -> M_trait_type_expr.type_product(more, x)).(all_types) == [more, more, more, more, more]
 
   # test of type_power
@@ -174,5 +181,4 @@ end
 
   @test (x -> M_implementation_convexity_type.get_convexity_wrapper(x)).(all_status_wrapper) ==
         all_status
-
 end

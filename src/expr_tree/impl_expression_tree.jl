@@ -5,15 +5,9 @@ using ModelingToolkit
 using ..M_abstract_expr_node, ..M_abstract_expr_tree
 using ..M_implementation_expr_tree
 
-import ..M_abstract_expr_tree:
-  create_expr_tree,
-  create_Expr
+import ..M_abstract_expr_tree: create_expr_tree, create_Expr
 import ..M_interface_expr_tree:
-  _inverse_expr_tree,
-  _get_expr_node,
-  _get_expr_children,
-  _get_real_node,
-  _transform_to_expr_tree
+  _inverse_expr_tree, _get_expr_node, _get_expr_children, _get_real_node, _transform_to_expr_tree
 
 """
     Variable_counter
@@ -91,7 +85,8 @@ function _get_expr_node(ex::ModelingToolkit.Operation; vc::Variable_counter = Va
   end
 end
 
-@inline _get_expr_node(ex::ModelingToolkit.Constant) = M_abstract_expr_node.create_node_expr(ex.value)
+@inline _get_expr_node(ex::ModelingToolkit.Constant) =
+  M_abstract_expr_node.create_node_expr(ex.value)
 
 @inline _get_expr_children(ex::ModelingToolkit.Operation) =
   (ex.op == ^) ? ex.args[1:(end - 1)] : ex.args

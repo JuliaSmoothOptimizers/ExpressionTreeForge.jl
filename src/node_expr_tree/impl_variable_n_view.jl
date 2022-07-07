@@ -42,8 +42,7 @@ end
 @inline get_name(v::Variable_n_view{Y}) where {Y <: Number} = v.name
 @inline get_index(v::Variable_n_view{Y}) where {Y <: Number} = v.index
 @inline get_multiple_x_view(v::Variable_n_view{Y}) where {Y <: Number} = v.multiple_x_view
-@inline get_x_view(v::Variable_n_view{Y}, i::Int) where {Y <: Number} =
-  get_multiple_x_view(v)[i]
+@inline get_x_view(v::Variable_n_view{Y}, i::Int) where {Y <: Number} = get_multiple_x_view(v)[i]
 @inline get_value(v::Variable_n_view{Y}, i::Int) where {Y <: Number} = get_x_view(v, i)[1]
 
 @inline _node_bound(v::Variable_n_view{Y}, t::DataType) where {Y <: Number} = ((t)(-Inf), (t)(Inf))
@@ -53,8 +52,11 @@ end
 
 @inline create_node_expr(n::Symbol, id::Int, multiple_x::Vector{Vector{Y}}) where {Y <: Number} =
   Variable_n_view{Y}(n, id, map(x -> view(x, [id]), multiple_x))
-@inline create_node_expr(v::M_variable.Variable, multiple_x::Vector{Vector{Y}}) where {Y <: Number} =
-  create_node_expr(M_variable.get_name(v),M_variable.get_index(v), multiple_x)
+@inline create_node_expr(
+  v::M_variable.Variable,
+  multiple_x::Vector{Vector{Y}},
+) where {Y <: Number} =
+  create_node_expr(M_variable.get_name(v), M_variable.get_index(v), multiple_x)
 
 @inline create_node_expr(
   n::Symbol,
@@ -66,7 +68,7 @@ end
   v::M_variable.Variable,
   multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
 ) where {N} where {T <: Number} =
-  create_node_expr(M_variable.get_name(v),M_variable.get_index(v), multiple_x_view)
+  create_node_expr(M_variable.get_name(v), M_variable.get_index(v), multiple_x_view)
 
 @inline _node_is_operator(v::Variable_n_view{Y}) where {Y <: Number} = false
 @inline _node_is_plus(v::Variable_n_view{Y}) where {Y <: Number} = false

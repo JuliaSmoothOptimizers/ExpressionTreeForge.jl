@@ -13,12 +13,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.convex_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.convex_type()
 
     m = Model()
     n = 5
@@ -32,12 +34,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.unknown_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.unknown_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.unknown_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.unknown_type()
 
     m = Model()
     n = 5
@@ -51,12 +55,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.convex_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.convex_type()
 
     m = Model()
     n = 5
@@ -71,12 +77,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.convex_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.convex_type()
 
     m = Model()
     n = 5
@@ -90,12 +98,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.convex_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.convex_type()
   end
 
   @testset "Minus" begin
@@ -111,12 +121,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.concave_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.concave_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.concave_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.concave_type()
   end
 
   @testset "Variable" begin
@@ -132,12 +144,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.linear_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.linear_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.linear_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.linear_type()
   end
 
   @testset "Constant and product" begin
@@ -159,7 +173,8 @@
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.constant_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.constant_type()
 
     m = Model()
     n = 5
@@ -174,12 +189,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.convex_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.convex_type()
   end
 
   @testset "Exp and Power" begin
@@ -196,12 +213,14 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.convex_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.convex_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.convex_type()
   end
 
   @testset "Constant" begin
@@ -217,7 +236,8 @@
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.constant_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.constant_type()
   end
 
   @testset "Variable" begin
@@ -227,11 +247,13 @@
     convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(expr_tree_j, bound_tree)
     ExpressionTreeForge.set_convexity!(expr_tree_j, convexity_tree, bound_tree)
-    @test ExpressionTreeForge.get_convexity_status(convexity_tree) == ExpressionTreeForge.linear_type()
+    @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+          ExpressionTreeForge.linear_type()
 
     complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
     ExpressionTreeForge.set_bounds!(complete_tree)
     ExpressionTreeForge.set_convexity!(complete_tree)
-    @test ExpressionTreeForge.get_convexity_status(complete_tree) == ExpressionTreeForge.linear_type()
+    @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+          ExpressionTreeForge.linear_type()
   end
 end

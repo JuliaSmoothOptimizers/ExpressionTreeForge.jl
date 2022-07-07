@@ -12,9 +12,9 @@ using ExpressionTreeForge.M_plus_operator,
 
 @testset "Node constructors" begin
   @test M_abstract_expr_node.create_node_expr(4) == M_constant.Constant(4)
-  @test M_abstract_expr_node.create_node_expr(:x, 5) ==M_variable.Variable(:x, 5)
+  @test M_abstract_expr_node.create_node_expr(:x, 5) == M_variable.Variable(:x, 5)
   @test M_abstract_expr_node.create_node_expr(:x, MathOptInterface.VariableIndex(5)) ==
-       M_variable.Variable(:x, 5)
+        M_variable.Variable(:x, 5)
   @test M_abstract_expr_node.create_node_expr(:x, MathOptInterface.VariableIndex(5)) ==
         M_abstract_expr_node.create_node_expr(:x, 5)
 
@@ -78,12 +78,15 @@ end
   ]
   @test M_trait_expr_node.node_is_operator.(coll_simple_op) == [true, true, true, true, true, true]
   @test M_trait_expr_node.node_is_plus.(coll_simple_op) == [true, false, false, false, false, false]
-  @test M_trait_expr_node.node_is_minus.(coll_simple_op) == [false, true, false, false, false, false]
-  @test M_trait_expr_node.node_is_times.(coll_simple_op) == [false, false, true, false, false, false]
+  @test M_trait_expr_node.node_is_minus.(coll_simple_op) ==
+        [false, true, false, false, false, false]
+  @test M_trait_expr_node.node_is_times.(coll_simple_op) ==
+        [false, false, true, false, false, false]
   @test M_trait_expr_node.node_is_sin.(coll_simple_op) == [false, false, false, true, false, false]
   @test M_trait_expr_node.node_is_cos.(coll_simple_op) == [false, false, false, false, true, false]
   @test M_trait_expr_node.node_is_tan.(coll_simple_op) == [false, false, false, false, false, true]
-  @test M_trait_expr_node.node_is_power.(coll_simple_op) == [false, false, false, false, false, false]
+  @test M_trait_expr_node.node_is_power.(coll_simple_op) ==
+        [false, false, false, false, false, false]
   @test M_trait_expr_node.node_is_constant.(coll_simple_op) ==
         [false, false, false, false, false, false]
   @test M_trait_expr_node.node_is_variable.(coll_simple_op) ==

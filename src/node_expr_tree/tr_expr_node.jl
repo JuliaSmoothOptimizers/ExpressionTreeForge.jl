@@ -103,7 +103,8 @@ It could be also a variable or a constant.
 """
 @inline node_is_operator(a) = _node_is_operator(a, is_expr_node(a))
 @inline _node_is_operator(a, ::Type_expr_node) = _node_is_operator(a)
-@inline _node_is_operator(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
+@inline _node_is_operator(a, ::Type_not_expr_node) =
+  error("This node is not a expression tree node")
 
 """
     bool = node_is_plus(node::Abstract_expr_node)
@@ -177,7 +178,8 @@ It could be also an operator or a constant.
 """
 @inline node_is_variable(a) = _node_is_variable(a, is_expr_node(a))
 @inline _node_is_variable(a, ::Type_expr_node) = _node_is_variable(a)
-@inline _node_is_variable(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
+@inline _node_is_variable(a, ::Type_not_expr_node) =
+  error("This node is not a expression tree node")
 
 """
     index = get_var_index(variable::Abstract_expr_node)
@@ -196,7 +198,8 @@ Check if `node` is a constant.
 """
 @inline node_is_constant(a) = _node_is_constant(a, is_expr_node(a))
 @inline _node_is_constant(a, ::Type_expr_node) = _node_is_constant(a)
-@inline _node_is_constant(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
+@inline _node_is_constant(a, ::Type_not_expr_node) =
+  error("This node is not a expression tree node")
 
 # This part is used in algorithms defined in expr_tree/tr_expr_tree
 """

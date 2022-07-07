@@ -6,7 +6,6 @@ import ..M_interface_type_expr:
 
 export is_trait_type_expr, is_linear, is_constant, is_quadratic, is_cubic, is_more
 
-
 """Type instantiated dynamically that checks if an argument is a `Type_expr_basic`"""
 struct Type_type_expr end
 

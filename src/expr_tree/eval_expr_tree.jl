@@ -4,8 +4,7 @@ module M_evaluation_expr_tree
 using ForwardDiff, ReverseDiff
 
 using ..M_trait_expr_tree, ..M_trait_expr_node
-using ..M_implementation_expr_tree,
-  ..M_implementation_complete_expr_tree
+using ..M_implementation_expr_tree, ..M_implementation_complete_expr_tree
 using ..M_abstract_expr_node
 
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
@@ -65,7 +64,9 @@ end
   expr_tree::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number}
-  if M_trait_expr_node.node_is_operator(expr_tree.field::M_trait_expr_node.Abstract_expr_node)::Bool == false
+  if M_trait_expr_node.node_is_operator(
+    expr_tree.field::M_trait_expr_node.Abstract_expr_node,
+  )::Bool == false
     return M_trait_expr_node._evaluate_node(expr_tree.field, x)
   else
     n = length(expr_tree.children)
@@ -293,7 +294,7 @@ Evaluate the gradient of the function represented by ``expr_tree` at the point `
 
 @inline _gradient_expr_tree_reverse(expr_tree, x::Vector{T}) where {T <: Number} =
   ReverseDiff.gradient(evaluate_expr_tree(expr_tree), x)
-  
+
 @inline _gradient_expr_tree_reverse(expr_tree, x::Vector{}, elmt_var::Vector{Int}) =
   ReverseDiff.gradient(evaluate_element_expr_tree(expr_tree, elmt_var), x)
 
@@ -302,8 +303,7 @@ Evaluate the gradient of the function represented by ``expr_tree` at the point `
     
 Compute the hessian matrix of the function represented by `expr_tree` at the point `x`.
 """
-@inline hessian_expr_tree(a::Any, x::Vector{}) =
-  _hessian_expr_tree(a, is_expr_tree(a), x)
+@inline hessian_expr_tree(a::Any, x::Vector{}) = _hessian_expr_tree(a, is_expr_tree(a), x)
 
 @inline _hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
   error("The first argument is not an expression tree")

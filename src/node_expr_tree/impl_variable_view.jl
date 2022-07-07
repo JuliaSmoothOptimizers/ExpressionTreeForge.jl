@@ -60,7 +60,7 @@ end
 @inline create_node_expr(v::Variable_view{Y}, x::AbstractVector{Y}) where {Y <: Number} =
   Variable_view(v.name, v.index, view(x, [v.index]))
 @inline create_node_expr(v::M_variable.Variable, x::AbstractVector{Y}) where {Y <: Number} =
-  create_node_expr(M_variable.get_name(v),M_variable.get_index(v), x)
+  create_node_expr(M_variable.get_name(v), M_variable.get_index(v), x)
 
 # (SubArray{Y,1,Array{Y,1},Tuple{Array{Int64,1}},false} where Y <: Number) <: (AbstractVector{Y} where Y <: Number)
 

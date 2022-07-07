@@ -4,17 +4,10 @@ using ..M_abstract_expr_node, ..M_trait_expr_node
 using ..M_abstract_expr_tree
 using ..M_trait_tree
 
-import ..M_abstract_expr_tree:
-  create_expr_tree,
-  create_Expr,
-  create_Expr2
+import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..M_implementation_tree.Type_node
 import ..M_interface_expr_tree:
-  _inverse_expr_tree,
-  _get_expr_node,
-  _get_expr_children,
-  _get_real_node,
-  _transform_to_expr_tree
+  _inverse_expr_tree, _get_expr_node, _get_expr_children, _get_real_node, _transform_to_expr_tree
 
 export Type_expr_tree
 
@@ -42,7 +35,7 @@ function create_Expr(t::Type_expr_tree)
     # simple operators
     if length(node_Expr) == 1
       return Expr(:call, node_Expr[1], children_Expr...)
-    # complicate operators
+      # complicate operators
     elseif length(node_Expr) == 2
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else
@@ -63,7 +56,7 @@ function create_Expr2(t::Type_expr_tree)
     # simple operators
     if length(node_Expr) == 1
       return Expr(:call, node_Expr[1], children_Expr...)
-    # complicate operators
+      # complicate operators
     elseif length(node_Expr) == 2
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else
@@ -75,7 +68,8 @@ end
 create_expr_tree(field::T, children::Vector{Type_node{T}}) where {T <: Abstract_expr_node} =
   length(children) == 0 ? create_expr_tree(field) : Type_expr_tree(field, children)
 
-create_expr_tree(field::T) where {T <: Abstract_expr_node} = Type_expr_tree(field, Vector{Type_expr_tree}(undef, 0))
+create_expr_tree(field::T) where {T <: Abstract_expr_node} =
+  Type_expr_tree(field, Vector{Type_expr_tree}(undef, 0))
 
 _get_expr_node(t::Type_expr_tree) = M_trait_tree.get_node(t)
 
