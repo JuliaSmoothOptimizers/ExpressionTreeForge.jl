@@ -82,7 +82,7 @@ end
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
-  length(value_ch) == 1 || error("power has more than one argument")
+  length(value_ch) == 1 || error("more than one argument")
   M_abstract_expr_node.set_myRef!(ref, tan(value_ch[1]))
 end
 

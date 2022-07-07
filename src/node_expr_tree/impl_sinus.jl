@@ -69,8 +69,8 @@ function _node_bound(
 ) where {T <: Number}
   vector_inf_bound = [p[1] for p in son_bound]
   vector_sup_bound = [p[2] for p in son_bound]
-  length(vector_inf_bound) == 1 || error("sinus non unaire")
-  length(vector_sup_bound) == 1 || error("sinus non unaire")
+  length(vector_inf_bound) == 1 || error("non unary sinus")
+  length(vector_sup_bound) == 1 || error("non unary sinus")
   bi = vector_inf_bound[1]
   bs = vector_sup_bound[1]
   if abs(bs - bi) > 2 * π || isinf(bi) || isinf(bs)
@@ -142,7 +142,7 @@ end
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
-  length(value_ch) == 1 || error("power has more than one argument")
+  length(value_ch) == 1 || error("more than one argument")
   M_abstract_expr_node.set_myRef!(ref, sin(value_ch[1]))
 end
 

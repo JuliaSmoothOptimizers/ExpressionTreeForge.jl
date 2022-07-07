@@ -15,7 +15,7 @@ abstract type Abstract_expr_node end
     create_node_expr(arg::UnionAll)
 
 Create a node from `arg`.
-See the different implementation in the `src/node_expr_tree/impl_operaotrs.jl`.
+See the different implementation in the `src/node_expr_tree/impl_operators.jl`.
 """
 create_node_expr(node::Abstract_expr_node) = error("error in the create of a node")
 
@@ -23,9 +23,9 @@ create_node_expr(node::Abstract_expr_node) = error("error in the create of a nod
     MyRef{Y <: Number}
 
 Sort of pointer.
-Contien the field:
+Contain the field:
 
-* `value` pointing to the desired structure.
+* `value` which points to the desired structure.
 """
 mutable struct MyRef{Y <: Number}
   value::Y
@@ -49,7 +49,7 @@ Create a vector of `n` `myRef{type}` components.
   Vector{MyRef{type}}(map(i -> new_ref(type), [1:n;]))
 
 """
-    create_undef_array_myRef(n::Int, m::Int, type::DataType = Float64)
+    my_ref_matrix = create_undef_array_myRef(n::Int, m::Int, type::DataType = Float64)
 
 Create a `n`×`m` array composed of `myRef{type}` components.
 """
@@ -57,7 +57,7 @@ Create a `n`×`m` array composed of `myRef{type}` components.
   Array{MyRef{type}, 2}(map(x -> MyRef{type}((type)(-1)), ones(n, m)))
 
 """
-    create_undef_array_myRef(l::Int, c::Int, type::DataType = Float64)
+    vector_vector_myref = create_undef_array_myRef(l::Int, c::Int, type::DataType = Float64)
 
 Create a vector of size `l`, each component is a `Vector{myRef{type}}` of `c` components.
 """
@@ -90,7 +90,7 @@ Set the `reference` to `value`.
 """
     value = get_myRef(reference::MyRef{Y}) where {Y <: Number}
 
-Get the `value` of the `reference`
+Get the `value` of the `reference`.
 """
 @inline get_myRef(ref::MyRef{Y}) where {Y <: Number} = ref.value::Y
 

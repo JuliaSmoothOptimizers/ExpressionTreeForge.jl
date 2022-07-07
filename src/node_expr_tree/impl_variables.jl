@@ -99,7 +99,7 @@ end
 function _change_from_N_to_Ni!(v::Expr, dic_new_var::Dict{Int, Int})
   hd = v.head
   if hd != :ref
-    error("on ne traite pas autre chose qu'une Variable")
+    error("The parameter is not a variable")
   else
     index_variable = v.args[2]
     v.args[2] = change_index(index_variable, dic_new_var)

@@ -38,7 +38,7 @@ function _node_convexity(
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {T <: Number}
   length(son_cvx) == length(son_bound) ||
-    error("mismatch length parameter, _node_convexity : times operator")
+    error("mismatch length of arguments")
   current_st = son_cvx[1]
   current_bounds = son_bound[1]
   for i = 2:length(son_cvx)

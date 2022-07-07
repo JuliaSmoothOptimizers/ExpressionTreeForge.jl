@@ -69,8 +69,8 @@ function _node_bound(
 ) where {T <: Number}
   vector_inf_bound = [p[1] for p in son_bound]
   vector_sup_bound = [p[2] for p in son_bound]
-  length(vector_inf_bound) == 1 || error("sinus non unaire")
-  length(vector_sup_bound) == 1 || error("sinus non unaire")
+  length(vector_inf_bound) == 1 || error("non unary cosinus")
+  length(vector_sup_bound) == 1 || error("non unary cosinus")
   bi = vector_inf_bound[1]
   bs = vector_sup_bound[1]
   if abs(bs - bi) > 2 * π || isinf(bi) || isinf(bs)
@@ -134,7 +134,7 @@ end
 @inline (==)(a::Cos_operator, b::Cos_operator) = true
 
 @inline function _evaluate_node(op::Cos_operator, value_ch::AbstractVector{T}) where {T <: Number}
-  length(value_ch) == 1 || error("more than one argument for tan")
+  length(value_ch) == 1 || error("more than one argument for cosinus")
   return cos(value_ch[1])
 end
 
@@ -143,7 +143,7 @@ end
   value_ch::AbstractVector{MyRef{Y}},
   ref::M_abstract_expr_node.MyRef{Y},
 ) where {Y <: Number}
-  length(value_ch) == 1 || error("power has more than one argument")
+  length(value_ch) == 1 || error("more than one argument")
   M_abstract_expr_node.set_myRef!(ref, cos(value_ch[1]))
 end
 

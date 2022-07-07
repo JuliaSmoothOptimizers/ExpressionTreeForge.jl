@@ -42,7 +42,7 @@ function _node_convexity(
   son_bound::AbstractVector{Tuple{T, T}},
 ) where {Y <: Number} where {T <: Number}
   (length(son_cvx) == 1 && length(son_bound) == 1) ||
-    error("non-valide length of argument _node_convexity power operator")
+    error("unvalid children length of _node_convexity")
   st_ch = son_cvx[1]
   (bi, bs) = son_bound[1]
   if (op.index == 0 || M_implementation_convexity_type.is_constant(st_ch))
