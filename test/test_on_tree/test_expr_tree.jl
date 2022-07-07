@@ -126,7 +126,7 @@ end
   @test M_trait_type_expr.is_more(algo_expr_tree.get_type_tree(t_expr_9))
 end
 
-@testset "test de la récupération des variable élementaires" begin
+@testset "Retrieve the elemental variables" begin
   t_expr_var = M_abstract_expr_tree.create_expr_tree(:((x[1]^3) + sin(x[1] * x[2]) - (x[3] - x[2])))
   t_var = M_trait_expr_tree.transform_to_expr_tree(t_expr_var)
   res = algo_expr_tree.get_elemental_variable(t_var)
@@ -141,7 +141,7 @@ end
   @test res_var1 == [1]
 end
 
-@testset "test complet à partir d'un modèle JuMP" begin
+@testset "Compare to a JuMP model" begin
   m = Model()
   n_x = 10
   @variable(m, x[1:n_x])
@@ -238,7 +238,7 @@ function expr_tree_factorielle_plus(n::Integer, op::Symbol)
   end
 end
 
-@testset "test arbres factorielle désimbriqué les + et get_type " begin
+@testset "Factorial tree divide the terms + and get_type " begin
   n = 5
   @time test_fac_expr_tree_plus =
     expr_tree_factorielle_plus(n, :+)::M_implementation_expr_tree.Type_expr_tree
@@ -269,7 +269,7 @@ function create_trees(n::Int)
   return Expr_j, expr_tree_j, complete_tree, evaluator
 end
 
-@testset "test de la création de la fonction d'évaluation" begin
+@testset "Create a evaluation function" begin
   n = 50
   expr, expr_tree, comp_tree, evaluator = create_trees(n)
   f = ExpressionTreeForge.get_function_of_evaluation(expr_tree)

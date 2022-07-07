@@ -34,30 +34,6 @@ A `Complete_expr_tree` has fields:
 Complete_expr_tree{T <: Number} = M_implementation_complete_expr_tree.Complete_expr_tree{T}
 
 """
-    Pre_compiled_tree{T} <: AbstractExprTree
-
-Implementation of an expression tree where the value of the children is accessible from the parent using `MyRef`.
-A `Pre_compiled_tree` has fields:
-
-* `root::New_node{Y}` representing an expression tree;
-* `x::AbstractVector{Y}` the vector evaluating `root`.
-"""
-Pre_compiled_tree{T <: Number} = M_implementation_pre_compiled_tree.Pre_compiled_tree{T}
-
-"""
-    Pre_n_compiled_tree{Y <: Number} <: AbstractExprTree
-
-Represent an expression tree that can be evaluate simultaneously by several points.
-It has the fields:
-
-* `root::Eval_n_node{Y}` the root of the expression tree;
-* `multiple_x::Vector{AbstractVector{Y}}` the multiple inputs `x` of the `Pre_n_compiled_tree`
-* `multiple::Int` the number of simultaneous evaluation supported;
-* `vec_tmp::Vector{M_abstract_expr_node.MyRef{Y}}` the result of the `multiple` evaluations.
-"""
-Pre_n_compiled_tree{T <: Number} = M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T}
-
-"""
     Type_calculus_tree
 
 Represent the different types that a expression can be :
@@ -224,29 +200,6 @@ Create a `complete_tree::Complete_expr_tree` from `expression_tree` (`::Type_exp
 """
 @inline create_complete_tree(tree) =
   M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
-
-"""
-    precompiled_tree = create_pre_compiled_tree(expression_tree, x::AbstractVector)
-
-Create a `precompiled_tree::Pre_compiled_tree` from `expression_tree` (`::Type_expr_tree` for now).
-"""
-@inline create_pre_compiled_tree(tree, x::AbstractVector) =
-  M_implementation_pre_compiled_tree.create_pre_compiled_tree(tree, x)
-
-"""
-    pre_n_compiled_tree = create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number}
-    pre_n_compiled_tree = create_pre_n_compiled_tree(tree, multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}}) where {N} where {T <: Number}
-
-Create a `pre_n_compiled_tree::Pre_n_compiled_tree` from `expression_tree` (`::Type_expr_tree` for now).
-"""
-@inline create_pre_n_compiled_tree(tree, x::Vector{Vector{T}}) where {T <: Number} =
-  M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, x)
-
-@inline create_pre_n_compiled_tree(
-  tree,
-  multiple_x_view::Vector{SubArray{T, 1, Array{T, 1}, N, false}},
-) where {N} where {T <: Number} =
-  M_implementation_pre_n_compiled_tree.create_pre_n_compiled_tree(tree, multiple_x_view)
 
 """
     bool = is_constant(type::Type_calculus_tree)
@@ -421,9 +374,6 @@ Evaluate the `expression_tree` with several points, represented as `x`.
 """
 @inline evaluate_expr_tree_multiple_points(expression_tree::Any, x::AbstractVector) =
   M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(expression_tree, x)
-
-@inline evaluate_expr_tree_multiple_points(expression_tree::Any) =
-  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(expression_tree)
 
 """
     gradient = gradient_expr_tree_forward(expr_tree, x)

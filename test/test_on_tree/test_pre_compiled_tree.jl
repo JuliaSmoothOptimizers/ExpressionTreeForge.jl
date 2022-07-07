@@ -20,33 +20,20 @@
   complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
 
   x = ones(Float64, n)
-  compiled_tree = ExpressionTreeForge.create_pre_compiled_tree(expr_tree, x)
-  @show ExpressionTreeForge.M_trait_expr_tree.is_expr_tree(compiled_tree)
-
+  
   t = Float64
   n_eval = 200
   f(n, i, t) = (v -> i * v).(ones(t, n))
   all_x = map(i -> f(n, i, t), [1:n_eval;])
   resx = Vector{Float64}(undef, n_eval)
   all_x_views = map(x -> view(x, [1:length(x);]), all_x)
-  n_compiled_tree = ExpressionTreeForge.create_pre_n_compiled_tree(expr_tree, all_x)
-  n_compiled_tree_views = ExpressionTreeForge.create_pre_n_compiled_tree(expr_tree, all_x_views)
-
+  
   obj_expr_tree = ExpressionTreeForge.evaluate_expr_tree(expr_tree, x)
   obj_complete_tree = ExpressionTreeForge.evaluate_expr_tree(complete_tree, x)
-  obj_compiled_tree = ExpressionTreeForge.evaluate_expr_tree(compiled_tree, x)
   obj_JuMP = MathOptInterface.eval_objective(evaluator, x)
-
-  obj_all_x = ExpressionTreeForge.evaluate_expr_tree_multiple_points(n_compiled_tree, all_x)
-  obj_all_x_views =
-    ExpressionTreeForge.evaluate_expr_tree_multiple_points(n_compiled_tree_views, all_x_views)
-  map!(x -> ExpressionTreeForge.evaluate_expr_tree(expr_tree, x), resx, all_x)
-  obj_all_without_x = ExpressionTreeForge.evaluate_expr_tree_multiple_points(n_compiled_tree_views)
-
-  @test obj_expr_tree ≈ obj_compiled_tree
-  @test obj_complete_tree ≈ obj_compiled_tree
-  @test obj_JuMP ≈ obj_compiled_tree
-  @test sum(resx) ≈ obj_all_x
-  @test sum(resx) ≈ obj_all_x_views
-  @test obj_all_without_x ≈ obj_all_x_views
+ 
+  @test obj_expr_tree ≈ obj_JuMP
+  @test obj_complete_tree ≈ obj_JuMP
+  @test mapreduce(x -> ExpressionTreeForge.evaluate_expr_tree(expr_tree, x), +, all_x) == mapreduce(x -> MathOptInterface.eval_objective(evaluator, x), +, all_x)
+  
 end

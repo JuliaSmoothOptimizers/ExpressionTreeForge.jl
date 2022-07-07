@@ -161,7 +161,7 @@ end
   @test complete_tree4 != complete_tree5
 end
 
-@testset " test un peu généraux" begin
+@testset "General tests" begin
   θ = 1e-5
   m = Model()
   n = 15

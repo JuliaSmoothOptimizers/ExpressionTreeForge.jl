@@ -1,6 +1,6 @@
 using ExpressionTreeForge.M_abstract_tree, ExpressionTreeForge.M_trait_tree
 
-@testset "test sur les arbre Expr" begin
+@testset "test on Expr" begin
   @test M_abstract_tree.create_tree(:(x[2] + 5 * x[3])) == :(x[2] + 5 * x[3])
   @test M_trait_tree.get_children(:(x[2] + 5 * x[3])) == [:(x[2]), :(5 * x[3])]
   @test M_trait_tree.get_node(:(x[2] + 5 * x[3])) == :+

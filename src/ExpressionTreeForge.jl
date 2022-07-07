@@ -7,8 +7,7 @@ include("expr_tree/ordered_include.jl")
 
 using .algo_expr_tree, .M_evaluation_expr_tree, .M_trait_expr_tree, .M_implementation_type_expr
 using .algo_tree
-using .M_implementation_complete_expr_tree,
-  .M_implementation_pre_compiled_tree, .M_implementation_pre_n_compiled_tree
+using .M_implementation_complete_expr_tree
 using .M_bound_propagations, .M_convexity_detection
 
 include("export.jl")

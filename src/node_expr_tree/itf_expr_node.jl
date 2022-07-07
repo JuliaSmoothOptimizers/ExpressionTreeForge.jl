@@ -87,7 +87,7 @@ _node_is_constant(node::Abstract_expr_node) = false
     type = _get_type_node(node::Abstract_expr_node, children_types::AbstractVector{Type_expr_basic})
 
 Return the type of `node` given the type of its children `children_types`.
-The types avaible are`constant, linear, quadratic, cubic` or `more`.
+The types available are `constant, linear, quadratic, cubic` or `more`.
 """
 _get_type_node(node::Abstract_expr_node) = error("Should not be called")
 
