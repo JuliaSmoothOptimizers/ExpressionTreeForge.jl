@@ -31,7 +31,7 @@ _is_cubic() = ()
 """
     bool = _is_more(type)
 
-Return `true` if `type` is `more` than a culib type.
+Return `true` if `type` is `more` non linear than a cubic type.
 """
 _is_more() = ()
 
@@ -49,4 +49,4 @@ Return the type resulting of `type` to power `index`.
 """
 _type_power() = ()
 
-end  # module M_interface_type_expr
+end

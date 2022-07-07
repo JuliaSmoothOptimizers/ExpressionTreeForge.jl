@@ -55,7 +55,7 @@ Get the `children` from the current node as part of `tree`, if `trait_tree::Type
 @inline _get_children(a, ::Type_trait_tree) = _get_children(a)
 @inline _get_children(a, ::Type_not_trait_tree) = error(" The parameter is not a Tree")
 
-end  # module trait_tree
+end
 
 module algo_tree
 

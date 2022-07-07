@@ -60,7 +60,7 @@ Return `true` if `type` is a cubic type.
 """
     bool = _is_more(type)
 
-Return `true` if `type` is more than a quadratic type.
+Return `true` if `type` is `more` non linear than a cubic.
 """
 @inline is_more(a::Any) = _is_more(a, is_trait_type_expr(a))
 @inline _is_more(a, ::Type_not_type_expr) = error("This is not a type of expr")

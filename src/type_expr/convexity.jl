@@ -10,6 +10,7 @@ Type representing wether an expression is `not_treated, constant, linear, convex
 
 """
     Convexity_wrapper
+
 Wrapper around `Convexity_type`.
 """
 mutable struct Convexity_wrapper
@@ -17,18 +18,18 @@ mutable struct Convexity_wrapper
 end
 
 """
-    convexity_status = get_convexity_wrapper(c::Convexity_wrapper)
+    convexity_status = get_convexity_wrapper(convexity::Convexity_wrapper)
 
-Return the convexity status of `c`.
+Return the convexity status of `convexity`.
 """
-@inline get_convexity_wrapper(c::Convexity_wrapper) = c.status
+@inline get_convexity_wrapper(convexity::Convexity_wrapper) = convexity.status
 
 """
-    set_convexity_wrapper!(c::Convexity_wrapper, t::Convexity_type)
+    set_convexity_wrapper!(convexity::Convexity_wrapper, t::Convexity_type)
 
-Set the convexity status of `c` to `t`.
+Set the convexity status of `convexity` to `type`.
 """
-@inline set_convexity_wrapper!(c::Convexity_wrapper, t::Convexity_type) = c.status = t
+@inline set_convexity_wrapper!(convexity::Convexity_wrapper, type::Convexity_type) = convexity.status = type
 
 """
     untreated_wrapper = init_conv_status()
@@ -116,65 +117,65 @@ Return a `unknown::Convexity_type`.
 
 """
     bool = is_treated(status::Convexity_type)
-    bool = is_treated(c::Convexity_wrapper)
+    bool = is_treated(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `not_treated`.
+Check if `status` or `convexity.status` equals `not_treated`.
 """
 @inline is_treated(status::Convexity_type) = status != not_treated
-@inline is_treated(c::Convexity_wrapper) = c.status != not_treated
+@inline is_treated(convexity::Convexity_wrapper) = convexity.status != not_treated
 
 """
     bool = is_not_treated(status::Convexity_type)
-    bool = is_not_treated(c::Convexity_wrapper)
+    bool = is_not_treated(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `not_treated`.
+Check if `status` or `convexity.status` equals `not_treated`.
 """
 @inline is_not_treated(status::Convexity_type) = status == not_treated
-@inline is_not_treated(c::Convexity_wrapper) = c.status == not_treated
+@inline is_not_treated(convexity::Convexity_wrapper) = convexity.status == not_treated
 
 """
     bool = is_constant(status::Convexity_type)
-    bool = is_constant(c::Convexity_wrapper)
+    bool = is_constant(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `constant`.
+Check if `status` or `convexity.status` equals `constant`.
 """
 @inline is_constant(status::Convexity_type) = status == constant
-@inline is_constant(c::Convexity_wrapper) = c.status == constant
+@inline is_constant(convexity::Convexity_wrapper) = convexity.status == constant
 
 """
     bool = is_linear(status::Convexity_type)
-    bool = is_linear(c::Convexity_wrapper)
+    bool = is_linear(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `linear`.
+Check if `status` or `convexity.status` equals `linear`.
 """
 @inline is_linear(status::Convexity_type) = (status == linear) || is_constant(status)
-@inline is_linear(c::Convexity_wrapper) = c.status == linear || is_constant(c)
+@inline is_linear(convexity::Convexity_wrapper) = convexity.status == linear || is_constant(convexity)
 
 """
     bool = is_convex(status::Convexity_type)
-    bool = is_convex(c::Convexity_wrapper)
+    bool = is_convex(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `convex`.
+Check if `status` or `convexity.status` equals `convex`.
 """
 @inline is_convex(status::Convexity_type) = (status == convex) || is_linear(status)
-@inline is_convex(c::Convexity_wrapper) = (c.status == convex) || is_linear(c)
+@inline is_convex(convexity::Convexity_wrapper) = (convexity.status == convex) || is_linear(convexity)
 
 """
     bool = is_concave(status::Convexity_type)
-    bool = is_concave(c::Convexity_wrapper)
+    bool = is_concave(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `concave`.
+Check if `status` or `convexity.status` equals `concave`.
 """
 @inline is_concave(status::Convexity_type) = (status == concave) || is_linear(status)
-@inline is_concave(c::Convexity_wrapper) = (c.status == concave) || is_linear(c)
+@inline is_concave(convexity::Convexity_wrapper) = (convexity.status == concave) || is_linear(convexity)
 
 """
     bool = is_unknown(status::Convexity_type)
-    bool = is_unknown(c::Convexity_wrapper)
+    bool = is_unknown(convexity::Convexity_wrapper)
 
-Check if `status` or `c.status` equals `unknown`.
+Check if `status` or `convexity.status` equals `unknown`.
 """
 @inline is_unknown(status::Convexity_type) = status == unknown
-@inline is_unknown(c::Convexity_wrapper) = (c.status == unknown)
+@inline is_unknown(convexity::Convexity_wrapper) = (convexity.status == unknown)
 
 end

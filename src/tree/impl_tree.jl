@@ -20,7 +20,6 @@ mutable struct Type_node{T} <: AbstractTree
   children::Vector{Type_node{T}}
 end
 
-# see abs_tree/jl
 @inline create_tree(field::T, children::Vector{Type_node{T}}) where {T} =
   Type_node{T}(field, children)
 @inline create_tree(field::T, children::Array{Any, 1}) where {T} = Type_node{T}(field, children)

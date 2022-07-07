@@ -290,7 +290,6 @@ Print a tree as long as it satisfies the interface `M_interface_tree`.
 """
 @inline print_tree(t) = algo_tree.printer_tree(t)
 
-# trait_expr_tree's functions
 """
     expr = transform_to_Expr(expr_tree)
 
