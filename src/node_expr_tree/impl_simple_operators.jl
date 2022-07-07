@@ -1,7 +1,7 @@
-module simple_operators
+module M_simple_operator
 
-import ..abstract_expr_node: ab_ex_nd, create_node_expr
-import ..interface_expr_node:
+import ..M_abstract_expr_node: Abstract_expr_node, create_node_expr
+import ..M_interface_expr_node:
   _node_is_plus,
   _node_is_minus,
   _node_is_power,
@@ -12,72 +12,70 @@ import ..interface_expr_node:
   _node_is_sin,
   _node_is_cos,
   _node_is_tan
-import ..interface_expr_node:
+import ..M_interface_expr_node:
   _get_type_node,
   _get_var_index,
   _evaluate_node,
   _evaluate_node!,
-  _change_from_N_to_Ni!,
-  _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
   _node_bound,
   _node_convexity
-import ..implementation_type_expr.t_type_expr_basic
+import ..M_implementation_type_expr.Type_expr_basic
 
-using ..implementation_convexity_type
-using ..implementation_type_expr
-using ..trait_type_expr
-using ..abstract_expr_node
+using ..M_implementation_convexity_type
+using ..M_implementation_type_expr
+using ..M_trait_type_expr
+using ..M_abstract_expr_node
 import Base.(==)
-export simple_operator
+export Simple_operator
 
-using ..plus_operators, ..minus_operators, ..times_operators, ..sinus_operators
-using ..tan_operators, ..cos_operators, ..exp_operators, ..frac_operators
+using ..M_plus_operator, ..M_minus_operator, ..M_times_operator, ..M_sinus_operator
+using ..M_tan_operator, ..M_cos_operator, ..M_exp_operator, ..M_frac_operator
 
-mutable struct simple_operator <: ab_ex_nd
+mutable struct Simple_operator <: Abstract_expr_node
   op::Symbol
 end
 
 function create_node_expr(op::Symbol)
   if op == :+
-    plus_operators.plus_operator()
+    M_plus_operator.Plus_operator()
   elseif op == :-
-    minus_operators.minus_operator()
+    M_minus_operator.Minus_operator()
   elseif op == :*
-    times_operators.time_operator()
+    M_times_operator.Time_operator()
   elseif op == :/
-    frac_operators.frac_operator()
+    M_frac_operator.Frac_operator()
   elseif op == :sin
-    sinus_operators.sinus_operator()
+    M_sinus_operator.Sinus_operator()
   elseif op == :tan
-    tan_operators.tan_operator()
+    M_tan_operator.Tan_operator()
   elseif op == :cos
-    cos_operators.cos_operator()
+    M_cos_operator.Cos_operator()
   elseif op == :exp
-    exp_operators.exp_operator()
+    M_exp_operator.Exp_operator()
   else
-    return simple_operator(op)
+    return Simple_operator(op)
   end
 end
 
 function create_node_expr(op::Symbol, x::AbstractVector{Y}) where {Y <: Number}
   if op == :+
-    plus_operators.plus_operator()
+    M_plus_operator.Plus_operator()
   elseif op == :-
-    minus_operators.minus_operator()
+    M_minus_operator.Minus_operator()
   elseif op == :*
-    times_operators.time_operator()
+    M_times_operator.Time_operator()
   elseif op == :/
-    frac_operators.frac_operator()
+    M_frac_operator.Frac_operator()
   elseif op == :sin
-    sinus_operators.sinus_operator()
+    M_sinus_operator.Sinus_operator()
   elseif op == :tan
-    tan_operators.tan_operator()
+    M_tan_operator.Tan_operator()
   elseif op == :cos
-    cos_operators.cos_operator()
+    M_cos_operator.Cos_operator()
   elseif op == :exp
-    exp_operators.exp_operator()
+    M_exp_operator.Exp_operator()
   else
     return simple_operator(op)
   end

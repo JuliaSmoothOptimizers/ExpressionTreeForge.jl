@@ -1,5 +1,4 @@
 [deps]
-CalculusTreeTools = "995bfbc1-c62b-4971-a5e3-ef0aad32e8da"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 
 [compat]

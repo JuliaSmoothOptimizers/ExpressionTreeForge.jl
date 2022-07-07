@@ -1,4 +1,4 @@
-using CalculusTreeTools
+using ExpressionTreeForge
 using JuMP, MathOptInterface, LinearAlgebra, SparseArrays
 using Test
 
@@ -14,35 +14,35 @@ using Test
 
   v = ones(n)
   Expr_j = MathOptInterface.objective_expr(evaluator)
-  expr_tree = CalculusTreeTools.transform_to_expr_tree(Expr_j)
+  expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
-  complete_tree = CalculusTreeTools.create_complete_tree(expr_tree_j)
+  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
 
   @test expr_tree_j == expr_tree
-  @test CalculusTreeTools.evaluate_expr_tree(complete_tree, v) ==
-        CalculusTreeTools.evaluate_expr_tree(expr_tree, v)
-  @test CalculusTreeTools.evaluate_expr_tree(complete_tree, v) ==
+  @test ExpressionTreeForge.evaluate_expr_tree(complete_tree, v) ==
+        ExpressionTreeForge.evaluate_expr_tree(expr_tree, v)
+  @test ExpressionTreeForge.evaluate_expr_tree(complete_tree, v) ==
         MathOptInterface.eval_objective(evaluator, v)
 
-  deleted_comp_expr_tree = CalculusTreeTools.delete_imbricated_plus(complete_tree)
-  deleted_expr_tree = CalculusTreeTools.delete_imbricated_plus(expr_tree)
-  comp_elem = CalculusTreeTools.get_elemental_variable.(deleted_comp_expr_tree)
-  elem = CalculusTreeTools.get_elemental_variable.(deleted_expr_tree)
+  deleted_comp_expr_tree = ExpressionTreeForge.delete_imbricated_plus(complete_tree)
+  deleted_expr_tree = ExpressionTreeForge.delete_imbricated_plus(expr_tree)
+  comp_elem = ExpressionTreeForge.get_elemental_variable.(deleted_comp_expr_tree)
+  elem = ExpressionTreeForge.get_elemental_variable.(deleted_expr_tree)
 
   @test length(deleted_comp_expr_tree) == length(deleted_expr_tree)
   @test comp_elem == elem
 
   res_deleted_comp_tree_evaluated =
-    (x -> x(v)).(CalculusTreeTools.evaluate_expr_tree.(deleted_comp_expr_tree))
+    (x -> x(v)).(ExpressionTreeForge.evaluate_expr_tree.(deleted_comp_expr_tree))
   res_deleted_tree_evaluated =
-    (x -> x(v)).(CalculusTreeTools.evaluate_expr_tree.(deleted_expr_tree))
+    (x -> x(v)).(ExpressionTreeForge.evaluate_expr_tree.(deleted_expr_tree))
   @test res_deleted_tree_evaluated == res_deleted_comp_tree_evaluated
 
   grad = zeros(n)
   MathOptInterface.eval_objective_gradient(evaluator, grad, v)
-  @test CalculusTreeTools.calcul_gradient_expr_tree(complete_tree, v) ==
-        CalculusTreeTools.calcul_gradient_expr_tree(expr_tree, v)
-  @test (norm(CalculusTreeTools.calcul_gradient_expr_tree(complete_tree, v)) - norm(grad)) < θ
+  @test ExpressionTreeForge.gradient_expr_tree_forward(complete_tree, v) ==
+        ExpressionTreeForge.gradient_expr_tree_forward(expr_tree, v)
+  @test (norm(ExpressionTreeForge.gradient_expr_tree_forward(complete_tree, v)) - norm(grad)) < θ
 
   MOI_pattern = MathOptInterface.hessian_lagrangian_structure(evaluator)
   column = [x[1] for x in MOI_pattern]
@@ -54,53 +54,53 @@ using Test
   MOI_half_hessian_en_x = sparse(row, column, values, n, n)
   MOI_hessian_en_x = Symmetric(MOI_half_hessian_en_x)
 
-  H = CalculusTreeTools.calcul_Hessian_expr_tree(complete_tree, v)
+  H = ExpressionTreeForge.hessian_expr_tree(complete_tree, v)
   @test (norm(MOI_hessian_en_x) - norm(H)) < θ
 
-  CalculusTreeTools.set_bounds!(complete_tree)
-  bound_tree = CalculusTreeTools.create_bound_tree(expr_tree)
-  CalculusTreeTools.set_bounds!(expr_tree, bound_tree)
-  @test CalculusTreeTools.get_bound(complete_tree) == CalculusTreeTools.get_bound(bound_tree)
+  ExpressionTreeForge.set_bounds!(complete_tree)
+  bound_tree = ExpressionTreeForge.create_bounds_tree(expr_tree)
+  ExpressionTreeForge.set_bounds!(expr_tree, bound_tree)
+  @test ExpressionTreeForge.get_bound(complete_tree) == ExpressionTreeForge.get_bound(bound_tree)
 
-  convexity_tree = CalculusTreeTools.create_convex_tree(expr_tree_j)
-  CalculusTreeTools.set_convexity!(expr_tree, convexity_tree, bound_tree)
-  CalculusTreeTools.set_convexity!(complete_tree)
-  @test CalculusTreeTools.get_convexity_status(convexity_tree) ==
-        CalculusTreeTools.get_convexity_status(complete_tree)
+  convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
+  ExpressionTreeForge.set_convexity!(expr_tree, convexity_tree, bound_tree)
+  ExpressionTreeForge.set_convexity!(complete_tree)
+  @test ExpressionTreeForge.get_convexity_status(convexity_tree) ==
+        ExpressionTreeForge.get_convexity_status(complete_tree)
 
   x = (y -> y * 4).(ones(n))
-  CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[3], comp_elem[3])
-  CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[3], elem[3])
-  @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[3], x) ==
-        CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[3], x)
+  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[3], comp_elem[3])
+  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_expr_tree[3], elem[3])
+  @test ExpressionTreeForge.evaluate_expr_tree(deleted_expr_tree[3], x) ==
+        ExpressionTreeForge.evaluate_expr_tree(deleted_comp_expr_tree[3], x)
 
-  CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[2], comp_elem[2])
-  CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[2], elem[2])
-  @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[2], x) ==
-        CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[2], x)
+  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[2], comp_elem[2])
+  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_expr_tree[2], elem[2])
+  @test ExpressionTreeForge.evaluate_expr_tree(deleted_expr_tree[2], x) ==
+        ExpressionTreeForge.evaluate_expr_tree(deleted_comp_expr_tree[2], x)
 
-  CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[4], comp_elem[4])
-  CalculusTreeTools.element_fun_from_N_to_Ni!(deleted_expr_tree[4], elem[4])
-  @test CalculusTreeTools.evaluate_expr_tree(deleted_expr_tree[4], x) ==
-        CalculusTreeTools.evaluate_expr_tree(deleted_comp_expr_tree[4], x)
+  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[4], comp_elem[4])
+  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_expr_tree[4], elem[4])
+  @test ExpressionTreeForge.evaluate_expr_tree(deleted_expr_tree[4], x) ==
+        ExpressionTreeForge.evaluate_expr_tree(deleted_comp_expr_tree[4], x)
 
   copy_tree = copy(complete_tree)
   @test copy_tree == complete_tree
 
-  CalculusTreeTools.evaluate_expr_tree(copy_tree, x)
-  CalculusTreeTools.evaluate_expr_tree(complete_tree, x)
-  @test CalculusTreeTools.get_bound(complete_tree) == CalculusTreeTools.get_bound(copy_tree)
-  @test CalculusTreeTools.get_convexity_status(complete_tree) ==
-        CalculusTreeTools.get_convexity_status(copy_tree)
+  ExpressionTreeForge.evaluate_expr_tree(copy_tree, x)
+  ExpressionTreeForge.evaluate_expr_tree(complete_tree, x)
+  @test ExpressionTreeForge.get_bound(complete_tree) == ExpressionTreeForge.get_bound(copy_tree)
+  @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
+        ExpressionTreeForge.get_convexity_status(copy_tree)
 
   @testset "test supp " begin
     type_test = [Float32, Float16, BigFloat, Float64]
     for t in type_test
       x = ones(t, n)
-      cast_new_tree = CalculusTreeTools.cast_type_of_constant(expr_tree, t)
-      cast_complete_tree = CalculusTreeTools.cast_type_of_constant(complete_tree, t)
-      obj_casted_ex_t = CalculusTreeTools.evaluate_expr_tree(cast_new_tree, x)
-      obj_casted_cp_t = CalculusTreeTools.evaluate_expr_tree(cast_complete_tree, x)
+      cast_new_tree = ExpressionTreeForge.cast_type_of_constant(expr_tree, t)
+      cast_complete_tree = ExpressionTreeForge.cast_type_of_constant(complete_tree, t)
+      obj_casted_ex_t = ExpressionTreeForge.evaluate_expr_tree(cast_new_tree, x)
+      obj_casted_cp_t = ExpressionTreeForge.evaluate_expr_tree(cast_complete_tree, x)
       @test obj_casted_ex_t == obj_casted_cp_t
       @test typeof(obj_casted_ex_t) == t && typeof(obj_casted_cp_t) == t
     end
@@ -112,14 +112,14 @@ end
   Expr2 = :(x[2] + x[2])
   Expr3 = :(x[2] + x[3] + x[4])
   Expr4 = :(x[2] + x[3] * x[4])
-  expr_tree1 = CalculusTreeTools.transform_to_expr_tree(Expr1)
-  expr_tree2 = CalculusTreeTools.transform_to_expr_tree(Expr2)
-  expr_tree3 = CalculusTreeTools.transform_to_expr_tree(Expr3)
-  expr_tree4 = CalculusTreeTools.transform_to_expr_tree(Expr4)
-  complete_tree1 = CalculusTreeTools.create_complete_tree(expr_tree1)
-  complete_tree2 = CalculusTreeTools.create_complete_tree(expr_tree2)
-  complete_tree3 = CalculusTreeTools.create_complete_tree(expr_tree3)
-  complete_tree4 = CalculusTreeTools.create_complete_tree(expr_tree4)
+  expr_tree1 = ExpressionTreeForge.transform_to_expr_tree(Expr1)
+  expr_tree2 = ExpressionTreeForge.transform_to_expr_tree(Expr2)
+  expr_tree3 = ExpressionTreeForge.transform_to_expr_tree(Expr3)
+  expr_tree4 = ExpressionTreeForge.transform_to_expr_tree(Expr4)
+  complete_tree1 = ExpressionTreeForge.create_complete_tree(expr_tree1)
+  complete_tree2 = ExpressionTreeForge.create_complete_tree(expr_tree2)
+  complete_tree3 = ExpressionTreeForge.create_complete_tree(expr_tree3)
+  complete_tree4 = ExpressionTreeForge.create_complete_tree(expr_tree4)
   complete_tree5 = copy(complete_tree1)
 
   @test complete_tree1 != complete_tree2
@@ -136,15 +136,15 @@ end
   @test complete_tree3 != complete_tree5
   @test complete_tree4 != complete_tree5
 
-  CalculusTreeTools.set_bounds!(complete_tree1)
-  CalculusTreeTools.set_bounds!(complete_tree2)
-  CalculusTreeTools.set_bounds!(complete_tree3)
-  CalculusTreeTools.set_bounds!(complete_tree4)
+  ExpressionTreeForge.set_bounds!(complete_tree1)
+  ExpressionTreeForge.set_bounds!(complete_tree2)
+  ExpressionTreeForge.set_bounds!(complete_tree3)
+  ExpressionTreeForge.set_bounds!(complete_tree4)
 
-  CalculusTreeTools.set_convexity!(complete_tree1)
-  CalculusTreeTools.set_convexity!(complete_tree2)
-  CalculusTreeTools.set_convexity!(complete_tree3)
-  CalculusTreeTools.set_convexity!(complete_tree4)
+  ExpressionTreeForge.set_convexity!(complete_tree1)
+  ExpressionTreeForge.set_convexity!(complete_tree2)
+  ExpressionTreeForge.set_convexity!(complete_tree3)
+  ExpressionTreeForge.set_convexity!(complete_tree4)
 
   @test complete_tree1 != complete_tree2
 
@@ -161,7 +161,7 @@ end
   @test complete_tree4 != complete_tree5
 end
 
-@testset " test un peu généraux" begin
+@testset "General tests" begin
   θ = 1e-5
   m = Model()
   n = 15
@@ -173,11 +173,11 @@ end
 
   v = ones(n)
   Expr = MathOptInterface.objective_expr(evaluator)
-  expr_tree = CalculusTreeTools.transform_to_expr_tree(Expr)
-  complete_tree = CalculusTreeTools.create_complete_tree(expr_tree)
+  expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr)
+  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree)
 
   complete_tree_cp = copy(complete_tree)
-  expr_tree_trans = CalculusTreeTools.transform_to_expr_tree(complete_tree)
+  expr_tree_trans = ExpressionTreeForge.transform_to_expr_tree(complete_tree)
 
   @test complete_tree_cp == complete_tree
   @test expr_tree_trans == expr_tree

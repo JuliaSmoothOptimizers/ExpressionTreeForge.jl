@@ -1,13 +1,13 @@
-module implementation_type_expr
+module M_implementation_type_expr
 
-import ..interface_type_expr:
+import ..M_interface_type_expr:
   _is_constant, _is_linear, _is_quadratic, _is_more, _is_cubic, _type_product, _type_power
 
-export t_type_expr_basic,
+export Type_expr_basic,
   _is_constant,
   _is_linear,
   _is_quadratic,
-  _is_more_than_quadratic,
+  _is_more,
   _is_cubic,
   return_constant,
   return_linear,
@@ -15,78 +15,129 @@ export t_type_expr_basic,
   return_cubic,
   return_more
 
-@enum t_type_expr_basic constant = 0 linear = 1 quadratic = 2 cubic = 3 more = 4
-
-############## définition des fonctions de l'interface ###################
-@inline _is_constant(t::t_type_expr_basic) = (t == constant)
-
-@inline _is_linear(t::t_type_expr_basic) = (t == linear)
-
-@inline _is_quadratic(t::t_type_expr_basic) = (t == quadratic)
-
-@inline _is_cubic(t::t_type_expr_basic) = (t == cubic)
-
-@inline _is_more(t::t_type_expr_basic) = (t == more)
-
-@inline return_constant() = t_type_expr_basic(0)
-
-@inline return_linear() = t_type_expr_basic(1)
-
-@inline return_quadratic() = t_type_expr_basic(2)
-
-@inline return_cubic() = t_type_expr_basic(3)
-
-@inline return_more() = t_type_expr_basic(4)
+@enum Type_expr_basic constant = 0 linear = 1 quadratic = 2 cubic = 3 more = 4
 
 """
-    _type_product(a,b)
-Compute the t_type_expr_basic that resultsof of the product a*b
+    bool = _is_constant(type::Type_expr_basic)
+
+Check if `type` equals `constant`.
 """
-function _type_product(a::t_type_expr_basic, b::t_type_expr_basic)
-  if _is_constant(a)
-    return b
-  elseif _is_linear(a)
-    if _is_constant(b)
+@inline _is_constant(type::Type_expr_basic) = (type == constant)
+
+"""
+    bool = _is_linear(type::Type_expr_basic)
+
+Check if `type` equals `linear`.
+"""
+@inline _is_linear(type::Type_expr_basic) = (type == linear)
+
+"""
+    bool = _is_quadratic(type::Type_expr_basic)
+
+Check if `type` equals `quadratic`.
+"""
+@inline _is_quadratic(type::Type_expr_basic) = (type == quadratic)
+
+"""
+    bool = _is_cubic(type::Type_expr_basic)
+
+Check if `type` equals `cubic`.
+"""
+@inline _is_cubic(type::Type_expr_basic) = (type == cubic)
+
+"""
+    bool = _is_more(type::Type_expr_basic)
+
+Check if `type` equals `more`.
+"""
+@inline _is_more(type::Type_expr_basic) = (type == more)
+
+"""
+    constant = return_constant()
+
+Return `constantype::Type_expr_basic`.
+"""
+@inline return_constant() = Type_expr_basic(0)
+
+"""
+    linear = return_linear()
+
+Return `linear::Type_expr_basic`.
+"""
+@inline return_linear() = Type_expr_basic(1)
+
+"""
+    quadratic = return_quadratic()
+
+Return `quadratic::Type_expr_basic`.
+"""
+@inline return_quadratic() = Type_expr_basic(2)
+
+"""
+    cubic = return_cubic()
+
+Return `cubic::Type_expr_basic`.
+"""
+@inline return_cubic() = Type_expr_basic(3)
+
+"""
+    more = return_more()
+
+Return `more::Type_expr_basic`.
+"""
+@inline return_more() = Type_expr_basic(4)
+
+"""
+    result_type = _type_product(a::Type_expr_basic, b::Type_expr_basic)
+
+Return `result_type::Type_expr_basic`, the type resulting of the product `a*b`.
+"""
+function _type_product(typea::Type_expr_basic, typeb::Type_expr_basic)
+  if _is_constant(typea)
+    return typeb
+  elseif _is_linear(typea)
+    if _is_constant(typeb)
       return linear
-    elseif _is_linear(b)
+    elseif _is_linear(typeb)
       return quadratic
-    elseif _is_quadratic(b)
+    elseif _is_quadratic(typeb)
       return cubic
     else
       return more
     end
-  elseif _is_quadratic(a)
-    if _is_constant(b)
+  elseif _is_quadratic(typea)
+    if _is_constant(typeb)
       return quadratic
-    elseif _is_linear(b)
+    elseif _is_linear(typeb)
       return cubic
     else
       return more
     end
-  elseif _is_cubic(a)
-    if _is_constant(b)
+  elseif _is_cubic(typea)
+    if _is_constant(typeb)
       return cubic
     else
       return more
     end
-  elseif _is_more(a)
+  elseif _is_more(typea)
     return more
   end
 end
 
 """
-    _type_product(index,b)
-Compute the t_type_expr_basic that results of b^(index)
+    result_type = _type_power(index_power::Number, b::Type_expr_basic)
+
+Return `result_type::Type_expr_basic`, resulting of `b^(index)`.
 """
-function _type_power(index_power::Number, b::t_type_expr_basic)
+function _type_power(index_power::Number, type::Type_expr_basic)
   if index_power == 0
     return constant
   elseif index_power == 1
-    return b
+    return type
   else
-    if _is_constant(b)
+    if _is_constant(type)
       return constant
-    elseif _is_linear(b)
+    elseif _is_linear(type)
       if index_power == 2
         return quadratic
       elseif index_power == 3
@@ -100,4 +151,4 @@ function _type_power(index_power::Number, b::t_type_expr_basic)
   end
 end
 
-end  # module implementation_type_expr
+end

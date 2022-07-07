@@ -1,33 +1,49 @@
-module implementation_tree
+module M_implementation_tree
 
-import ..abstract_tree: ab_tree, create_tree
-import ..interface_tree: _get_node, _get_children
+import ..M_abstract_tree: AbstractTree, create_tree
+import ..M_interface_tree: _get_node, _get_children
 import Base.==
 
-mutable struct type_node{T} <: ab_tree
+export Type_node
+
+"""
+    Type_node{T} <: AbstractTree
+
+Basic implementation of a tree.
+A `Type_node` has fields:
+
+* `field` gathering the informations about the current node;
+* `children` a vector of children, each of them being a `Type_node`.
+"""
+mutable struct Type_node{T} <: AbstractTree
   field::T
-  children::Vector{type_node{T}}
+  children::Vector{Type_node{T}}
 end
 
-@inline create_tree(field::T, children::Vector{type_node{T}}) where {T} =
-  type_node{T}(field, children)
-@inline create_tree(field::T, children::Array{Any, 1}) where {T} = type_node{T}(field, children)
+@inline create_tree(field::T, children::Vector{Type_node{T}}) where {T} =
+  Type_node{T}(field, children)
+@inline create_tree(field::T, children::Array{Any, 1}) where {T} = Type_node{T}(field, children)
 
-@inline _get_node(tree::type_node{T}) where {T} = tree.field
+@inline _get_node(tree::Type_node{T}) where {T} = tree.field
 
-@inline _get_children(tree::type_node{T}) where {T} = tree.children
-@inbounds @inline _get_children(tree::type_node{T}, i::Int) where {T} = tree.children[i]
-@inline _get_length_children(tree::type_node{T}) where {T} = length(_get_children(tree))
+@inline _get_children(tree::Type_node{T}) where {T} = tree.children
+@inline _get_children(tree::Type_node{T}, i::Int) where {T} = tree.children[i]
 
-@inline (==)(a::type_node{T}, b::type_node{T}) where {T} = equal_tree(a, b)
+@inline (==)(a::Type_node{T}, b::Type_node{T}) where {T} = equal_tree(a, b)
 @inline my_and(x, y) = x && y
-@inline equal_tree(a::type_node{T}, b::type_node{T}) where {T} = begin
-  ca = _get_children(a)
-  cb = _get_children(b)
-  la = length(ca)
-  lb = length(cb)
-  _get_node(a) == _get_node(b) && la == lb ?
-  (la > 0 ? mapreduce(equal_tree, my_and, ca, cb) : true) : false
+
+"""
+    bool = equal_tree(tree1::Type_node{T}, tree2::Type_node{T})
+
+Check recursively if every node is the same for both `tree1` and `tree2`
+"""
+function equal_tree(tree1::Type_node{T}, tree2::Type_node{T}) where {T}
+  children_tree1 = _get_children(tree1)
+  children_tree2 = _get_children(tree2)
+  l1 = length(children_tree1)
+  l2 = length(children_tree2)
+  _get_node(tree1) == _get_node(tree1) && l1 == l2 ?
+  (l1 > 0 ? mapreduce(equal_tree, my_and, children_tree1, children_tree2) : true) : false
 end
 
-end  # module implementation_tree
+end  # module M_implementation_tree

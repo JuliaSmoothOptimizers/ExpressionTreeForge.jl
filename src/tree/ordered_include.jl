@@ -1,6 +1,6 @@
-include("itf_tree.jl")
-
 include("abs_tree.jl")
+
+include("itf_tree.jl")
 
 include("impl_tree.jl")
 include("impl_tree_Expr.jl")

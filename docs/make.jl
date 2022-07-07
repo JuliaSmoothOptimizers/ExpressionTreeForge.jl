@@ -1,91 +1,87 @@
 using Documenter
-using CalculusTreeTools
+using ExpressionTreeForge
 
-using CalculusTreeTools:
-  abstract_expr_tree,
-  trait_expr_tree,
-  interface_expr_tree,
-  implementation_pre_compiled_tree,
-  implementation_pre_n_compiled_tree,
-  implementation_expression_tree_Expr,
-  implementation_expr_tree_Expr,
-  implementation_expr_tree,
-  implementation_complete_expr_tree,
+using ExpressionTreeForge:
+  M_abstract_expr_tree,
+  M_trait_expr_tree,
+  M_interface_expr_tree,
+  M_implementation_expression_tree_Expr,
+  M_implementation_expr_tree_Expr,
+  M_implementation_expr_tree,
+  M_implementation_complete_expr_tree,
   M_evaluation_expr_tree,
-  bound_propagations,
-  convexity_detection,
+  M_bound_propagations,
+  M_convexity_detection,
   algo_expr_tree,
-  trait_expr_node,
-  interface_expr_node,
-  variables,
-  variables_view,
-  variables_n_view,
-  times_operators,
-  tan_operators,
-  sinus_operators,
-  simple_operators,
-  power_operators,
-  plus_operators,
-  minus_operators,
-  frac_operators,
-  exp_operators,
-  cos_operators,
-  constants,
-  abstract_expr_node,
-  trait_tree,
+  M_trait_expr_node,
+  M_interface_expr_node,
+  M_variable,
+  M_variables_view,
+  M_variables_n_view,
+  M_times_operator,
+  M_tan_operator,
+  M_sinus_operator,
+  M_simple_operator,
+  M_power_operator,
+  M_plus_operator,
+  M_minus_operator,
+  M_frac_operator,
+  M_exp_operator,
+  M_cos_operator,
+  M_constant,
+  M_abstract_expr_node,
+  M_trait_tree,
   algo_tree,
-  interface_tree,
-  implementation_tree,
-  implementation_tree_Expr,
-  abstract_tree,
-  trait_type_expr,
-  interface_type_expr,
-  implementation_type_expr,
-  implementation_convexity_type
+  M_interface_tree,
+  M_implementation_tree,
+  M_implementation_tree_Expr,
+  M_abstract_tree,
+  M_trait_type_expr,
+  M_interface_type_expr,
+  M_implementation_type_expr,
+  M_implementation_convexity_type
 
 makedocs(
   modules = [
-    CalculusTreeTools,
-    abstract_expr_tree,
-    trait_expr_tree,
-    interface_expr_tree,
-    implementation_pre_compiled_tree,
-    implementation_pre_n_compiled_tree,
-    implementation_expression_tree_Expr,
-    implementation_expr_tree_Expr,
-    implementation_expr_tree,
-    implementation_complete_expr_tree,
+    ExpressionTreeForge,
+    M_abstract_expr_tree,
+    M_trait_expr_tree,
+    M_interface_expr_tree,
+    M_implementation_expression_tree_Expr,
+    M_implementation_expr_tree_Expr,
+    M_implementation_expr_tree,
+    M_implementation_complete_expr_tree,
     M_evaluation_expr_tree,
-    bound_propagations,
-    convexity_detection,
+    M_bound_propagations,
+    M_convexity_detection,
     algo_expr_tree,
-    trait_expr_node,
-    interface_expr_node,
-    variables,
-    variables_view,
-    variables_n_view,
-    times_operators,
-    tan_operators,
-    sinus_operators,
-    simple_operators,
-    power_operators,
-    plus_operators,
-    minus_operators,
-    frac_operators,
-    exp_operators,
-    cos_operators,
-    constants,
-    abstract_expr_node,
-    trait_tree,
+    M_trait_expr_node,
+    M_interface_expr_node,
+    M_variable,
+    M_variables_view,
+    M_variables_n_view,
+    M_times_operator,
+    M_tan_operator,
+    M_sinus_operator,
+    M_simple_operator,
+    M_power_operator,
+    M_plus_operator,
+    M_minus_operator,
+    M_frac_operator,
+    M_exp_operator,
+    M_cos_operator,
+    M_constant,
+    M_abstract_expr_node,
+    M_trait_tree,
     algo_tree,
-    interface_tree,
-    implementation_tree,
-    implementation_tree_Expr,
-    abstract_tree,
-    trait_type_expr,
-    interface_type_expr,
-    implementation_type_expr,
-    implementation_convexity_type,
+    M_interface_tree,
+    M_implementation_tree,
+    M_implementation_tree_Expr,
+    M_abstract_tree,
+    M_trait_type_expr,
+    M_interface_type_expr,
+    M_implementation_type_expr,
+    M_implementation_convexity_type,
   ],
   doctest = true,
   # linkcheck = true,
@@ -94,49 +90,8 @@ makedocs(
     assets = ["assets/style.css"],
     prettyurls = get(ENV, "CI", nothing) == "true",
   ),
-  sitename = "CalculusTreeTools.jl",
+  sitename = "ExpressionTreeForge.jl",
   pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
 )
 
-deploydocs(repo = "github.com/paraynaud/CalculusTreeTools.jl.git", devbranch = "master")
-
-# abstract_expr_tree
-# trait_expr_tree
-# interface_expr_tree
-# implementation_pre_compiled_tree
-# implementation_pre_n_compiled_tree
-# implementation_expression_tree_Expr
-# implementation_expr_tree_Expr
-# implementation_expr_tree
-# implementation_complete_expr_tree
-# M_evaluation_expr_tree
-# bound_propagations
-# convexity_detection
-# algo_expr_tree
-# trait_expr_node
-# interface_expr_node
-# variables
-# variables_view
-# variables_n_view
-# times_operators
-# tan_operators
-# sinus_operators
-# simple_operators
-# power_operators
-# plus_operators
-# minus_operators
-# frac_operators
-# exp_operators
-# cos_operators
-# constants
-# abstract_expr_node
-# trait_tree
-# algo_tree
-# interface_tree
-# implementation_tree
-# implementation_tree_Expr
-# abstract_tree
-# trait_type_expr
-# interface_type_expr
-# implementation_type_expr
-# implementation_convexity_type
+deploydocs(repo = "github.com/paraynaud/ExpressionTreeForge.jl.git", devbranch = "master")
