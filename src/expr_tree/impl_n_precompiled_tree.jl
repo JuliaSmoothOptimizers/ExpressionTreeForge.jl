@@ -1,5 +1,5 @@
 module M_implementation_pre_n_compiled_tree
-
+# à supprimer
 using ..M_abstract_expr_node, ..M_trait_tree, ..M_implementation_expr_tree, ..M_trait_expr_node, ..M_abstract_expr_tree
 
 mutable struct New_field
@@ -34,7 +34,7 @@ end
 """
     Pre_n_compiled_tree{Y <: Number} <: AbstractExprTree
 
-Represent an expression tree that can be evaluate simultaneously by several points.
+Represent an expression tree that can be evaluate by several points in one pass.
 It has the fields:
 
 * `root::Eval_n_node{Y}` the root of the expression tree;

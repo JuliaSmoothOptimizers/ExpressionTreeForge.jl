@@ -196,21 +196,28 @@ julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
 #     la première fonction défini juste le dictionnaire nécessaire pour la seconde fonction.
 #     - La seconde fonction est la fonction qui va réellement modifier l'arbre d'expression expr_tree, en modifiant les indices des variables
 #     en accord avec les valeurs dans le dictionnaire.
-function _element_fun_from_N_to_Ni!(expr_tree, elmt_var::Vector{Int})
-  function N_to_Ni(elemental_var::Vector{Int})
-    dic_var_value = Dict{Int, Int}()
-    for i = 1:length(elemental_var)
-      dic_var_value[elemental_var[i]] = i
-    end
-    return dic_var_value
+"""
+    dic = N_to_Ni(elemental_var::Vector{Int})
+
+Return a dictionnary informing the index changes of an element expression tree.
+If `element_var = [4,5]` then `dic == Dict([4=>1, 5=>2])`.
+"""
+function N_to_Ni(elemental_var::Vector{Int})
+  dic_var_value = Dict{Int, Int}()
+  for i = 1:length(elemental_var)
+    dic_var_value[elemental_var[i]] = i
   end
+  return dic_var_value
+end
+
+function _element_fun_from_N_to_Ni!(expr_tree, elmt_var::Vector{Int})
   new_var = N_to_Ni(elmt_var)
   element_fun_from_N_to_Ni!(expr_tree, new_var)
 end
 
 function _element_fun_from_N_to_Ni!(expr_tree, dic_new_var::Dict{Int, Int})
   ch = M_trait_expr_tree.get_expr_children(expr_tree)
-  if isempty(ch) # on est alors dans une feuille
+  if isempty(ch) # expr is a leaf
     r_node = M_trait_expr_tree.get_real_node(expr_tree)
     M_trait_expr_node.change_from_N_to_Ni!(r_node, dic_new_var)
   else

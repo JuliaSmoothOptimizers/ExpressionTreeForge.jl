@@ -1,4 +1,6 @@
 module M_evaluation_expr_tree
+# Define multiple ways to evaluate every type of expression tree.
+
 using ForwardDiff, ReverseDiff
 
 using ..M_trait_expr_tree, ..M_trait_expr_node
@@ -104,10 +106,9 @@ end
 ) where {T <: Number} = M_implementation_pre_compiled_tree.evaluate_pre_compiled_tree(tree, x)
 
 """
-    _evaluate_expr_tree_multiple_points(expr_tree, vec_x)
+    _evaluate_expr_tree_multiple_points(expr_tree, xs)
 
-
-Evaluate the expr_tree as many times as there is vector in vec_x
+Evaluate the expr_tree as many times as there is vector in `xs`
 """
 function _evaluate_expr_tree_multiple_points(
   expr_tree::M_implementation_expr_tree.Type_expr_tree,
@@ -277,72 +278,72 @@ function _evaluate_expr_tree_multiple_points(
 end
 
 """
-    calcul_gradient_expr_tree(expr_tree, x)
+    gradient_expr_tree_forward(expr_tree, x)
 
-Evaluation the gradient of the function represented by expr_tree at the point x
+Evaluate the gradient of the function represented by ``expr_tree` at the point `x`.
 """
-@inline calcul_gradient_expr_tree(a::Any, x::Vector{}) =
-  _calcul_gradient_expr_tree(a, is_expr_tree(a), x)
+@inline gradient_expr_tree_forward(a::Any, x::Vector{}) =
+  _gradient_expr_tree_forward(a, is_expr_tree(a), x)
 
-@inline _calcul_gradient_expr_tree(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
+@inline _gradient_expr_tree_forward(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
   error("The first argument is not an expression tree")
 
-@inline _calcul_gradient_expr_tree(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
-  _calcul_gradient_expr_tree(a, x)
+@inline _gradient_expr_tree_forward(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
+  _gradient_expr_tree_forward(a, x)
 
-@inline calcul_gradient_expr_tree(a::Any, x::Vector{}, elmt_var::Vector{Int}) =
-  _calcul_gradient_expr_tree(a, is_expr_tree(a), x, elmt_var)
+@inline gradient_expr_tree_forward(a::Any, x::Vector{}, elmt_var::Vector{Int}) =
+  _gradient_expr_tree_forward(a, is_expr_tree(a), x, elmt_var)
 
-@inline _calcul_gradient_expr_tree(
+@inline _gradient_expr_tree_forward(
   a::Any,
   ::M_trait_expr_tree.Is_not_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = error("The first argument is not an expression tree")
 
-@inline _calcul_gradient_expr_tree(
+@inline _gradient_expr_tree_forward(
   a::Any,
   ::M_trait_expr_tree.Is_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
-) = _calcul_gradient_expr_tree(a, x, elmt_var)
+) = _gradient_expr_tree_forward(a, x, elmt_var)
 
-@inline _calcul_gradient_expr_tree(expr_tree, x::Vector{T}) where {T <: Number} =
+@inline _gradient_expr_tree_forward(expr_tree, x::Vector{T}) where {T <: Number} =
   ForwardDiff.gradient(evaluate_expr_tree(expr_tree), x)
 
-@inline _calcul_gradient_expr_tree(expr_tree, x::Vector{}, elmt_var::Vector{Int}) =
+@inline _gradient_expr_tree_forward(expr_tree, x::Vector{}, elmt_var::Vector{Int}) =
   ForwardDiff.gradient(evaluate_expr_tree(expr_tree, elmt_var), x)
 
-@inline calcul_gradient_expr_tree2(a::Any, x::Vector{}, elmt_var::Vector{Int}) =
-  _calcul_gradient_expr_tree2(a, is_expr_tree(a), x, elmt_var)
+@inline gradient_expr_tree_reverse(a::Any, x::Vector{}, elmt_var::Vector{Int}) =
+  _gradient_expr_tree_reverse(a, is_expr_tree(a), x, elmt_var)
 
-@inline calcul_gradient_expr_tree2(a::Any, x::Vector{}) =
-  _calcul_gradient_expr_tree2(a, is_expr_tree(a), x)
+@inline gradient_expr_tree_reverse(a::Any, x::Vector{}) =
+  _gradient_expr_tree_reverse(a, is_expr_tree(a), x)
 
-@inline _calcul_gradient_expr_tree2(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
+@inline _gradient_expr_tree_reverse(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
   error("The first argument is not an expression tree")
 
-@inline _calcul_gradient_expr_tree2(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
-  _calcul_gradient_expr_tree2(a, x)
+@inline _gradient_expr_tree_reverse(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
+  _gradient_expr_tree_reverse(a, x)
 
-@inline _calcul_gradient_expr_tree2(
+@inline _gradient_expr_tree_reverse(
   a::Any,
   ::M_trait_expr_tree.Is_not_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
 ) = error("The first argument is not an expression tree")
 
-@inline _calcul_gradient_expr_tree2(
+@inline _gradient_expr_tree_reverse(
   a::Any,
   ::M_trait_expr_tree.Is_expr_tree,
   x::Vector{},
   elmt_var::Vector{Int},
-) = _calcul_gradient_expr_tree2(a, x, elmt_var)
+) = _gradient_expr_tree_reverse(a, x, elmt_var)
 
-@inline _calcul_gradient_expr_tree2(expr_tree, x::Vector{T}) where {T <: Number} =
+@inline _gradient_expr_tree_reverse(expr_tree, x::Vector{T}) where {T <: Number} =
   ReverseDiff.gradient(evaluate_expr_tree(expr_tree), x)
   
-@inline _calcul_gradient_expr_tree2(expr_tree, x::Vector{}, elmt_var::Vector{Int}) =
+@inline _gradient_expr_tree_reverse(expr_tree, x::Vector{}, elmt_var::Vector{Int}) =
   ReverseDiff.gradient(evaluate_element_expr_tree(expr_tree, elmt_var), x)
 
 """
@@ -352,37 +353,34 @@ Compute the hessian matrix of the function represented by `expr_tree` at the poi
 """
 @inline hessian_expr_tree(a::Any, x::Vector{}) =
   _hessian_expr_tree(a, is_expr_tree(a), x)
+
 @inline _hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
   error("The first argument is not an expression tree")
+
 @inline _hessian_expr_tree(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
   _hessian_expr_tree(a, x)
+
 @inline _hessian_expr_tree(expr_tree, x::Vector{}) =
   ForwardDiff.hessian(evaluate_expr_tree(expr_tree), x)
 
-#=-----------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------
-Fonction de test pour améliorer
------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------=#
-
-# evaluate_expr_tree(a :: Any) = (x :: AbstractVector{} -> evaluate_expr_tree(a,x) )
-# evaluate_expr_tree(a :: Any, elmt_var :: Vector{Int}) = (x :: AbstractVector{} -> evaluate_expr_tree(a,view(x,elmt_var) ) )
+# à supprimer
 @inline evaluate_expr_tree2(
   a::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = _evaluate_expr_tree2(a, M_trait_expr_tree.is_expr_tree(a), x)
+
 @inline _evaluate_expr_tree2(
   a::M_implementation_expr_tree.Type_expr_tree,
   ::M_trait_expr_tree.Is_not_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = error(" This is not an Expr tree")
+
 @inline _evaluate_expr_tree2(
   a::M_implementation_expr_tree.Type_expr_tree,
   ::M_trait_expr_tree.Is_expr_tree,
   x::AbstractVector{T},
 ) where {T <: Number} = _evaluate_expr_tree2(a, x)
+
 function _evaluate_expr_tree2(
   expr_tree::M_implementation_expr_tree.Type_expr_tree,
   x::AbstractVector{T},

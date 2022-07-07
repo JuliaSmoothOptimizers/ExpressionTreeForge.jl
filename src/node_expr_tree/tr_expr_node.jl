@@ -27,7 +27,9 @@ import ..M_interface_expr_node._node_bound, ..M_interface_expr_node._node_convex
 using ..M_trait_type_expr
 using ..M_implementation_convexity_type
 
+"""Type instantiated dynamically checking that an argument is an expression node."""
 struct Type_expr_node end
+"""Type instantiated dynamically checking that an argument is a not an expression node."""
 struct Type_not_expr_node end
 
 """

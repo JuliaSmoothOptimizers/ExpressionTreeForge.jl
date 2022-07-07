@@ -15,6 +15,11 @@ import ..M_interface_expr_tree:
   _get_real_node,
   _transform_to_expr_tree
 
+"""
+    Variable_counter
+
+Associate the index of the symbol variable to their integer index.  
+"""
 mutable struct Variable_counter
   current_var::Int
   dic_var::Dict{Symbol, Int64}
@@ -31,12 +36,12 @@ function add_dic_var!(vc::Variable_counter, sym::Symbol)
   str_sym = String(sym) # Symbol -> String
   chains = split(str_sym, "x") # split from the "x"
   str = string(chains[2]) # get the indices
-  int_chain = Vector{Int}(undef, length(str)) #
+  int_chain = Vector{Int}(undef, length(str))
   for (id, v) in enumerate(str)
     int_chain[id] = Int(v) # transform unicode to Int
   end
   dec_basis = (x -> x - 8320).(int_chain) # Int('₁') = 8321
-  index = mapreduce(x -> x, decimal_basis, dec_basis) # compute the numbre from the decimal basis
+  index = mapreduce(x -> x, decimal_basis, dec_basis) # compute the index using a decimal basis
   vc.dic_var[sym] = index
 end
 

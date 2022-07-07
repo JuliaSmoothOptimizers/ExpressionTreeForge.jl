@@ -40,9 +40,9 @@ using Test
 
   grad = zeros(n)
   MathOptInterface.eval_objective_gradient(evaluator, grad, v)
-  @test ExpressionTreeForge.calcul_gradient_expr_tree(complete_tree, v) ==
-        ExpressionTreeForge.calcul_gradient_expr_tree(expr_tree, v)
-  @test (norm(ExpressionTreeForge.calcul_gradient_expr_tree(complete_tree, v)) - norm(grad)) < θ
+  @test ExpressionTreeForge.gradient_expr_tree_forward(complete_tree, v) ==
+        ExpressionTreeForge.gradient_expr_tree_forward(expr_tree, v)
+  @test (norm(ExpressionTreeForge.gradient_expr_tree_forward(complete_tree, v)) - norm(grad)) < θ
 
   MOI_pattern = MathOptInterface.hessian_lagrangian_structure(evaluator)
   column = [x[1] for x in MOI_pattern]

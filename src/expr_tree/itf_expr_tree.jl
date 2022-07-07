@@ -23,7 +23,11 @@ Apply a unary minus on `tree`.
 """
 _inverse_expr_tree(tree::AbstractExprTree) = @error("Sould not be called")
 
-
+"""
+    _get_real_node(tree::AbstractExprTree)
+ 
+Return the value of a leaf in a suitable format for particular algorithm.
+"""
 _get_real_node(tree::AbstractExprTree) = @error("Sould not be called")
 
 """

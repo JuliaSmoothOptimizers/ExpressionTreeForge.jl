@@ -10,7 +10,7 @@ abstract type AbstractExprTree <: AbstractTree end
 """ 
     Bounds{T <: Number}
 
-Structure representing the upper bound and the lower bound of a node. 
+Structure representing the upper-bound and the lower-bound of a node. 
 """
 mutable struct Bounds{T <: Number}
   inf_bound::T

@@ -49,35 +49,35 @@ The status can be:
 """
     constant = constant_type() 
 
-Return the value of `constant` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `constant` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline constant_type() = M_implementation_convexity_type.constant_type()
 
 """
     linear = linear_type() 
 
-Return the value of `linear` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `linear` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline linear_type() = M_implementation_convexity_type.linear_type()
 
 """
     convex = convex_type() 
 
-Return the value of `convex` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `convex` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline convex_type() = M_implementation_convexity_type.convex_type()
 
 """
     concave = concave_type() 
 
-Return the value of `concave` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `concave` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline concave_type() = M_implementation_convexity_type.concave_type()
 
 """
     unknown = unknown_type() 
 
-Return the value of `unknown` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `unknown` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
@@ -87,17 +87,16 @@ Return the value of `unknown` from the enumerative type `M_implementation_convex
 
 Deduce from elementary rules the convexity status of `tree` nodes or `complete_tree` nodes.
 `complete_tree` integrate a bounds tree and can run alone the convexity detection whereas `tree`
- require the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
+require the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
 """
 function set_convexity!(tree::M_implementation_tree.Type_node, cvx_tree::Convexity_tree, bounds_tree)
   node = M_trait_tree.get_node(tree)
   if M_trait_expr_node.node_is_operator(node) == false
     (length(M_trait_tree.get_children(tree)) == length(M_trait_tree.get_children(cvx_tree))) ||
-      error("le fils n'est pas vide set_convexity!")
+      error("Both trees do not have the same shape")
     convex_wrapper = M_trait_tree.get_node(cvx_tree)
     status = M_trait_expr_node.node_convexity(node)
     M_implementation_convexity_type.set_convexity_wrapper!(convex_wrapper, status)
-    # M_implementation_tree.set_convexity_wrapper(convex_wrapper, M_implementation_tree.linear_type())
   else
     children_tree = M_trait_tree.get_children(tree)
     children_convex_tree = M_trait_tree.get_children(cvx_tree)

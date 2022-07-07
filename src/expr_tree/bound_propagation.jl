@@ -7,7 +7,7 @@ using ..M_implementation_tree, ..M_implementation_complete_expr_tree
 """
     Bound_tree
 
-A tree where each node is pair `(bound_inf, bound_sup)`.
+A tree where each node is a pair `(bound_inf, bound_sup)`.
 Must be paired with an expression tree.
 """
 Bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
@@ -30,7 +30,7 @@ Return a `similar` expression tree to `tree`, where each node has an undefined b
     set_bounds!(tree, bound_tree::Bound_tree)
     set_bounds!(complete_tree::Complete_expr_tree)
 
-Set the bounds of `bound_tree` by walking `tree` and propagate the computation from the leaves to the root.
+Set the bounds of `bound_tree` by walking `tree` and by propagating the computations from the leaves to the root.
 A `Complete_expr_tree` contains a precompiled `bound_tree`, and then can be use alone.
 """
 function set_bounds!(

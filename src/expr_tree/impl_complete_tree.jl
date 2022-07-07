@@ -196,4 +196,4 @@ function (==)(ex1::Complete_expr_tree{T}, ex2::Complete_expr_tree{T}) where {T <
   return b
 end
 
-end  # moduleM_implementation_expr_tree
+end

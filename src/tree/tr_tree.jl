@@ -6,9 +6,9 @@ import ..M_interface_tree: _get_node, _get_children
 export get_node
 export get_children
 
-"""Type instantiated dynamically checking if an argument is a tree."""
+"""Type instantiated dynamically checking that an argument is a tree."""
 struct Type_trait_tree end
-"""Type instantiated dynamically checking if an argument is not a tree."""
+"""Type instantiated dynamically checking that an argument is not a tree."""
 struct Type_not_trait_tree end
 
 """
