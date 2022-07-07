@@ -4,7 +4,9 @@ module M_evaluation_expr_tree
 using ForwardDiff, ReverseDiff
 
 using ..M_trait_expr_tree, ..M_trait_expr_node
-using ..M_implementation_expr_tree, ..M_implementation_complete_expr_tree
+using ..M_implementation_expr_tree,
+  ..M_implementation_complete_expr_tree
+using  ..M_implementation_pre_compiled_tree, ..M_implementation_pre_n_compiled_tree
 using ..M_abstract_expr_node
 
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
@@ -100,6 +102,11 @@ end
   end
 end
 
+@inline _evaluate_expr_tree(
+  tree::M_implementation_pre_compiled_tree.Pre_compiled_tree{T},
+  x::AbstractVector{T},
+) where {T <: Number} = M_implementation_pre_compiled_tree.evaluate_pre_compiled_tree(tree, x)
+
 @inline evaluate_expr_tree_multiple_points(a::Any, x::Array{Array{T, 1}, 1}) where {T <: Number} =
   _evaluate_expr_tree_multiple_points(a, M_trait_expr_tree.is_expr_tree(a), x)
 
@@ -176,6 +183,18 @@ end
     return res
   end
 end
+
+@inline evaluate_expr_tree_multiple_points(
+  tree::M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T},
+  multiple_x::Vector{Vector{T}},
+) where {T <: Number} =
+  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x)
+
+@inline evaluate_expr_tree_multiple_points(
+  tree::M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T},
+  multiple_x_view::Array{SubArray{T, 1, Array{T, 1}, N, false}, 1},
+) where {N} where {T <: Number} =
+  M_implementation_pre_n_compiled_tree.evaluate_pre_n_compiled_tree(tree, multiple_x_view)
 
 function _evaluate_expr_tree_multiple_points(
   expr_tree_cmp::M_implementation_complete_expr_tree.Complete_expr_tree,

@@ -5,7 +5,9 @@ using Base.Threads
 using ..M_abstract_expr_tree,
   ..M_implementation_expr_tree,
   ..M_implementation_complete_expr_tree,
-  ..M_implementation_expression_tree_Expr
+  ..M_implementation_expression_tree_Expr,
+  ..M_implementation_pre_compiled_tree,
+  ..M_implementation_pre_n_compiled_tree
 
 import ..M_interface_expr_tree._get_expr_node,
   ..M_interface_expr_tree._get_expr_children, ..M_interface_expr_tree._inverse_expr_tree
@@ -32,6 +34,13 @@ Return `Is_expr_tree ` if `arg` is considered as an implementation of an express
 @inline is_expr_tree(::Number) = Is_expr_tree()
 @inline is_expr_tree(
   a::M_implementation_complete_expr_tree.Complete_expr_tree{T},
+) where {T <: Number} = Is_expr_tree()
+
+@inline is_expr_tree(a::M_implementation_pre_compiled_tree.Pre_compiled_tree{T}) where {T <: Number} =
+  Is_expr_tree()
+
+@inline is_expr_tree(
+  a::M_implementation_pre_n_compiled_tree.Pre_n_compiled_tree{T},
 ) where {T <: Number} = Is_expr_tree()
 
 @inline is_expr_tree(a::ModelingToolkit.Operation) = Is_expr_tree()
