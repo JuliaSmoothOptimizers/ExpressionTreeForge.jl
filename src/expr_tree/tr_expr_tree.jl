@@ -115,8 +115,7 @@ Return the value of a leaf in a suitable format for particular algorithm.
 """
 @inline get_real_node(a) = _get_real_node(is_expr_tree(a), a)
 
-@inline _get_real_node(::Is_not_expr_tree, ::Any) =
-  error("The argument is not a expression tree")
+@inline _get_real_node(::Is_not_expr_tree, ::Any) = error("The argument is not a expression tree")
 
 @inline _get_real_node(::Is_expr_tree, a::Any) = _get_real_node(a)
 
@@ -154,7 +153,7 @@ Return `expr::Expr` from the expression tree `expr_tree`.
 @inline _transform_to_Expr2(::M_trait_expr_tree.Is_expr_tree, ex) = _transform_to_Expr2(ex)
 @inline _transform_to_Expr2(::M_trait_expr_tree.Is_not_expr_tree, ex) =
   error("The argument is not a expression tree ")
-  
+
 @inline _transform_to_Expr2(ex) = M_abstract_expr_tree.create_Expr2(ex)
 
 """

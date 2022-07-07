@@ -14,8 +14,12 @@
     ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node,
   }(
     ExpressionTreeForge.M_plus_operator.Plus_operator(),
-    ExpressionTreeForge.M_implementation_tree.Type_node{ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node}[
-      ExpressionTreeForge.M_implementation_tree.Type_node{ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node}(
+    ExpressionTreeForge.M_implementation_tree.Type_node{
+      ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node,
+    }[
+      ExpressionTreeForge.M_implementation_tree.Type_node{
+        ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node,
+      }(
         ExpressionTreeForge.M_plus_operator.Plus_operator(),
         ExpressionTreeForge.M_implementation_tree.Type_node{
           ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node,
@@ -140,7 +144,9 @@
           ),
         ],
       ),
-      ExpressionTreeForge.M_implementation_tree.Type_node{ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node}(
+      ExpressionTreeForge.M_implementation_tree.Type_node{
+        ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node,
+      }(
         ExpressionTreeForge.M_minus_operator.Minus_operator(),
         ExpressionTreeForge.M_implementation_tree.Type_node{
           ExpressionTreeForge.M_abstract_expr_node.Abstract_expr_node,

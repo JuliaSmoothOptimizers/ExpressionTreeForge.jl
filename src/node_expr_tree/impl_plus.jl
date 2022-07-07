@@ -45,12 +45,14 @@ function _node_convexity(
     son_cvx,
   )
   all_linear = mapreduce(
-    x::M_implementation_convexity_type.Convexity_type -> M_implementation_convexity_type.is_linear(x),
+    x::M_implementation_convexity_type.Convexity_type ->
+      M_implementation_convexity_type.is_linear(x),
     my_and,
     son_cvx,
   )
   all_convex = mapreduce(
-    x::M_implementation_convexity_type.Convexity_type -> M_implementation_convexity_type.is_convex(x),
+    x::M_implementation_convexity_type.Convexity_type ->
+      M_implementation_convexity_type.is_convex(x),
     my_and,
     son_cvx,
   )
@@ -116,7 +118,7 @@ end
   ref::M_abstract_expr_node.MyRef{T},
 ) where {T <: Number} =
   length(value_ch) > 1 ? M_abstract_expr_node.set_myRef!(ref, sum(value_ch)) :
-            M_abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
+  M_abstract_expr_node.set_myRef!(ref, get_myRef(value_ch[1]))
 @inline function _evaluate_node!(
   op::Plus_operator,
   vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},

@@ -106,8 +106,9 @@ The status can be:
 @inline get_convexity_status(convexity_tree::M_convexity_detection.Convexity_tree) =
   M_convexity_detection.get_convexity_status(convexity_tree)
 
-@inline get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree) =
-  M_convexity_detection.get_convexity_status(complete_tree)
+@inline get_convexity_status(
+  complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree,
+) = M_convexity_detection.get_convexity_status(complete_tree)
 
 """
     constant = constant_type() 
@@ -156,14 +157,16 @@ Check if `convexity_status` is different of `not_treated`.
 
 Check if `convexity_status` is `not_treated`.
 """
-@inline is_not_treated(convexity_status) = M_implementation_convexity_type.is_not_treated(convexity_status)
+@inline is_not_treated(convexity_status) =
+  M_implementation_convexity_type.is_not_treated(convexity_status)
 
 """
     bool = is_constant(convexity_status)
 
 Check if `convexity_status` is `constant`.
 """
-@inline is_constant(convexity_status) = M_implementation_convexity_type.is_constant(convexity_status)
+@inline is_constant(convexity_status) =
+  M_implementation_convexity_type.is_constant(convexity_status)
 
 """
     bool = is_linear(convexity_status)

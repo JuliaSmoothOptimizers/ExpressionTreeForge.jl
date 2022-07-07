@@ -44,6 +44,7 @@ _transform_to_expr_tree(tree::AbstractExprTree) = @error("Sould not be called")
 Return `expr_tree`, a expression tree of the type from `tree2` with the values of `tree1`.
 It is supported for few expression-tree structure.
 """
-_expr_tree_to_create(tree1::AbstractExprTree, tree2::AbstractExprTree) = @error("Sould not be called")
+_expr_tree_to_create(tree1::AbstractExprTree, tree2::AbstractExprTree) =
+  @error("Sould not be called")
 
 end

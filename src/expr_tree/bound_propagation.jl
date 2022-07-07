@@ -26,7 +26,7 @@ Return a `similar` expression tree to `tree`, where each node has an undefined b
 @inline create_bounds_tree(cst::T, type = Float64::DataType) where {T <: Number} =
   return Bound_tree{type}(M_abstract_expr_tree.Bounds{type}((type)(0), (type)(0)), [])
 
- """
+"""
     set_bounds!(tree, bound_tree::Bound_tree)
     set_bounds!(complete_tree::Complete_expr_tree)
 
@@ -89,7 +89,8 @@ end
 Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
 """
 @inline get_bound(b::Bound_tree{T}) where {T <: Number} = bound_to_tuple(M_trait_tree.get_node(b))
-@inline get_bound(ex::M_implementation_complete_expr_tree.Complete_expr_tree{T}) where {T <: Number} =
-  M_implementation_complete_expr_tree.tuple_bound_from_tree(ex)
+@inline get_bound(
+  ex::M_implementation_complete_expr_tree.Complete_expr_tree{T},
+) where {T <: Number} = M_implementation_complete_expr_tree.tuple_bound_from_tree(ex)
 
 end

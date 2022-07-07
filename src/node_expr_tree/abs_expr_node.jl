@@ -69,7 +69,7 @@ Create a vector of size `l`, each component is a `Vector{myRef{type}}` of `c` co
 
 Set the references of `b` to those of `a`.
 """
-  function equalize_vec_vec_myRef!(
+function equalize_vec_vec_myRef!(
   a::Vector{Vector{MyRef{T}}},
   b::Vector{Vector{MyRef{T}}},
 ) where {T <: Number}
@@ -94,31 +94,26 @@ Get the `value` of the `reference`.
 """
 @inline get_myRef(ref::MyRef{Y}) where {Y <: Number} = ref.value::Y
 
-@inline +(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} =
-  get_myRef(ref1) + get_myRef(ref2)::Y
+@inline +(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} = get_myRef(ref1) + get_myRef(ref2)::Y
 @inline +(value::Y, ref::MyRef{Y}) where {Y <: Number} = value + get_myRef(ref)::Y
 @inline +(ref::MyRef{Y}, value::Y) where {Y <: Number} = value + get_myRef(ref)::Y
 @inline +(ref::MyRef{Y}) where {Y <: Number} = get_myRef(ref)::Y
 
-@inline -(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} =
-  get_myRef(ref1) - get_myRef(ref2)::Y
+@inline -(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} = get_myRef(ref1) - get_myRef(ref2)::Y
 @inline -(value::Y, ref::MyRef{Y}) where {Y <: Number} = value - get_myRef(ref)::Y
 @inline -(ref::MyRef{Y}, value::Y) where {Y <: Number} = get_myRef(ref) - value::Y
 @inline -(ref::MyRef{Y}) where {Y <: Number} = -get_myRef(ref)::Y
 
-@inline *(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} =
-  get_myRef(ref1) * get_myRef(ref2)::Y
+@inline *(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} = get_myRef(ref1) * get_myRef(ref2)::Y
 @inline *(value::Y, ref::MyRef{Y}) where {Y <: Number} = value * get_myRef(ref)::Y
 @inline *(ref::MyRef{Y}, value::Y) where {Y <: Number} = value * get_myRef(ref)::Y
 @inline *(ref::MyRef{Y}) where {Y <: Number} = get_myRef(ref)::Y
 
-@inline /(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} =
-  get_myRef(ref1) / get_myRef(ref2)::Y
+@inline /(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} = get_myRef(ref1) / get_myRef(ref2)::Y
 @inline /(value::Y, ref::MyRef{Y}) where {Y <: Number} = value / get_myRef(ref)::Y
 @inline /(ref::MyRef{Y}, value::Y) where {Y <: Number} = get_myRef(ref) / value::Y
 
-@inline ^(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} =
-  get_myRef(ref1)^get_myRef(ref2)::Y
+@inline ^(ref1::MyRef{Y}, ref2::MyRef{Y}) where {Y <: Number} = get_myRef(ref1)^get_myRef(ref2)::Y
 @inline ^(value::Y, ref::MyRef{Y}) where {Y <: Number} = value^get_myRef(ref)::Y
 @inline ^(ref::MyRef{Y}, value::Y) where {Y <: Number} = get_myRef(ref)^value::Y
 

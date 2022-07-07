@@ -143,10 +143,7 @@ end
 
 @inline _node_is_constant(op::Power_operator{T}) where {T <: Number} = false
 
-function _get_type_node(
-  op::Power_operator{T},
-  type_ch::Vector{Type_expr_basic},
-) where {T <: Number}
+function _get_type_node(op::Power_operator{T}, type_ch::Vector{Type_expr_basic}) where {T <: Number}
   length(type_ch) == 1 || error("power has more than one argument")
   return M_trait_type_expr.type_power(op.index, type_ch[1])
 end
