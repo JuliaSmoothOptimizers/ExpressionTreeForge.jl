@@ -45,9 +45,9 @@ expr_tree_MTK == expr_tree_Expr
 
 From any expression tree `Type_expr_tree`, you can achieve:
 - partial separability detection;
-- evaluation of $f(x), \nabla f(x), \nabla^2 f(x)$.
+- evaluation of $f(x), \nabla f(x), \nabla^2 f(x)$;
 - bounds propagations;
-- strict convexity detection;
+- strict convexity detection.
 
 
 ### Detection of the partially separable structure
@@ -121,15 +121,20 @@ and compute the bounds and the convexity status afterward
 ```@example ExpressionTreeForge
 set_bounds!(complete_tree)
 set_convexity!(complete_tree)
+```
 
+```@example ExpressionTreeForge
 # get the root bounds
 bounds = get_bound(complete_tree)
+```
+
+```@example ExpressionTreeForge
 # get the root convexity status
 convexity_status = get_convexity_status(complete_tree)
 ```
 
 ## Tools 
 If you need to visualize a tree, use `print_tree()` to get a better output on the julia console
-```@example ExpressionTreeForge
+```julia
 print_tree(expr_tree_Expr)
 ```
