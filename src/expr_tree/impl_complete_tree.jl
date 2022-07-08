@@ -142,7 +142,7 @@ function create_Expr(t::Complete_expr_tree)
     node_Expr = M_trait_expr_node.node_to_Expr(op)
     if length(node_Expr) == 1 # easy case
       return Expr(:call, node_Expr[1], children_Expr...)
-    elseif length(node_Expr) == 2 # :^
+    elseif length(node_Expr) == 2 # :^ (power case)
       return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
     else
       error("unsupported")

@@ -85,7 +85,7 @@ end
 function sup_bound_sin(bi, bs, t::DataType)
   if belong(bi, bs, π / 2)
     return t(1)
-  elseif bs < π / 2 #bi également
+  elseif bs < π / 2 # bi < π / 2
     return sin(bs)
   else
     return max(sin(bs), sin(bi))
@@ -95,10 +95,10 @@ end
 function inf_bound_sin(bi, bs, t::DataType)
   if belong(bi, bs, -π / 2)
     return t(-1)
-  elseif bi > -π / 2 #bs également
-    return sin(bi) # sin(bs) plus grand
+  elseif bi > -π / 2 # bs > -π / 2
+    return sin(bi)
   else
-    return min(sin(bs), sin(bi)) #cas bi=0 et bs = 3π/4
+    return min(sin(bs), sin(bi)) # case where bi=0 and bs = 3π/4
   end
 end
 

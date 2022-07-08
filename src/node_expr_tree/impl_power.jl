@@ -70,7 +70,7 @@ function _node_convexity(
         return M_implementation_convexity_type.unknown_type()
       end
     end
-  elseif op.index % 2 == 1  #op.indxx is odd
+  elseif op.index % 2 == 1 # op.indxx is odd
     if op.index > 0
       if M_implementation_convexity_type.is_convex(st_ch) && bi >= 0
         return M_implementation_convexity_type.convex_type()
@@ -79,7 +79,7 @@ function _node_convexity(
       else
         return M_implementation_convexity_type.unknown_type()
       end
-    else #op.indxx is odd and <0
+    else # op.indxx is odd and <0
       if M_implementation_convexity_type.is_concave(st_ch) && bi >= 0
         return M_implementation_convexity_type.convex_type()
       elseif M_implementation_convexity_type.is_convex(st_ch) && bs <= 0

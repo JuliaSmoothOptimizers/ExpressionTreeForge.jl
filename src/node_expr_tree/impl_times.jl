@@ -70,8 +70,8 @@ function node_convexity_binary_time(
     M_implementation_convexity_type.is_linear(status2)
   )
     return M_implementation_convexity_type.linear_type()
-  elseif cste_exist #only one status is constant
-    if M_implementation_convexity_type.is_constant(status1) # les 2 éléments du tuples sont égaux
+  elseif cste_exist # only one status is constant
+    if M_implementation_convexity_type.is_constant(status1)
       cst = bounds1[1]
       if M_implementation_convexity_type.is_convex(status2)
         cst >= 0 ? M_implementation_convexity_type.convex_type() :

@@ -56,7 +56,7 @@ function _node_convexity(
     res_first_son = son_cvx[1]
     res_second_son = _node_convexity(op, [son_cvx[2]], [son_bound[2]])
     if res_first_son == res_second_son
-      return res_first_son #or res_second_son
+      return res_first_son # == res_second_son
     elseif (
       M_implementation_convexity_type.is_linear(res_first_son) &&
       M_implementation_convexity_type.is_constant(res_second_son)
@@ -99,7 +99,7 @@ function _node_bound(
   if length(vector_inf_bound) == 1
     (bi, bs) = (vector_inf_bound[1], vector_sup_bound[1])
     return (-bs, -bi)
-  else #binary minus
+  else # binary minus
     (bi1, bs1) = (vector_inf_bound[1], vector_sup_bound[1])
     (bi2, bs2) = (vector_inf_bound[2], vector_sup_bound[2])
     return (bi1 - bs2, bs1 - bi2)

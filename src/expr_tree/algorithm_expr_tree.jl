@@ -43,12 +43,12 @@ function _delete_imbricated_plus(expr_tree::T) where {T}
       return vcat(res...)
     elseif M_trait_expr_node.node_is_minus(nd)
       ch = M_trait_expr_tree.get_expr_children(expr_tree)
-      if length(ch) == 1 #moins unaire donc un seul fils
+      if length(ch) == 1 # unary minus
         temp = delete_imbricated_plus(ch[1])
         res = M_trait_expr_tree.inverse_expr_tree.(temp)
         return vcat(res...)
       else
-        length(ch) == 2 #2 fils
+        length(ch) == 2 # binary minus
         res1 = delete_imbricated_plus(ch[1])
         temp = delete_imbricated_plus(ch[2])
         res2 = M_trait_expr_tree.inverse_expr_tree.(temp)

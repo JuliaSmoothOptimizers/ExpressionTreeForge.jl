@@ -190,7 +190,7 @@ Return the `index` of the `variable`.
 @inline _get_var_index(a, ::Type_expr_node) = _get_var_index(a)
 @inline _get_var_index(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
 
-#  M_constant's part
+# M_constant's part
 """
     bool = node_is_constant(node::Abstract_expr_node)
 

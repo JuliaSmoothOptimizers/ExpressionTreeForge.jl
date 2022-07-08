@@ -78,7 +78,6 @@ function _node_bound(
   else
     bs_π = max(bs % (2 * π), bi % (2 * π))
     bi_π = min(bs % (2 * π), bi % (2 * π))
-    # @show "sinus", bi, bs, bi_π, bs_π, inf_bound_sin(bi_π, bs_π), sup_bound_sin(bi_π, bs_π)
     return (inf_bound_cos(bi_π, bs_π, t), sup_bound_cos(bi_π, bs_π, t))
   end
 end
@@ -86,7 +85,7 @@ end
 function sup_bound_cos(bi, bs, t::DataType)
   if belong(bi, bs, 0)
     return t(1)
-  elseif bi > 0 #bi également
+  elseif bi > 0 #bs too
     return cos(bi)
   else
     return max(cos(bs), cos(bi))
@@ -96,10 +95,10 @@ end
 function inf_bound_cos(bi, bs, t::DataType)
   if belong(bi, bs, π)
     return t(-1)
-  elseif bs < π #bs également
-    return cos(bs) # sin(bs) plus grand
+  elseif bs < π # bi < π too
+    return cos(bs)
   else
-    return min(cos(bs), cos(bi)) #cas bi=0 et bs = 3π/4
+    return min(cos(bs), cos(bi)) #case where bi=0 et bs = 3π/4
   end
 end
 
