@@ -88,7 +88,6 @@ end
 
 @inline _get_var_index(v::Variable_n_view{Y}) where {Y <: Number} = v.index::Int
 
-#peut-être à revoir
 @inline (==)(a::Variable_n_view{Y}, b::Variable_n_view{Y}) where {Y <: Number} =
   (a.name == b.name) && (a.index == b.index) && (a.multiple_x_view .== b.multiple_x_view)
 

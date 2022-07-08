@@ -38,8 +38,7 @@ function _cast_type_of_constant(ex::Expr, t::DataType)
   for i = 1:length(ch)
     node_i = M_trait_expr_tree.get_expr_node(ch[i])
     if M_trait_expr_node.node_is_constant(node_i)
-      ex.args[i + 1] = M_trait_expr_node._cast_constant!(i, t) #manipulation assez bas niveau des Expr
-    # @show i, ch[i]
+      ex.args[i + 1] = M_trait_expr_node._cast_constant!(i, t) # low level of Expr manipulation
     elseif M_trait_expr_node.node_is_power(node_i)
       ch[i].args[end] = M_trait_expr_node._cast_constant!(node_i, t)
     end

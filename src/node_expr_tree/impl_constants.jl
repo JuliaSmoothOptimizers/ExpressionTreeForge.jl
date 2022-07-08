@@ -36,7 +36,6 @@ mutable struct Constant{T <: Number} <: Abstract_expr_node
   value::T
 end
 
-# Base.convert(::Type{Constant{T}}, x :: Constant{Y}) where T <: Number where Y <: Number = Constant{T}(T(x.value))
 @inline Base.convert(::Type{Constant{T}}, x::Constant{Y}) where {Y <: Number, T <: Number} =
   Constant{T}(T(x.value))
 @inline _node_bound(c::Constant{T}, t::DataType) where {T <: Number} = ((t)(c.value), (t)(c.value))
