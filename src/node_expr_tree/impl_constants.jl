@@ -17,6 +17,7 @@ import ..M_interface_expr_node:
   _get_var_index,
   _evaluate_node,
   _evaluate_node!,
+  _change_from_N_to_Ni!,
   _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
@@ -107,6 +108,8 @@ end
     M_abstract_expr_node.set_myRef!(ref, c.value::Y)
   end
 end
+
+@inline _change_from_N_to_Ni!(c::Constant, dic_new_indices::Dict{Int, Int}) = c
 
 @inline _cast_constant!(c::Constant{Y}, t::DataType) where {Y <: Number} = Constant{t}((t)(c.value))
 @inline _cast_constant!(c::Number, t::DataType) = (t)(c)
