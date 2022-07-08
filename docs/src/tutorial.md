@@ -1,21 +1,21 @@
 # ExpressionTreeForge.jl Tutorial
 
-ExpressionTreeForge.jl is a manipulator of expression tree.
-It supports several expression trees and define methods to analyze and manipulate them.
-It interfaces to `Type_expr_tree` by using `transform_to_expr_tree()` several expression trees:
+ExpressionTreeForge.jl analyze and manipulate expression trees.
+It supports several implementations of expression trees, by interface them with the function `transform_to_expr_tree()` to the internal expression tree `Type_expr_tree`.
+The main expression trees supported are:
 - julia `Expr`
 ```@example ExpressionTreeForge
 using ExpressionTreeForge
-expr_julia = :(x[1]^2 + x[2]^2)
+expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
 expr_tree_Expr = transform_to_expr_tree(expr_julia)
 ```
 - `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
 ```@example ExpressionTreeForge
 using JuMP, MathOptInterface
 m = Model()
-n = 2
+n = 3
 @variable(m, x[1:n])
-@NLobjective(m, Min, x[1]^2 + x[2]^2)
+@NLobjective(m, Min, (x[1]+x[2])^2 + (x[2]+x[3])^2)
 evaluator = JuMP.NLPEvaluator(m)
 MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
@@ -25,9 +25,9 @@ expr_tree_JuMP = transform_to_expr_tree(expr_jump)
 ```@example ExpressionTreeForge
 using ModelingToolkit
 function f(y)    
-  return sum(y[i]^2 for i = 1:length(y))
+  return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
 end
-n = 2
+n = 3
 ModelingToolkit.@variables x[1:n] # must be x
 
 fun_tree = f(x)
@@ -56,48 +56,66 @@ It is the original purpose of `ExpressionTreeForge.jl` to detect the partially s
 f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}, \quad n_i \ll n.
 ```
 which means `ExpressionTreeForge.jl` detects that $f$ is a sum, and return:
-- the element functions $\hat{f}_i$
-- the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*) which are concretely $U_i$
+- the element functions $\hat{f}_i$;
+- the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*) which are concretely $U_i$.
 
 You detect the element functions (i.e. the terms of the sum) with `delete_imbricated_plus()`, which return a vector of terms `Type_expr_tree`
 ```@example ExpressionTreeForge
-element_functions = delete_imbricated_plus(expr_tree_Expr)
+expr_tree = copy(expr_tree_Expr)
+
+element_functions = delete_imbricated_plus(expr_tree)
 ```
+**Warning**: the `element_functions` are pointers on nodes of `expr_tree`. Any modification on element_functions will be applied on `expr_tree`!
+
 You extract the elemental variables by applying `get_elemental_variable()` on every element function expression tree
 ```@example ExpressionTreeForge
 elemental_Ui = get_elemental_variable.(element_functions)
 ```
 
-Then you can change the indices of an element-function expression tree with:
+Then you can replace the index variables of an element-function expression tree such they stay in the range `1:length(elemental_Ui[i])`:
 ```@example ExpressionTreeForge
+# change the indices of the second element function
 element_fun_from_N_to_Ni!(element_functions[2], elemental_Ui[2])
 ```
-which rewrite the expression with variables of index in the range `1:length(Ui)`.
 
-### Evaluate $f, \nabla f, \nabla^2 f$
-The evaluation of any `Type_expr_tree` at a given point is done with `evaluate_expr_tree()`
+### Evaluate $f, \nabla f, \nabla^2 f$ of a `Type_expr_tree`
+ExpressionTreeForge.jl offers method to evaluate the value of the supported expression trees and their derivatives.
+`evaluate_expr_tree()` evaluate any `Type_expr_tree` at a point `y` of suitable size
 ```@example ExpressionTreeForge
 y = rand(n)
 fx = evaluate_expr_tree(expr_tree_Expr, y)
 ```
-The gradient computation, using `ForwardDiff` and `ReverseDiff`, is respectively
+The gradient computation of an expression tree can either use `ForwardDiff` or `ReverseDiff`
 ```@example ExpressionTreeForge
 gradient_forward = gradient_expr_tree_forward(expr_tree_Expr, y)
 gradient_reverse = gradient_expr_tree_reverse(expr_tree_Expr, y)
 ```
-and the Hessian is
+```@example ExpressionTreeForge
+gradient_forward == gradient_reverse
+```
+and the Hessian is computed with
 ```@example ExpressionTreeForge
 hessian = hessian_expr_tree(expr_tree_Expr, y)
 ```
-All these methods can be applied on the expression tree of the element functions.
-See [PartitionedStructures.jl](https://github.com/JuliaSmoothOptimizers/PartitionedStructures.jl) to see more details about partial separability and how to store the derivatives of the element functions.
+
+These methods can be applied on the element-function expression trees.
+```
+y1 = rand(length(elemental_Ui[1]))
+f1x = evaluate_expr_tree(element_functions[1], y1)
+
+gradient_forward1 = gradient_expr_tree_forward(element_functions[1], y1)
+gradient_reverse1 = gradient_expr_tree_reverse(element_functions[1], y1)
+
+hessian1 = hessian_expr_tree(element_functions[1], y1)
+```
+See [PartitionedStructures.jl](https://github.com/JuliaSmoothOptimizers/PartitionedStructures.jl) to see more details about partial separability and how to store the partitioned derivatives of the element functions.
 
 ### Bounds and convexity
 To detect the bounds and the convexity you have to define a `Complete_expr_tree`, a richer structure than `Type_expr_tree`.
 A `Complete_expr_tree` is similar to `expr_tree_Expr`, but in addition it stores for each node its bounds and its convexity status.
-You define it any `expr_tree::Type_expr_tree`
+You can define a `Complete_expr_tree` for any `expr_tree::Type_expr_tree`
 ```@example ExpressionTreeForge
-complete_tree = screate_complete_tree(expr_tree_Expr)
+complete_tree = create_complete_tree(expr_tree_Expr)
 ```
 and compute the bounds and the convexity status afterward
 ```@example ExpressionTreeForge
@@ -111,7 +129,7 @@ convexity_status = get_convexity_status(complete_tree)
 ```
 
 ## Tools 
-If you need to visualize a tree, use `print_tree()` to get a better output on the terminal
+If you need to visualize a tree, use `print_tree()` to get a better output on the julia console
 ```@example ExpressionTreeForge
 print_tree(expr_tree_Expr)
 ```
