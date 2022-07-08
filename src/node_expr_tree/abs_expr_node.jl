@@ -17,7 +17,7 @@ abstract type Abstract_expr_node end
 Create a node from `arg`.
 See the different implementation in the `src/node_expr_tree/impl_operators.jl`.
 """
-create_node_expr(node::Abstract_expr_node) = error("error in the create of a node")
+create_node_expr(node::Abstract_expr_node) = error("error in the creation of a node")
 
 """
     MyRef{Y <: Number}
