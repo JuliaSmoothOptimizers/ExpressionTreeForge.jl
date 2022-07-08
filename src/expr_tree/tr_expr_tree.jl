@@ -180,4 +180,4 @@ function _expr_tree_to_create(a, b, ::Is_expr_tree, ::Is_expr_tree)
   _expr_tree_to_create(uniformized_a, b)
 end
 
-end  # module M_trait_expr_tree
+end
