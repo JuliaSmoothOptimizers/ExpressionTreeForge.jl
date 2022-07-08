@@ -46,4 +46,4 @@ function equal_tree(tree1::Type_node{T}, tree2::Type_node{T}) where {T}
   (l1 > 0 ? mapreduce(equal_tree, my_and, children_tree1, children_tree2) : true) : false
 end
 
-end  # module M_implementation_tree
+end
