@@ -18,9 +18,10 @@ export concave_type, constant_type, convex_type, linear_type, not_treated_type, 
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
 export get_convexity_status, set_convexity!, create_convex_tree
 export is_constant, is_linear, is_quadratic, is_cubic, is_more
-export transform_to_Expr, transform_to_Expr_julia, transform_to_expr_tree
+export transform_to_Expr, transform_to_Expr_julia, transform_to_expr_tree,
+  create_complete_tree
 export delete_imbricated_plus,
-  get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni, cast_type_of_constant!
+  get_type_tree, get_elemental_variable, element_fun_from_N_to_Ni!, cast_type_of_constant!
 export evaluate_expr_tree, gradient_expr_tree_forward, gradient_expr_tree_reverse, hessian_expr_tree
 export print_tree
 
