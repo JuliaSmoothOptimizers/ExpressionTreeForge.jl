@@ -44,7 +44,7 @@ function _delete_imbricated_plus(expr_tree::T) where {T}
     elseif M_trait_expr_node.node_is_minus(nd)
       ch = M_trait_expr_tree.get_expr_children(expr_tree)
       if length(ch) == 1 #moins unaire donc un seul fils
-        temp = delete_imbricated_plus(ch)
+        temp = delete_imbricated_plus(ch[1])
         res = M_trait_expr_tree.inverse_expr_tree.(temp)
         return vcat(res...)
       else
