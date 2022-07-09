@@ -17,6 +17,14 @@
 [doi-img]: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.822073-blue.svg
 [doi-url]: https://doi.org/10.5281/zenodo.822073
 
+## Philosophy
+ExpressionTreeForge.jl is a manipulator of expression trees.
+It supports several expression tree implementations and defines methods to analyze and manipulate them, including:
+- partial separability detection;
+- evaluation of the expression, and its first and second derivatives;
+- bound propagation;
+- convexity detection.
+
 ## Compatibility
 Julia ≥ 1.6.
 
@@ -26,16 +34,8 @@ pkg> add https://github.com/paraynaud/ExpressionTreeForge.jl
 pkg> test ExpressionTreeForge
 ```
 
-## Philosophy
-ExpressionTreeForge.jl is a manipulator of expression tree.
-It supports several expression tree implementations and define methods to analyze and manipulate them such as:
-- partial separability detection;
-- evaluation of $f(x), \nabla f(x), \nabla^2 f(x)$;
-- bounds propagations;
-- strict convexity detection.
-
 ## How to use 
 See the [tutorial](https://paraynaud.github.io/ExpressionTreeForge.jl/dev/tutorial/).
 
 ## Dependencies
-This module is use in addition of [PartitionedStructures.jl](https://github.com/paraynaud/PartitionedStructures.jl) by: [PartiallySeparableNLPModels.jl](https://github.com/paraynaud/PartiallySeparableNLPModels.jl) and [PartiallySeparableSolvers.jl](https://github.com/paraynaud/PartiallySeparableSolvers.jl) to define a trust-region method exploiting the partial separability through partitioned quasi-Newton approximations. 
+This module is used together with [PartitionedStructures.jl](https://github.com/paraynaud/PartitionedStructures.jl) by [PartiallySeparableNLPModels.jl](https://github.com/paraynaud/PartiallySeparableNLPModels.jl) and [PartiallySeparableSolvers.jl](https://github.com/paraynaud/PartiallySeparableSolvers.jl) to define a trust-region method exploiting partial separability through partitioned quasi-Newton approximations. 
