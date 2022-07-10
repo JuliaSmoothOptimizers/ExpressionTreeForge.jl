@@ -11,7 +11,7 @@
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
     bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
-    @test ExpressionTreeForge.get_bound(bound_expr_tree) == (-1, 1)
+    @test ExpressionTreeForge.get_bounds(bound_expr_tree) == (-1, 1)
   end
 
   @testset "Product" begin
@@ -19,19 +19,19 @@
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
     bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
-    @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_tree) == (-Inf, Inf)
 
     e1 = :(sin(x[1]) * 3 * x[2]^2)
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
     bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
-    @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_tree) == (-Inf, Inf)
 
     e1 = :(sin(x[1]) * 3)
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
     bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
-    @test ExpressionTreeForge.get_bound(bound_tree) == (-3, 3)
+    @test ExpressionTreeForge.get_bounds(bound_tree) == (-3, 3)
   end
 
   @testset "Tan" begin
@@ -39,13 +39,13 @@
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
     bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
-    @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_tree) == (-Inf, Inf)
 
     e1 = :(tan(4))
     et1 = ExpressionTreeForge.transform_to_expr_tree(e1)
     bound_tree = ExpressionTreeForge.create_bounds_tree(et1)
     ExpressionTreeForge.set_bounds!(et1, bound_tree)
-    @test ExpressionTreeForge.get_bound(bound_tree) == (-Inf, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_tree) == (-Inf, Inf)
   end
 
   @testset "Exp and Power" begin
@@ -59,7 +59,7 @@
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
     bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
-    @test ExpressionTreeForge.get_bound(bound_expr_tree) == (0, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_expr_tree) == (0, Inf)
 
     m = Model()
     n = 1
@@ -71,7 +71,7 @@
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
     bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
-    @test ExpressionTreeForge.get_bound(bound_expr_tree) == (0, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_expr_tree) == (0, Inf)
 
     m = Model()
     n = 1
@@ -83,7 +83,7 @@
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
     bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
-    @test ExpressionTreeForge.get_bound(bound_expr_tree) == (0, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_expr_tree) == (0, Inf)
 
     m = Model()
     n = 1
@@ -95,6 +95,6 @@
     expr_tree_obj = ExpressionTreeForge.transform_to_expr_tree(obj)
     bound_expr_tree = ExpressionTreeForge.create_bounds_tree(expr_tree_obj)
     ExpressionTreeForge.set_bounds!(expr_tree_obj, bound_expr_tree)
-    @test ExpressionTreeForge.get_bound(bound_expr_tree) == (-Inf, Inf)
+    @test ExpressionTreeForge.get_bounds(bound_expr_tree) == (-Inf, Inf)
   end
 end

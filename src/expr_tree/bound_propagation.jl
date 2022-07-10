@@ -84,12 +84,12 @@ end
   (b.inf_bound, b.sup_bound)
 
 """
-    (inf_bound, sup_bound) = get_bound(bound_tree::Bound_tree)
+    (inf_bound, sup_bound) = get_bounds(bound_tree::Bound_tree)
 
 Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
 """
-@inline get_bound(b::Bound_tree{T}) where {T <: Number} = bound_to_tuple(M_trait_tree.get_node(b))
-@inline get_bound(
+@inline get_bounds(b::Bound_tree{T}) where {T <: Number} = bound_to_tuple(M_trait_tree.get_node(b))
+@inline get_bounds(
   ex::M_implementation_complete_expr_tree.Complete_expr_tree{T},
 ) where {T <: Number} = M_implementation_complete_expr_tree.tuple_bound_from_tree(ex)
 

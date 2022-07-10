@@ -12,7 +12,7 @@ using .M_bound_propagations, .M_convexity_detection
 
 include("export.jl")
 
-export create_bounds_tree, get_bound, set_bounds!
+export create_bounds_tree, get_bounds, set_bounds!
 export Type_node, Complete_expr_tree, Pre_compiled_tree, Pre_n_compiled_tree, Type_calculus_tree
 export concave_type, constant_type, convex_type, linear_type, not_treated_type, unknown_type
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
