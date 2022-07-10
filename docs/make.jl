@@ -91,7 +91,7 @@ makedocs(
     prettyurls = get(ENV, "CI", nothing) == "true",
   ),
   sitename = "ExpressionTreeForge.jl",
-  pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md", "Developper note" => "developer_note.md"],
+  pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
 )
 
-deploydocs(repo = "github.com/paraynaud/ExpressionTreeForge.jl.git",push_preview = true, devbranch = "master")
+deploydocs(repo = "github.com/paraynaud/ExpressionTreeForge.jl.git", push_preview = true, devbranch = "master")
