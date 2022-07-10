@@ -22,12 +22,13 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Plus_operator
 
 mutable struct Plus_operator <: Abstract_expr_node end
@@ -109,6 +110,7 @@ function _get_type_node(op::Plus_operator, type_ch::Vector{Type_expr_basic})
 end
 
 @inline (==)(a::Plus_operator, b::Plus_operator) = true
+@inline string(a::Plus_operator) = "+"
 
 @inline _evaluate_node(op::Plus_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   sum(value_ch)

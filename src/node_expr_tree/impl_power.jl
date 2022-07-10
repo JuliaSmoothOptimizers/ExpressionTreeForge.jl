@@ -23,12 +23,13 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Power_operator
 
 mutable struct Power_operator{T <: Number} <: Abstract_expr_node
@@ -149,6 +150,7 @@ function _get_type_node(op::Power_operator{T}, type_ch::Vector{Type_expr_basic})
 end
 
 @inline (==)(a::Power_operator{T}, b::Power_operator{T}) where {T <: Number} = (a.index == b.index)
+@inline string(a::Power_operator) = "^"*string(a.index)
 
 @inline function _evaluate_node(
   op::Power_operator{Z},

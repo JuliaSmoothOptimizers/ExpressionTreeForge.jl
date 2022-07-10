@@ -27,7 +27,7 @@ using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Simple_operator
 
 using ..M_plus_operator, ..M_minus_operator, ..M_times_operator, ..M_sinus_operator

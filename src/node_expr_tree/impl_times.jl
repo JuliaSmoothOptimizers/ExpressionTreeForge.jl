@@ -22,11 +22,11 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type, ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
 
 export Time_operator
 
@@ -142,6 +142,7 @@ end
   foldl(M_trait_type_expr.type_product, type_ch)
 
 @inline (==)(a::Time_operator, b::Time_operator) = true
+@inline string(a::Time_operator) = "*"
 
 @inline _evaluate_node(op::Time_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   foldl(*, value_ch)
