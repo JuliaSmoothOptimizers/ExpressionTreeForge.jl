@@ -69,6 +69,7 @@ You detect the element functions with `extract_element_functions()`, which retur
 ```@example ExpressionTreeForge
 expr_tree = copy(expr_tree_Expr)
 element_functions = extract_element_functions(expr_tree)
+show.(element_functions)
 ```
 **Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification on `element_functions` will be applied to `expr_tree`!
 
@@ -81,6 +82,7 @@ Then you can replace the index variables of an element-function expression tree 
 ```@example ExpressionTreeForge
 # change the indices of the second element function
 normalize_indices!(element_functions[2], Us[2])
+show(element_functions[2])
 ```
 
 ### Evaluate a `Type_expr_tree` and its derivatives
@@ -137,10 +139,4 @@ bounds = get_bounds(completetree)
 # get the root convexity status
 convexity_status = get_convexity_status(completetree)
 is_convex(convexity_status)
-```
-
-## Tools 
-If you need to visualize a tree, use `print_tree()` to get a better output on the julia console
-```julia
-show(expr_tree_Expr)
 ```
