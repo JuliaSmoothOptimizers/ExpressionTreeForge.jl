@@ -17,7 +17,7 @@
 
   expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
-  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
+  complete_tree = ExpressionTreeForge.complete_tree(expr_tree_j)
 
   x = ones(Float64, n)
 

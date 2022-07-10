@@ -8,29 +8,29 @@ using ..M_hl_trait_expr_tree
 using ..M_implementation_expr_tree
 
 """
-    separated_terms = delete_imbricated_plus(expr_tree)
+    separated_terms = extract_element_functions(expr_tree)
 
 Divide the expression tree as a terms of a sum if possible.
 It returns a vector where each component is a subexpression tree of `expr_tree`.
 
 Example:
 ```julia
-julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
+julia> extract_element_functions(:(x[1] + x[2] + x[3]*x[4] ) )
 3-element Vector{Expr}:
  :(x[1])
  :(x[2])
  :(x[3] * x[4])
 ```
 """
-@inline delete_imbricated_plus(a::Any) =
-  _delete_imbricated_plus(a, M_trait_expr_tree.is_expr_tree(a))
+@inline extract_element_functions(a::Any) =
+  _extract_element_functions(a, M_trait_expr_tree.is_expr_tree(a))
 
-@inline _delete_imbricated_plus(a, ::M_trait_expr_tree.Is_not_expr_tree) =
+@inline _extract_element_functions(a, ::M_trait_expr_tree.Is_not_expr_tree) =
   error(" This is not an expr tree")
 
-@inline _delete_imbricated_plus(a, ::M_trait_expr_tree.Is_expr_tree) = _delete_imbricated_plus(a)
+@inline _extract_element_functions(a, ::M_trait_expr_tree.Is_expr_tree) = _extract_element_functions(a)
 
-function _delete_imbricated_plus(expr_tree::T) where {T}
+function _extract_element_functions(expr_tree::T) where {T}
   nd = M_trait_expr_tree.get_expr_node(expr_tree)
   if M_trait_expr_node.node_is_operator(nd)
     if M_trait_expr_node.node_is_plus(nd)
@@ -38,19 +38,19 @@ function _delete_imbricated_plus(expr_tree::T) where {T}
       n = length(ch)
       res = Vector{}(undef, n)
       Threads.@threads for i = 1:n
-        res[i] = delete_imbricated_plus(ch[i])
+        res[i] = extract_element_functions(ch[i])
       end
       return vcat(res...)
     elseif M_trait_expr_node.node_is_minus(nd)
       ch = M_trait_expr_tree.get_expr_children(expr_tree)
       if length(ch) == 1 # unary minus
-        temp = delete_imbricated_plus(ch[1])
+        temp = extract_element_functions(ch[1])
         res = M_trait_expr_tree.inverse_expr_tree.(temp)
         return vcat(res...)
       else
         length(ch) == 2 # binary minus
-        res1 = delete_imbricated_plus(ch[1])
-        temp = delete_imbricated_plus(ch[2])
+        res1 = extract_element_functions(ch[1])
+        temp = extract_element_functions(ch[2])
         res2 = M_trait_expr_tree.inverse_expr_tree.(temp)
         return vcat(vcat(res1...), vcat(res2...))
       end
@@ -101,33 +101,33 @@ function _get_type_tree(expr_tree)
 end
 
 """
-    indices = get_elemental_variable(expr_tree)
+    indices = get_elemental_variables(expr_tree)
 
 Return the `indices` of the variable appearing in `expr_tree`.
 This function find the elemental variables from the expression tree of an element function.
 
 Example:
 ```julia
-julia> get_elemental_variable(:(x[1] + x[3]) )
+julia> get_elemental_variables(:(x[1] + x[3]) )
 [1, 3]
-julia> get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
+julia> get_elemental_variables(:(x[1]^2 + x[6] + x[2]) )
 [1, 6, 2]
 ```
 """
-@inline get_elemental_variable(a::Any) =
-  _get_elemental_variable(a, M_trait_expr_tree.is_expr_tree(a))
+@inline get_elemental_variables(a::Any) =
+  _get_elemental_variables(a, M_trait_expr_tree.is_expr_tree(a))
 
-@inline _get_elemental_variable(a, ::M_trait_expr_tree.Is_not_expr_tree) =
+@inline _get_elemental_variables(a, ::M_trait_expr_tree.Is_not_expr_tree) =
   error(" This is not an Expr tree")
 
-@inline _get_elemental_variable(a, ::M_trait_expr_tree.Is_expr_tree) = _get_elemental_variable(a)
+@inline _get_elemental_variables(a, ::M_trait_expr_tree.Is_expr_tree) = _get_elemental_variables(a)
 
-function _get_elemental_variable(expr_tree)
+function _get_elemental_variables(expr_tree)
   nd = M_trait_expr_tree.get_expr_node(expr_tree)
   if M_trait_expr_node.node_is_operator(nd)
     ch = M_trait_expr_tree.get_expr_children(expr_tree)
     n = length(ch)
-    list_var = map(get_elemental_variable, ch)
+    list_var = map(get_elemental_variables, ch)
     res = unique!(vcat(list_var...))
     return res::Vector{Int}
   elseif M_trait_expr_node.node_is_variable(nd)
@@ -142,7 +142,7 @@ end
 """
     Ui = get_Ui(indices::Vector{Int}, n::Int)
 
-Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variable`.
+Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variables`.
 Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
 function get_Ui(index_vars::Vector{Int}, n::Int)
@@ -158,40 +158,40 @@ function get_Ui(index_vars::Vector{Int}, n::Int)
 end
 
 """
-    element_fun_from_N_to_Ni!(expr_tree, vector_indices)
+    normalize_indices!(expr_tree, vector_indices)
 
 Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
-It it paired with `get_elemental_variable` to define the elemental element functions expression tree.
+It it paired with `get_elemental_variables` to define the elemental element functions expression tree.
 
 Example:
 ```julia
-julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
+julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 :(x[1] + x[2])
 ```
 """
-@inline element_fun_from_N_to_Ni!(expr_tree, a::Vector{Int}) =
-  _element_fun_from_N_to_Ni!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
+@inline normalize_indices!(expr_tree, a::Vector{Int}) =
+  _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
 
-@inline _element_fun_from_N_to_Ni!(
+@inline _normalize_indices!(
   expr_tree,
   ::M_trait_expr_tree.Is_not_expr_tree,
   a::Vector{Int},
 ) = error(" This is not an Expr tree")
 
-@inline _element_fun_from_N_to_Ni!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Vector{Int}) =
-  _element_fun_from_N_to_Ni!(expr_tree, a)
+@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Vector{Int}) =
+  _normalize_indices!(expr_tree, a)
 
-@inline element_fun_from_N_to_Ni!(expr_tree, a::Dict{Int, Int}) =
-  _element_fun_from_N_to_Ni!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
+@inline normalize_indices!(expr_tree, a::Dict{Int, Int}) =
+  _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
 
-@inline _element_fun_from_N_to_Ni!(
+@inline _normalize_indices!(
   expr_tree,
   ::M_trait_expr_tree.Is_not_expr_tree,
   a::Dict{Int, Int},
 ) = error(" This is not an Expr tree")
 
-@inline _element_fun_from_N_to_Ni!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Dict{Int, Int}) =
-  _element_fun_from_N_to_Ni!(expr_tree, a)
+@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Dict{Int, Int}) =
+  _normalize_indices!(expr_tree, a)
 
 """
     dic = N_to_Ni(elemental_var::Vector{Int})
@@ -207,12 +207,12 @@ function N_to_Ni(elemental_var::Vector{Int})
   return dic_var_value
 end
 
-function _element_fun_from_N_to_Ni!(expr_tree, elmt_var::Vector{Int})
+function _normalize_indices!(expr_tree, elmt_var::Vector{Int})
   new_var = N_to_Ni(elmt_var)
-  element_fun_from_N_to_Ni!(expr_tree, new_var)
+  normalize_indices!(expr_tree, new_var)
 end
 
-function _element_fun_from_N_to_Ni!(expr_tree, dic_new_var::Dict{Int, Int})
+function _normalize_indices!(expr_tree, dic_new_var::Dict{Int, Int})
   ch = M_trait_expr_tree.get_expr_children(expr_tree)
   if isempty(ch) # expr is a leaf
     r_node = M_trait_expr_tree.get_real_node(expr_tree)
@@ -220,7 +220,7 @@ function _element_fun_from_N_to_Ni!(expr_tree, dic_new_var::Dict{Int, Int})
   else
     n = length(ch)
     for i = 1:n
-      _element_fun_from_N_to_Ni!(ch[i], dic_new_var)
+      _normalize_indices!(ch[i], dic_new_var)
     end
   end
 end
@@ -291,7 +291,7 @@ function _get_function_of_evaluation(
 )
   ex_Expr = M_trait_expr_tree.transform_to_Expr2(ex)
   if n == -1
-    vars_ex_Expr = algo_expr_tree.get_elemental_variable(ex)
+    vars_ex_Expr = algo_expr_tree.get_elemental_variables(ex)
     sort!(vars_ex_Expr)
     nᵢ = length(vars_ex_Expr)
     x = Vector{t}(undef, nᵢ)

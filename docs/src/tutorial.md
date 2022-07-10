@@ -60,22 +60,22 @@ which means `ExpressionTreeForge.jl` detects that $f$ is a sum, and return:
 - the element functions $\hat{f}_i$;
 - the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*) which are represented via $U_i$.
 
-You detect the element functions with `delete_imbricated_plus()`, which returns a vector of `Type_expr_tree`s:
+You detect the element functions with `extract_element_functions()`, which returns a vector of `Type_expr_tree`s:
 ```@example ExpressionTreeForge
 expr_tree = copy(expr_tree_Expr)
-element_functions = delete_imbricated_plus(expr_tree)
+element_functions = extract_element_functions(expr_tree)
 ```
 **Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification on `element_functions` will be applied on `expr_tree`!
 
-You extract the elemental variables by applying `get_elemental_variable()` on every element function expression tree
+You extract the elemental variables by applying `get_elemental_variables()` on every element function expression tree
 ```@example ExpressionTreeForge
-Us = get_elemental_variable.(element_functions)
+Us = get_elemental_variables.(element_functions)
 ```
 
 Then you can replace the index variables of an element-function expression tree such they stay in the range `1:length(elemental_Ui[i])`:
 ```@example ExpressionTreeForge
 # change the indices of the second element function
-element_fun_from_N_to_Ni!(element_functions[2], Us[2])
+normalize_indices!(element_functions[2], Us[2])
 ```
 
 ### Evaluate a `Type_expr_tree` and its derivatives
@@ -87,15 +87,15 @@ fx = evaluate_expr_tree(expr_tree_Expr, y)
 ```
 The gradient computation of an expression tree can either use `ForwardDiff` or `ReverseDiff`
 ```@example ExpressionTreeForge
-gradient_forward = gradient_expr_tree_forward(expr_tree_Expr, y)
-gradient_reverse = gradient_expr_tree_reverse(expr_tree_Expr, y)
+gradient_forward = gradient_forward(expr_tree_Expr, y)
+gradient_reverse = gradient_reverse(expr_tree_Expr, y)
 ```
 ```@example ExpressionTreeForge
 gradient_forward == gradient_reverse
 ```
 and the Hessian is computed with
 ```@example ExpressionTreeForge
-hessian = hessian_expr_tree(expr_tree_Expr, y)
+hessian = hessian_forward(expr_tree_Expr, y)
 ```
 
 These methods can be applied to the element-function expression trees:
@@ -116,7 +116,7 @@ To compute bounds and convexity we use a `Complete_expr_tree`, a richer structur
 A `Complete_expr_tree` is similar to `Type_expr_tree`, but in addition it stores: the lower bound, the upper bound and the convexity status of each node.
 You can define a `Complete_expr_tree` for any `Type_expr_tree`:
 ```@example ExpressionTreeForge
-complete_tree = create_complete_tree(expr_tree_Expr)
+complete_tree = complete_tree(expr_tree_Expr)
 ```
 and compute the bounds and the convexity status afterward
 ```@example ExpressionTreeForge

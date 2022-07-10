@@ -41,32 +41,32 @@ end
 @testset " Deletion of imbricated +" begin
   t_expr_4 = M_abstract_expr_tree.create_expr_tree(:((x[3] + x[4]) + (x[1] + x[2])))
   t4 = M_trait_expr_tree.transform_to_expr_tree(t_expr_4)
-  res_t4 = algo_expr_tree.delete_imbricated_plus(t4)
-  res_t_expr_4 = algo_expr_tree.delete_imbricated_plus(t_expr_4)
+  res_t4 = algo_expr_tree.extract_element_functions(t4)
+  res_t_expr_4 = algo_expr_tree.extract_element_functions(t_expr_4)
   test_res_t_expr_4 = [:(x[3]), :(x[4]), :(x[1]), :(x[2])]
   @test res_t_expr_4 == test_res_t_expr_4
   @test foldl(&, M_trait_expr_tree.expr_tree_equal.(res_t4, res_t_expr_4))
 
   t_expr_5 = M_abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) + (x[1] + x[2])))
   t5 = M_trait_expr_tree.transform_to_expr_tree(t_expr_5)
-  res_t_expr_5 = algo_expr_tree.delete_imbricated_plus(t_expr_5)
-  res_t5 = algo_expr_tree.delete_imbricated_plus(t5)
+  res_t_expr_5 = algo_expr_tree.extract_element_functions(t_expr_5)
+  res_t5 = algo_expr_tree.extract_element_functions(t5)
   test_res_t_expr_5 = [:(x[3]^2), :(x[5] * x[4]), :(x[1]), :(x[2])]
   @test res_t_expr_5 == test_res_t_expr_5
   @test foldl(&, M_trait_expr_tree.expr_tree_equal.(res_t5, res_t_expr_5))
 
   t_expr_6 = M_abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) - (x[1] + x[2])))
   t6 = M_trait_expr_tree.transform_to_expr_tree(t_expr_6)
-  res_t_expr_6 = algo_expr_tree.delete_imbricated_plus(t_expr_6)
-  res_t6 = algo_expr_tree.delete_imbricated_plus(t6)
+  res_t_expr_6 = algo_expr_tree.extract_element_functions(t_expr_6)
+  res_t6 = algo_expr_tree.extract_element_functions(t6)
   test_res_t_expr_6 = [:(x[3]^2), :(x[5] * x[4]), :(-(x[1])), :(-(x[2]))]
   @test res_t_expr_6 == test_res_t_expr_6
   @test foldl(&, M_trait_expr_tree.expr_tree_equal.(res_t6, res_t_expr_6))
 
   t_expr_7 = M_abstract_expr_tree.create_expr_tree(:((x[3])^2 + (x[5] * x[4]) - (x[1] - x[2])))
   t7 = M_trait_expr_tree.transform_to_expr_tree(t_expr_7)
-  res_t_expr_7 = algo_expr_tree.delete_imbricated_plus(t_expr_7)
-  res_t7 = algo_expr_tree.delete_imbricated_plus(t7)
+  res_t_expr_7 = algo_expr_tree.extract_element_functions(t_expr_7)
+  res_t7 = algo_expr_tree.extract_element_functions(t7)
   test_res_t_expr_7 = [:(x[3]^2), :(x[5] * x[4]), :(-(x[1])), :(-(-(x[2])))]
   @test res_t_expr_7 == test_res_t_expr_7
   @test foldl(&, M_trait_expr_tree.expr_tree_equal.(res_t7, res_t_expr_7))
@@ -120,7 +120,7 @@ end
   @test M_trait_type_expr.is_more(test_res_obj) == false
 
   t_expr_9 = M_abstract_expr_tree.create_expr_tree(:(x[1] + sin(x[2])))
-  res_t_expr_9 = algo_expr_tree.delete_imbricated_plus(t_expr_9)
+  res_t_expr_9 = algo_expr_tree.extract_element_functions(t_expr_9)
 
   @test M_trait_type_expr.is_linear(algo_expr_tree.get_type_tree(t_expr_9)) == false
   @test M_trait_type_expr.is_more(algo_expr_tree.get_type_tree(t_expr_9))
@@ -129,14 +129,14 @@ end
 @testset "Retrieve the elemental variables" begin
   t_expr_var = M_abstract_expr_tree.create_expr_tree(:((x[1]^3) + sin(x[1] * x[2]) - (x[3] - x[2])))
   t_var = M_trait_expr_tree.transform_to_expr_tree(t_expr_var)
-  res = algo_expr_tree.get_elemental_variable(t_var)
-  res2 = algo_expr_tree.get_elemental_variable(t_expr_var)
+  res = algo_expr_tree.get_elemental_variables(t_var)
+  res2 = algo_expr_tree.get_elemental_variables(t_expr_var)
   @test res == res2
   @test res == [1, 2, 3]
   t_expr_var1 = M_abstract_expr_tree.create_expr_tree(:((x[1]^3)))
   t_var1 = M_trait_expr_tree.transform_to_expr_tree(t_expr_var1)
-  res_expr_var1 = algo_expr_tree.get_elemental_variable(t_expr_var1)
-  res_var1 = algo_expr_tree.get_elemental_variable(t_var1)
+  res_expr_var1 = algo_expr_tree.get_elemental_variables(t_expr_var1)
+  res_var1 = algo_expr_tree.get_elemental_variables(t_var1)
   @test res_var1 == res_expr_var1
   @test res_var1 == [1]
 end
@@ -150,13 +150,13 @@ end
   MathOptInterface.initialize(eval_test, [:ExprGraph])
   obj = MathOptInterface.objective_expr(eval_test)
   t_obj = M_trait_expr_tree.transform_to_expr_tree(obj)
-  elmt_fun = algo_expr_tree.delete_imbricated_plus(obj)
+  elmt_fun = algo_expr_tree.extract_element_functions(obj)
   type_elmt_fun = algo_expr_tree.get_type_tree.(elmt_fun)
-  U = algo_expr_tree.get_elemental_variable.(elmt_fun)
+  U = algo_expr_tree.get_elemental_variables.(elmt_fun)
 
-  t_elmt_fun = algo_expr_tree.delete_imbricated_plus(t_obj)
+  t_elmt_fun = algo_expr_tree.extract_element_functions(t_obj)
   t_type_elmt_fun = algo_expr_tree.get_type_tree.(t_elmt_fun)
-  t_U = algo_expr_tree.get_elemental_variable.(t_elmt_fun)
+  t_U = algo_expr_tree.get_elemental_variables.(t_elmt_fun)
 
   x = ones(Float32, n_x)
   eval_ones = 15.708073371141893
@@ -242,9 +242,9 @@ end
   n = 5
   @time test_fac_expr_tree_plus =
     expr_tree_factorielle_plus(n, :+)::M_implementation_expr_tree.Type_expr_tree
-  test_fac_expr_tree_plus_no_plus = algo_expr_tree.delete_imbricated_plus(test_fac_expr_tree_plus)
+  test_fac_expr_tree_plus_no_plus = algo_expr_tree.extract_element_functions(test_fac_expr_tree_plus)
   algo_expr_tree.get_type_tree(test_fac_expr_tree_plus)
-  res3 = algo_expr_tree.get_elemental_variable(test_fac_expr_tree_plus)
+  res3 = algo_expr_tree.get_elemental_variables(test_fac_expr_tree_plus)
   res = M_evaluation_expr_tree.evaluate_expr_tree(test_fac_expr_tree_plus, ones(5))
   @test res == factorial(n)
 end
@@ -264,7 +264,7 @@ function create_trees(n::Int)
   Expr_j = MathOptInterface.objective_expr(evaluator)
   expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
-  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
+  complete_tree = ExpressionTreeForge.complete_tree(expr_tree_j)
 
   return Expr_j, expr_tree_j, complete_tree, evaluator
 end

@@ -15,12 +15,12 @@ using ..ExpressionTreeForge.M_trait_expr_tree
   expr_tree_j = copy(expr_tree)
   @test ExpressionTreeForge.M_trait_expr_tree.expr_tree_equal(expr_tree, expr_tree_j)
 
-  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
+  complete_tree = ExpressionTreeForge.complete_tree(expr_tree_j)
 
-  element_functions = delete_imbricated_plus(expr_tree_j)
-  element_variables = get_elemental_variable.(element_functions)
+  element_functions = extract_element_functions(expr_tree_j)
+  element_variables = get_elemental_variables.(element_functions)
 
-  map((fun, var) -> element_fun_from_N_to_Ni!(fun, var), element_functions, element_variables)
+  map((fun, var) -> normalize_indices!(fun, var), element_functions, element_variables)
   @test ExpressionTreeForge.M_trait_expr_tree.expr_tree_equal(expr_tree, expr_tree_j) == false
 end
 

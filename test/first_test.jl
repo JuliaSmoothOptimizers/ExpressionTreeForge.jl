@@ -4,8 +4,8 @@
   x = ones(2)
   res_e1 = ExpressionTreeForge.evaluate_expr_tree(e1, x)
   res_et1 = ExpressionTreeForge.evaluate_expr_tree(et1, x)
-  res_grad_e1 = ExpressionTreeForge.gradient_expr_tree_forward(e1, x)
-  res_grad_et1 = ExpressionTreeForge.gradient_expr_tree_forward(et1, x)
+  res_grad_e1 = ExpressionTreeForge.gradient_forward(e1, x)
+  res_grad_et1 = ExpressionTreeForge.gradient_forward(et1, x)
   type_e1 = ExpressionTreeForge.get_type_tree(e1)
   type_et1 = ExpressionTreeForge.get_type_tree(et1)
   @test res_e1 == res_et1
