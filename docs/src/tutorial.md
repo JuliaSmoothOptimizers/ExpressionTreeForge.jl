@@ -69,7 +69,7 @@ You detect the element functions with `extract_element_functions()`, which retur
 ```@example ExpressionTreeForge
 expr_tree = copy(expr_tree_Expr)
 element_functions = extract_element_functions(expr_tree)
-show.(element_functions)
+show(element_functions[2])
 ```
 **Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification on `element_functions` will be applied to `expr_tree`!
 
