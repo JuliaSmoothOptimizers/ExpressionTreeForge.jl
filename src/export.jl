@@ -178,14 +178,14 @@ Check if `convexity_status` is `linear`.
 """
     bool = is_convex(convexity_status)
 
-Check if `convexity_status` is strictly `convex`.
+Check if `convexity_status` is `convex`.
 """
 @inline is_convex(convexity_status) = M_implementation_convexity_type.is_convex(convexity_status)
 
 """
     bool = is_concave(convexity_status)
 
-Check if `convexity_status` is strictly `concave`.
+Check if `convexity_status` is `concave`.
 """
 @inline is_concave(convexity_status) = M_implementation_convexity_type.is_concave(convexity_status)
 
