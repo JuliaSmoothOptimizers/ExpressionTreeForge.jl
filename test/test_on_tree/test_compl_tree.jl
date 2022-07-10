@@ -60,7 +60,7 @@ using Test
   ExpressionTreeForge.set_bounds!(complete_tree)
   bound_tree = ExpressionTreeForge.create_bounds_tree(expr_tree)
   ExpressionTreeForge.set_bounds!(expr_tree, bound_tree)
-  @test ExpressionTreeForge.get_bound(complete_tree) == ExpressionTreeForge.get_bound(bound_tree)
+  @test ExpressionTreeForge.get_bounds(complete_tree) == ExpressionTreeForge.get_bounds(bound_tree)
 
   convexity_tree = ExpressionTreeForge.create_convex_tree(expr_tree_j)
   ExpressionTreeForge.set_convexity!(expr_tree, convexity_tree, bound_tree)
@@ -89,7 +89,7 @@ using Test
 
   ExpressionTreeForge.evaluate_expr_tree(copy_tree, x)
   ExpressionTreeForge.evaluate_expr_tree(complete_tree, x)
-  @test ExpressionTreeForge.get_bound(complete_tree) == ExpressionTreeForge.get_bound(copy_tree)
+  @test ExpressionTreeForge.get_bounds(complete_tree) == ExpressionTreeForge.get_bounds(copy_tree)
   @test ExpressionTreeForge.get_convexity_status(complete_tree) ==
         ExpressionTreeForge.get_convexity_status(copy_tree)
 

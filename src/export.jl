@@ -65,11 +65,11 @@ A `Complete_expr_tree` contains a precompiled `bound_tree`, and then can be use 
 @inline set_bounds!(complete_tree) = M_bound_propagations.set_bounds!(complete_tree)
 
 """
-    (inf_bound, sup_bound) = get_bound(bound_tree::Bound_tree)
+    (inf_bound, sup_bound) = get_bounds(bound_tree::Bound_tree)
 
 Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
 """
-@inline get_bound(bound_tree) = M_bound_propagations.get_bound(bound_tree)
+@inline get_bounds(bound_tree) = M_bound_propagations.get_bounds(bound_tree)
 
 """
     convex_tree = create_convex_tree(tree::Type_node)
