@@ -16,7 +16,7 @@ using Test
   Expr_j = MathOptInterface.objective_expr(evaluator)
   expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
-  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree_j)
+  complete_tree = ExpressionTreeForge.complete_tree(expr_tree_j)
 
   @test expr_tree_j == expr_tree
   @test ExpressionTreeForge.evaluate_expr_tree(complete_tree, v) ==
@@ -24,10 +24,10 @@ using Test
   @test ExpressionTreeForge.evaluate_expr_tree(complete_tree, v) ==
         MathOptInterface.eval_objective(evaluator, v)
 
-  deleted_comp_expr_tree = ExpressionTreeForge.delete_imbricated_plus(complete_tree)
-  deleted_expr_tree = ExpressionTreeForge.delete_imbricated_plus(expr_tree)
-  comp_elem = ExpressionTreeForge.get_elemental_variable.(deleted_comp_expr_tree)
-  elem = ExpressionTreeForge.get_elemental_variable.(deleted_expr_tree)
+  deleted_comp_expr_tree = ExpressionTreeForge.extract_element_functions(complete_tree)
+  deleted_expr_tree = ExpressionTreeForge.extract_element_functions(expr_tree)
+  comp_elem = ExpressionTreeForge.get_elemental_variables.(deleted_comp_expr_tree)
+  elem = ExpressionTreeForge.get_elemental_variables.(deleted_expr_tree)
 
   @test length(deleted_comp_expr_tree) == length(deleted_expr_tree)
   @test comp_elem == elem
@@ -40,9 +40,9 @@ using Test
 
   grad = zeros(n)
   MathOptInterface.eval_objective_gradient(evaluator, grad, v)
-  @test ExpressionTreeForge.gradient_expr_tree_forward(complete_tree, v) ==
-        ExpressionTreeForge.gradient_expr_tree_forward(expr_tree, v)
-  @test (norm(ExpressionTreeForge.gradient_expr_tree_forward(complete_tree, v)) - norm(grad)) < θ
+  @test ExpressionTreeForge.gradient_forward(complete_tree, v) ==
+        ExpressionTreeForge.gradient_forward(expr_tree, v)
+  @test (norm(ExpressionTreeForge.gradient_forward(complete_tree, v)) - norm(grad)) < θ
 
   MOI_pattern = MathOptInterface.hessian_lagrangian_structure(evaluator)
   column = [x[1] for x in MOI_pattern]
@@ -54,7 +54,7 @@ using Test
   MOI_half_hessian_en_x = sparse(row, column, values, n, n)
   MOI_hessian_en_x = Symmetric(MOI_half_hessian_en_x)
 
-  H = ExpressionTreeForge.hessian_expr_tree(complete_tree, v)
+  H = ExpressionTreeForge.hessian_forward(complete_tree, v)
   @test (norm(MOI_hessian_en_x) - norm(H)) < θ
 
   ExpressionTreeForge.set_bounds!(complete_tree)
@@ -69,18 +69,18 @@ using Test
         ExpressionTreeForge.get_convexity_status(complete_tree)
 
   x = (y -> y * 4).(ones(n))
-  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[3], comp_elem[3])
-  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_expr_tree[3], elem[3])
+  ExpressionTreeForge.normalize_indices!(deleted_comp_expr_tree[3], comp_elem[3])
+  ExpressionTreeForge.normalize_indices!(deleted_expr_tree[3], elem[3])
   @test ExpressionTreeForge.evaluate_expr_tree(deleted_expr_tree[3], x) ==
         ExpressionTreeForge.evaluate_expr_tree(deleted_comp_expr_tree[3], x)
 
-  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[2], comp_elem[2])
-  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_expr_tree[2], elem[2])
+  ExpressionTreeForge.normalize_indices!(deleted_comp_expr_tree[2], comp_elem[2])
+  ExpressionTreeForge.normalize_indices!(deleted_expr_tree[2], elem[2])
   @test ExpressionTreeForge.evaluate_expr_tree(deleted_expr_tree[2], x) ==
         ExpressionTreeForge.evaluate_expr_tree(deleted_comp_expr_tree[2], x)
 
-  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_comp_expr_tree[4], comp_elem[4])
-  ExpressionTreeForge.element_fun_from_N_to_Ni!(deleted_expr_tree[4], elem[4])
+  ExpressionTreeForge.normalize_indices!(deleted_comp_expr_tree[4], comp_elem[4])
+  ExpressionTreeForge.normalize_indices!(deleted_expr_tree[4], elem[4])
   @test ExpressionTreeForge.evaluate_expr_tree(deleted_expr_tree[4], x) ==
         ExpressionTreeForge.evaluate_expr_tree(deleted_comp_expr_tree[4], x)
 
@@ -116,10 +116,10 @@ end
   expr_tree2 = ExpressionTreeForge.transform_to_expr_tree(Expr2)
   expr_tree3 = ExpressionTreeForge.transform_to_expr_tree(Expr3)
   expr_tree4 = ExpressionTreeForge.transform_to_expr_tree(Expr4)
-  complete_tree1 = ExpressionTreeForge.create_complete_tree(expr_tree1)
-  complete_tree2 = ExpressionTreeForge.create_complete_tree(expr_tree2)
-  complete_tree3 = ExpressionTreeForge.create_complete_tree(expr_tree3)
-  complete_tree4 = ExpressionTreeForge.create_complete_tree(expr_tree4)
+  complete_tree1 = ExpressionTreeForge.complete_tree(expr_tree1)
+  complete_tree2 = ExpressionTreeForge.complete_tree(expr_tree2)
+  complete_tree3 = ExpressionTreeForge.complete_tree(expr_tree3)
+  complete_tree4 = ExpressionTreeForge.complete_tree(expr_tree4)
   complete_tree5 = copy(complete_tree1)
 
   @test complete_tree1 != complete_tree2
@@ -174,7 +174,7 @@ end
   v = ones(n)
   Expr = MathOptInterface.objective_expr(evaluator)
   expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr)
-  complete_tree = ExpressionTreeForge.create_complete_tree(expr_tree)
+  complete_tree = ExpressionTreeForge.complete_tree(expr_tree)
 
   complete_tree_cp = copy(complete_tree)
   expr_tree_trans = ExpressionTreeForge.transform_to_expr_tree(complete_tree)

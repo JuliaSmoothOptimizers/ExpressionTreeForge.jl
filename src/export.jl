@@ -197,11 +197,11 @@ Check if `convexity_status` is `unknown`.
 @inline is_unknown(convexity_status) = M_implementation_convexity_type.is_unknown(convexity_status)
 
 """
-    complete_tree = create_complete_tree(expression_tree)
+    complete_tree = complete_tree(expression_tree)
 
 Create a `complete_tree::Complete_expr_tree` from `expression_tree` (`::Type_expr_tree` for now).
 """
-@inline create_complete_tree(tree) =
+@inline complete_tree(tree) =
   M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
 """
@@ -270,21 +270,21 @@ Transform `expr` into an `expr_tree::Type_expr_tree`.
 @inline transform_to_expr_tree(e::Any) = M_trait_expr_tree.transform_to_expr_tree(e)::Type_expr_tree
 
 """
-    separated_terms = delete_imbricated_plus(expr_tree)
+    separated_terms = extract_element_functions(expr_tree)
 
 Divide the expression tree as a terms of a sum if possible.
 It returns a vector where each component is a subexpression tree of `expr_tree`.
 
 Example:
 ```julia
-julia> delete_imbricated_plus(:(x[1] + x[2] + x[3]*x[4] ) )
+julia> extract_element_functions(:(x[1] + x[2] + x[3]*x[4] ) )
 3-element Vector{Expr}:
  :(x[1])
  :(x[2])
  :(x[3] * x[4])
 ```
 """
-@inline delete_imbricated_plus(a::Any) = algo_expr_tree.delete_imbricated_plus(a)
+@inline extract_element_functions(a::Any) = algo_expr_tree.extract_element_functions(a)
 
 """
     type = get_type_tree(expr_tree)
@@ -305,43 +305,43 @@ true
 @inline get_type_tree(a::Any) = algo_expr_tree.get_type_tree(a)
 
 """
-    indices = get_elemental_variable(expr_tree)
+    indices = get_elemental_variables(expr_tree)
 
 Return the `indices` of the variable appearing in `expr_tree`.
 This function find the elemental variables from the expression tree of an element function.
 
 Example:
 ```julia
-julia> get_elemental_variable(:(x[1] + x[3]) )
+julia> get_elemental_variables(:(x[1] + x[3]) )
 [1, 3]
-julia> get_elemental_variable(:(x[1]^2 + x[6] + x[2]) )
+julia> get_elemental_variables(:(x[1]^2 + x[6] + x[2]) )
 [1, 6, 2]
 ```
 """
-@inline get_elemental_variable(a::Any) = algo_expr_tree.get_elemental_variable(a)
+@inline get_elemental_variables(a::Any) = algo_expr_tree.get_elemental_variables(a)
 
 """
     Ui = get_Ui(indices::Vector{Int}, n::Int)
 
-Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variable`.
+Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variables`.
 Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
 @inline get_Ui(indices::Vector{Int}, n::Int) = algo_expr_tree.get_Ui(indices, n)
 
 """
-    element_fun_from_N_to_Ni!(expr_tree, vector_indices)
+    normalize_indices!(expr_tree, vector_indices)
 
 Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
-It it paired with `get_elemental_variable` to define the elemental element functions expression tree.
+It it paired with `get_elemental_variables` to define the elemental element functions expression tree.
 
 Example:
 ```julia
-julia> element_fun_from_N_to_Ni!(:(x[4] + x[5]), [4,5])
+julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 :(x[1] + x[2])
 ```
 """
-@inline element_fun_from_N_to_Ni!(a::Any, v::AbstractVector{Int}) =
-  algo_expr_tree.element_fun_from_N_to_Ni!(a, v)
+@inline normalize_indices!(a::Any, v::AbstractVector{Int}) =
+  algo_expr_tree.normalize_indices!(a, v)
 
 """
     cast_type_of_constant(expr_tree, type::DataType)
@@ -379,46 +379,46 @@ Evaluate the `expression_tree` with several points, represented as `x`.
   M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(expression_tree, x)
 
 """
-    gradient = gradient_expr_tree_forward(expr_tree, x)
+    gradient = gradient_forward(expr_tree, x)
 
 Evaluate the `gradient` of `expr_tree` at the point `x` with a forward automatic differentiation method.
 
 Example:
 ```julia
-julia> gradient_expr_tree_forward(:(x[1] + x[2]), rand(2))
+julia> gradient_forward(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
 ```
 """
-@inline gradient_expr_tree_forward(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.gradient_expr_tree_forward(e, x)
+@inline gradient_forward(e::Any, x::AbstractVector) =
+  M_evaluation_expr_tree.gradient_forward(e, x)
 
 """
-    gradient = gradient_expr_tree_reverse(expr_tree, x)
+    gradient = gradient_reverse(expr_tree, x)
 
 Evaluate the `gradient` of `expr_tree` at the point `x` with a reverse automatic differentiation method.
 
 Example:
 ```julia
-julia> gradient_expr_tree_reverse(:(x[1] + x[2]), rand(2))
+julia> gradient_reverse(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
 ```
 """
-@inline gradient_expr_tree_reverse(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.gradient_expr_tree_reverse(e, x)
+@inline gradient_reverse(e::Any, x::AbstractVector) =
+  M_evaluation_expr_tree.gradient_reverse(e, x)
 
 """
-    hessian = hessian_expr_tree(expr_tree, x)
+    hessian = hessian_forward(expr_tree, x)
 
 Evaluate the Hessian of `expr_tree` at the point `x`.
 
 Example:
 ```julia
-julia> hessian_expr_tree(:(x[1]^2 + x[2]), rand(2))
+julia> hessian_forward(:(x[1]^2 + x[2]), rand(2))
 [2.0 0.0; 0.0 0.0]
 ```
 """
-@inline hessian_expr_tree(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.hessian_expr_tree(e, x)
+@inline hessian_forward(e::Any, x::AbstractVector) =
+  M_evaluation_expr_tree.hessian_forward(e, x)
 
 """
     eval_expression_tree = get_function_of_evaluation(expression_tree)
