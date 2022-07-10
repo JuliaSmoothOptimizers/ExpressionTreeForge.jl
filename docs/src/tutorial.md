@@ -24,7 +24,7 @@ The main expression trees supported are:
   expr_tree_JuMP = transform_to_expr_tree(expr_jump)
   ```
 
-- expression tree from a julia function created by [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0)
+- expression tree from a julia function created by [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0) 
   ```@example ExpressionTreeForge
   using ModelingToolkit
   function f(y)    
@@ -37,7 +37,7 @@ The main expression trees supported are:
   expr_tree_MTK = transform_to_expr_tree(mtk_tree)
   ```
 
-It produces the sames `expr_tree::Type_expr_tree`
+All three produce the sames `expr_tree::Type_expr_tree`:
 ```@example ExpressionTreeForge
 expr_tree_MTK == expr_tree_JuMP
 ```
@@ -67,7 +67,7 @@ You detect the element functions with `extract_element_functions()`, which retur
 expr_tree = copy(expr_tree_Expr)
 element_functions = extract_element_functions(expr_tree)
 ```
-**Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification on `element_functions` will be applied on `expr_tree`!
+**Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification on `element_functions` will be applied to `expr_tree`!
 
 You extract the elemental variables by applying `get_elemental_variables()` on every element function expression tree
 ```@example ExpressionTreeForge
@@ -139,5 +139,5 @@ is_convex(convexity_status)
 ## Tools 
 If you need to visualize a tree, use `print_tree()` to get a better output on the julia console
 ```julia
-print_tree(expr_tree_Expr)
+show(expr_tree_Expr)
 ```

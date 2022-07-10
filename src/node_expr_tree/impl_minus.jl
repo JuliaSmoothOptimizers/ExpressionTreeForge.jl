@@ -22,12 +22,13 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Minus_operator
 
 mutable struct Minus_operator <: Abstract_expr_node end
@@ -130,6 +131,7 @@ function _get_type_node(op::Minus_operator, type_ch::Vector{Type_expr_basic})
 end
 
 @inline (==)(a::Minus_operator, b::Minus_operator) = true
+@inline string(a::Minus_operator) = "-"
 
 function _evaluate_node(op::Minus_operator, value_ch::AbstractVector{T}) where {T <: Number}
   if length(value_ch) == 1

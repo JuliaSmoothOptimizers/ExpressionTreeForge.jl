@@ -24,12 +24,13 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Constant
 
 mutable struct Constant{T <: Number} <: Abstract_expr_node
@@ -73,6 +74,7 @@ end
   M_implementation_type_expr.return_constant()
 
 @inline (==)(a::Constant{T}, b::Constant{T}) where {T <: Number} = (a.value == b.value)
+@inline string(a::Constant{T}) where {T <: Number} = string(a.value)
 
 @inline _evaluate_node(
   c::Constant{Y},

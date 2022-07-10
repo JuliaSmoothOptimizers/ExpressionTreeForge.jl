@@ -25,11 +25,12 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Variable
 
 mutable struct Variable <: Abstract_expr_node
@@ -76,6 +77,7 @@ _get_type_node(v::Variable) = M_implementation_type_expr.return_linear()
 _get_var_index(v::Variable) = v.index::Int
 
 (==)(a::Variable, b::Variable) = (a.name == b.name) && (a.index == b.index)
+@inline string(a::Variable) = string(a.name) * "[" * string(a.index) * "]"
 
 function _evaluate_node(v::Variable, dic::Dict{Int, T}) where {T <: Number}
   return dic[v.index]::T

@@ -22,12 +22,13 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Cos_operator
 
 mutable struct Cos_operator <: Abstract_expr_node end
@@ -131,6 +132,7 @@ function _get_type_node(op::Cos_operator, type_ch::Vector{Type_expr_basic})
 end
 
 @inline (==)(a::Cos_operator, b::Cos_operator) = true
+@inline string(a::Cos_operator) = "cos"
 
 @inline function _evaluate_node(op::Cos_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for cosinus")

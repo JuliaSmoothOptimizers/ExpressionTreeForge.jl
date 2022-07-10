@@ -22,12 +22,13 @@ import ..M_interface_expr_node:
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
+import Base.(==), Base.string
 
 using ..M_implementation_convexity_type
 using ..M_implementation_type_expr
 using ..M_trait_type_expr
 using ..M_abstract_expr_node
-import Base.(==)
+
 export Tan_operator
 
 mutable struct Tan_operator <: Abstract_expr_node end
@@ -71,6 +72,7 @@ function _get_type_node(op::Tan_operator, type_ch::Vector{Type_expr_basic})
 end
 
 @inline (==)(a::Tan_operator, b::Tan_operator) = true
+@inline string(a::Tan_operator) = "tan"
 
 @inline function _evaluate_node(op::Tan_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for tan")
