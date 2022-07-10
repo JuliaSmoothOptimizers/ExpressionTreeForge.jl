@@ -5,37 +5,37 @@ It interfaces several implementations of expression trees to the internal expres
 
 The main expression trees supported are:
 - julia `Expr`
-  ```@example ExpressionTreeForge
-  using ExpressionTreeForge
-  expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
-  expr_tree_Expr = transform_to_expr_tree(expr_julia)
-  ```
+```@example ExpressionTreeForge
+using ExpressionTreeForge
+expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
+expr_tree_Expr = transform_to_expr_tree(expr_julia)
+```
 
 - `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
-  ```@example ExpressionTreeForge
-  using JuMP, MathOptInterface
-  m = Model()
-  n = 3
-  @variable(m, x[1:n])
-  @NLobjective(m, Min, (x[1]+x[2])^2 + (x[2]+x[3])^2)
-  evaluator = JuMP.NLPEvaluator(m)
-  MathOptInterface.initialize(evaluator, [:ExprGraph])
-  expr_jump = MathOptInterface.objective_expr(evaluator)
-  expr_tree_JuMP = transform_to_expr_tree(expr_jump)
-  ```
+```@example ExpressionTreeForge
+using JuMP, MathOptInterface
+m = Model()
+n = 3
+@variable(m, x[1:n])
+@NLobjective(m, Min, (x[1]+x[2])^2 + (x[2]+x[3])^2)
+evaluator = JuMP.NLPEvaluator(m)
+MathOptInterface.initialize(evaluator, [:ExprGraph])
+expr_jump = MathOptInterface.objective_expr(evaluator)
+expr_tree_JuMP = transform_to_expr_tree(expr_jump)
+```
 
-- expression tree from a julia function created by [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0) 
-  ```@example ExpressionTreeForge
-  using ModelingToolkit
-  function f(y)    
-    return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
-  end
-  n = 3
-  ModelingToolkit.@variables x[1:n] # must be x
+- expression tree from a julia function created by [ModelingToolKit.jl (v3.21.0)](https://github.com/SciML/ModelingToolkit.jl/)
+```@example ExpressionTreeForge
+using ModelingToolkit
+function f(y)    
+  return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
+end
+n = 3
+ModelingToolkit.@variables x[1:n] # must be x
 
-  mtk_tree = f(x)
-  expr_tree_MTK = transform_to_expr_tree(mtk_tree)
-  ```
+mtk_tree = f(x)
+expr_tree_MTK = transform_to_expr_tree(mtk_tree)
+```
 
 All three produce the sames `expr_tree::Type_expr_tree`:
 ```@example ExpressionTreeForge
@@ -44,6 +44,9 @@ expr_tree_MTK == expr_tree_JuMP
 
 ```@example ExpressionTreeForge
 expr_tree_MTK == expr_tree_Expr
+```
+```@example ExpressionTreeForge
+show(expr_tree_MTK)
 ```
 
 With an expression tree `Type_expr_tree`, you can:
