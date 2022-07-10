@@ -5,35 +5,37 @@ It interfaces several implementations of expression trees to the internal expres
 
 The main expression trees supported are:
 - julia `Expr`
-```@example ExpressionTreeForge
-using ExpressionTreeForge
-expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
-expr_tree_Expr = transform_to_expr_tree(expr_julia)
-```
-- `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
-```@example ExpressionTreeForge
-using JuMP, MathOptInterface
-m = Model()
-n = 3
-@variable(m, x[1:n])
-@NLobjective(m, Min, (x[1]+x[2])^2 + (x[2]+x[3])^2)
-evaluator = JuMP.NLPEvaluator(m)
-MathOptInterface.initialize(evaluator, [:ExprGraph])
-expr_jump = MathOptInterface.objective_expr(evaluator)
-expr_tree_JuMP = transform_to_expr_tree(expr_jump)
-```
-- expression tree from a julia function created by [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0)
-```@example ExpressionTreeForge
-using ModelingToolkit
-function f(y)    
-  return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
-end
-n = 3
-ModelingToolkit.@variables x[1:n] # must be x
+  ```@example ExpressionTreeForge
+  using ExpressionTreeForge
+  expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
+  expr_tree_Expr = transform_to_expr_tree(expr_julia)
+  ```
 
-mtk_tree = f(x)
-expr_tree_MTK = transform_to_expr_tree(mtk_tree)
-```
+- `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
+  ```@example ExpressionTreeForge
+  using JuMP, MathOptInterface
+  m = Model()
+  n = 3
+  @variable(m, x[1:n])
+  @NLobjective(m, Min, (x[1]+x[2])^2 + (x[2]+x[3])^2)
+  evaluator = JuMP.NLPEvaluator(m)
+  MathOptInterface.initialize(evaluator, [:ExprGraph])
+  expr_jump = MathOptInterface.objective_expr(evaluator)
+  expr_tree_JuMP = transform_to_expr_tree(expr_jump)
+  ```
+
+- expression tree from a julia function created by [ModelingToolKit.jl](https://github.com/SciML/ModelingToolkit.jl/) (v3.21.0)
+  ```@example ExpressionTreeForge
+  using ModelingToolkit
+  function f(y)    
+    return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
+  end
+  n = 3
+  ModelingToolkit.@variables x[1:n] # must be x
+
+  mtk_tree = f(x)
+  expr_tree_MTK = transform_to_expr_tree(mtk_tree)
+  ```
 
 It produces the sames `expr_tree::Type_expr_tree`
 ```@example ExpressionTreeForge
@@ -87,8 +89,8 @@ fx = evaluate_expr_tree(expr_tree_Expr, y)
 ```
 The gradient computation of an expression tree can either use `ForwardDiff` or `ReverseDiff`
 ```@example ExpressionTreeForge
-gradient_forward = gradient_forward(expr_tree_Expr, y)
-gradient_reverse = gradient_reverse(expr_tree_Expr, y)
+∇f_forward = gradient_forward(expr_tree_Expr, y)
+∇f_reverse = gradient_reverse(expr_tree_Expr, y)
 ```
 ```@example ExpressionTreeForge
 gradient_forward == gradient_reverse
@@ -116,21 +118,21 @@ To compute bounds and convexity we use a `Complete_expr_tree`, a richer structur
 A `Complete_expr_tree` is similar to `Type_expr_tree`, but in addition it stores: the lower bound, the upper bound and the convexity status of each node.
 You can define a `Complete_expr_tree` for any `Type_expr_tree`:
 ```@example ExpressionTreeForge
-complete_tree = complete_tree(expr_tree_Expr)
+completetree = complete_tree(expr_tree_Expr)
 ```
 and compute the bounds and the convexity status afterward
 ```@example ExpressionTreeForge
 # propagate the bounds from the variables
-set_bounds!(complete_tree)
+set_bounds!(completetree)
 # deduce the convexity status of each node
-set_convexity!(complete_tree)
+set_convexity!(completetree)
 # get the root bounds
-bounds = get_bound(complete_tree)
+bounds = get_bounds(completetree)
 ```
 
 ```@example ExpressionTreeForge
 # get the root convexity status
-convexity_status = get_convexity_status(complete_tree)
+convexity_status = get_convexity_status(completetree)
 is_convex(convexity_status)
 ```
 
