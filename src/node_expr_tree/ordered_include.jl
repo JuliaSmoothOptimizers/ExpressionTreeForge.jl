@@ -4,8 +4,6 @@ include("itf_expr_node.jl")
 
 include("impl_constants.jl")
 include("impl_variables.jl")
-include("impl_variable_view.jl")
-include("impl_variable_n_view.jl")
 
 include("impl_plus.jl")
 include("impl_minus.jl")
