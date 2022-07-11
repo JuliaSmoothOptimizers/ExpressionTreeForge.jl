@@ -9,7 +9,6 @@ The main expression trees supported are:
 using ExpressionTreeForge
 expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
 expr_tree_Expr = transform_to_expr_tree(expr_julia)
-show(expr_tree_Expr)
 ```
 
 - `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
@@ -80,7 +79,6 @@ Then you can replace the index variables of an element-function expression tree 
 ```@example ExpressionTreeForge
 # change the indices of the second element function
 normalize_indices!(element_functions[2], Us[2])
-show(element_functions[2])
 ```
 
 ### Evaluate a `Type_expr_tree` and its derivatives
