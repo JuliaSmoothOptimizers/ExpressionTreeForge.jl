@@ -58,7 +58,7 @@ The original purpose of `ExpressionTreeForge.jl` is to detect the partially-sepa
 ```math
 f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}, \quad n_i \ll n,
 ```
-which means `ExpressionTreeForge.jl` detects that $f$ is a sum, and return:
+which means `ExpressionTreeForge.jl` detects that $f$ is a sum, and returns:
 - the element functions $\hat{f}_i$;
 - the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*) which are represented via $U_i$.
 
