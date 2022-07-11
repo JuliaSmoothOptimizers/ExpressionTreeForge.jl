@@ -75,7 +75,7 @@ You extract the elemental variables by applying `get_elemental_variables()` on e
 Us = get_elemental_variables.(element_functions)
 ```
 
-Then you can replace the index variables of an element-function expression tree such they stay in the range `1:length(elemental_Ui[i])`:
+Then you can replace the index variables of an element function expression tree so they stay in the range `1:length(Us[i])`:
 ```@example ExpressionTreeForge
 # change the indices of the second element function
 normalize_indices!(element_functions[2], Us[2])
