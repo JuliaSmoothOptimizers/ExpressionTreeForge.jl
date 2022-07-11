@@ -68,7 +68,7 @@ expr_tree = copy(expr_tree_Expr)
 element_functions = extract_element_functions(expr_tree)
 show(element_functions[2])
 ```
-**Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification on `element_functions` will be applied to `expr_tree`!
+**Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification to `element_functions` will be applied to `expr_tree`!
 
 You extract the elemental variables by applying `get_elemental_variables()` on every element function expression tree
 ```@example ExpressionTreeForge
