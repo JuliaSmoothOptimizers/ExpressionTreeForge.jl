@@ -23,6 +23,8 @@ using Test
         ExpressionTreeForge.evaluate_expr_tree(expr_tree, v)
   @test ExpressionTreeForge.evaluate_expr_tree(complete_tree, v) ==
         MathOptInterface.eval_objective(evaluator, v)
+  @test complete_tree(v) == MathOptInterface.eval_objective(evaluator, v)
+  @test expr_tree(v) == MathOptInterface.eval_objective(evaluator, v)
 
   deleted_comp_expr_tree = ExpressionTreeForge.extract_element_functions(complete_tree)
   deleted_expr_tree = ExpressionTreeForge.extract_element_functions(expr_tree)
