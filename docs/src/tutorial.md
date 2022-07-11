@@ -9,6 +9,7 @@ The main expression trees supported are:
 using ExpressionTreeForge
 expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
 expr_tree_Expr = transform_to_expr_tree(expr_julia)
+show(expr_tree_Expr)
 ```
 
 - `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
@@ -44,9 +45,6 @@ expr_tree_MTK == expr_tree_JuMP
 
 ```@example ExpressionTreeForge
 expr_tree_MTK == expr_tree_Expr
-```
-```@example ExpressionTreeForge
-show(expr_tree_MTK)
 ```
 
 With an expression tree `Type_expr_tree`, you can:
@@ -120,12 +118,12 @@ See [PartitionedStructures.jl](https://github.com/JuliaSmoothOptimizers/Partitio
 
 ### Bounds and convexity
 To compute bounds and convexity we use a `Complete_expr_tree`, a richer structure than `Type_expr_tree`.
-A `Complete_expr_tree` is similar to `Type_expr_tree`, but in addition it stores: the lower bound, the upper bound and the convexity status of each node.
+`Complete_expr_tree` is similar to `Type_expr_tree`, but in addition it stores: the lower bound, the upper bound and the convexity status of each node.
 You can define a `Complete_expr_tree` for any `Type_expr_tree`:
 ```@example ExpressionTreeForge
 completetree = complete_tree(expr_tree_Expr)
 ```
-and compute the bounds and the convexity status afterward
+You compute the bounds and the convexity status afterward
 ```@example ExpressionTreeForge
 # propagate the bounds from the variables
 set_bounds!(completetree)
@@ -139,4 +137,9 @@ bounds = get_bounds(completetree)
 # get the root convexity status
 convexity_status = get_convexity_status(completetree)
 is_convex(convexity_status)
+```
+
+You can observe the bounds and convexity status of each node with
+```@example ExpressionTreeForge
+show(completetree)
 ```
