@@ -14,12 +14,12 @@ Julia ≥ 1.6.
 
 ## How to install
 ```
-pkg> add https://github.com/paraynaud/ExpressionTreeForge.jl
+pkg> add https://github.com/JuliaSmoothOptimizers/ExpressionTreeForge.jl
 pkg> test ExpressionTreeForge
 ```
 
 ## How to use 
-See the [tutorial](https://paraynaud.github.io/ExpressionTreeForge.jl/dev/tutorial/).
+See the [tutorial](https://JuliaSmoothOptimizers.github.io/ExpressionTreeForge.jl/dev/tutorial/).
 
 ## Dependencies
-This module is used together with [PartitionedStructures.jl](https://github.com/paraynaud/PartitionedStructures.jl) by [PartiallySeparableNLPModels.jl](https://github.com/paraynaud/PartiallySeparableNLPModels.jl) and [PartiallySeparableSolvers.jl](https://github.com/paraynaud/PartiallySeparableSolvers.jl) to define a trust-region method exploiting partial separability through partitioned quasi-Newton approximations. 
+This module is used together with [PartitionedStructures.jl](https://github.com/JuliaSmoothOptimizers/PartitionedStructures.jl) by [PartiallySeparableNLPModels.jl](https://github.com/paraynaud/PartiallySeparableNLPModels.jl) and [PartiallySeparableSolvers.jl](https://github.com/paraynaud/PartiallySeparableSolvers.jl) to define a trust-region method exploiting partial separability through partitioned quasi-Newton approximations. 
