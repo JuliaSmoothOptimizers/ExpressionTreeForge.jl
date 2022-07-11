@@ -86,7 +86,7 @@ ExpressionTreeForge.jl offers methods to evaluate an expression tree and its der
 `evaluate_expr_tree()` evaluates a `Type_expr_tree` at a point `y` of suitable size:
 ```@example ExpressionTreeForge
 y = ones(n)
-fx = evaluate_expr_tree(expr_tree_Expr, y)
+fx = expr_tree_Expr(y)
 ```
 The gradient computation of an expression tree can either use `ForwardDiff` or `ReverseDiff`
 ```@example ExpressionTreeForge
@@ -139,5 +139,5 @@ is_convex(convexity_status)
 
 You can observe the bounds and convexity status of each node with
 ```@example ExpressionTreeForge
-show(completetree)
+completetree
 ```
