@@ -28,7 +28,8 @@ julia> extract_element_functions(:(x[1] + x[2] + x[3]*x[4] ) )
 @inline _extract_element_functions(a, ::M_trait_expr_tree.Is_not_expr_tree) =
   error(" This is not an expr tree")
 
-@inline _extract_element_functions(a, ::M_trait_expr_tree.Is_expr_tree) = _extract_element_functions(a)
+@inline _extract_element_functions(a, ::M_trait_expr_tree.Is_expr_tree) =
+  _extract_element_functions(a)
 
 function _extract_element_functions(expr_tree::T) where {T}
   nd = M_trait_expr_tree.get_expr_node(expr_tree)
@@ -172,11 +173,8 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 @inline normalize_indices!(expr_tree, a::Vector{Int}) =
   _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
 
-@inline _normalize_indices!(
-  expr_tree,
-  ::M_trait_expr_tree.Is_not_expr_tree,
-  a::Vector{Int},
-) = error(" This is not an Expr tree")
+@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_not_expr_tree, a::Vector{Int}) =
+  error(" This is not an Expr tree")
 
 @inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Vector{Int}) =
   _normalize_indices!(expr_tree, a)
@@ -184,11 +182,8 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 @inline normalize_indices!(expr_tree, a::Dict{Int, Int}) =
   _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
 
-@inline _normalize_indices!(
-  expr_tree,
-  ::M_trait_expr_tree.Is_not_expr_tree,
-  a::Dict{Int, Int},
-) = error(" This is not an Expr tree")
+@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_not_expr_tree, a::Dict{Int, Int}) =
+  error(" This is not an Expr tree")
 
 @inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Dict{Int, Int}) =
   _normalize_indices!(expr_tree, a)

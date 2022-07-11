@@ -4,7 +4,7 @@ using ..ExpressionTreeForge.M_trait_expr_tree
   m = Model()
   n = 4
   @variable(m, x[1:n])
-  @NLobjective(m, Min, (x[1]*x[3]+5)^2 + sin(x[2]+cos(x[3])) + (-1 + x[4])^2)
+  @NLobjective(m, Min, (x[1] * x[3] + 5)^2 + sin(x[2] + cos(x[3])) + (-1 + x[4])^2)
 
   evaluator = JuMP.NLPEvaluator(m)
   MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
@@ -23,4 +23,3 @@ using ..ExpressionTreeForge.M_trait_expr_tree
   map((fun, var) -> normalize_indices!(fun, var), element_functions, element_variables)
   @test ExpressionTreeForge.M_trait_expr_tree.expr_tree_equal(expr_tree, expr_tree_j) == false
 end
-

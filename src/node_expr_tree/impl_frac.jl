@@ -61,27 +61,27 @@ function _node_convexity(
   )
     return M_implementation_convexity_type.concave_type()
   elseif !(check_0_in(bi_denom, bs_denom)) &&
-    M_implementation_convexity_type.is_constant(st_num) &&
-    (
-      (
-        (bi_num >= 0) &&
-        (bi_denom > 0) &&
-        M_implementation_convexity_type.is_concave(st_denom)
-      ) ||
-      ((bs_num <= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom))
-    )
+         M_implementation_convexity_type.is_constant(st_num) &&
+         (
+           (
+             (bi_num >= 0) &&
+             (bi_denom > 0) &&
+             M_implementation_convexity_type.is_concave(st_denom)
+           ) ||
+           ((bs_num <= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom))
+         )
     return M_implementation_convexity_type.convex_type()
   elseif !(check_0_in(bi_denom, bs_denom)) &&
-    M_implementation_convexity_type.is_constant(st_num) &&
-    (
-      (
-        (bi_num >= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom)
-      ) || (
-        (bs_num <= 0) &&
-        (bi_denom > 0) &&
-        M_implementation_convexity_type.is_concave(st_denom)
-      )
-    )
+         M_implementation_convexity_type.is_constant(st_num) &&
+         (
+           (
+             (bi_num >= 0) && (bs_denom < 0) && M_implementation_convexity_type.is_convex(st_denom)
+           ) || (
+             (bs_num <= 0) &&
+             (bi_denom > 0) &&
+             M_implementation_convexity_type.is_concave(st_denom)
+           )
+         )
     return M_implementation_convexity_type.concave_type()
   else
     return M_implementation_convexity_type.unknown_type()
@@ -103,11 +103,11 @@ function _node_bound(
   (bi_denom, bs_denom) = son_bound[2]
   (length(son_bound) == 2) || error("Too many children")
   if (check_0_in(bi_denom, bs_denom) && check_positive_negative(bi_num, bs_num)) ||
-    (check_0_plus(bi_denom, bs_denom) && check_0_minus(bi_denom, bs_denom)) ||
-    (
-      check_positive_negative(bi_num, bs_num) &&
-      (check_0_plus(bi_denom, bs_denom) || check_0_minus(bi_denom, bs_denom))
-    )
+     (check_0_plus(bi_denom, bs_denom) && check_0_minus(bi_denom, bs_denom)) ||
+     (
+       check_positive_negative(bi_num, bs_num) &&
+       (check_0_plus(bi_denom, bs_denom) || check_0_minus(bi_denom, bs_denom))
+     )
     return (t(-Inf), t(Inf))
   elseif check_positive(bi_denom, bs_denom) || check_negative(bi_denom, bs_denom)
     brut_force_bound_frac(bi_num, bs_num, bi_denom, bs_denom)

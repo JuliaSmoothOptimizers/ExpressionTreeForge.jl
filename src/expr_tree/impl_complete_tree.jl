@@ -177,7 +177,8 @@ end
   (node1.convexity_status == node2.convexity_status)
 )
 
-string(node::Complete_node) = string(node.op) * " ~" * string(get_bounds(node)) * " ~" * string(get_convexity_status(node))
+string(node::Complete_node) =
+  string(node.op) * " ~" * string(get_bounds(node)) * " ~" * string(get_convexity_status(node))
 
 function (==)(ex1::Complete_expr_tree{T}, ex2::Complete_expr_tree{T}) where {T <: Number}
   ch1 = M_trait_tree.get_children(ex1)

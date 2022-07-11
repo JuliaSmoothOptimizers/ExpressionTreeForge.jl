@@ -91,9 +91,8 @@ function show(io::IO, tree; deepth = 0)
   string_node = string(node)
   println(io, ident, string_node)
   children = get_children(tree)
-  map(child -> show(io, child; deepth=deepth + 1), children)
+  map(child -> show(io, child; deepth = deepth + 1), children)
   return nothing
 end
-
 
 end
