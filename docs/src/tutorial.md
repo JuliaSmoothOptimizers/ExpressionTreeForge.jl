@@ -98,7 +98,7 @@ gradient_forward == gradient_reverse
 ```
 and the Hessian is computed with
 ```@example ExpressionTreeForge
-hessian = hessian_forward(expr_tree_Expr, y)
+hess = hessian(expr_tree_Expr, y)
 ```
 
 These methods can be applied to the element-function expression trees:
@@ -110,7 +110,7 @@ f1x = evaluate_expr_tree(f1, y1)
 ∇f1_forward = gradient_forward(f1, y1)
 ∇f1_reverse = gradient_reverse(f1, y1)
 
-hessian1 = hessian_forward(f1, y1)
+hess1 = hessian(f1, y1)
 ```
 See [PartitionedStructures.jl](https://github.com/JuliaSmoothOptimizers/PartitionedStructures.jl) for more details about partial separability and how the partitioned derivatives of the element functions are stored.
 

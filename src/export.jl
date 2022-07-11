@@ -421,18 +421,18 @@ julia> gradient_reverse(:(x[1] + x[2]), rand(2))
   M_evaluation_expr_tree.gradient_reverse(e, x)
 
 """
-    hessian = hessian_forward(expr_tree, x)
+    hess = hessian(expr_tree, x)
 
 Evaluate the Hessian of `expr_tree` at the point `x` with forward automatic differentiation.
 
 Example:
 ```julia
-julia> hessian_forward(:(x[1]^2 + x[2]), rand(2))
+julia> hessian(:(x[1]^2 + x[2]), rand(2))
 [2.0 0.0; 0.0 0.0]
 ```
 """
-@inline hessian_forward(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.hessian_forward(e, x)
+@inline hessian(e::Any, x::AbstractVector) =
+  M_evaluation_expr_tree.hessian(e, x)
 
 """
     eval_expression_tree = get_function_of_evaluation(expression_tree::Type_expr_tree)

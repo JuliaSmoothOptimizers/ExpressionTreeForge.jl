@@ -22,7 +22,7 @@ export transform_to_Expr, transform_to_Expr_julia, transform_to_expr_tree,
   complete_tree
 export extract_element_functions,
   get_type_tree, get_elemental_variables, normalize_indices!, cast_type_of_constant!
-export evaluate_expr_tree, gradient_forward, gradient_reverse, hessian_forward
+export evaluate_expr_tree, gradient_forward, gradient_reverse, hessian
 export print_tree
 
 end
