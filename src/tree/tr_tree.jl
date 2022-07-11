@@ -78,17 +78,20 @@ function printer_tree(tree, deepth = 0)
 end
 
 """
-    show(tree::AbstractTree)
+    show(tree::AbstractTree; deepth)
+    show(io::IO, tree::AbstractTree; deepth)
 
 Print `tree` in the julia console with a suitable form.
 """
-function show(tree; deepth = 0)
+show(tree; deepth = 0) = show(stdout, tree; deepth)
+
+function show(io::IO, tree; deepth = 0)
   ident = "  "^deepth
   node = get_node(tree)
   string_node = string(node)
-  println(ident, string_node)
+  println(io, ident, string_node)
   children = get_children(tree)
-  show.(children; deepth=deepth + 1)
+  map(child -> show(io, child; deepth=deepth + 1), children)
   return nothing
 end
 
