@@ -54,7 +54,7 @@ using Test
   MOI_half_hessian_en_x = sparse(row, column, values, n, n)
   MOI_hessian_en_x = Symmetric(MOI_half_hessian_en_x)
 
-  H = ExpressionTreeForge.hessian_forward(complete_tree, v)
+  H = ExpressionTreeForge.hessian(complete_tree, v)
   @test (norm(MOI_hessian_en_x) - norm(H)) < θ
 
   ExpressionTreeForge.set_bounds!(complete_tree)

@@ -299,19 +299,19 @@ Evaluate the gradient of the function represented by ``expr_tree` at the point `
   ReverseDiff.gradient(evaluate_element_expr_tree(expr_tree, elmt_var), x)
 
 """
-    hessian_forward(expr_tree, x)
+    hess = hessian(expr_tree, x)
     
 Compute the hessian matrix of the function represented by `expr_tree` at the point `x`.
 """
-@inline hessian_forward(a::Any, x::Vector{}) = _hessian_forward(a, is_expr_tree(a), x)
+@inline hessian(a::Any, x::Vector{}) = _hessian(a, is_expr_tree(a), x)
 
-@inline _hessian_forward(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
+@inline _hessian(a::Any, ::M_trait_expr_tree.Is_not_expr_tree, x::Vector{}) =
   error("The first argument is not an expression tree")
 
-@inline _hessian_forward(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
-  _hessian_forward(a, x)
+@inline _hessian(a::Any, ::M_trait_expr_tree.Is_expr_tree, x::Vector{}) =
+  _hessian(a, x)
 
-@inline _hessian_forward(expr_tree, x::Vector{}) =
+@inline _hessian(expr_tree, x::Vector{}) =
   ForwardDiff.hessian(evaluate_expr_tree(expr_tree), x)
 
 end
