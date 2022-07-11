@@ -223,6 +223,7 @@ function _normalize_indices!(expr_tree, dic_new_var::Dict{Int, Int})
       _normalize_indices!(ch[i], dic_new_var)
     end
   end
+  return expr_tree
 end
 
 """
