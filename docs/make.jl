@@ -91,7 +91,7 @@ makedocs(
 )
 
 deploydocs(
-  repo = "github.com/paraynaud/ExpressionTreeForge.jl.git",
+  repo = "github.com/JuliaSmoothOptimizers/ExpressionTreeForge.jl.git",
   push_preview = true,
   devbranch = "master",
 )
