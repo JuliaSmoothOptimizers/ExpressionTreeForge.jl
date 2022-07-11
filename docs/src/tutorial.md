@@ -1,7 +1,7 @@
 # ExpressionTreeForge.jl Tutorial
 
 ExpressionTreeForge.jl analyzes and manipulates expression trees.
-It interfaces several implementations of expression trees to the internal expression tree `Type_expr_tree` (with `transform_to_expr_tree()`).
+It interfaces several implementations of expression trees to the internal type `Type_expr_tree` (with `transform_to_expr_tree()`).
 
 The main expression trees supported are:
 - julia `Expr`
