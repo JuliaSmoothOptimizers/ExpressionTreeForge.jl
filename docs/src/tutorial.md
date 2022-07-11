@@ -83,7 +83,7 @@ normalize_indices!(element_functions[2], Us[2])
 
 ### Evaluate a `Type_expr_tree` and its derivatives
 ExpressionTreeForge.jl offers methods to evaluate an expression tree and its derivatives.
-`evaluate_expr_tree()` evaluates any `Type_expr_tree` at a point `y` of suitable size:
+`evaluate_expr_tree()` evaluates a `Type_expr_tree` at a point `y` of suitable size:
 ```@example ExpressionTreeForge
 y = ones(n)
 fx = evaluate_expr_tree(expr_tree_Expr, y)
