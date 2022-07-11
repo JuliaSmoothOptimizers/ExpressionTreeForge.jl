@@ -49,7 +49,7 @@ element_functions = extract_element_functions(expr_tree)
 show(element_functions[2])</code></pre><pre class="documenter-example-output">^2
   +
     x[2]
-    x[3]</pre><p><strong>Warning</strong>: the <code>element_functions</code> are pointers to nodes of <code>expr_tree</code>. Any modification on <code>element_functions</code> will be applied to <code>expr_tree</code>!</p><p>You extract the elemental variables by applying <code>get_elemental_variables()</code> on every element function expression tree</p><pre><code class="language-julia">Us = get_elemental_variables.(element_functions)</code></pre><pre class="documenter-example-output">2-element Vector{Vector{Int64}}:
+    x[3]</pre><p><strong>Warning</strong>: the <code>element_functions</code> are pointers to nodes of <code>expr_tree</code>. Any modification to <code>element_functions</code> will be applied to <code>expr_tree</code>!</p><p>You extract the elemental variables by applying <code>get_elemental_variables()</code> on every element function expression tree</p><pre><code class="language-julia">Us = get_elemental_variables.(element_functions)</code></pre><pre class="documenter-example-output">2-element Vector{Vector{Int64}}:
  [1, 2]
  [2, 3]</pre><p>Then you can replace the index variables of an element-function expression tree such they stay in the range <code>1:length(elemental_Ui[i])</code>:</p><pre><code class="language-julia"># change the indices of the second element function
 normalize_indices!(element_functions[2], Us[2])</code></pre><pre class="documenter-example-output">^2
