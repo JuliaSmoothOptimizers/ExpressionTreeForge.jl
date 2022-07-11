@@ -46,7 +46,7 @@ expr_tree_MTK == expr_tree_JuMP
 expr_tree_MTK == expr_tree_Expr
 ```
 
-With an expression tree `Type_expr_tree`, you can:
+With a `Type_expr_tree`, you can:
 - detect partial separability;
 - evaluate the expression, and its first and second derivatives;
 - propagate bounds;
