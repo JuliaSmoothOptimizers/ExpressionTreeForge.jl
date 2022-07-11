@@ -60,7 +60,7 @@ f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i 
 ```
 which means `ExpressionTreeForge.jl` detects that $f$ is a sum, and returns:
 - the element functions $\hat{f}_i$;
-- the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*) which are represented via $U_i$.
+- the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*), which are represented via $U_i$.
 
 You detect the element functions with `extract_element_functions()`, which returns a vector of `Type_expr_tree`s:
 ```@example ExpressionTreeForge
