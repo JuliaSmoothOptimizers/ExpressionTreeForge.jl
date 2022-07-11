@@ -7,6 +7,9 @@ using ..M_trait_expr_tree, ..M_trait_expr_node
 using ..M_implementation_expr_tree, ..M_implementation_complete_expr_tree
 using ..M_abstract_expr_node
 
+@inline (tree::M_implementation_expr_tree.Type_expr_tree)(x::AbstractVector{T}) where T <: Number =  evaluate_expr_tree(tree, x)
+@inline (tree::M_implementation_complete_expr_tree.Complete_expr_tree)(x::AbstractVector{T}) where T <: Number =  evaluate_expr_tree(tree, x)
+
 # IMPORTANT The fonction evaluate_expr_tree keep the type of x
 # IT requires that the M_constant have the same type of x
 @inline evaluate_expr_tree(a::Any) = (x::AbstractVector{} -> evaluate_expr_tree(a, x))
