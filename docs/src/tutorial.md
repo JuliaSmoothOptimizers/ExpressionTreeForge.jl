@@ -101,7 +101,7 @@ and the Hessian is computed with
 hess = hessian(expr_tree_Expr, y)
 ```
 
-These methods can be applied to the element-function expression trees:
+AD methods can be applied to the element-function expression trees:
 ```
 y1 = ones(length(Us[1]))
 f1 = element_functions[1]
