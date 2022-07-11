@@ -242,7 +242,8 @@ end
   n = 5
   @time test_fac_expr_tree_plus =
     expr_tree_factorielle_plus(n, :+)::M_implementation_expr_tree.Type_expr_tree
-  test_fac_expr_tree_plus_no_plus = algo_expr_tree.extract_element_functions(test_fac_expr_tree_plus)
+  test_fac_expr_tree_plus_no_plus =
+    algo_expr_tree.extract_element_functions(test_fac_expr_tree_plus)
   algo_expr_tree.get_type_tree(test_fac_expr_tree_plus)
   res3 = algo_expr_tree.get_elemental_variables(test_fac_expr_tree_plus)
   res = M_evaluation_expr_tree.evaluate_expr_tree(test_fac_expr_tree_plus, ones(5))

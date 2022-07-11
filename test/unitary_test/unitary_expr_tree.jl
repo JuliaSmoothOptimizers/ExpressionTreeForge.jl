@@ -1,4 +1,5 @@
-using ExpressionTreeForge.M_trait_expr_tree, ExpressionTreeForge.M_abstract_expr_tree, ExpressionTreeForge.M_abstract_expr_node
+using ExpressionTreeForge.M_trait_expr_tree,
+  ExpressionTreeForge.M_abstract_expr_tree, ExpressionTreeForge.M_abstract_expr_node
 using ExpressionTreeForge.M_implementation_expr_tree
 
 @testset " Unitary tests about expr_tree" begin

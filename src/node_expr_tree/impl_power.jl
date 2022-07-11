@@ -150,7 +150,7 @@ function _get_type_node(op::Power_operator{T}, type_ch::Vector{Type_expr_basic})
 end
 
 @inline (==)(a::Power_operator{T}, b::Power_operator{T}) where {T <: Number} = (a.index == b.index)
-@inline string(a::Power_operator) = "^"*string(a.index)
+@inline string(a::Power_operator) = "^" * string(a.index)
 
 @inline function _evaluate_node(
   op::Power_operator{Z},

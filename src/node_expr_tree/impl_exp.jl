@@ -93,7 +93,6 @@ end
 @inline (==)(a::Exp_operator, b::Exp_operator) = true
 @inline string(a::Exp_operator) = "exp"
 
-
 @inline function _evaluate_node(op::Exp_operator, value_ch::AbstractVector{T}) where {T <: Number}
   length(value_ch) == 1 || error("more than one argument for exp")
   return exp(value_ch[1])

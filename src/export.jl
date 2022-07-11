@@ -208,8 +208,7 @@ Check if `convexity_status` is `unknown`.
 
 Create a `complete_tree::Complete_expr_tree` from `expression_tree`.
 """
-@inline complete_tree(tree) =
-  M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
+@inline complete_tree(tree) = M_implementation_complete_expr_tree.create_complete_expr_tree(tree)
 
 """
     bool = is_constant(type::Type_calculus_tree)
@@ -352,8 +351,7 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 :(x[1] + x[2])
 ```
 """
-@inline normalize_indices!(a::Any, v::AbstractVector{Int}) =
-  algo_expr_tree.normalize_indices!(a, v)
+@inline normalize_indices!(a::Any, v::AbstractVector{Int}) = algo_expr_tree.normalize_indices!(a, v)
 
 """
     cast_type_of_constant(expr_tree, type::DataType)
@@ -403,8 +401,7 @@ julia> gradient_forward(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
 ```
 """
-@inline gradient_forward(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.gradient_forward(e, x)
+@inline gradient_forward(e::Any, x::AbstractVector) = M_evaluation_expr_tree.gradient_forward(e, x)
 
 """
     gradient = gradient_reverse(expr_tree, x)
@@ -417,8 +414,7 @@ julia> gradient_reverse(:(x[1] + x[2]), rand(2))
 [1.0 1.0]
 ```
 """
-@inline gradient_reverse(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.gradient_reverse(e, x)
+@inline gradient_reverse(e::Any, x::AbstractVector) = M_evaluation_expr_tree.gradient_reverse(e, x)
 
 """
     hess = hessian(expr_tree, x)
@@ -431,8 +427,7 @@ julia> hessian(:(x[1]^2 + x[2]), rand(2))
 [2.0 0.0; 0.0 0.0]
 ```
 """
-@inline hessian(e::Any, x::AbstractVector) =
-  M_evaluation_expr_tree.hessian(e, x)
+@inline hessian(e::Any, x::AbstractVector) = M_evaluation_expr_tree.hessian(e, x)
 
 """
     eval_expression_tree = get_function_of_evaluation(expression_tree::Type_expr_tree)
