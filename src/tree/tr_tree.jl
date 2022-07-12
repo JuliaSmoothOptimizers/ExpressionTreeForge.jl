@@ -59,7 +59,7 @@ end
 
 module algo_tree
 
-using ..M_trait_tree
+using ..M_trait_tree, ..M_abstract_tree
 import Base.show
 export printer_tree
 
@@ -83,9 +83,9 @@ end
 
 Print `tree` in the julia console with a suitable form.
 """
-show(tree; deepth = 0) = show(stdout, tree; deepth)
+show(tree::AbstractTree; deepth = 0) = show(stdout, tree; deepth)
 
-function show(io::IO, tree; deepth = 0)
+function show(io::IO, tree::AbstractTree; deepth = 0)
   ident = "  "^deepth
   node = get_node(tree)
   string_node = string(node)
