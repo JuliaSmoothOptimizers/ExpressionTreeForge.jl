@@ -14,8 +14,12 @@
 [build-cirrus-url]: https://cirrus-ci.com/github/JuliaSmoothOptimizers/ExpressionTreeForge.jl
 [codecov-img]: https://codecov.io/gh/JuliaSmoothOptimizers/ExpressionTreeForge.jl/branch/master/graph/badge.svg
 [codecov-url]: https://app.codecov.io/gh/JuliaSmoothOptimizers/ExpressionTreeForge.jl
-[doi-img]: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.822073-blue.svg
-[doi-url]: https://doi.org/10.5281/zenodo.822073
+[doi-img]: https://zenodo.org/badge/266801355.svg
+[doi-url]: https://zenodo.org/badge/latestdoi/266801355
+
+## How to cite
+
+If you use ExpressionTreeForge.jl in your work, please cite using the format given in [CITATION.bib](CITATION.bib).
 
 ## Philosophy
 ExpressionTreeForge.jl is a manipulator of expression trees.
