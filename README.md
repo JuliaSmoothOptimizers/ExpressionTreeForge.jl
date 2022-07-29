@@ -1,4 +1,4 @@
-# ExpressionTreeForge: A manipulator of expression tree
+# ExpressionTreeForge: A manipulator of expression trees
 
 | **Documentation** | **Linux/macOS/Windows/FreeBSD** | **Coverage** | **DOI** |
 |:-----------------:|:-------------------------------:|:------------:|:-------:|
