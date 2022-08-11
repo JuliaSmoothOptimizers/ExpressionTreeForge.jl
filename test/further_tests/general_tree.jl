@@ -12,8 +12,8 @@
     cos(-cos(cos(x[7])^2)) + 
     sin(cos(cos(x[7])^2)) + 
     tan(cos(cos(x[7])^2)) + 
-    sin(+ cos(cos(x[7])^2)) + 
-    tan(+ cos(cos(x[7])^2)) +     
+    sin(- cos(cos(x[7])^2)) + 
+    tan(- cos(cos(x[7])^2)) +     
     4 + 
     cos(x[3]^2) +
     1/4 * sin(x[4]) -
@@ -36,7 +36,7 @@
   @test ExpressionTreeForge.is_more(get_type_tree(cex))
   
   x = ones(7)
-  @test evaluate_expr_tree(cex, x) == 13.071183616090432
+  @test evaluate_expr_tree(cex, x) == 8.59273057251237
   res = show(cex)
   @test res == nothing
 end

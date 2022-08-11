@@ -192,12 +192,6 @@ end
 @inline _evaluate_node(op::Power_operator{T}, value_ch::T) where {T <: Number} where {Z <: Number} =
   value_ch^(op.index)::T
 
-@inline _evaluate_node!(
-  op::Power_operator{Y},
-  value_ch::Y,
-  ref::M_abstract_expr_node.MyRef{Y},
-) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, value_ch^(op.index)::Y)
-
 @inline _node_to_Expr(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
 
 function _cast_constant!(op::Power_operator{T}, t::DataType) where {T <: Number}

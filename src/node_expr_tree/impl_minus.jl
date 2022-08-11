@@ -141,28 +141,6 @@ function _evaluate_node(op::Minus_operator, value_ch::AbstractVector{T}) where {
   end
 end
 
-@inline function _evaluate_node!(
-  op::Minus_operator,
-  value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
-  ref::M_abstract_expr_node.MyRef{T},
-) where {T <: Number}
-  if length(value_ch) == 1
-    M_abstract_expr_node.set_myRef!(ref, -value_ch[1])
-  else
-    M_abstract_expr_node.set_myRef!(ref, value_ch[1] - value_ch[2])
-  end
-end
-
-@inline function _evaluate_node!(
-  op::Minus_operator,
-  vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
-  vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
-) where {T <: Number}
-  for i = 1:length(vec_value_ch)
-    _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
-  end
-end
-
 @inline _node_to_Expr(op::Minus_operator) = [:-]
 
 end

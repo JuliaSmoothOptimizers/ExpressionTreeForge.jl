@@ -155,20 +155,6 @@ end
 
 @inline _evaluate_node(op::Frac_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   value_ch[1] / value_ch[2]
-@inline _evaluate_node!(
-  op::Frac_operator,
-  value_ch::AbstractVector{M_abstract_expr_node.MyRef{T}},
-  ref::M_abstract_expr_node.MyRef{T},
-) where {T <: Number} = M_abstract_expr_node.set_myRef!(ref, value_ch[1] / value_ch[2])
-@inline function _evaluate_node!(
-  op::Frac_operator,
-  vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{T}}},
-  vec_ref::Vector{M_abstract_expr_node.MyRef{T}},
-) where {T <: Number}
-  for i = 1:length(vec_value_ch)
-    _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
-  end
-end
 
 @inline _node_to_Expr(op::Frac_operator) = [:/]
 
