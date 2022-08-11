@@ -147,22 +147,6 @@ end
 @inline _evaluate_node(op::Time_operator, value_ch::AbstractVector{T}) where {T <: Number} =
   foldl(*, value_ch)
 
-@inline _evaluate_node!(
-  op::Time_operator,
-  value_ch::AbstractVector{M_abstract_expr_node.MyRef{Y}},
-  ref::M_abstract_expr_node.MyRef{Y},
-) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, foldl(*, value_ch))
-
-@inline function _evaluate_node!(
-  op::Time_operator,
-  vec_value_ch::Vector{Vector{M_abstract_expr_node.MyRef{Y}}},
-  vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
-) where {Y <: Number}
-  for i = 1:length(vec_value_ch)
-    _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
-  end
-end
-
 @inline _node_to_Expr(op::Time_operator) = [:*]
 
 end
