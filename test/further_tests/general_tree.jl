@@ -40,3 +40,35 @@
   res = show(cex)
   @test res == nothing
 end
+
+
+@testset "create_node_expr" begin
+  using ExpressionTreeForge.M_abstract_expr_node
+  using ExpressionTreeForge.M_simple_operator
+  using ExpressionTreeForge.M_constant
+  using ExpressionTreeForge.M_variable
+  
+  x = rand(5)
+  #Operators
+  symbol_table = [:+, :-, :*, :/, :cos, :sin, :tan, :exp]
+
+  nodes = create_node_expr.(symbol_table)
+  nodes_x = map(symbol -> create_node_expr(symbol, x), symbol_table)
+  @test nodes == nodes_x 
+
+  pow2 = create_node_expr(:^, 2)
+  pow3 = create_node_expr(:^, 3)
+  @test pow2 != pow3
+
+  # Constants
+  constantF64 = [3, 5.]
+  constantF32 = Vector{Float32}([3, 5.])
+
+  @test create_node_expr.(constantF64) != create_node_expr.(constantF32)
+  @test create_node_expr.(constantF64) == map(constant -> create_node_expr(constant, x), constantF64)
+  
+  # Variables
+  variables = [(:x,1), (:x,2)]
+  @test map(variable -> create_node_expr(variable...), variables) == map(variable -> create_node_expr(variable..., x), variables)
+
+end

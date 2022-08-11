@@ -77,7 +77,7 @@ function create_node_expr(op::Symbol, x::AbstractVector{Y}) where {Y <: Number}
   elseif op == :exp
     M_exp_operator.Exp_operator()
   else
-    return simple_operator(op)
+    return Simple_operator(op)
   end
 end
 
