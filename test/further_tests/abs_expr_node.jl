@@ -1,4 +1,5 @@
 using ExpressionTreeForge.M_abstract_expr_node
+using ExpressionTreeForge.M_interface_expr_node
 
 @testset "MyRef" begin
   ref1 = new_ref(5.)
@@ -45,14 +46,47 @@ using ExpressionTreeForge.M_abstract_expr_node
 
 end
 
+
+# using ExpressionTreeForge.M_interface_expr_node:
+#   _node_is_plus,
+#   _node_is_minus,
+#   _node_is_power,
+#   _node_is_times,
+#   _node_is_constant,
+#   _node_is_variable,
+#   _node_is_operator,
+#   _node_is_sin,
+#   _node_is_cos,
+#   _node_is_tan
+
+
 @testset "numerical errors" begin
   mutable struct Ab <: Abstract_expr_node
     field::Int
   end
 
   ab_node = Ab(5)
-  @test_throws UndefVarError create_expr_tree(ab_node)
-  @test_throws UndefVarError create_Expr(ab_node)
-  @test_throws UndefVarError create_Expr2(ab_node)
+  
+  @test M_interface_expr_node._node_is_operator(ab_node) == false
+  @test M_interface_expr_node._node_is_plus(ab_node) == false
+  @test M_interface_expr_node._node_is_minus(ab_node) == false
+  @test M_interface_expr_node._node_is_times(ab_node) == false
+  @test M_interface_expr_node._node_is_sin(ab_node) == false
+  @test M_interface_expr_node._node_is_cos(ab_node) == false
+  @test M_interface_expr_node._node_is_tan(ab_node) == false
+  @test M_interface_expr_node._node_is_power(ab_node) == false
+  @test M_interface_expr_node._node_is_constant(ab_node) == false
+  @test M_interface_expr_node._node_is_variable(ab_node) == false
 
+  @test M_interface_expr_node._get_var_index(ab_node) == ()
+
+  @test_throws ErrorException M_interface_expr_node._get_type_node(ab_node)
+  @test_throws ErrorException M_interface_expr_node._evaluate_node(ab_node)
+  @test_throws ErrorException M_interface_expr_node._evaluate_node(ab_node)
+  @test_throws UndefVarError M_interface_expr_node._change_from_N_to_Ni(ab_node)
+  @test_throws UndefVarError M_interface_expr_node._cast_constant(ab_node)
+  @test_throws ErrorException M_interface_expr_node._node_to_Expr(ab_node)
+  @test_throws ErrorException M_interface_expr_node._node_to_Expr2(ab_node)
+  @test_throws ErrorException M_interface_expr_node._node_bound(ab_node)
+  @test_throws ErrorException M_interface_expr_node._node_convexity(ab_node)
 end

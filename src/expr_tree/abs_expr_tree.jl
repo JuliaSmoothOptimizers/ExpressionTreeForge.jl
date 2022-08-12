@@ -48,7 +48,7 @@ Create an `Type_expr_tree` from `tree`.
 `tree` can be several types.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 """
-create_expr_tree(tree::AbstractExprTree) = @error("Should not be called, create_expr_tree")
+create_expr_tree(tree::AbstractExprTree) = error("Should not be called, create_expr_tree")
 
 """
     expr = create_expr_tree(tree)
@@ -58,7 +58,7 @@ Create an `Expr` from `tree`.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 The variables of the `Expr` use `MathOptInterface` variables.
 """
-create_Expr(tree::AbstractExprTree) = @error("Should not be called, create_Expr")
+create_Expr(tree::AbstractExprTree) = error("Should not be called, create_Expr")
 
 """
     expr = create_expr_tree(tree)
@@ -67,6 +67,6 @@ Create a julia `Expr` from `tree`.
 `tree` can be several types.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 """
-create_Expr2(tree::AbstractExprTree) = @error("Should not be called, create_Expr2")
+create_Expr2(tree::AbstractExprTree) = error("Should not be called, create_Expr2")
 
 end
