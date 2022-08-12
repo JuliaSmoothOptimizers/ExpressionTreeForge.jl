@@ -38,9 +38,9 @@ mutable struct Variable <: Abstract_expr_node
   index::Int
 end
 
-@inline get_name(v::Variable) = v.name
-@inline get_index(v::Variable) = v.index
-@inline get_value(v::Variable, x::AbstractVector{T}) where {T <: Number} = x[get_index(v)]
+# @inline get_name(v::Variable) = v.name
+# @inline get_index(v::Variable) = v.index
+# @inline get_value(v::Variable, x::AbstractVector{T}) where {T <: Number} = x[get_index(v)]
 
 _node_bound(v::Variable, t::DataType) = ((t)(-Inf), (t)(Inf))
 
