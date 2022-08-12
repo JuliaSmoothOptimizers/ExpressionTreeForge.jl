@@ -92,24 +92,6 @@ end
 @inline _evaluate_node(c::Constant{Y}, x::AbstractVector{Y}) where {Y <: Number} = c.value::Y
 @inline _evaluate_node(c::Constant{Y}) where {Y <: Number} = c.value::Y
 
-@inline _evaluate_node!(
-  c::Constant{Y},
-  x::AbstractVector{Y},
-  ref::M_abstract_expr_node.MyRef{Y},
-) where {Y <: Number} = M_abstract_expr_node.set_myRef!(ref, c.value::Y)
-
-@inline _evaluate_node!(c::Constant{Y}, ref::M_abstract_expr_node.MyRef{Y}) where {Y <: Number} =
-  M_abstract_expr_node.set_myRef!(ref, c.value::Y)
-
-@inline _evaluate_node!(
-  c::Constant{Y},
-  multiple_ref::AbstractVector{M_abstract_expr_node.MyRef{Y}},
-) where {Y <: Number} = begin
-  for ref in multiple_ref
-    M_abstract_expr_node.set_myRef!(ref, c.value::Y)
-  end
-end
-
 @inline _change_from_N_to_Ni!(c::Constant, dic_new_indices::Dict{Int, Int}) = c
 
 @inline _cast_constant!(c::Constant{Y}, t::DataType) where {Y <: Number} = Constant{t}((t)(c.value))

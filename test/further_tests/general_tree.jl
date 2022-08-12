@@ -17,7 +17,16 @@
     4 + 
     cos(x[3]^2) +
     1/4 * sin(x[4]) -
-    x[5]^2 * sin(exp(x[6]))/(7 + x[7]^2.5)
+    x[5]^2 * sin(exp(x[6]))/(7 + x[7]^2.5) +
+    (-x[6]^2)^2 +
+    5^3 +
+    x[6]^0 +
+    x[3]^1 +
+    (x[4]^2)^(-1) + 
+    cos(x[1])^-2 +
+    x[2]^(-3) + 
+    (x[1]^2 + 1)^2 +
+    (-x[1]^2 - 1)^2
   )
   
   ex = get_expression_tree(m)
@@ -36,7 +45,7 @@
   @test ExpressionTreeForge.is_more(get_type_tree(cex))
   
   x = ones(7)
-  @test evaluate_expr_tree(cex, x) == 8.59273057251237
+  @test evaluate_expr_tree(cex, x) == 150.01824939332715
   res = show(cex)
   @test res == nothing
 end

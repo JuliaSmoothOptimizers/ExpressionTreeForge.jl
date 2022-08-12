@@ -83,7 +83,9 @@ function _node_bound(
 ) where {T <: Number}
   vector_inf_bound = [p[1] for p in son_bound]
   vector_sup_bound = [p[2] for p in son_bound]
-  return (sum(vector_inf_bound), sum(vector_sup_bound))
+  inf_bound = sum(vector_inf_bound)
+  sup_bound = sum(vector_sup_bound)
+  return (isnan(inf_bound) ? -Inf : inf_bound, isnan(sup_bound) ? Inf : sup_bound)
 end
 
 @inline create_node_expr(op::Plus_operator) = Plus_operator()

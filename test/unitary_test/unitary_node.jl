@@ -92,6 +92,43 @@ end
   @test M_trait_expr_node.node_is_variable.(coll_simple_op) ==
         [false, false, false, false, false, false]
   @test M_trait_expr_node.get_var_index(variable) == 5
+
+  @test M_trait_expr_node.node_is_operator(power_operator) == true
+  @test M_trait_expr_node.node_is_plus(power_operator) == false
+  @test M_trait_expr_node.node_is_minus(power_operator) == false
+  @test M_trait_expr_node.node_is_times(power_operator) == false
+  @test M_trait_expr_node.node_is_sin(power_operator) == false
+  @test M_trait_expr_node.node_is_cos(power_operator) == false
+  @test M_trait_expr_node.node_is_tan(power_operator) == false
+  @test M_trait_expr_node.node_is_power(power_operator) == true
+  @test M_trait_expr_node.node_is_constant(power_operator) == false
+  @test M_trait_expr_node.node_is_variable(power_operator) == false
+
+  @test M_trait_expr_node.node_is_operator(constant) == false
+  @test M_trait_expr_node.node_is_plus(constant) == false
+  @test M_trait_expr_node.node_is_minus(constant) == false
+  @test M_trait_expr_node.node_is_times(constant) == false
+  @test M_trait_expr_node.node_is_sin(constant) == false
+  @test M_trait_expr_node.node_is_cos(constant) == false
+  @test M_trait_expr_node.node_is_tan(constant) == false
+  @test M_trait_expr_node.node_is_power(constant) == false
+  @test M_trait_expr_node.node_is_constant(constant) == true
+  @test M_trait_expr_node.node_is_variable(constant) == false
+
+  @test M_trait_expr_node.node_is_operator(variable) == false
+  @test M_trait_expr_node.node_is_plus(variable) == false
+  @test M_trait_expr_node.node_is_minus(variable) == false
+  @test M_trait_expr_node.node_is_times(variable) == false
+  @test M_trait_expr_node.node_is_sin(variable) == false
+  @test M_trait_expr_node.node_is_cos(variable) == false
+  @test M_trait_expr_node.node_is_tan(variable) == false
+  @test M_trait_expr_node.node_is_power(variable) == false
+  @test M_trait_expr_node.node_is_constant(variable) == false
+  @test M_trait_expr_node.node_is_variable(variable) == true
+
+  # @test get_name(variable) == :x
+  # @test get_index(variable) == 5
+  # @test get_value(variable, ones(5)) == 1.
 end
 
 @testset "Node evaluation" begin

@@ -168,25 +168,6 @@ end
   return value_ch[1]^(op.index)::T
 end
 
-@inline function _evaluate_node!(
-  op::Power_operator{Y},
-  value_ch::AbstractVector{MyRef{Y}},
-  ref::M_abstract_expr_node.MyRef{Y},
-) where {Y <: Number}
-  length(value_ch) == 1 || error("power has more than one argument")
-  M_abstract_expr_node.set_myRef!(ref, value_ch[1]^(op.index)::Y)
-end
-
-@inline function _evaluate_node!(
-  op::Power_operator{Y},
-  vec_value_ch::Vector{Vector{MyRef{Y}}},
-  vec_ref::Vector{M_abstract_expr_node.MyRef{Y}},
-) where {Y <: Number}
-  for i = 1:length(vec_value_ch)
-    _evaluate_node!(op, vec_value_ch[i], vec_ref[i])
-  end
-end
-
 @inline _evaluate_node(op::Power_operator{Z}, value_ch::T) where {T <: Number} where {Z <: Number} =
   (T)(value_ch^(op.index))::T
 @inline _evaluate_node(op::Power_operator{T}, value_ch::T) where {T <: Number} where {Z <: Number} =
