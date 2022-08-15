@@ -7,7 +7,7 @@ using Test
   m = Model()
   n = 5
   @variable(m, x[1:n])
-  @NLobjective(m, Min, x[1] + x[2] + x[3] + x[4])
+  @NLobjective(m, Min, x[1] + x[2] + x[3]^2 + x[4]*x[2])
 
   evaluator = JuMP.NLPEvaluator(m)
   MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
@@ -100,6 +100,8 @@ using Test
     for t in type_test
       x = ones(t, n)
       cast_new_tree = ExpressionTreeForge.cast_type_of_constant(expr_tree, t)
+      @show Expr_j
+      cast_new_Expr_tree = ExpressionTreeForge.cast_type_of_constant(Expr_j, t)
       cast_complete_tree = ExpressionTreeForge.cast_type_of_constant(complete_tree, t)
       obj_casted_ex_t = ExpressionTreeForge.evaluate_expr_tree(cast_new_tree, x)
       obj_casted_cp_t = ExpressionTreeForge.evaluate_expr_tree(cast_complete_tree, x)

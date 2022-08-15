@@ -1,4 +1,5 @@
 using ExpressionTreeForge.M_abstract_tree, ExpressionTreeForge.M_trait_tree
+using ExpressionTreeForge.algo_tree
 
 @testset "test on Expr" begin
   @test M_abstract_tree.create_tree(:(x[2] + 5 * x[3])) == :(x[2] + 5 * x[3])
@@ -19,4 +20,7 @@ using ExpressionTreeForge.M_abstract_tree, ExpressionTreeForge.M_trait_tree
   @test M_trait_tree.get_node(bree) == 7.0
 
   @test bree != tree
+
+  res = algo_tree.printer_tree(tree)
+  @test res == nothing
 end
