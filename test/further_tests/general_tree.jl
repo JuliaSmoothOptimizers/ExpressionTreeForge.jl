@@ -56,7 +56,8 @@ end
   using ExpressionTreeForge.M_simple_operator
   using ExpressionTreeForge.M_constant
   using ExpressionTreeForge.M_variable
-  
+  using ExpressionTreeForge.M_interface_expr_node
+
   x = rand(5)
   #Operators
   symbol_table = [:+, :-, :*, :/, :cos, :sin, :tan, :exp]
@@ -67,6 +68,7 @@ end
 
   pow2 = create_node_expr(:^, 2)
   pow3 = create_node_expr(:^, 3)
+
   @test pow2 != pow3
 
   # Constants
@@ -78,6 +80,15 @@ end
   
   # Variables
   variables = [(:x,1), (:x,2)]
+  x = ones(2)
+  xdic = Dict{Int,Float64}(1=>1., 2=>1.)
   @test map(variable -> create_node_expr(variable...), variables) == map(variable -> create_node_expr(variable..., x), variables)
+  var = create_node_expr(variables[1]...)
+  @test M_interface_expr_node._evaluate_node(var, x) == M_interface_expr_node._evaluate_node(var, xdic)
 
+  variable_expr = :(x[1])
+  n_to_ni = Dict{Int,Int}(1=>2)
+  M_interface_expr_node._change_from_N_to_Ni!(variable_expr, n_to_ni)
+  @test variable_expr == :(x[2])
+  M_interface_expr_node._node_to_Expr(var)
 end
