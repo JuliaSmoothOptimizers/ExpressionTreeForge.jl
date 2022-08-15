@@ -38,13 +38,6 @@ Return `Is_expr_tree ` if `arg` is considered as an implementation of an express
 @inline is_expr_tree(a::ModelingToolkit.Constant) = Is_expr_tree()
 @inline is_expr_tree(a::ModelingToolkit.Variable) = Is_expr_tree()
 @inline is_expr_tree(a::Any) = Is_not_expr_tree()
-function is_expr_tree(t::DataType)
-  if t == M_abstract_expr_tree.AbstractExprTree || t == Type_expr_tree || t == Expr || t == Number
-    Type_expr_tree()
-  else
-    Is_not_expr_tree()
-  end
-end
 
 """
     node = get_expr_node(tree::AbstractExprTree)
