@@ -109,6 +109,7 @@ _evaluate_node!(node::Abstract_expr_node) = error("Should not be called")
     _change_from_N_to_Ni!(node::Abstract_expr_node, dic_new_indices::Dict{Int, Int})
 
 Change the index of the variables following the index given by `dic_new_indices`.
+Must be implemented for leaf nodes.
 """
 _change_from_N_to_Ni!(node::Abstract_expr_node) = error("Should not be called")
 

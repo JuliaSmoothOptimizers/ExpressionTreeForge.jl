@@ -1,5 +1,6 @@
 using ExpressionTreeForge.M_abstract_expr_node
 using ExpressionTreeForge.M_interface_expr_node
+using ExpressionTreeForge.M_trait_expr_node
 
 @testset "MyRef" begin
   ref1 = new_ref(5.)
@@ -45,20 +46,6 @@ using ExpressionTreeForge.M_interface_expr_node
   end 
 
 end
-
-
-# using ExpressionTreeForge.M_interface_expr_node:
-#   _node_is_plus,
-#   _node_is_minus,
-#   _node_is_power,
-#   _node_is_times,
-#   _node_is_constant,
-#   _node_is_variable,
-#   _node_is_operator,
-#   _node_is_sin,
-#   _node_is_cos,
-#   _node_is_tan
-
 
 @testset "numerical errors" begin
   mutable struct Ab <: Abstract_expr_node

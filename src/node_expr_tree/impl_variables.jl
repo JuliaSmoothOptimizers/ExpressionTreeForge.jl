@@ -38,10 +38,6 @@ mutable struct Variable <: Abstract_expr_node
   index::Int
 end
 
-# @inline get_name(v::Variable) = v.name
-# @inline get_index(v::Variable) = v.index
-# @inline get_value(v::Variable, x::AbstractVector{T}) where {T <: Number} = x[get_index(v)]
-
 _node_bound(v::Variable, t::DataType) = ((t)(-Inf), (t)(Inf))
 
 _node_convexity(v::Variable) = M_implementation_convexity_type.linear_type()
@@ -68,7 +64,6 @@ _node_is_cos(v::Variable) = false
 _node_is_tan(v::Variable) = false
 
 _node_is_variable(v::Variable) = true
-_node_is_variable(v::Symbol) = true
 
 _node_is_constant(v::Variable) = false
 
@@ -84,8 +79,6 @@ function _evaluate_node(v::Variable, dic::Dict{Int, T}) where {T <: Number}
 end
 
 @inline _evaluate_node(v::Variable, x::AbstractVector{T}) where {T <: Number} = x[v.index]
-@inline _evaluate_node!(v::Variable, x::AbstractVector{T}, ref::MyRef{T}) where {T <: Number} =
-  M_abstract_expr_node.set_myRef!(ref, get_value(v, x))
 
 function change_index(v::MathOptInterface.VariableIndex, x::AbstractVector{T}) where {T <: Number}
   return x[v.value]

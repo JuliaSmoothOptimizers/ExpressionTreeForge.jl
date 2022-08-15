@@ -126,9 +126,6 @@ end
   @test M_trait_expr_node.node_is_constant(variable) == false
   @test M_trait_expr_node.node_is_variable(variable) == true
 
-  # @test get_name(variable) == :x
-  # @test get_index(variable) == 5
-  # @test get_value(variable, ones(5)) == 1.
 end
 
 @testset "Node evaluation" begin
