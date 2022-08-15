@@ -7,7 +7,7 @@ end
 abtree = AbTree(5)
 
 @testset "Abstract_expr_tree & Interface" begin
-  using ..ExpressionTreeForge.M_interface_expr_tree  
+  using ExpressionTreeForge.M_interface_expr_tree
 
   @test_throws ErrorException M_abstract_expr_tree.create_expr_tree(abtree)
   @test_throws ErrorException M_abstract_expr_tree.create_Expr(abtree)
