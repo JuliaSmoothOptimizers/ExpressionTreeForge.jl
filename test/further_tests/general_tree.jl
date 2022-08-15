@@ -1,5 +1,6 @@
 @testset "general tree" begin
-  
+  using ExpressionTreeForge.M_evaluation_expr_tree
+
   n = 7
   m = Model()
   @variable(m, x[1:n])
@@ -48,6 +49,9 @@
   @test evaluate_expr_tree(cex, x) == 150.01824939332715
   res = show(cex)
   @test res == nothing
+
+  xs = map(i -> i*ones(n), 1:5)
+  ExpressionTreeForge.evaluate_expr_tree_multiple_points(cex, xs)
 end
 
 
