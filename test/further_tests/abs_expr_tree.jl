@@ -27,7 +27,9 @@ end
   @test is_expr_tree(4) == M_trait_expr_tree.Is_expr_tree()
   @test is_expr_tree(abtree) == M_trait_expr_tree.Is_expr_tree()
 
-  mutable struct NotTree; c end
+  mutable struct NotTree
+    c
+  end
   notree = NotTree(5)
   @test_throws UndefVarError M_trait_expr_tree.get_expr_node(a)
   @test_throws ErrorException M_trait_expr_tree.get_expr_children(notree)
@@ -38,5 +40,4 @@ end
   @test_throws ErrorException M_trait_expr_tree.transform_to_Expr(notree)
   @test_throws ErrorException M_trait_expr_tree.transform_to_Expr2(notree)
   @test_throws MethodError M_trait_expr_tree.expr_tree_to_create(notree)
-
 end

@@ -1,5 +1,4 @@
 
-
 @testset "abstract trees" begin
   using ExpressionTreeForge.M_abstract_tree
   using ExpressionTreeForge.M_trait_tree

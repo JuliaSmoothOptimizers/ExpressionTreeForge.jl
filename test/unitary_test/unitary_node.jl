@@ -125,7 +125,6 @@ end
   @test M_trait_expr_node.node_is_power(variable) == false
   @test M_trait_expr_node.node_is_constant(variable) == false
   @test M_trait_expr_node.node_is_variable(variable) == true
-
 end
 
 @testset "Node evaluation" begin

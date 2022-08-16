@@ -7,7 +7,7 @@ using Test
   m = Model()
   n = 5
   @variable(m, x[1:n])
-  @NLobjective(m, Min, x[1] + x[2] + x[3]^2 + x[4]*x[2])
+  @NLobjective(m, Min, x[1] + x[2] + x[3]^2 + x[4] * x[2])
 
   evaluator = JuMP.NLPEvaluator(m)
   MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
