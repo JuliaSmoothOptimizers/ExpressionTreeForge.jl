@@ -24,7 +24,7 @@ function _get_expr_node(ex::Expr)
     else
       index_power = args[end]
       pow_op = M_abstract_expr_node.create_node_expr(op, index_power, true)
-      return pow_op 
+      return pow_op
     end
   elseif hd == :ref
     name_variable = args[1]

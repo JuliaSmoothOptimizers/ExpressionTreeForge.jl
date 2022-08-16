@@ -3,29 +3,29 @@ using ExpressionTreeForge.M_interface_expr_node
 using ExpressionTreeForge.M_trait_expr_node
 
 @testset "MyRef" begin
-  ref1 = new_ref(5.)
+  ref1 = new_ref(5.0)
   ref2 = new_ref(Float64)
 
-  @test get_myRef(ref1) == 5.
-  @test get_myRef(ref2) == -1.
+  @test get_myRef(ref1) == 5.0
+  @test get_myRef(ref2) == -1.0
 
-  @test ref1 + ref2 == 4.
-  @test ref1 + 1. == 6.
-  @test 1. + ref1 == 6.
-  @test +ref1 == 5.
+  @test ref1 + ref2 == 4.0
+  @test ref1 + 1.0 == 6.0
+  @test 1.0 + ref1 == 6.0
+  @test +ref1 == 5.0
 
-  @test ref1 - ref2 == 6.
-  @test ref1 - 1. == 4.
-  @test 1. - ref1 == -4.
-  @test -ref1 == -5.
+  @test ref1 - ref2 == 6.0
+  @test ref1 - 1.0 == 4.0
+  @test 1.0 - ref1 == -4.0
+  @test -ref1 == -5.0
 
-  @test ref1 * ref2 == -5.
-  @test ref1 * 1. == 5.
-  @test 1. * ref1 == 5.
+  @test ref1 * ref2 == -5.0
+  @test ref1 * 1.0 == 5.0
+  @test 1.0 * ref1 == 5.0
 
-  @test ref1 / ref2 == -5.
-  @test ref1 / 2. == 2.5
-  @test 2. / ref1 == 2/5
+  @test ref1 / ref2 == -5.0
+  @test ref1 / 2.0 == 2.5
+  @test 2.0 / ref1 == 2 / 5
 
   @test sin(ref1) == sin(5)
   @test tan(ref1) == tan(5)
@@ -41,10 +41,9 @@ using ExpressionTreeForge.M_trait_expr_node
 
   equalize_vec_vec_myRef!(nested_vector_ref1, nested_vector_ref2)
 
-  for i in 1:n, j in 1:m
+  for i = 1:n, j = 1:m
     @test nested_vector_ref1[i][j] == nested_vector_ref2[j][i]
-  end 
-
+  end
 end
 
 @testset "numerical errors" begin
@@ -53,7 +52,7 @@ end
   end
 
   ab_node = Ab(5)
-  
+
   @test M_interface_expr_node._node_is_operator(ab_node) == false
   @test M_interface_expr_node._node_is_plus(ab_node) == false
   @test M_interface_expr_node._node_is_minus(ab_node) == false

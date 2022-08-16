@@ -1,10 +1,12 @@
 @testset "Trait methods" begin
   using ExpressionTreeForge.M_trait_expr_node
 
-  mutable struct NotNode; c end
+  mutable struct NotNode
+    c
+  end
 
   x = []
-  dic = Dict{Int,Float64}()
+  dic = Dict{Int, Float64}()
 
   not_node = NotNode(5)
   @test_throws UndefVarError node_bound(not_node, Float64)
@@ -29,7 +31,6 @@
   @test_throws UndefVarError node_to_Expr2(not_node)
   @test_throws UndefVarError evaluate_node(not_node, x)
   @test_throws UndefVarError evaluate_node(not_node, dic)
-  
-  @test M_trait_expr_node.is_expr_node(5) == M_trait_expr_node.is_expr_node(:(x[1]))
 
+  @test M_trait_expr_node.is_expr_node(5) == M_trait_expr_node.is_expr_node(:(x[1]))
 end
