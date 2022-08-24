@@ -8,6 +8,36 @@ import ..M_abstract_expr_tree: create_expr_tree, create_Expr
 import ..M_interface_expr_tree:
   _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
 
+"""
+    Variable_counter
+
+Associate the index of the symbol variable to their integer index.  
+"""
+mutable struct Variable_counter
+  current_var::Int
+  dic_var::Dict{Symbol, Int64}
+end
+Variable_counter(; index = 0, dic_var = Dict{Symbol, Int64}()) = Variable_counter(index, dic_var)
+
+@inline zero_vc() = Variable_counter()
+
+@inline get_value(vc::Variable_counter, s::Symbol) = get(vc.dic_var, s, -1)
+
+@inline decimal_basis(a::Int, b::Int) = a * 10 + b
+
+function add_dic_var!(vc::Variable_counter, sym::Symbol)
+  str_sym = String(sym) # Symbol -> String
+  chains = split(str_sym, "x") # split from the "x"
+  str = string(chains[2]) # get the indices
+  int_chain = Vector{Int}(undef, length(str))
+  for (id, v) in enumerate(str)
+    int_chain[id] = Int(v) # transform unicode to Int
+  end
+  dec_basis = (x -> x - 8320).(int_chain) # Int('₁') = 8321
+  index = mapreduce(x -> x, decimal_basis, dec_basis) # compute the index using a decimal basis
+  vc.dic_var[sym] = index
+end
+
 @inline create_expr_tree(ex::Expr) = ex
 
 @inline create_Expr(ex::Expr) = ex
@@ -79,14 +109,14 @@ end
 
 @inline _get_real_node(ex::Number) = ex
 
-function _transform_to_expr_tree(ex::Expr)
+function _transform_to_expr_tree(ex::Expr; vc::Variable_counter = Variable_counter())
   n_node = _get_expr_node(ex)::M_abstract_expr_node.Abstract_expr_node
   children = _get_expr_children(ex)
   if isempty(children)
     return M_abstract_expr_tree.create_expr_tree(n_node)::M_implementation_expr_tree.Type_expr_tree
-  else
+  else    
     n_children =
-      _transform_to_expr_tree.(children)::Vector{M_implementation_expr_tree.Type_expr_tree}
+      _transform_to_expr_tree.(children; vc) # ::Vector{M_implementation_expr_tree.Type_expr_tree}
     return M_abstract_expr_tree.create_expr_tree(
       n_node,
       n_children,
@@ -94,8 +124,20 @@ function _transform_to_expr_tree(ex::Expr)
   end
 end
 
-_transform_to_expr_tree(ex::Number) = M_abstract_expr_tree.create_expr_tree(
+_transform_to_expr_tree(ex::Number; vc::Variable_counter = Variable_counter()) = M_abstract_expr_tree.create_expr_tree(
   M_abstract_expr_node.create_node_expr(ex),
 )::M_implementation_expr_tree.Type_expr_tree
+
+function _transform_to_expr_tree(sym::Symbol; vc::Variable_counter = Variable_counter())
+  string_sym = string(sym)
+  if string_sym[1] == 'x'    
+    index = get_value(vc, sym)
+    if index == -1
+      add_dic_var!(vc, sym)
+      index = get_value(vc, sym)
+    end
+    M_abstract_expr_tree.create_expr_tree(M_abstract_expr_node.create_node_expr(:x, index))
+  end
+end
 
 end
