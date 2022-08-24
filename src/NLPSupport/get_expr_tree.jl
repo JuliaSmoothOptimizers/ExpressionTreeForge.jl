@@ -10,7 +10,7 @@ using NLPModelsJuMP, ADNLPModels
 
 Return the objective function as a `Type_expr_tree` for a: `MathOptNLPModel`, `ADNLPModel `JuMP.Model`.
 """
-get_expression_tree(nlp::MathOptNLPModel) = get_expression_tree(nlp.eval.m)
+get_expression_tree(nlp::MathOptNLPModel) = get_expression_tree(nlp.eval.model)
 function get_expression_tree(model::JuMP.Model)
   evaluator = JuMP.NLPEvaluator(model)
   MathOptInterface.initialize(evaluator, [:ExprGraph])
