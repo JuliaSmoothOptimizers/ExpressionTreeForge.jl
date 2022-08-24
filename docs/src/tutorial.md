@@ -23,35 +23,31 @@ MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
 expr_tree_JuMP = transform_to_expr_tree(expr_jump)
 ```
-
-- expression tree from a julia function created by [ModelingToolKit.jl (v3.21.0)](https://github.com/SciML/ModelingToolkit.jl/)
+The both trees have the same sharpe
 ```@example ExpressionTreeForge
-using ModelingToolkit
+expr_tree_Expr == expr_tree_JuMP
+```
+
+- expression tree from a julia function created by [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl)
+```@example ExpressionTreeForge
+using Symbolics
 function f(y)    
   return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
 end
 n = 3
-ModelingToolkit.@variables x[1:n] # must be x
+Symbolics.@variables x[1:n] # must be x
 
 mtk_tree = f(x)
-expr_tree_MTK = transform_to_expr_tree(mtk_tree)
+expr_tree_Symbolics = transform_to_expr_tree(mtk_tree)
 ```
-
-All three produce the sames `expr_tree::Type_expr_tree`:
-```@example ExpressionTreeForge
-expr_tree_MTK == expr_tree_JuMP
-```
-
-```@example ExpressionTreeForge
-expr_tree_MTK == expr_tree_Expr
-```
+which may perform automatically some simplifications or reorder the terms.
+However, `expr_tree_Expr`, `expr_tree_JuMP` and `expr_tree_Symbolics` share the same type `::Type_expr_tree`:
 
 With a `Type_expr_tree`, you can:
 - detect partial separability;
 - evaluate the expression, and its first and second derivatives;
 - propagate bounds;
 - detect convexity.
-
 
 ### Detection of the partially separable structure
 The original purpose of `ExpressionTreeForge.jl` is to detect the partially-separable structure of a function $f : \R^n \to \R$

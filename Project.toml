@@ -15,7 +15,13 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [compat]
-
+ADNLPModels = "0.4.0"
+ForwardDiff = "0.10.32"
+JuMP = "1.1.1"
+MathOptInterface = "1.7.0"
+NLPModelsJuMP = "0.11.1"
+ReverseDiff = "1.14.1"
+Symbolics = "4.10.4"
 
 [extras]
 ADNLPModels = "54578032-b7ea-4c30-94aa-7cbd1cce6c9a"
