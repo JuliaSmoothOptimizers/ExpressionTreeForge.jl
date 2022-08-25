@@ -114,7 +114,7 @@ function _transform_to_expr_tree(ex::Expr; vc::Variable_counter = Variable_count
   children = _get_expr_children(ex)
   if isempty(children)
     return M_abstract_expr_tree.create_expr_tree(n_node)::M_implementation_expr_tree.Type_expr_tree
-  else    
+  else
     n_children =
       _transform_to_expr_tree.(children; vc) # ::Vector{M_implementation_expr_tree.Type_expr_tree}
     return M_abstract_expr_tree.create_expr_tree(
