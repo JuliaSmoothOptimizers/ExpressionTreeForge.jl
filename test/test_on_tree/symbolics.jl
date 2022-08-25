@@ -1,4 +1,4 @@
-@testset "ADNLPModel modelisation" begin
+@testset "ADNLPModel model" begin
   n = 5
   function f(x)
     n = length(x)
