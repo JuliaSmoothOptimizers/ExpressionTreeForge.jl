@@ -1,7 +1,6 @@
-using Test
+using LinearAlgebra, SparseArrays, Test
+using JuMP, MathOptInterface, Symbolics
 using ExpressionTreeForge
-using JuMP, LinearAlgebra, MathOptInterface, SparseArrays
-using Symbolics
 
 include("first_test.jl")
 include("test_on_tree/ordered_include.jl")
