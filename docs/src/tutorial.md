@@ -133,7 +133,10 @@ convexity_status = get_convexity_status(completetree)
 is_convex(convexity_status)
 ```
 
-You can observe the bounds and convexity status of each node with
+You can observe the bounds and convexity status of each node of `completetree` by walking the graph
 ```@example ExpressionTreeForge
-completetree
+# convexity statuses of the root's children
+statuses = get_convexity_status.(cex.children) 
+# bounds of the root's children
+bounds = get_bounds.(cex.children)
 ```
