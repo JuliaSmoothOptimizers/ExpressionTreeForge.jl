@@ -79,13 +79,9 @@ set_convexity!(completetree)
 # get the root bounds
 bounds = get_bounds(completetree)</code></pre><pre class="documenter-example-output">(0.0, Inf)</pre><pre><code class="language-julia"># get the root convexity status
 convexity_status = get_convexity_status(completetree)
-is_convex(convexity_status)</code></pre><pre class="documenter-example-output">true</pre><p>You can observe the bounds and convexity status of each node with</p><pre><code class="language-julia">completetree</code></pre><pre class="documenter-example-output">+ ~(0.0, Inf) ~convex
-  ^2 ~(0.0, Inf) ~convex
-    + ~(-Inf, Inf) ~linear
-      x[1] ~(-Inf, Inf) ~linear
-      x[2] ~(-Inf, Inf) ~linear
-  ^2 ~(0.0, Inf) ~convex
-    + ~(-Inf, Inf) ~linear
-      x[2] ~(-Inf, Inf) ~linear
-      x[3] ~(-Inf, Inf) ~linear
-</pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../reference/">Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 25 August 2022 16:29">Thursday 25 August 2022</span>. Using Julia version 1.8.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+is_convex(convexity_status)</code></pre><pre class="documenter-example-output">true</pre><p>You can observe the bounds and convexity status of each node of <code>completetree</code> by walking the graph</p><pre><code class="language-julia"># convexity statuses of the root&#39;s children
+statuses = get_convexity_status.(completetree.children)
+# bounds of the root&#39;s children
+bounds = get_bounds.(completetree.children)</code></pre><pre class="documenter-example-output">2-element Vector{Tuple{Float64, Float64}}:
+ (0.0, Inf)
+ (0.0, Inf)</pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../reference/">Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 18 September 2022 15:22">Sunday 18 September 2022</span>. Using Julia version 1.8.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
