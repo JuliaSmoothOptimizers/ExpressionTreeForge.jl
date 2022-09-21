@@ -15,9 +15,9 @@ Associate the index of the symbol variable to their integer index.
 """
 mutable struct Variable_counter
   current_var::Int
-  dic_var::Dict{Symbol, Int64}
+  dic_var::Dict{Symbol, Int}
 end
-Variable_counter(; index = 0, dic_var = Dict{Symbol, Int64}()) = Variable_counter(index, dic_var)
+Variable_counter(; index = 0, dic_var = Dict{Symbol, Int}()) = Variable_counter(index, dic_var)
 
 @inline zero_vc() = Variable_counter()
 
@@ -88,7 +88,6 @@ end
 
 @inline _inverse_expr_tree(ex::Number) = Expr(:call, :-, ex)
 
-#Fonction à reprendre potetiellement, pourle moment ca marche
 function _get_real_node(ex::Expr)
   hd = ex.head
   args = ex.args
@@ -97,8 +96,7 @@ function _get_real_node(ex::Expr)
     if op != :^
       return op
     else
-      index_power = args[end]
-      error("Not done yet, _get_real_node")
+      error("unary operator which is not ^ (_get_real_node(ex::Expr)")
     end
   elseif hd == :ref
     return ex
@@ -116,7 +114,7 @@ function _transform_to_expr_tree(ex::Expr; vc::Variable_counter = Variable_count
     return M_abstract_expr_tree.create_expr_tree(n_node)::M_implementation_expr_tree.Type_expr_tree
   else
     n_children =
-      _transform_to_expr_tree.(children; vc) # ::Vector{M_implementation_expr_tree.Type_expr_tree}
+      _transform_to_expr_tree.(children; vc)
     return M_abstract_expr_tree.create_expr_tree(
       n_node,
       n_children,
