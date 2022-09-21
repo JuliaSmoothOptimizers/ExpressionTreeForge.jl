@@ -23,7 +23,7 @@ MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
 expr_tree_JuMP = transform_to_expr_tree(expr_jump)
 ```
-The both trees have the same sharpe
+The both trees have the same share
 ```@example ExpressionTreeForge
 expr_tree_Expr == expr_tree_JuMP
 ```
@@ -40,8 +40,14 @@ Symbolics.@variables x[1:n] # must be x
 mtk_tree = f(x)
 expr_tree_Symbolics = transform_to_expr_tree(mtk_tree)
 ```
-which may perform automatically some simplifications or reorder the terms.
+which may perform automatically some simplifications and/or reorder the terms.
 However, `expr_tree_Expr`, `expr_tree_JuMP` and `expr_tree_Symbolics` share the same type `::Type_expr_tree`:
+```@example ExpressionTreeForge
+typeof(expr_tree_Expr) == typeof(expr_tree_JuMP)
+```
+```@example ExpressionTreeForge
+typeof(expr_tree_Expr) == typeof(expr_tree_Symbolics)
+```
 
 With a `Type_expr_tree`, you can:
 - detect partial separability;

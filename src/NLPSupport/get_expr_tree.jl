@@ -1,5 +1,4 @@
 using JuMP, MathOptInterface
-# , ModelingToolkit
 using Symbolics
 using NLPModelsJuMP, ADNLPModels
 

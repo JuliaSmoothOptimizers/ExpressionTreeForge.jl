@@ -26,5 +26,4 @@
 
   y = ones(n)
   @test M_evaluation_expr_tree.evaluate_expr_tree(expr_tree, y) == M_evaluation_expr_tree.evaluate_expr_tree(expr_tree_jump, y)
-  # @test expr_tree == expr_tree_jump
 end
