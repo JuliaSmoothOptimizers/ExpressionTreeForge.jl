@@ -23,7 +23,7 @@ MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
 expr_tree_JuMP = transform_to_expr_tree(expr_jump)
 ```
-The both trees have the same share
+Both trees have the same shape
 ```@example ExpressionTreeForge
 expr_tree_Expr == expr_tree_JuMP
 ```
