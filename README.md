@@ -34,7 +34,7 @@ Julia ≥ 1.6.
 
 ## How to install
 ```
-pkg> add https://github.com/JuliaSmoothOptimizers/ExpressionTreeForge.jl
+pkg> add ExpressionTreeForge
 pkg> test ExpressionTreeForge
 ```
 
