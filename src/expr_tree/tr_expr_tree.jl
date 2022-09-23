@@ -1,9 +1,7 @@
 module M_trait_expr_tree
 
 using Base.Threads
-using ..M_abstract_expr_tree,
-  ..M_implementation_expr_tree,
-  ..M_implementation_complete_expr_tree
+using ..M_abstract_expr_tree, ..M_implementation_expr_tree, ..M_implementation_complete_expr_tree
 
 import ..M_interface_expr_tree._get_expr_node,
   ..M_interface_expr_tree._get_expr_children, ..M_interface_expr_tree._inverse_expr_tree
