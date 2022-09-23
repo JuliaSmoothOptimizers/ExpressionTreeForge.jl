@@ -27,24 +27,16 @@ expr_tree_JuMP = transform_to_expr_tree(expr_jump)</code></pre><pre class="docum
     +
       x[2]
       x[3]
-</pre><ul><li>expression tree from a julia function created by <a href="https://github.com/SciML/ModelingToolkit.jl/">ModelingToolKit.jl (v3.21.0)</a></li></ul><pre><code class="language-julia">using ModelingToolkit
+</pre><p>Both trees have the same shape</p><pre><code class="language-julia">expr_tree_Expr == expr_tree_JuMP</code></pre><pre class="documenter-example-output">true</pre><ul><li>expression tree from a julia function created by <a href="https://github.com/JuliaSymbolics/Symbolics.jl">Symbolics.jl</a></li></ul><pre><code class="language-julia">using Symbolics
 function f(y)
   return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
 end
 n = 3
-ModelingToolkit.@variables x[1:n] # must be x
+Symbolics.@variables x[1:n] # must be x
 
 mtk_tree = f(x)
-expr_tree_MTK = transform_to_expr_tree(mtk_tree)</code></pre><pre class="documenter-example-output">+
-  ^2
-    +
-      x[1]
-      x[2]
-  ^2
-    +
-      x[2]
-      x[3]
-</pre><p>All three produce the sames <code>expr_tree::Type_expr_tree</code>:</p><pre><code class="language-julia">expr_tree_MTK == expr_tree_JuMP</code></pre><pre class="documenter-example-output">true</pre><pre><code class="language-julia">expr_tree_MTK == expr_tree_Expr</code></pre><pre class="documenter-example-output">true</pre><p>With a <code>Type_expr_tree</code>, you can:</p><ul><li>detect partial separability;</li><li>evaluate the expression, and its first and second derivatives;</li><li>propagate bounds;</li><li>detect convexity.</li></ul><h3 id="Detection-of-the-partially-separable-structure"><a class="docs-heading-anchor" href="#Detection-of-the-partially-separable-structure">Detection of the partially separable structure</a><a id="Detection-of-the-partially-separable-structure-1"></a><a class="docs-heading-anchor-permalink" href="#Detection-of-the-partially-separable-structure" title="Permalink"></a></h3><p>The original purpose of <code>ExpressionTreeForge.jl</code> is to detect the partially-separable structure of a function <span>$f : \R^n \to \R$</span></p><p class="math-container">\[f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}, \quad n_i \ll n,\]</p><p>which means <code>ExpressionTreeForge.jl</code> detects that <span>$f$</span> is a sum, and returns:</p><ul><li>the element functions <span>$\hat{f}_i$</span>;</li><li>the variables appearing in <span>$\hat{f}_i$</span> (i.e. <em>elemental variables</em>), which are represented via <span>$U_i$</span>.</li></ul><p>You detect the element functions with <code>extract_element_functions()</code>, which returns a vector of <code>Type_expr_tree</code>s:</p><pre><code class="language-julia">expr_tree = copy(expr_tree_Expr)
+expr_tree_Symbolics = transform_to_expr_tree(mtk_tree)</code></pre><pre class="documenter-example-output">(x[1] + x[2])^2 + (x[2] + x[3])^2
+</pre><p>which may perform automatically some simplifications and/or reorder the terms. However, <code>expr_tree_Expr</code>, <code>expr_tree_JuMP</code> and <code>expr_tree_Symbolics</code> share the same type <code>::Type_expr_tree</code>:</p><pre><code class="language-julia">typeof(expr_tree_Expr) == typeof(expr_tree_JuMP)</code></pre><pre class="documenter-example-output">true</pre><pre><code class="language-julia">typeof(expr_tree_Expr) == typeof(expr_tree_Symbolics)</code></pre><pre class="documenter-example-output">true</pre><p>With a <code>Type_expr_tree</code>, you can:</p><ul><li>detect partial separability;</li><li>evaluate the expression, and its first and second derivatives;</li><li>propagate bounds;</li><li>detect convexity.</li></ul><h3 id="Detection-of-the-partially-separable-structure"><a class="docs-heading-anchor" href="#Detection-of-the-partially-separable-structure">Detection of the partially separable structure</a><a id="Detection-of-the-partially-separable-structure-1"></a><a class="docs-heading-anchor-permalink" href="#Detection-of-the-partially-separable-structure" title="Permalink"></a></h3><p>The original purpose of <code>ExpressionTreeForge.jl</code> is to detect the partially-separable structure of a function <span>$f : \R^n \to \R$</span></p><p class="math-container">\[f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}, \quad n_i \ll n,\]</p><p>which means <code>ExpressionTreeForge.jl</code> detects that <span>$f$</span> is a sum, and returns:</p><ul><li>the element functions <span>$\hat{f}_i$</span>;</li><li>the variables appearing in <span>$\hat{f}_i$</span> (i.e. <em>elemental variables</em>), which are represented via <span>$U_i$</span>.</li></ul><p>You detect the element functions with <code>extract_element_functions()</code>, which returns a vector of <code>Type_expr_tree</code>s:</p><pre><code class="language-julia">expr_tree = copy(expr_tree_Expr)
 element_functions = extract_element_functions(expr_tree)
 show(element_functions[2])</code></pre><pre class="documenter-example-output">^2
   +
@@ -87,13 +79,9 @@ set_convexity!(completetree)
 # get the root bounds
 bounds = get_bounds(completetree)</code></pre><pre class="documenter-example-output">(0.0, Inf)</pre><pre><code class="language-julia"># get the root convexity status
 convexity_status = get_convexity_status(completetree)
-is_convex(convexity_status)</code></pre><pre class="documenter-example-output">true</pre><p>You can observe the bounds and convexity status of each node with</p><pre><code class="language-julia">completetree</code></pre><pre class="documenter-example-output">+ ~(0.0, Inf) ~convex
-  ^2 ~(0.0, Inf) ~convex
-    + ~(-Inf, Inf) ~linear
-      x[1] ~(-Inf, Inf) ~linear
-      x[2] ~(-Inf, Inf) ~linear
-  ^2 ~(0.0, Inf) ~convex
-    + ~(-Inf, Inf) ~linear
-      x[2] ~(-Inf, Inf) ~linear
-      x[3] ~(-Inf, Inf) ~linear
-</pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../reference/">Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 16 August 2022 15:10">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+is_convex(convexity_status)</code></pre><pre class="documenter-example-output">true</pre><p>You can observe the bounds and convexity status of each node of <code>completetree</code> by walking the graph</p><pre><code class="language-julia"># convexity statuses of the root&#39;s children
+statuses = get_convexity_status.(completetree.children)
+# bounds of the root&#39;s children
+bounds = get_bounds.(completetree.children)</code></pre><pre class="documenter-example-output">2-element Vector{Tuple{Float64, Float64}}:
+ (0.0, Inf)
+ (0.0, Inf)</pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../reference/">Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Friday 23 September 2022 13:25">Friday 23 September 2022</span>. Using Julia version 1.8.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
