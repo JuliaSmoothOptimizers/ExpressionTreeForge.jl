@@ -113,8 +113,7 @@ function _transform_to_expr_tree(ex::Expr; vc::Variable_counter = Variable_count
   if isempty(children)
     return M_abstract_expr_tree.create_expr_tree(n_node)::M_implementation_expr_tree.Type_expr_tree
   else
-    n_children =
-      _transform_to_expr_tree.(children; vc)
+    n_children = _transform_to_expr_tree.(children; vc)
     return M_abstract_expr_tree.create_expr_tree(
       n_node,
       n_children,
@@ -122,13 +121,14 @@ function _transform_to_expr_tree(ex::Expr; vc::Variable_counter = Variable_count
   end
 end
 
-_transform_to_expr_tree(ex::Number; vc::Variable_counter = Variable_counter()) = M_abstract_expr_tree.create_expr_tree(
-  M_abstract_expr_node.create_node_expr(ex),
-)::M_implementation_expr_tree.Type_expr_tree
+_transform_to_expr_tree(ex::Number; vc::Variable_counter = Variable_counter()) =
+  M_abstract_expr_tree.create_expr_tree(
+    M_abstract_expr_node.create_node_expr(ex),
+  )::M_implementation_expr_tree.Type_expr_tree
 
 function _transform_to_expr_tree(sym::Symbol; vc::Variable_counter = Variable_counter())
   string_sym = string(sym)
-  if string_sym[1] == 'x'    
+  if string_sym[1] == 'x'
     index = get_value(vc, sym)
     if index == -1
       add_dic_var!(vc, sym)
