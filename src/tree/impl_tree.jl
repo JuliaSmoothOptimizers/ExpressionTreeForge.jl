@@ -42,7 +42,7 @@ function equal_tree(tree1::Type_node{T}, tree2::Type_node{T}) where {T}
   children_tree2 = _get_children(tree2)
   l1 = length(children_tree1)
   l2 = length(children_tree2)
-  _get_node(tree1) == _get_node(tree1) && l1 == l2 ?
+  _get_node(tree1) == _get_node(tree2) && l1 == l2 ?
   (l1 > 0 ? mapreduce(equal_tree, my_and, children_tree1, children_tree2) : true) : false
 end
 
