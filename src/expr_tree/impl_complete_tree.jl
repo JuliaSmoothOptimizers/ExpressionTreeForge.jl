@@ -10,7 +10,7 @@ using ..M_interface_expr_tree
 import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..M_implementation_tree.Type_node
 import ..M_interface_expr_tree:
-  _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
+  _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree, _sum_expr_trees
 
 export Complete_node
 
@@ -155,6 +155,13 @@ function _inverse_expr_tree(t::Complete_expr_tree{T}) where {T <: Number}
   bounds = M_abstract_expr_tree.create_empty_bounds(T)
   node = create_complete_node(op_minus, bounds)
   return create_complete_expr_tree(node, [t])
+end
+
+function _sum_expr_trees(trees::Vector{Complete_expr_tree{T}}) where {T <: Number}
+  op_sum = M_abstract_expr_node.create_node_expr(:+)
+  bounds = M_abstract_expr_tree.create_empty_bounds(T)
+  node = create_complete_node(op_sum, bounds)
+  return create_complete_expr_tree(node, trees)
 end
 
 function Base.copy(ex::Complete_expr_tree{T}) where {T <: Number}

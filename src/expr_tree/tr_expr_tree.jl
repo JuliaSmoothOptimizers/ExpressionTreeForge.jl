@@ -3,13 +3,12 @@ module M_trait_expr_tree
 using Base.Threads
 using ..M_abstract_expr_tree, ..M_implementation_expr_tree, ..M_implementation_complete_expr_tree
 
-import ..M_interface_expr_tree._get_expr_node,
-  ..M_interface_expr_tree._get_expr_children, ..M_interface_expr_tree._inverse_expr_tree
-import ..M_implementation_expr_tree.Type_expr_tree, ..M_interface_expr_tree._get_real_node
-import ..M_interface_expr_tree._transform_to_expr_tree, ..M_interface_expr_tree._expr_tree_to_create
+import ..M_interface_expr_tree: _get_expr_node, _get_expr_children, _inverse_expr_tree, _sum_expr_trees
+import ..M_implementation_expr_tree: Type_expr_tree, _get_real_node
+import ..M_interface_expr_tree: _transform_to_expr_tree, _expr_tree_to_create
 import Base.==
 
-export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree
+export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree, sum_expr_trees
 
 """Type instantiated dynamically checking that an argument is an expression tree."""
 struct Is_expr_tree end
@@ -49,6 +48,18 @@ Return the `children` of the `root` of `tree`.
 @inline get_expr_children(a) = _get_expr_children(a, is_expr_tree(a))
 @inline _get_expr_children(a, ::Is_not_expr_tree) = error("This is not an expr tree")
 @inline _get_expr_children(a, ::Is_expr_tree) = _get_expr_children(a)
+
+"""
+    summed_tree = sum_expr_trees(trees::Vector{::AbstractExprTree})
+
+Sum every `trees`.
+"""
+function sum_expr_trees(a::Vector)  
+  trait_vector = (is_expr_tree -> is_expr_tree == M_trait_expr_tree.Is_expr_tree()).(M_trait_expr_tree.is_expr_tree.(a))
+  bool_every_element_is_tree = reduce(&, trait_vector)
+  !bool_every_element_is_tree && error("All arguments are not expression tree")
+  bool_every_element_is_tree && _sum_expr_trees(a)
+end
 
 """
     minus_tree = inverse_expr_tree(tree::AbstractExprTree)

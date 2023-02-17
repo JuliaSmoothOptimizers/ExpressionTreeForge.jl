@@ -436,3 +436,10 @@ Return and evaluation function of `expression_tree` with better performance than
 """
 @inline get_function_of_evaluation(expression_tree::Type_expr_tree) =
   algo_expr_tree.get_function_of_evaluation(expression_tree)
+
+"""
+    summed_tree = sum_expr_trees(trees::Vector{::AbstractExprTree})
+
+Sum every `trees`.
+"""
+@inline sum_expr_trees(trees::Vector) = M_trait_expr_tree.sum_expr_trees(trees)

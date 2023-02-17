@@ -17,6 +17,13 @@ Return the `children` of the `root` of `tree`.
 _get_expr_children(tree::AbstractExprTree) = error("Should not be called.")
 
 """
+    summed_tree = _sum_expr_trees(trees::Vector{::AbstractExprTree})
+
+Sum every `trees`.
+"""
+_sum_expr_trees(tree::Vector{<:AbstractExprTree}) = error("Should not be called.")
+
+"""
     minus_tree = _inverse_expr_tree(tree::AbstractExprTree)
 
 Apply a unary minus on `tree`.

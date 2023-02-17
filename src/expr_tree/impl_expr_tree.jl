@@ -7,7 +7,7 @@ using ..M_trait_tree
 import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
 import ..M_implementation_tree.Type_node
 import ..M_interface_expr_tree:
-  _inverse_expr_tree, _get_expr_node, _get_expr_children, _get_real_node, _transform_to_expr_tree
+  _inverse_expr_tree, _get_expr_node, _get_expr_children, _get_real_node, _transform_to_expr_tree, _sum_expr_trees
 
 export Type_expr_tree
 
@@ -74,6 +74,12 @@ create_expr_tree(field::T) where {T <: Abstract_expr_node} =
 _get_expr_node(t::Type_expr_tree) = M_trait_tree.get_node(t)
 
 _get_expr_children(t::Type_expr_tree) = M_trait_tree.get_children(t)
+
+function _sum_expr_trees(trees::Vector{Type_expr_tree})
+  op_sum = M_abstract_expr_node.create_node_expr(:+)
+  new_node = M_abstract_expr_tree.create_expr_tree(op_sum, trees)
+  return new_node
+end
 
 function _inverse_expr_tree(t::Type_expr_tree)
   op_minus = M_abstract_expr_node.create_node_expr(:-)

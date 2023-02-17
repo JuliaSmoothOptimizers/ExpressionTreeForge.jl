@@ -6,7 +6,7 @@ using ..M_implementation_expr_tree
 
 import ..M_abstract_expr_tree: create_expr_tree, create_Expr
 import ..M_interface_expr_tree:
-  _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree
+  _get_expr_node, _get_expr_children, _inverse_expr_tree, _get_real_node, _transform_to_expr_tree, _sum_expr_trees
 
 """
     Variable_counter
@@ -83,6 +83,8 @@ function _get_expr_children(ex::Expr)
     error("Unsupported")
   end
 end
+
+@inline _sum_expr_trees(exprs::Vector) = Expr(:call, :+, exprs...)
 
 @inline _inverse_expr_tree(ex::Expr) = Expr(:call, :-, ex)
 
