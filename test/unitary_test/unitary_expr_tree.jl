@@ -29,6 +29,7 @@ using ExpressionTreeForge.M_implementation_expr_tree
   @test M_trait_expr_tree.inverse_expr_tree(:(x[5] + 4)) == :(-(x[5] + 4))
 end
 
+using ExpressionTreeForge
 
 @testset "merge expression trees" begin
   expr1 = :(5*x[1] + 3*x[2] + 3)
@@ -39,9 +40,9 @@ end
   expr_tree2 = transform_to_expr_tree(expr2)
   complete_tree2 = complete_tree(expr_tree2)
 
-  sum_expr = M_trait_expr_tree.sum_expr_trees([expr1, expr2])
-  sum_expr_tree = M_trait_expr_tree.sum_expr_trees([expr_tree1, expr_tree2])
-  sum_complete_tree = M_trait_expr_tree.sum_expr_trees([complete_tree1, complete_tree2])
+  sum_expr = ExpressionTreeForge.sum_expr_trees([expr1, expr2])
+  sum_expr_tree = ExpressionTreeForge.sum_expr_trees([expr_tree1, expr_tree2])
+  sum_complete_tree = ExpressionTreeForge.sum_expr_trees([complete_tree1, complete_tree2])
 
   expr_summed = :((5*x[1] + 3*x[2] + 3) + (x[3]+2)^2)
   expr_tree_summed = transform_to_expr_tree(expr_summed)
