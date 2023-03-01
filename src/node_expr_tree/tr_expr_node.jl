@@ -21,7 +21,8 @@ import ..M_interface_expr_node:
   _change_from_N_to_Ni!,
   _cast_constant!,
   _node_to_Expr,
-  _node_to_Expr2
+  _node_to_Expr2,
+  _node_to_Expr_JuMP
 import ..M_interface_expr_node._node_bound, ..M_interface_expr_node._node_convexity
 
 using ..M_trait_type_expr
@@ -301,6 +302,18 @@ A `constant` return its value.
 @inline _node_to_Expr2(a, ::Type_expr_node) = _node_to_Expr2(a)
 @inline _node_to_Expr2(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
 @inline _node_to_Expr2(a) = _node_to_Expr(a)
+
+"""
+    bool = _node_to_Expr_JuMP(node::Abstract_expr_node)
+
+Return the information required to build later on a julia `Expr`.
+An `operator` return the operator symbol (ex: `+` -> `:+`).
+A `variable` parametrized with the index `i` returns a variable as a `MathOptInterface.Variable(i)`.
+A `constant` return its value.
+"""
+@inline node_to_Expr_JuMP(a) = _node_to_Expr_JuMP(a, is_expr_node(a))
+@inline _node_to_Expr_JuMP(a, ::Type_expr_node) = _node_to_Expr_JuMP(a)
+@inline _node_to_Expr_JuMP(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
 
 """
     bool = cast_constant!(node::Abstract_expr_node, type::Datatype)

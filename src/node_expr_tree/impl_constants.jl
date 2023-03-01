@@ -21,6 +21,7 @@ import ..M_interface_expr_node:
   _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
+  _node_to_Expr_JuMP,
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
@@ -99,5 +100,6 @@ end
 
 @inline _node_to_Expr(c::Constant{Y}) where {Y <: Number} = c.value
 @inline _node_to_Expr2(c::Constant{Y}) where {Y <: Number} = c.value
+@inline _node_to_Expr_JuMP(c::Constant{Y}) where {Y <: Number} = c.value
 
 end

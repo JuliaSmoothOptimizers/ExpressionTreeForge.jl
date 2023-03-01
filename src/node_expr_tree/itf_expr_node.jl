@@ -138,7 +138,17 @@ An `operator` return the operator symbol (ex: `+` -> `:+`).
 A `variable` return a variable.
 A `constant` return its value.
 """
-_node_to_Expr2(node::Abstract_expr_node) = _node_to_Expr(node)
+_node_to_Expr2(node::Abstract_expr_node) = error("Should not be called")
+
+"""
+    bool = _node_to_Expr2(node::Abstract_expr_node)
+
+Return the information required to build later on a julia `Expr`.
+An `operator` return the operator symbol (ex: `+` -> `:+`).
+A `variable` return a `MathOptInterface.VariableIndex()`.
+A `constant` return its value.
+"""
+_node_to_Expr_JuMP(node::Abstract_expr_node) = error("Should not be called")
 
 """
     (lowerbound, upper_bound) = _node_bound(node::Abstract_expr_node, children_bounds::AbstractVector{Tuple{T, T}}, type::DataType)

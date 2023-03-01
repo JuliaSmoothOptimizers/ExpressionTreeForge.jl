@@ -22,6 +22,7 @@ import ..M_interface_expr_node:
   _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
+  _node_to_Expr_JuMP,
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
@@ -104,6 +105,8 @@ change_index(x::MathOptInterface.VariableIndex, dic_new_var::Dict{Int, Int}) =
 
 _node_to_Expr(v::Variable) = Expr(:ref, v.name, MathOptInterface.VariableIndex(v.index))
 _node_to_Expr2(v::Variable) = Symbol(string(v.name) * string(v.index))
+_node_to_Expr_JuMP(v::Variable) = MathOptInterface.VariableIndex(v.index)
+
 _cast_constant!(v::Variable, t::DataType) = v
 
 end

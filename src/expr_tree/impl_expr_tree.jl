@@ -4,7 +4,7 @@ using ..M_abstract_expr_node, ..M_trait_expr_node
 using ..M_abstract_expr_tree
 using ..M_trait_tree
 
-import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2
+import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr2, create_Expr_JuMP
 import ..M_implementation_tree.Type_node
 import ..M_interface_expr_tree:
   _inverse_expr_tree,
@@ -57,6 +57,27 @@ function create_Expr2(t::Type_expr_tree)
   else
     children_Expr = create_Expr2.(ch)
     node_Expr = M_trait_expr_node.node_to_Expr2(nd)
+    # differentiate the simple operators :+, :- and the more complicated :^2
+    # simple operators
+    if length(node_Expr) == 1
+      return Expr(:call, node_Expr[1], children_Expr...)
+      # complicate operators
+    elseif length(node_Expr) == 2
+      return Expr(:call, node_Expr[1], children_Expr..., node_Expr[2])
+    else
+      error("unsupported")
+    end
+  end
+end
+
+function create_Expr_JuMP(t::Type_expr_tree)
+  nd = M_trait_tree.get_node(t)
+  ch = M_trait_tree.get_children(t)
+  if isempty(ch)
+    return M_trait_expr_node.node_to_Expr_JuMP(nd)
+  else
+    children_Expr = create_Expr_JuMP.(ch)
+    node_Expr = M_trait_expr_node.node_to_Expr_JuMP(nd)
     # differentiate the simple operators :+, :- and the more complicated :^2
     # simple operators
     if length(node_Expr) == 1

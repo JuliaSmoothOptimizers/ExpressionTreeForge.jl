@@ -20,6 +20,7 @@ import ..M_interface_expr_node:
   _cast_constant!,
   _node_to_Expr,
   _node_to_Expr2,
+  _node_to_Expr_JuMP,
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
@@ -174,6 +175,7 @@ end
   value_ch^(op.index)::T
 
 @inline _node_to_Expr(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
+@inline _node_to_Expr_JuMP(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
 
 function _cast_constant!(op::Power_operator{T}, t::DataType) where {T <: Number}
   new_index = (t)(op.index)

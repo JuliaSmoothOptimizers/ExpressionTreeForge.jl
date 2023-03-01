@@ -1,10 +1,12 @@
 module M_implementation_expr_tree_Expr
 
+using MathOptInterface
+
 using ..M_abstract_expr_node
 using ..M_abstract_expr_tree
 using ..M_implementation_expr_tree
 
-import ..M_abstract_expr_tree: create_expr_tree, create_Expr
+import ..M_abstract_expr_tree: create_expr_tree, create_Expr, create_Expr_JuMP
 import ..M_interface_expr_tree:
   _get_expr_node,
   _get_expr_children,
@@ -46,6 +48,20 @@ end
 @inline create_expr_tree(ex::Expr) = ex
 
 @inline create_Expr(ex::Expr) = ex
+
+create_Expr_JuMP(subex::Number) = subex
+create_Expr_JuMP(arg::Symbol) = arg
+function create_Expr_JuMP(ex::Expr)
+  hd = ex.head
+  args = ex.args
+  if hd == :call
+    Expr(hd, create_Expr_JuMP.(args)...)
+  elseif hd == :ref
+    index = args[2]
+    MathOptInterface.VariableIndex(index)
+    # args = [MathOptInterface.VariableIndex(index)]
+  end
+end
 
 @inline _get_expr_node(ex::Number) = M_abstract_expr_node.create_node_expr(ex)
 
