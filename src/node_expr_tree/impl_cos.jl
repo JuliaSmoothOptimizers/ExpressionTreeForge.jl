@@ -141,6 +141,7 @@ end
 end
 
 @inline _node_to_Expr(op::Cos_operator) = [:cos]
+@inline _node_to_Expr2(op::Cos_operator) = [:cos]
 @inline _node_to_Expr_JuMP(op::Cos_operator) = [:cos]
 
 end

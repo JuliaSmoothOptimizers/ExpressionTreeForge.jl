@@ -300,7 +300,7 @@ julia> extract_element_functions(:(x[1] + x[2] + x[3]*x[4] ) )
  :(x[3] * x[4])
 ```
 """
-@inline extract_element_functions(a::Any) = algo_expr_tree.extract_element_functions(a)
+@inline extract_element_functions(a::Any) = M_algo_expr_tree.extract_element_functions(a)
 
 """
     type = get_type_tree(expr_tree)
@@ -319,7 +319,7 @@ julia> get_type_tree(:(x[1]* x[2])) == quadratic
 true
 ```
 """
-@inline get_type_tree(a::Any) = algo_expr_tree.get_type_tree(a)
+@inline get_type_tree(a::Any) = M_algo_expr_tree.get_type_tree(a)
 
 """
     indices = get_elemental_variables(expr_tree)
@@ -336,7 +336,7 @@ julia> get_elemental_variables(:(x[1]^2 + x[6] + x[2]) )
 [1, 6, 2]
 ```
 """
-@inline get_elemental_variables(a::Any) = algo_expr_tree.get_elemental_variables(a)
+@inline get_elemental_variables(a::Any) = M_algo_expr_tree.get_elemental_variables(a)
 
 """
     Ui = get_Ui(indices::Vector{Int}, n::Int)
@@ -344,7 +344,7 @@ julia> get_elemental_variables(:(x[1]^2 + x[6] + x[2]) )
 Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variables`.
 Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
-@inline get_Ui(indices::Vector{Int}, n::Int) = algo_expr_tree.get_Ui(indices, n)
+@inline get_Ui(indices::Vector{Int}, n::Int) = M_algo_expr_tree.get_Ui(indices, n)
 
 """
     normalize_indices!(expr_tree, vector_indices::Vector{Int})
@@ -359,7 +359,7 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 :(x[1] + x[2])
 ```
 """
-@inline normalize_indices!(a::Any, v::AbstractVector{Int}) = algo_expr_tree.normalize_indices!(a, v)
+@inline normalize_indices!(a::Any, v::AbstractVector{Int}) = M_algo_expr_tree.normalize_indices!(a, v)
 
 """
     cast_type_of_constant(expr_tree, type::DataType)
@@ -367,7 +367,31 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 Cast to `type` the constants of `expr_tree`.
 `expr_tree` may be an `Expr`, a `Type_expr_tree` or a `Complete_expr_tree`.
 """
-@inline cast_type_of_constant(ex::Any, t::DataType) = algo_expr_tree.cast_type_of_constant(ex, t)
+@inline cast_type_of_constant(ex::Any, t::DataType) = M_algo_expr_tree.cast_type_of_constant(ex, t)
+
+"""
+    model, evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables::Vector{Int})
+
+Return a `MathOptInterface.Nonlinear.Model` and its initialized evaluator for any `expr_tree` supported.
+`variables` informs the indices of the variables appearing in `expr_tree`.
+If `variables` is not provided, it is determined automatically through `sort!(get_elemental_variables(expr_tree))`.
+Warning: `variables` must be sorted!
+Example:
+```julia
+expr_tree = :(x[1]^2 + x[3]^3)
+variables = [1,3]
+model, evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables)
+```
+Afterward, you may evaluate the function and the gradient from `expr_tree` with:
+```julia
+x = rand(2)
+MOI.eval_objective(evaluator, x)
+grad = similar(x)
+MOI.eval_objective_gradient(evaluator, grad, x)
+```
+Warning: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
+"""
+@inline non_linear_JuMP_model_evaluator(ex::Any) = M_algo_expr_tree.non_linear_JuMP_model_evaluator(ex)
 
 """
     evaluate_expr_tree(expr_tree::Type_expr_tree, x::AbstractVector)
@@ -443,7 +467,7 @@ julia> hessian(:(x[1]^2 + x[2]), rand(2))
 Return and evaluation function of `expression_tree` with better performance than the actual `evaluate_expr_tree`.
 """
 @inline get_function_of_evaluation(expression_tree::Type_expr_tree) =
-  algo_expr_tree.get_function_of_evaluation(expression_tree)
+  M_algo_expr_tree.get_function_of_evaluation(expression_tree)
 
 """
     summed_tree = sum_expr_trees(trees::Vector{::AbstractExprTree})

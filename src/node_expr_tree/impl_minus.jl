@@ -143,6 +143,7 @@ function _evaluate_node(op::Minus_operator, value_ch::AbstractVector{T}) where {
 end
 
 @inline _node_to_Expr(op::Minus_operator) = [:-]
+@inline _node_to_Expr2(op::Minus_operator) = [:-]
 @inline _node_to_Expr_JuMP(op::Minus_operator) = [:-]
 
 end

@@ -100,6 +100,7 @@ end
 end
 
 @inline _node_to_Expr(op::Exp_operator) = [:exp]
+@inline _node_to_Expr2(op::Exp_operator) = [:exp]
 @inline _node_to_Expr_JuMP(op::Exp_operator) = [:exp]
 
 end

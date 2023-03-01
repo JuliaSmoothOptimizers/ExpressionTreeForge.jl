@@ -81,6 +81,7 @@ end
 end
 
 @inline _node_to_Expr(op::Tan_operator) = [:tan]
+@inline _node_to_Expr2(op::Tan_operator) = [:tan]
 @inline _node_to_Expr_JuMP(op::Tan_operator) = [:tan]
 
 end
