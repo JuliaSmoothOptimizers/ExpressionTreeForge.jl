@@ -175,6 +175,7 @@ end
   value_ch^(op.index)::T
 
 @inline _node_to_Expr(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
+@inline _node_to_Expr2(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
 @inline _node_to_Expr_JuMP(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
 
 function _cast_constant!(op::Power_operator{T}, t::DataType) where {T <: Number}

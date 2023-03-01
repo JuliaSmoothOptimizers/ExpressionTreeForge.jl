@@ -149,6 +149,7 @@ end
   foldl(*, value_ch)
 
 @inline _node_to_Expr(op::Time_operator) = [:*]
+@inline _node_to_Expr2(op::Time_operator) = [:*]
 @inline _node_to_Expr_JuMP(op::Time_operator) = [:*]
 
 end

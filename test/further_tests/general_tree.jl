@@ -29,9 +29,8 @@
 
   ex = get_expression_tree(m)
 
-  expr = :(cos(cos(x[7])^2))
-  # ex = tranform
-
+  transform_to_Expr_julia(ex) # for coverage
+  
   cex = complete_tree(ex)
 
   ExpressionTreeForge.set_bounds!(cex)

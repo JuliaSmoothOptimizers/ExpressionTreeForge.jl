@@ -12,6 +12,7 @@ abtree = AbTree(5)
   @test_throws ErrorException M_abstract_expr_tree.create_expr_tree(abtree)
   @test_throws ErrorException M_abstract_expr_tree.create_Expr(abtree)
   @test_throws ErrorException M_abstract_expr_tree.create_Expr2(abtree)
+  @test_throws ErrorException M_abstract_expr_tree.create_Expr_JuMP(abtree)
 
   @test_throws ErrorException M_interface_expr_tree._get_expr_node(abtree)
   @test_throws ErrorException M_interface_expr_tree._get_expr_children(abtree)
@@ -40,5 +41,6 @@ end
   @test_throws ErrorException M_trait_expr_tree.transform_to_expr_tree(notree)
   @test_throws ErrorException M_trait_expr_tree.transform_to_Expr(notree)
   @test_throws ErrorException M_trait_expr_tree.transform_to_Expr2(notree)
+  @test_throws ErrorException M_trait_expr_tree.transform_to_Expr_JuMP(notree)
   @test_throws MethodError M_trait_expr_tree.expr_tree_to_create(notree)
 end

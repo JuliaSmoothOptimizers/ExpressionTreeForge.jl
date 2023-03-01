@@ -121,7 +121,7 @@ Rewrite the `Number`s composing `node` as `type`.
 _cast_constant!(node::Abstract_expr_node) = error("Should not be called")
 
 """
-    bool = _node_to_Expr(node::Abstract_expr_node)
+    [symbols] = _node_to_Expr(node::Abstract_expr_node)
 
 Return the information required to build later on a julia `Expr`.
 An `operator` return the operator symbol (ex: `+` -> `:+`).
@@ -131,7 +131,7 @@ A `constant` return its value.
 _node_to_Expr(node::Abstract_expr_node) = error("Should not be called")
 
 """
-    bool = _node_to_Expr2(node::Abstract_expr_node)
+    [symbols] = _node_to_Expr2(node::Abstract_expr_node)
 
 Return the information required to build later on a julia `Expr`.
 An `operator` return the operator symbol (ex: `+` -> `:+`).
@@ -141,7 +141,7 @@ A `constant` return its value.
 _node_to_Expr2(node::Abstract_expr_node) = error("Should not be called")
 
 """
-    bool = _node_to_Expr2(node::Abstract_expr_node)
+    [symbols] = _node_to_Expr2(node::Abstract_expr_node)
 
 Return the information required to build later on a julia `Expr`.
 An `operator` return the operator symbol (ex: `+` -> `:+`).

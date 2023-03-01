@@ -158,6 +158,7 @@ end
   value_ch[1] / value_ch[2]
 
 @inline _node_to_Expr(op::Frac_operator) = [:/]
+@inline _node_to_Expr2(op::Frac_operator) = [:/]
 @inline _node_to_Expr_JuMP(op::Frac_operator) = [:/]
 
 end

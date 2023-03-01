@@ -141,6 +141,7 @@ end
 end
 
 @inline _node_to_Expr(op::Sinus_operator) = [:sin]
+@inline _node_to_Expr2(op::Sinus_operator) = [:sin]
 @inline _node_to_Expr_JuMP(op::Sinus_operator) = [:sin]
 
 end
