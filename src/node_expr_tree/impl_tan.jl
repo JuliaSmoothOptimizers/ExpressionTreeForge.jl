@@ -19,6 +19,7 @@ import ..M_interface_expr_node:
   _evaluate_node!,
   _node_to_Expr,
   _node_to_Expr2,
+  _node_to_Expr_JuMP,
   _node_bound,
   _node_convexity
 import ..M_implementation_type_expr.Type_expr_basic
@@ -80,5 +81,6 @@ end
 end
 
 @inline _node_to_Expr(op::Tan_operator) = [:tan]
+@inline _node_to_Expr_JuMP(op::Tan_operator) = [:tan]
 
 end

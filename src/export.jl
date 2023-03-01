@@ -271,6 +271,14 @@ Transform `expr_tree` into an `Expr`.
 @inline transform_to_Expr_julia(e::Any) = M_trait_expr_tree.transform_to_Expr2(e::Any)
 
 """
+    expr = transform_to_Expr_JuMP(expr_tree)
+
+Transform `expr_tree` into an `Expr`.
+`expr_tree` may be a `Type_expr_tree` or a `Complete_expr_tree`.
+"""
+@inline transform_to_Expr_JuMP(e::Any) = M_trait_expr_tree.transform_to_Expr_JuMP(e::Any)
+
+"""
     expr_tree = transform_to_expr_tree(expr::Expr)
 
 Transform `expr` into an `expr_tree::Type_expr_tree`.

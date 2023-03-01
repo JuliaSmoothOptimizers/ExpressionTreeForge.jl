@@ -2,7 +2,7 @@ module M_abstract_expr_tree
 import ..M_abstract_tree.AbstractTree
 
 export AbstractExprTree
-export create_expr_tree, create_Expr, create_Expr2
+export create_expr_tree, create_Expr, create_Expr2, create_Expr_JuMP
 
 """ Supertype of every expression tree. """
 abstract type AbstractExprTree <: AbstractTree end
@@ -45,7 +45,7 @@ end
     expr_tree = create_expr_tree(tree)
 
 Create an `Type_expr_tree` from `tree`.
-`tree` can be several types.
+Several types of tree are supported.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 """
 create_expr_tree(tree::AbstractExprTree) = error("Should not be called, create_expr_tree")
@@ -54,7 +54,7 @@ create_expr_tree(tree::AbstractExprTree) = error("Should not be called, create_e
     expr = create_expr_tree(tree)
 
 Create an `Expr` from `tree`.
-`tree` can be several types.
+Several types of tree are supported.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 The variables of the `Expr` use `MathOptInterface` variables.
 """
@@ -64,9 +64,19 @@ create_Expr(tree::AbstractExprTree) = error("Should not be called, create_Expr")
     expr = create_expr_tree(tree)
 
 Create a julia `Expr` from `tree`.
-`tree` can be several types.
+Several types of tree are supported.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 """
 create_Expr2(tree::AbstractExprTree) = error("Should not be called, create_Expr2")
+
+"""
+    expr = create_expr_tree(tree)
+
+Create an `Expr` from `tree`.
+Several types of tree are supported.
+For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
+The variables of the `Expr` use `MathOptInterface.VariableIndex(i)`.
+"""
+create_Expr_JuMP(tree::AbstractExprTree) = error("Should not be called, create_Expr_JuMP")
 
 end

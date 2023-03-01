@@ -6,7 +6,7 @@ using ..M_abstract_expr_tree, ..M_implementation_expr_tree, ..M_implementation_c
 import ..M_interface_expr_tree:
   _get_expr_node, _get_expr_children, _inverse_expr_tree, _sum_expr_trees
 import ..M_implementation_expr_tree: Type_expr_tree, _get_real_node
-import ..M_interface_expr_tree: _transform_to_expr_tree, _expr_tree_to_create
+import ..M_interface_expr_tree: _transform_to_expr_tree, _expr_tree_to_create, _transform_to_Expr_JuMP
 import Base.==
 
 export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree, sum_expr_trees
@@ -156,6 +156,21 @@ Return `expr::Expr` from the expression tree `expr_tree`.
   error("The argument is not a expression tree ")
 
 @inline _transform_to_Expr2(ex) = M_abstract_expr_tree.create_Expr2(ex)
+
+"""
+    expr = transform_to_Expr_JuMP(expr_tree)
+
+Return `expr::Expr` from the expression tree `expr_tree`.
+The variable in `expr` are provided using `MathOptInterface.VariableIndex`.
+"""
+@inline transform_to_Expr_JuMP(ex) = _transform_to_Expr_JuMP(M_trait_expr_tree.is_expr_tree(ex), ex)
+
+@inline _transform_to_Expr_JuMP(::M_trait_expr_tree.Is_expr_tree, ex) = _transform_to_Expr_JuMP(ex)
+
+@inline _transform_to_Expr_JuMP(::M_trait_expr_tree.Is_not_expr_tree, ex) =
+  error("The argument is not a expression tree ")
+
+@inline _transform_to_Expr_JuMP(ex) = M_abstract_expr_tree.create_Expr_JuMP(ex)
 
 """
     expr_tree = expr_tree_to_create(tree1::AbstractExprTree, tree2::AbstractExprTree)
