@@ -30,6 +30,8 @@
   ex = get_expression_tree(m)
 
   transform_to_Expr_julia(ex) # for coverage
+
+  non_linear_JuMP_model_evaluator(ex) # for coverage
   
   cex = complete_tree(ex)
 
