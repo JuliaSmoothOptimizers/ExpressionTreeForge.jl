@@ -304,7 +304,7 @@ function _get_function_of_evaluation(
 end
 
 """
-    model, evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables::Vector{Int})
+    evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables::Vector{Int})
 
 Return a `MathOptInterface.Nonlinear.Model` and its initialized evaluator for any `expr_tree` supported.
 `variables` informs the indices of the variables appearing in `expr_tree`.
@@ -314,7 +314,7 @@ Example:
 ```julia
 expr_tree = :(x[1]^2 + x[3]^3)
 variables = [1,3]
-model, evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables)
+evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables)
 ```
 Afterward, you may evaluate the function and the gradient from `expr_tree` with:
 ```julia
@@ -331,9 +331,9 @@ function non_linear_JuMP_model_evaluator(expr_tree; variables=sort!(M_algo_expr_
   ex_jump = M_trait_expr_tree.transform_to_Expr_JuMP(expr_tree)
   ex = MathOptInterface.Nonlinear.add_expression(model, ex_jump)
 
-  MathOptInterface.Nonlinear.set_objective(model, :($ex))
+  MathOptInterface.Nonlinear.set_objective(model, ex)
   evaluator = MathOptInterface.Nonlinear.Evaluator(model, MathOptInterface.Nonlinear.SparseReverseMode(), _variables)
-  MathOptInterface.initialize(evaluator, [:Grad])
+  MathOptInterface.initialize(evaluator, [:Grad, :HessVec])
   
   return evaluator
 end

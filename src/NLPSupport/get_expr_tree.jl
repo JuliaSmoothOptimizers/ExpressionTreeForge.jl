@@ -19,6 +19,15 @@ function get_expression_tree(model::JuMP.Model)
   return expr_tree
 end
 
+function get_expression_tree(model::MathOptInterface.Nonlinear.Model)
+  evaluator = MathOptInterface.Nonlinear.Evaluator(model)
+  MathOptInterface.initialize(evaluator, [:ExprGraph])
+  obj_Expr = MathOptInterface.objective_expr(evaluator)::Expr
+  expr_tree =
+    ExpressionTreeForge.transform_to_expr_tree(obj_Expr)::ExpressionTreeForge.Type_expr_tree
+  return expr_tree
+end
+
 function get_expression_tree(adnlp::ADNLPModel)
   n = adnlp.meta.nvar
   Symbolics.@variables x[1:n]
