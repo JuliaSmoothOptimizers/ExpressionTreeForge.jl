@@ -94,6 +94,7 @@ end
 @inline _evaluate_node(c::Constant{Y}) where {Y <: Number} = c.value::Y
 
 @inline _change_from_N_to_Ni!(c::Constant, dic_new_indices::Dict{Int, Int}) = c
+@inline _change_from_N_to_Ni!(c::Number, dic_new_indices::Dict{Int, Int}) = c
 
 @inline _cast_constant!(c::Constant{Y}, t::DataType) where {Y <: Number} = Constant{t}((t)(c.value))
 @inline _cast_constant!(c::Number, t::DataType) = (t)(c)

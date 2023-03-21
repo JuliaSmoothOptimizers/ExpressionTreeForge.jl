@@ -160,55 +160,55 @@ function get_Ui(index_vars::Vector{Int}, n::Int)
 end
 
 """
-    normalize_indices!(expr_tree, vector_indices)
+    normalize_indices!(expr_tree, vector_indices; initial_index=0)
 
 Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
 It it paired with `get_elemental_variables` to define the elemental element functions expression tree.
 
 Example:
 ```julia
-julia> normalize_indices!(:(x[4] + x[5]), [4,5])
-:(x[1] + x[2])
+julia> normalize_indices!(:(x[4] + x[5]), [4,5]; initial_index::Int)
+:(x[1+initial_index] + x[2+initial_index])
 ```
 """
-@inline normalize_indices!(expr_tree, a::Vector{Int}) =
-  _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
+@inline normalize_indices!(expr_tree, a::Vector{Int}; kwargs...) =
+  _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a; kwargs...)
 
 @inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_not_expr_tree, a::Vector{Int}) =
   error(" This is not an Expr tree")
 
-@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Vector{Int}) =
-  _normalize_indices!(expr_tree, a)
+@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Vector{Int}; kwargs...) =
+  _normalize_indices!(expr_tree, a; kwargs...)
 
-@inline normalize_indices!(expr_tree, a::Dict{Int, Int}) =
-  _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a)
+@inline normalize_indices!(expr_tree, a::Dict{Int, Int}; kwargs...) =
+  _normalize_indices!(expr_tree, M_trait_expr_tree.is_expr_tree(expr_tree), a; kwargs...)
 
 @inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_not_expr_tree, a::Dict{Int, Int}) =
   error(" This is not an Expr tree")
 
-@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Dict{Int, Int}) =
-  _normalize_indices!(expr_tree, a)
+@inline _normalize_indices!(expr_tree, ::M_trait_expr_tree.Is_expr_tree, a::Dict{Int, Int}; kwargs...) =
+  _normalize_indices!(expr_tree, a; kwargs...)
 
 """
-    dic = N_to_Ni(elemental_var::Vector{Int})
+    dic = N_to_Ni(elemental_var::Vector{Int}; initial_index=0)
 
 Return a dictionnary informing the index changes of an element expression tree.
-If `element_var = [4,5]` then `dic == Dict([4=>1, 5=>2])`.
+If `element_var = [4,5]` then `dic == Dict([4=>initial_index+1, 5=>initial_index+2])`.
 """
-function N_to_Ni(elemental_var::Vector{Int})
+function N_to_Ni(elemental_var::Vector{Int}; initial_index=0, kwargs...)
   dic_var_value = Dict{Int, Int}()
   for i = 1:length(elemental_var)
-    dic_var_value[elemental_var[i]] = i
+    dic_var_value[elemental_var[i]] = initial_index+i
   end
   return dic_var_value
 end
 
-function _normalize_indices!(expr_tree, elmt_var::Vector{Int})
-  new_var = N_to_Ni(elmt_var)
-  normalize_indices!(expr_tree, new_var)
+function _normalize_indices!(expr_tree, elmt_var::Vector{Int}; kwargs...)
+  new_var = N_to_Ni(elmt_var; kwargs...)::Dict{Int, Int}
+  normalize_indices!(expr_tree, new_var; kwargs...)
 end
 
-function _normalize_indices!(expr_tree, dic_new_var::Dict{Int, Int})
+function _normalize_indices!(expr_tree, dic_new_var::Dict{Int, Int}; kwargs...)
   ch = M_trait_expr_tree.get_expr_children(expr_tree)
   if isempty(ch) # expr is a leaf
     r_node = M_trait_expr_tree.get_real_node(expr_tree)

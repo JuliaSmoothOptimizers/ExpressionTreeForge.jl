@@ -50,7 +50,7 @@ Complete_expr_tree{T <: Number} = Type_node{Complete_node{T}}
   op::Abstract_expr_node,
   bounds::M_abstract_expr_tree.Bounds{T},
   cvx_st::M_implementation_convexity_type.Convexity_wrapper,
-) where {T <: Number} = Complete_node{T}(op, bounds, cvx_st)
+) where {T <: Number} = Complete_node{T}(copy(op), copy(bounds), copy(cvx_st))
 
 @inline create_complete_node(
   op::Abstract_expr_node,

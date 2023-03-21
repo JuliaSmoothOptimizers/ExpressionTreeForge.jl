@@ -1,5 +1,7 @@
 module M_implementation_convexity_type
 
+import Base.copy
+
 # définition of all distinct properties that can have a calculus tree
 """
     Convexity_type
@@ -16,6 +18,8 @@ Wrapper around `Convexity_type`.
 mutable struct Convexity_wrapper
   status::Convexity_type
 end
+
+copy(cw::Convexity_wrapper) = Convexity_wrapper(cw.status)
 
 """
     convexity_status = get_convexity_wrapper(convexity::Convexity_wrapper)

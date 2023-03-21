@@ -1,5 +1,6 @@
 module M_abstract_expr_tree
 import ..M_abstract_tree.AbstractTree
+import Base.copy
 
 export AbstractExprTree
 export create_expr_tree, create_Expr, create_Expr2, create_Expr_JuMP
@@ -16,6 +17,8 @@ mutable struct Bounds{T <: Number}
   inf_bound::T
   sup_bound::T
 end
+
+copy(bounds::Bounds{T}) where T = Bounds{T}(bounds.inf_bound, bounds.sup_bound)
 
 """
     bound = create_empty_bounds(type::DataType)

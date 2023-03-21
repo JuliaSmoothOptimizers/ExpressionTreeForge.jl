@@ -359,7 +359,7 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 :(x[1] + x[2])
 ```
 """
-@inline normalize_indices!(a::Any, v::AbstractVector{Int}) = M_algo_expr_tree.normalize_indices!(a, v)
+@inline normalize_indices!(a::Any, v::AbstractVector{Int}; kwargs...) = M_algo_expr_tree.normalize_indices!(a, v; kwargs...)
 
 """
     cast_type_of_constant(expr_tree, type::DataType)
