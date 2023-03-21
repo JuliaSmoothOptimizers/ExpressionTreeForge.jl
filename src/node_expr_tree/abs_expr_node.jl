@@ -4,6 +4,7 @@ import Base.+, Base.-
 import Base.*, Base./
 import Base.^
 import Base.sin, Base.tan, Base.cos, Base.exp
+import Base.copy
 
 export Abstract_expr_node, create_node_expr
 export MyRef, new_ref, set_myRef!, get_myRef
@@ -12,6 +13,12 @@ export equalize_vec_vec_myRef!
 
 """ Supertype of every node. """
 abstract type Abstract_expr_node end
+
+function copy(node::T) where {T<:Abstract_expr_node}
+  names = fieldnames(T)
+  fields = map(name -> getfield(node, name), names)
+  return T(fields...)
+end
 
 """
     create_node_expr(arg::UnionAll)

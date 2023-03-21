@@ -55,3 +55,20 @@ end
   @test grad_expr_tree == grad_sol
   @test grad_complete_tree == grad_sol
 end
+
+@testset "normalize_indices! tests" begin
+  expr = :(5*x[3] + 3*x[1] + 4*x[4]^2 + 3)
+  expr_tree = transform_to_expr_tree(expr)
+  completed_tree = complete_tree(expr_tree)
+
+  elt_var = get_elemental_variables(expr)
+  sort!(elt_var)
+  normalize_indices!(expr, elt_var; initial_index=2)
+  expr == :(5 * x[4] + 3 * x[3] + 4 * x[5] ^ 2 + 3)
+
+  normalize_indices!(expr_tree, elt_var; initial_index=2)
+  expr_tree == transform_to_expr_tree(expr)
+
+  normalize_indices!(completed_tree, elt_var; initial_index=2)
+  completed_tree == complete_tree(expr_tree)
+end
