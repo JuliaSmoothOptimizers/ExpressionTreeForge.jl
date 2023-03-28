@@ -2,6 +2,8 @@ module M_algo_expr_tree
 using SparseArrays
 using MathOptInterface
 
+const MOI=MathOptInterface
+
 using ..M_trait_expr_node, ..M_trait_expr_tree, ..M_trait_tree
 using ..M_abstract_expr_tree, ..M_abstract_expr_node, ..M_abstract_tree
 using ..M_implementation_tree, ..M_implementation_type_expr
@@ -306,7 +308,7 @@ end
 """
     evaluator = non_linear_JuMP_model_evaluator(expr_tree; variables::Vector{Int})
 
-Return a `MathOptInterface.Nonlinear.Model` and its initialized evaluator for any `expr_tree` supported.
+Return the evaluator of a `MOI.Nonlinear.Model` defined by `expr_tree`, as long as it is supported.
 `variables` informs the indices of the variables appearing in `expr_tree`.
 If `variables` is not provided, it is determined automatically through `sort!(get_elemental_variables(expr_tree))`.
 Warning: `variables` must be sorted!
@@ -325,17 +327,55 @@ MOI.eval_objective_gradient(evaluator, grad, x)
 ```
 Warning: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
 """
-function non_linear_JuMP_model_evaluator(expr_tree; variables=sort!(M_algo_expr_tree.get_elemental_variables(expr_tree)))
-  model = MathOptInterface.Nonlinear.Model()
-  _variables = (index -> MathOptInterface.VariableIndex(index)).(variables)
+function non_linear_JuMP_model_evaluator(expr_tree; variables=sort!(get_elemental_variables(expr_tree)))
+  model = MOI.Nonlinear.Model()
+  _variables = (index -> MOI.VariableIndex(index)).(variables)
   ex_jump = M_trait_expr_tree.transform_to_Expr_JuMP(expr_tree)
-  ex = MathOptInterface.Nonlinear.add_expression(model, ex_jump)
+  ex = MOI.Nonlinear.add_expression(model, ex_jump)
 
-  MathOptInterface.Nonlinear.set_objective(model, ex)
-  evaluator = MathOptInterface.Nonlinear.Evaluator(model, MathOptInterface.Nonlinear.SparseReverseMode(), _variables)
-  MathOptInterface.initialize(evaluator, [:Grad, :HessVec])
+  MOI.Nonlinear.set_objective(model, ex)
+  evaluator = MOI.Nonlinear.Evaluator(model, MOI.Nonlinear.SparseReverseMode(), _variables)
+  MOI.initialize(evaluator, [:Grad, :HessVec])
   
   return evaluator
 end
+
+"""
+    evaluator = sparse_jacobian_JuMP_model(expr_trees)
+
+Return the evaluator of a `MOI.Nonlinear.Model` defined by `expr_tree`, as long as it is supported.
+The `evaluator` considers the objective function as the sum of `expr_trees` and a constraint for each `expr_tree` contained in `expr_trees`.
+If the expression trees in `expr_trees` depend on a subset of variables, the constraint Jacobian will be sparse.
+"""
+function sparse_jacobian_JuMP_model(expr_trees)
+  model = MOI.Nonlinear.Model()
+
+  # constraints, each fᵢ
+  variables_constraints = MOI.VariableIndex[]
+  for expr in expr_trees
+    variables = sort!(get_elemental_variables(expr))
+    variables_constraints = unique(vcat(variables_constraints, variables))
+    expr_jump = M_trait_expr_tree.transform_to_Expr_JuMP(expr)    
+    expr_index = MOI.Nonlinear.add_expression(model, expr_jump)
+    constraint_index = MOI.Nonlinear.add_constraint(model, expr_index, MOI.EqualTo(0.))
+  end
+  sort!(variables_constraints)
+
+  # objective ∑ᴺᵢ fᵢ
+  expr_objective = sum_expr_trees(expr_trees)
+  expr_jump = M_trait_expr_tree.transform_to_Expr_JuMP(expr_objective)
+  variables_objective = sort!(get_elemental_variables(expr_objective))
+  expr_index = MOI.Nonlinear.add_expression(model, expr_jump)
+  MOI.Nonlinear.set_objective(model, expr_index)
+
+  variables = sort!(unique(vcat(variables_constraints, variables_objective)))
+  n = length(variables)
+  _variables = (index -> MOI.VariableIndex(index)).(variables)
+  evaluator = MOI.Nonlinear.Evaluator(model, MOI.Nonlinear.SparseReverseMode(), _variables)
+  MOI.initialize(evaluator, [:Grad, :HessVec, :Jac])
+
+  return evaluator
+end
+
 
 end
