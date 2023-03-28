@@ -22,7 +22,8 @@ export get_convexity_status, set_convexity!, create_convex_tree
 export is_constant, is_linear, is_quadratic, is_cubic, is_more
 export transform_to_Expr, transform_to_Expr_julia, transform_to_Expr_JuMP, transform_to_expr_tree, complete_tree
 export extract_element_functions,
-  get_type_tree, get_elemental_variables, normalize_indices!, cast_type_of_constant!, sum_expr_trees, non_linear_JuMP_model_evaluator
+  get_type_tree, get_elemental_variables, normalize_indices!, cast_type_of_constant!, sum_expr_trees
+export non_linear_JuMP_model_evaluator, sparse_jacobian_JuMP_model
 export evaluate_expr_tree, gradient_forward, gradient_reverse, hessian
 export print_tree
 export get_expression_tree

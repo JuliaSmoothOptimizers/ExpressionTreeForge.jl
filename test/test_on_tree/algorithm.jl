@@ -7,10 +7,10 @@ using ..ExpressionTreeForge.M_trait_expr_tree
   @NLobjective(m, Min, (x[1] * x[3] + 5)^2 + sin(x[2] + cos(x[3])) + (-1 + x[4])^2)
 
   evaluator = JuMP.NLPEvaluator(m)
-  MathOptInterface.initialize(evaluator, [:ExprGraph, :Hess])
+  MOI.initialize(evaluator, [:ExprGraph, :Hess])
 
   v = ones(n)
-  Expr_j = MathOptInterface.objective_expr(evaluator)
+  Expr_j = MOI.objective_expr(evaluator)
   expr_tree = ExpressionTreeForge.transform_to_expr_tree(Expr_j)
   expr_tree_j = copy(expr_tree)
   @test ExpressionTreeForge.M_trait_expr_tree.expr_tree_equal(expr_tree, expr_tree_j)
@@ -27,6 +27,7 @@ using ..ExpressionTreeForge.M_trait_expr_tree
 end
 
 @testset "MOI.Nonlinear.Model from trees" begin
+  # unconstrained model
   expr = :(5*x[3] + 3*x[1] + 4*x[4]^2 + 3)
   expr_tree = transform_to_expr_tree(expr)
   complete_expr_tree = complete_tree(expr_tree)
@@ -54,6 +55,44 @@ end
   @test grad_expr == grad_sol
   @test grad_expr_tree == grad_sol
   @test grad_complete_tree == grad_sol
+
+  # constrained model
+  expr1 = :(5*x[3] + 3*x[1] + 4*x[4]^2 + 3)
+  expr2 = :(2*x[1] + 3*x[1]^3 + 4*x[2]^2 -2)
+
+  expr_tree1 = transform_to_expr_tree(expr1)
+  expr_tree2 = transform_to_expr_tree(expr2)
+
+  complete_expr_tree1 = complete_tree(expr_tree1)
+  complete_expr_tree2 = complete_tree(expr_tree2)
+
+  evaluator = sparse_jacobian_JuMP_model([expr1, expr2])
+  evaluator_tree = sparse_jacobian_JuMP_model([expr_tree1, expr_tree2])
+  evaluator_complete = sparse_jacobian_JuMP_model([complete_expr_tree1, complete_expr_tree2])
+
+  x= Float64[0,1,2,3]
+  @test MOI.eval_objective(evaluator, x) == 51.
+  @test MOI.eval_objective(evaluator_tree, x) == 51.
+  @test MOI.eval_objective(evaluator_complete, x) == 51.
+
+  #same for the 3 evaluators
+  non_empty_indices = MOI.jacobian_structure(evaluator)
+  sparse_jacobian = Vector{Float64}(undef, length(non_empty_indices))
+  sparse_jacobian_tree = Vector{Float64}(undef, length(non_empty_indices))
+  sparse_jacobian_complete = Vector{Float64}(undef, length(non_empty_indices))
+
+  MOI.eval_constraint_jacobian(evaluator, sparse_jacobian, x)
+  MOI.eval_constraint_jacobian(evaluator, sparse_jacobian_tree, x)
+  MOI.eval_constraint_jacobian(evaluator, sparse_jacobian_complete, x)
+  
+  @test sparse_jacobian_tree == sparse_jacobian
+  @test sparse_jacobian_complete == sparse_jacobian
+
+  grad = similar(x)
+  MOI.eval_objective_gradient(evaluator, grad, x)
+  expr1 = :(5*x[3] + 3*x[1] + 4*x[4]^2 + 3)
+  expr2 = :(2*x[1] + 3*x[1]^3 + 4*x[2]^2 -2)
+  @test grad == [sparse_jacobian[1] + sparse_jacobian[4], sparse_jacobian[5], sparse_jacobian[2], sparse_jacobian[3]]
 end
 
 @testset "normalize_indices! tests" begin
