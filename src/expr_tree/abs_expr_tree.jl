@@ -18,7 +18,7 @@ mutable struct Bounds{T <: Number}
   sup_bound::T
 end
 
-copy(bounds::Bounds{T}) where T = Bounds{T}(bounds.inf_bound, bounds.sup_bound)
+copy(bounds::Bounds{T}) where {T} = Bounds{T}(bounds.inf_bound, bounds.sup_bound)
 
 """
     bound = create_empty_bounds(type::DataType)

@@ -14,7 +14,7 @@ export equalize_vec_vec_myRef!
 """ Supertype of every node. """
 abstract type Abstract_expr_node end
 
-function copy(node::T) where {T<:Abstract_expr_node}
+function copy(node::T) where {T <: Abstract_expr_node}
   names = fieldnames(T)
   fields = map(name -> getfield(node, name), names)
   return T(fields...)

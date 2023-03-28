@@ -20,7 +20,8 @@ export concave_type, constant_type, convex_type, linear_type, not_treated_type, 
 export is_concave, is_constant, is_convex, is_linear, is_not_treated, is_treated, is_unknown
 export get_convexity_status, set_convexity!, create_convex_tree
 export is_constant, is_linear, is_quadratic, is_cubic, is_more
-export transform_to_Expr, transform_to_Expr_julia, transform_to_Expr_JuMP, transform_to_expr_tree, complete_tree
+export transform_to_Expr,
+  transform_to_Expr_julia, transform_to_Expr_JuMP, transform_to_expr_tree, complete_tree
 export extract_element_functions,
   get_type_tree, get_elemental_variables, normalize_indices!, cast_type_of_constant!, sum_expr_trees
 export non_linear_JuMP_model_evaluator, sparse_jacobian_JuMP_model

@@ -32,7 +32,7 @@
   transform_to_Expr_julia(ex) # for coverage
 
   non_linear_JuMP_model_evaluator(ex) # for coverage
-  
+
   cex = complete_tree(ex)
 
   ExpressionTreeForge.set_bounds!(cex)
