@@ -116,33 +116,33 @@ To compute bounds and convexity we use a `Complete_expr_tree`, a richer structur
 `Complete_expr_tree` is similar to `Type_expr_tree`, but in addition it stores: the lower bound, the upper bound and the convexity status of each node.
 You can define a `Complete_expr_tree` for any `Type_expr_tree`:
 ```@example ExpressionTreeForge
-complete_tree = complete_tree(expr_tree_Expr)
+complete_tree_from_Expr = complete_tree(expr_tree_Expr)
 ```
 The bounds and convexity status are then propagated using the methods:
 ```@example ExpressionTreeForge
 # propagate the bounds from the variables
-set_bounds!(complete_tree)
+set_bounds!(complete_tree_from_Expr)
 # deduce the convexity status of each node
-set_convexity!(complete_tree)
+set_convexity!(complete_tree_from_Expr)
 ```
 ```@example ExpressionTreeForge
 # get the root bounds
-bounds = get_bounds(complete_tree)
+bounds = get_bounds(complete_tree_from_Expr)
 ```
 
 ```@example ExpressionTreeForge
 # get the root convexity status
-convexity_status = get_convexity_status(complete_tree)
+convexity_status = get_convexity_status(complete_tree_from_Expr)
 is_convex(convexity_status)
 ```
 
-You can observe the bounds and convexity status of each node of `complete_tree` by walking the graph
+You can observe the bounds and convexity status of each node of `complete_tree_from_Expr` by walking the graph
 ```@example ExpressionTreeForge
 # convexity statuses of the root's children
-statuses = get_convexity_status.(complete_tree.children) 
+statuses = get_convexity_status.(complete_tree_from_Expr.children) 
 ```
 
 ```@example ExpressionTreeForge
 # bounds of the root's children
-bounds = get_bounds.(complete_tree.children)
+bounds = get_bounds.(complete_tree_from_Expr.children)
 ```
