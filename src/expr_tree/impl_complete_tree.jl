@@ -25,8 +25,8 @@ export Complete_node
 Gather in a single structure:
 
 * `op::M_abstract_expr_node.Abstract_expr_node` an arithmetic operator;
-* `bounds::M_abstract_expr_tree.Bounds{T}` the bounds of this operator depending its children;
-* `convexity_status::M_implementation_convexity_type.Convexity_wrapper` the convexity status of this operator depending its children.
+* `bounds::M_abstract_expr_tree.Bounds{T}` the bounds of this operator depending on its children;
+* `convexity_status::M_implementation_convexity_type.Convexity_wrapper` the convexity status of this operator depending on its children.
 """
 mutable struct Complete_node{T <: Number}
   op::M_abstract_expr_node.Abstract_expr_node
@@ -37,8 +37,8 @@ end
 """
     Complete_expr_tree{T} <: AbstractTree
 
-Implementation of an expression tree.
-`Complete_expr_tree` is the same than `Type_expr_tree` with the additions in each node of a `Bounds` and `Convexity_wrapper`.
+Implementation of an expression tree similar to `Type_expr_tree`.
+`Complete_expr_tree` considers a `Complete_node` which adds the `Bounds` and a `Convexity_wrapper` to each node.
 A `Complete_expr_tree` has fields:
 
 * `field::Complete_node{T}` representing an operator, a constant or a variable alongide its bounds and its convexity status;

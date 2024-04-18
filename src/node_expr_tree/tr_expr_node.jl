@@ -28,9 +28,9 @@ import ..M_interface_expr_node._node_bound, ..M_interface_expr_node._node_convex
 using ..M_trait_type_expr
 using ..M_implementation_convexity_type
 
-"""Type instantiated dynamically checking that an argument is an expression node."""
+"""Type instantiated dynamically representeing that an argument is an expression node."""
 struct Type_expr_node end
-"""Type instantiated dynamically checking that an argument is a not an expression node."""
+"""Type instantiated dynamically representeing that an argument is a not an expression node."""
 struct Type_not_expr_node end
 
 """
@@ -110,7 +110,7 @@ It could be also a variable or a constant.
 """
     bool = node_is_plus(node::Abstract_expr_node)
 
-Check if `node` is a `+` operator or not.
+Check if `node` is a `+` operator.
 """
 @inline node_is_plus(a) = _node_is_plus(a, is_expr_node(a))
 @inline _node_is_plus(a, ::Type_expr_node) = _node_is_plus(a)
@@ -119,7 +119,7 @@ Check if `node` is a `+` operator or not.
 """
     bool = _node_is_times(node::Abstract_expr_node)
 
-Check if `node` is a `*` operator or not.
+Check if `node` is a `*` operator.
 """
 @inline node_is_times(a) = _node_is_times(a, is_expr_node(a))
 @inline _node_is_times(a, ::Type_expr_node) = _node_is_times(a)
@@ -128,7 +128,7 @@ Check if `node` is a `*` operator or not.
 """
     bool = node_is_minus(node::Abstract_expr_node)
 
-Check if `node` is a `-` operator or not.
+Check if `node` is a `-` operator.
 """
 @inline node_is_minus(a) = _node_is_minus(a, is_expr_node(a))
 @inline _node_is_minus(a, ::Type_expr_node) = _node_is_minus(a)
@@ -137,7 +137,7 @@ Check if `node` is a `-` operator or not.
 """
     bool = node_is_power(node::Abstract_expr_node)
 
-Check if `node` is a `^` operator or not.
+Check if `node` is a `^` operator.
 """
 @inline node_is_power(a) = _node_is_power(a, is_expr_node(a))
 @inline _node_is_power(a, ::Type_expr_node) = _node_is_power(a)
@@ -226,7 +226,7 @@ end
 """
     value = _evaluate_node(node::Abstract_expr_node, value_children::AbstractVector{T}) where T<:Number
 
-Evaluate `node` depending `value_children`.
+Evaluate `node` depending on `value_children`.
 """
 @inline evaluate_node(a, x::Vector{T}) where {T <: Number} = _evaluate_node(a, is_expr_node(a), x)
 @inline _evaluate_node(a, ::Type_expr_node, x::Vector{T}) where {T <: Number} = _evaluate_node(a, x)
@@ -281,10 +281,10 @@ Change the index of the variables following the index given by `dic_new_indices`
 """
     bool = node_to_Expr(node::Abstract_expr_node)
 
-Return the information required to build later on a julia `Expr`.
-An `operator` return the operator symbol (ex: `+` -> `:+`).
-A `variable` return a variable as a `MathOptInterface` variable.
-A `constant` return its value.
+Return the information required to build later on a Julia `Expr`.
+An `operator` node returns the operator symbol (ex: `+` -> `:+`).
+A `variable` node returns a variable as a `MathOptInterface` variable.
+A `constant` node returns its value.
 """
 @inline node_to_Expr(a) = _node_to_Expr(a, is_expr_node(a))
 @inline _node_to_Expr(a, ::Type_expr_node) = _node_to_Expr(a)
@@ -293,10 +293,10 @@ A `constant` return its value.
 """
     bool = node_to_Expr2(node::Abstract_expr_node)
 
-Return the information required to build later on a julia `Expr`.
-An `operator` return the operator symbol (ex: `+` -> `:+`).
+Return the information required to build later on a Julia `Expr`.
+An `operator` node returns the operator symbol (ex: `+` -> `:+`).
 A `variable` return a variable.
-A `constant` return its value.
+A `constant` node returns its value.
 """
 @inline node_to_Expr2(a) = _node_to_Expr2(a, is_expr_node(a))
 @inline _node_to_Expr2(a, ::Type_expr_node) = _node_to_Expr2(a)
@@ -306,10 +306,10 @@ A `constant` return its value.
 """
     bool = _node_to_Expr_JuMP(node::Abstract_expr_node)
 
-Return the information required to build later on a julia `Expr`.
-An `operator` return the operator symbol (ex: `+` -> `:+`).
+Return the information required to build later on a Julia `Expr`.
+An `operator` node returns the operator symbol (ex: `+` -> `:+`).
 A `variable` parametrized with the index `i` returns a variable as a `MathOptInterface.Variable(i)`.
-A `constant` return its value.
+A `constant` node returns its value.
 """
 @inline node_to_Expr_JuMP(a) = _node_to_Expr_JuMP(a, is_expr_node(a))
 @inline _node_to_Expr_JuMP(a, ::Type_expr_node) = _node_to_Expr_JuMP(a)

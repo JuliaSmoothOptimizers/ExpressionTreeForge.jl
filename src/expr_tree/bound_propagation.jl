@@ -15,7 +15,7 @@ Bound_tree{T} = M_implementation_tree.Type_node{M_abstract_expr_tree.Bounds{T}}
 """
     bound_tree = create_bounds_tree(tree)
 
-Return a `similar` expression tree to `tree`, where each node has an undefined bounds.
+Return a convexity tree shaped as `tree`, where each node has an undefined bounds.
 """
 @inline create_bounds_tree(tree::M_implementation_tree.Type_node, type = Float64::DataType) =
   return Bound_tree{type}(
@@ -86,7 +86,7 @@ end
 """
     (inf_bound, sup_bound) = get_bounds(bound_tree::Bound_tree)
 
-Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
+Retrieve the bounds from the root of `bound_tree` (a given bounds' tree).
 """
 @inline get_bounds(b::Bound_tree{T}) where {T <: Number} = bound_to_tuple(M_trait_tree.get_node(b))
 @inline get_bounds(

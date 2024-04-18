@@ -6,9 +6,9 @@ import ..M_interface_tree: _get_node, _get_children
 export get_node
 export get_children
 
-"""Type instantiated dynamically checking that an argument is a tree."""
+"""Type instantiated dynamically representeing that an argument is a tree."""
 struct Type_trait_tree end
-"""Type instantiated dynamically checking that an argument is not a tree."""
+"""Type instantiated dynamically representeing that an argument is not a tree."""
 struct Type_not_trait_tree end
 
 """
@@ -28,14 +28,14 @@ In the other cases it returns `Type_not_trait_tree`.
 """
     node = get_node(tree)
 
-Get the current `node` as a part of `tree`.
+Get the root `node` of `tree`.
 """
 @inline get_node(a) = _get_node(a, is_type_trait_tree(a))
 
 """
     node = _get_node(tree, trait_tree)
 
-Get the current `node` as a part of `tree`, if `trait_tree::Type_trait_tree`.
+Get the root `node` of `tree`, if `trait_tree::Type_trait_tree`.
 """
 @inline _get_node(a, b::Type_trait_tree) = _get_node(a)
 @inline _get_node(a, b::Type_not_trait_tree) = error(" The parameter is not a Tree")
@@ -43,14 +43,14 @@ Get the current `node` as a part of `tree`, if `trait_tree::Type_trait_tree`.
 """
     children = get_children(tree)
 
-Get the `children` from the current node as part of `tree`.
+Get the `children` from the root node of `tree`.
 """
 @inline get_children(a) = _get_children(a, is_type_trait_tree(a))
 
 """
     children = _get_children(tree, trait_tree)
 
-Get the `children` from the current node as part of `tree`, if `trait_tree::Type_trait_tree`..
+Get the `children` from the root node of `tree`, if `trait_tree::Type_trait_tree`.
 """
 @inline _get_children(a, ::Type_trait_tree) = _get_children(a)
 @inline _get_children(a, ::Type_not_trait_tree) = error(" The parameter is not a Tree")
@@ -81,7 +81,7 @@ end
     show(tree::AbstractTree; deepth)
     show(io::IO, tree::AbstractTree; deepth)
 
-Print `tree` in the julia console with a suitable form.
+Print `tree` in the Julia console with a suitable form.
 """
 show(tree::AbstractTree; deepth = 0) = show(stdout, tree; deepth)
 

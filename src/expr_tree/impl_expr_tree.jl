@@ -19,8 +19,8 @@ export Type_expr_tree
 """
     Type_expr_tree{T} <: AbstractTree
 
-Basic implementation of an expression tree.`
-Every expression tree supported must be able to return `Type_expr_tree`.
+Basic implementation of an expression tree.
+Every expression tree supported must be able to return `Type_expr_tree` with `transform_to_expr_tree`.
 A `Type_expr_tree` has fields:
 
 * `field::Abstract_expr_node` representing an operator, a constant or a variable;

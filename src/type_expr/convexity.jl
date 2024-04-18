@@ -39,84 +39,84 @@ Set the convexity status of `convexity` to `type`.
 """
     untreated_wrapper = init_conv_status()
 
-Return a `Convexity_wrapper` with value `not_treated`.
+Return a `Convexity_wrapper` wich values `not_treated`.
 """
 @inline init_conv_status() = Convexity_wrapper(not_treated)
 
 """
     constant_wrapper = constant_wrapper()
 
-Return a `Convexity_wrapper` with value `constant`.
+Return a `Convexity_wrapper` wich values `constant`.
 """
 @inline constant_wrapper() = Convexity_wrapper(constant)
 
 """
     linear_wrapper = linear_wrapper()
 
-Return a `Convexity_wrapper` with value `linear`.
+Return a `Convexity_wrapper` wich values `linear`.
 """
 @inline linear_wrapper() = Convexity_wrapper(linear)
 
 """
     convex_wrapper = convex_wrapper()
 
-Return a `Convexity_wrapper` with value `convex`.
+Return a `Convexity_wrapper` wich values `convex`.
 """
 @inline convex_wrapper() = Convexity_wrapper(convex)
 
 """
     concave_wrapper = concave_wrapper()
 
-Return a `Convexity_wrapper` with value `concave`.
+Return a `Convexity_wrapper` wich values `concave`.
 """
 @inline concave_wrapper() = Convexity_wrapper(concave)
 
 """
     unknown_wrapper = unknown_wrapper()
 
-Return a `Convexity_wrapper` with value `unknown`.
+Return a `Convexity_wrapper` wich values `unknown`.
 """
 @inline unknown_wrapper() = Convexity_wrapper(unknown)
 
 """
     not_treated = not_treated_type()
 
-Return a `not_treated::Convexity_type`.
+Return `not_treated::Convexity_type`.
 """
 @inline not_treated_type() = not_treated
 
 """
     constant = constant_type()
 
-Return a `constant::Convexity_type`.
+Return `constant::Convexity_type`.
 """
 @inline constant_type() = constant
 
 """
     linear = linear_type()
 
-Return a `linear::Convexity_type`.
+Return `linear::Convexity_type`.
 """
 @inline linear_type() = linear
 
 """
     convex = convex_type()
 
-Return a `convex::Convexity_type`.
+Return `convex::Convexity_type`.
 """
 @inline convex_type() = convex
 
 """
     concave = concave_type()
 
-Return a `concave::Convexity_type`.
+Return `concave::Convexity_type`.
 """
 @inline concave_type() = concave
 
 """
     unknown = unknown_type()
 
-Return a `unknown::Convexity_type`.
+Return `unknown::Convexity_type`.
 """
 @inline unknown_type() = unknown
 

@@ -127,7 +127,7 @@ end
 """
     result_type = _type_power(index_power::Number, b::Type_expr_basic)
 
-Return `result_type::Type_expr_basic`, resulting of `b^(index)`.
+Return `result_type::Type_expr_basic`, resulting of `b^(index_power)`.
 """
 function _type_power(index_power::Number, type::Type_expr_basic)
   if index_power == 0

@@ -35,7 +35,7 @@ end
 """
     bool = equal_tree(tree1::Type_node{T}, tree2::Type_node{T})
 
-Check recursively if every node is the same for both `tree1` and `tree2`
+Check recursively if every node from `tree1` is the same for `tree2`.
 """
 function equal_tree(tree1::Type_node{T}, tree2::Type_node{T}) where {T}
   children_tree1 = _get_children(tree1)

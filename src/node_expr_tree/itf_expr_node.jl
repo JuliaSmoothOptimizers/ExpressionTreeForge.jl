@@ -15,28 +15,28 @@ _node_is_operator(node::Abstract_expr_node) = false
 """
     bool = _node_is_plus(node::Abstract_expr_node)
 
-Check if `node` is a `+` operator or not.
+Check if `node` is a `+` operator.
 """
 _node_is_plus(node::Abstract_expr_node) = false
 
 """
     bool = _node_is_minus(node::Abstract_expr_node)
 
-Check if `node` is a `-` operator or not.
+Check if `node` is a `-` operator.
 """
 _node_is_minus(node::Abstract_expr_node) = false
 
 """
     bool = _node_is_times(node::Abstract_expr_node)
 
-Check if `node` is a `*` operator or not.
+Check if `node` is a `*` operator.
 """
 _node_is_times(node::Abstract_expr_node) = false
 
 """
     bool = _node_is_power(node::Abstract_expr_node)
 
-Check if `node` is a `^` operator or not.
+Check if `node` is a `^` operator.
 """
 _node_is_power(node::Abstract_expr_node) = false
 
@@ -94,14 +94,14 @@ _get_type_node(node::Abstract_expr_node) = error("Should not be called")
 """
     value = _evaluate_node(node::Abstract_expr_node, value_children::AbstractVector{T}) where T<:Number
 
-Evaluate `node` depending `value_children`.
+Evaluate `node` depending on `value_children`.
 """
 _evaluate_node(node::Abstract_expr_node) = error("Should not be called")
 
 """
     _evaluate_node!(node::Abstract_expr_node, value_children::AbstractVector{T}, ref::MyRef{T}) where T<:Number
 
-Evaluate `node` depending `value_children` and store the result in `ref`.
+Evaluate `node` depending on `value_children` and store the result in `ref`.
 """
 _evaluate_node!(node::Abstract_expr_node) = error("Should not be called")
 
@@ -123,30 +123,30 @@ _cast_constant!(node::Abstract_expr_node) = error("Should not be called")
 """
     [symbols] = _node_to_Expr(node::Abstract_expr_node)
 
-Return the information required to build later on a julia `Expr`.
-An `operator` return the operator symbol (ex: `+` -> `:+`).
-A `variable` return a variable as a `MathOptInterface` variable.
-A `constant` return its value.
+Return the information required to build later on a Julia `Expr`.
+An `operator` node returns the operator symbol (ex: `+` -> `:+`).
+A `variable` node returns a variable as a `MathOptInterface` variable.
+A `constant` node returns its value.
 """
 _node_to_Expr(node::Abstract_expr_node) = error("Should not be called")
 
 """
     [symbols] = _node_to_Expr2(node::Abstract_expr_node)
 
-Return the information required to build later on a julia `Expr`.
-An `operator` return the operator symbol (ex: `+` -> `:+`).
+Return the information required to build later on a Julia `Expr`.
+An `operator` node returns the operator symbol (ex: `+` -> `:+`).
 A `variable` return a variable.
-A `constant` return its value.
+A `constant` node returns its value.
 """
 _node_to_Expr2(node::Abstract_expr_node) = error("Should not be called")
 
 """
     [symbols] = _node_to_Expr2(node::Abstract_expr_node)
 
-Return the information required to build later on a julia `Expr`.
-An `operator` return the operator symbol (ex: `+` -> `:+`).
+Return the information required to build later on a Julia `Expr`.
+An `operator` node returns the operator symbol (ex: `+` -> `:+`).
 A `variable` return a `MathOptInterface.VariableIndex()`.
-A `constant` return its value.
+A `constant` node returns its value.
 """
 _node_to_Expr_JuMP(node::Abstract_expr_node) = error("Should not be called")
 

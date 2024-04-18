@@ -66,7 +66,7 @@ create_Expr(tree::AbstractExprTree) = error("Should not be called, create_Expr")
 """
     expr = create_expr_tree(tree)
 
-Create a julia `Expr` from `tree`.
+Create a Julia `Expr` from `tree`.
 Several types of tree are supported.
 For now, it supports `Expr` and `ModelingToolkit.Operation`, as well as the internal expression trees defined.
 """
