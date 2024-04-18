@@ -7,6 +7,6 @@ Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [compat]
 Documenter = "~0.25"
-JuMP = "1.1.1"
-MathOptInterface = "1.7.0"
-Symbolics = "4.10.4"
+JuMP = "1.1.1 - 1.8"
+MathOptInterface = "1.7 - 1.27"
+Symbolics = "4.10.4 - 5.1"
