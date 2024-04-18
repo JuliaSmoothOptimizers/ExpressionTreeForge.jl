@@ -5,14 +5,14 @@ using ..M_abstract_expr_tree
 """
     node = _get_expr_node(tree::AbstractExprTree)
 
-Return the `node` being the `root` of the `tree`.
+Return the root `node` of `tree`.
 """
 _get_expr_node(tree::AbstractExprTree) = error("Should not be called.")
 
 """
     children = _get_expr_children(tree::AbstractExprTree)
 
-Return the `children` of the `root` of `tree`.
+Return the `children` from the `root` of `tree`.
 """
 _get_expr_children(tree::AbstractExprTree) = error("Should not be called.")
 

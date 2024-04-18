@@ -4,11 +4,11 @@ ExpressionTreeForge.jl analyzes and manipulates expression trees.
 It interfaces several implementations of expression trees to the internal type `Type_expr_tree` (with `transform_to_expr_tree()`).
 
 The main expression trees supported are:
-- julia `Expr`
+- Julia `Expr`
 ```@example ExpressionTreeForge
 using ExpressionTreeForge
-expr_julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
-expr_tree_Expr = transform_to_expr_tree(expr_julia)
+expr_Julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
+expr_tree_Expr = transform_to_expr_tree(expr_Julia)
 ```
 
 - `Expr` from [JuMP](https://github.com/jump-dev/JuMP.jl) model (with `MathOptInterface`)
@@ -23,12 +23,8 @@ MathOptInterface.initialize(evaluator, [:ExprGraph])
 expr_jump = MathOptInterface.objective_expr(evaluator)
 expr_tree_JuMP = transform_to_expr_tree(expr_jump)
 ```
-Both trees have the same shape
-```@example ExpressionTreeForge
-expr_tree_Expr == expr_tree_JuMP
-```
 
-- expression tree from a julia function created by [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl)
+- an `Expr` which is the result of `@variables` from [Symbolics.jl](https://github.com/JuliaSymbolics/Symbolics.jl) to a Julia function:
 ```@example ExpressionTreeForge
 using Symbolics
 function f(y)    
@@ -37,16 +33,14 @@ end
 n = 3
 Symbolics.@variables x[1:n] # must be x
 
-mtk_tree = f(x)
+fun = f(x)
+mtk_tree = Symbolics._toexpr(fun)
 expr_tree_Symbolics = transform_to_expr_tree(mtk_tree)
 ```
-which may perform automatically some simplifications and/or reorder the terms.
+Note that depending on the library used, the expression tree may be simplified and/or have reordered terms.
 However, `expr_tree_Expr`, `expr_tree_JuMP` and `expr_tree_Symbolics` share the same type `::Type_expr_tree`:
 ```@example ExpressionTreeForge
-typeof(expr_tree_Expr) == typeof(expr_tree_JuMP)
-```
-```@example ExpressionTreeForge
-typeof(expr_tree_Expr) == typeof(expr_tree_Symbolics)
+(typeof(expr_tree_Expr) == typeof(expr_tree_JuMP)) && (typeof(expr_tree_Expr) == typeof(expr_tree_Symbolics))
 ```
 
 With a `Type_expr_tree`, you can:
@@ -62,22 +56,23 @@ f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i 
 ```
 which means `ExpressionTreeForge.jl` detects that $f$ is a sum, and returns:
 - the element functions $\hat{f}_i$;
-- the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*), which are represented via $U_i$.
+- the variables appearing in $\hat{f}_i$ (i.e. *elemental variables*), which are selected with $U_i$.
 
-You detect the element functions with `extract_element_functions()`, which returns a vector of `Type_expr_tree`s:
+The method `extract_element_functions()` detects the element functions and returns a vector of `Type_expr_tree`s:
 ```@example ExpressionTreeForge
 expr_tree = copy(expr_tree_Expr)
 element_functions = extract_element_functions(expr_tree)
 show(element_functions[2])
 ```
-**Warning**: the `element_functions` are pointers to nodes of `expr_tree`. Any modification to `element_functions` will be applied to `expr_tree`!
+**Warning**: the `element_functions` are pointers to nodes of `expr_tree`. 
+Any modification to `element_functions` will be applied to `expr_tree` !!
 
-You extract the elemental variables by applying `get_elemental_variables()` on every element function expression tree
+The elemental variables are retrieved by applying `get_elemental_variables()` to every element function expression tree
 ```@example ExpressionTreeForge
 Us = get_elemental_variables.(element_functions)
 ```
 
-Then you can replace the index variables of an element function expression tree so they stay in the range `1:length(Us[i])`:
+Then you can replace the index variables of an element function expression tree so they stay in the range `1:length(Us[i])`, i.e. $1$ to $n_i$:
 ```@example ExpressionTreeForge
 # change the indices of the second element function
 normalize_indices!(element_functions[2], Us[2])
@@ -96,14 +91,14 @@ The gradient computation of an expression tree can either use `ForwardDiff` or `
 ∇f_reverse = gradient_reverse(expr_tree_Expr, y)
 ```
 ```@example ExpressionTreeForge
-gradient_forward == gradient_reverse
+∇f_forward == ∇f_reverse
 ```
 and the Hessian is computed with
 ```@example ExpressionTreeForge
 hess = hessian(expr_tree_Expr, y)
 ```
 
-AD methods can be applied to the element-function expression trees:
+Automatic differentiation methods can be applied directly to the element-function expression trees:
 ```
 y1 = ones(length(Us[1]))
 f1 = element_functions[1]
@@ -121,28 +116,33 @@ To compute bounds and convexity we use a `Complete_expr_tree`, a richer structur
 `Complete_expr_tree` is similar to `Type_expr_tree`, but in addition it stores: the lower bound, the upper bound and the convexity status of each node.
 You can define a `Complete_expr_tree` for any `Type_expr_tree`:
 ```@example ExpressionTreeForge
-completetree = complete_tree(expr_tree_Expr)
+complete_tree = complete_tree(expr_tree_Expr)
 ```
-You compute the bounds and the convexity status afterward
+The bounds and convexity status are then propagated using the methods:
 ```@example ExpressionTreeForge
 # propagate the bounds from the variables
-set_bounds!(completetree)
+set_bounds!(complete_tree)
 # deduce the convexity status of each node
-set_convexity!(completetree)
+set_convexity!(complete_tree)
+```
+```@example ExpressionTreeForge
 # get the root bounds
-bounds = get_bounds(completetree)
+bounds = get_bounds(complete_tree)
 ```
 
 ```@example ExpressionTreeForge
 # get the root convexity status
-convexity_status = get_convexity_status(completetree)
+convexity_status = get_convexity_status(complete_tree)
 is_convex(convexity_status)
 ```
 
-You can observe the bounds and convexity status of each node of `completetree` by walking the graph
+You can observe the bounds and convexity status of each node of `complete_tree` by walking the graph
 ```@example ExpressionTreeForge
 # convexity statuses of the root's children
-statuses = get_convexity_status.(completetree.children) 
+statuses = get_convexity_status.(complete_tree.children) 
+```
+
+```@example ExpressionTreeForge
 # bounds of the root's children
-bounds = get_bounds.(completetree.children)
+bounds = get_bounds.(complete_tree.children)
 ```

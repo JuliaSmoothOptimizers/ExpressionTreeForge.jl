@@ -13,7 +13,7 @@ Type_node = M_implementation_tree.Type_node
     Type_expr_tree{T} <: AbstractTree
 
 Basic implementation of an expression tree.
-Every expression tree supported must be able to return `Type_expr_tree`.
+Every expression tree supported must be able to return `Type_expr_tree` with `transform_to_expr_tree`.
 A `Type_expr_tree` has fields:
 
 * `field::Abstract_expr_node` representing an operator, a constant or a variable;
@@ -49,7 +49,7 @@ Type_calculus_tree = M_implementation_type_expr.Type_expr_basic
 """
     bound_tree = create_bounds_tree(tree)
 
-Return a `similar` expression tree to `tree`, where each node has an undefined bounds.
+Return a convexity tree shaped as `tree`, where each node has an undefined bounds.
 """
 @inline create_bounds_tree(t) = M_bound_propagations.create_bounds_tree(t)
 
@@ -57,8 +57,8 @@ Return a `similar` expression tree to `tree`, where each node has an undefined b
     set_bounds!(tree::Type_expr_tree, bound_tree::Bound_tree)
     set_bounds!(complete_tree::Complete_expr_tree)
 
-Set the bounds of `bound_tree` by walking `tree` and propagate the computation from the leaves to the root.
-A `Complete_expr_tree` contains a precompiled `bound_tree`, and then can be use alone.
+Set the bounds of `bound_tree` by walking `tree` and propagate the bounds' computation from the leaves to the root.
+As a `Complete_expr_tree` contains a precompiled `bound_tree`, it can be used alone.
 """
 @inline set_bounds!(tree, bound_tree) = M_bound_propagations.set_bounds!(tree, bound_tree)
 
@@ -67,14 +67,14 @@ A `Complete_expr_tree` contains a precompiled `bound_tree`, and then can be use 
 """
     (inf_bound, sup_bound) = get_bounds(bound_tree::Bound_tree)
 
-Retrieve the bounds of the root of `bound_tree`, the bounds of expression tree.
+Retrieve the bounds from the root of `bound_tree` (a given bounds' tree).
 """
 @inline get_bounds(bound_tree) = M_bound_propagations.get_bounds(bound_tree)
 
 """
     convex_tree = create_convex_tree(tree::Type_expr_tree)
 
-Return a `similar` expression tree to `tree`, where each node has an undefined convexity status.
+Return bounds' tree with the same shaped  than `tree`, where each node has an undefined convexity status.
 """
 @inline create_convex_tree(tree) = M_convexity_detection.create_convex_tree(tree)
 
@@ -83,8 +83,8 @@ Return a `similar` expression tree to `tree`, where each node has an undefined c
     set_convexity!(complete_tree::Complete_expr_tree)
 
 Deduce from elementary rules the convexity status of `tree` nodes or `complete_tree` nodes.
-`complete_tree` integrate a bounds tree and can run alone the convexity detection whereas `tree`
- require the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
+`complete_tree` stores a bounds tree and can run the convexity detection standalone whereas `tree`
+ requires the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
 """
 @inline set_convexity!(tree, convexity_tree, bound_tree) =
   M_convexity_detection.set_convexity!(tree, convexity_tree, bound_tree)
@@ -95,7 +95,7 @@ Deduce from elementary rules the convexity status of `tree` nodes or `complete_t
     convexity_status = get_convexity_status(convexity_tree::M_convexity_detection.Convexity_tree)
     convexity_status = get_convexity_status(complete_tree::Complete_expr_tree)
 
-Return the convexity status of either `convexity_tree` or `complete_tree`.
+Return the convexity status of either a `convexity_tree` or a `complete_tree`.
 The status can be:
 * `constant`
 * `linear`
@@ -113,35 +113,35 @@ The status can be:
 """
     constant = constant_type() 
 
-Return the value of `constant` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `constant` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline constant_type() = M_implementation_convexity_type.constant_type()
 
 """
     linear = linear_type() 
 
-Return the value of `linear` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `linear` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline linear_type() = M_implementation_convexity_type.linear_type()
 
 """
     convex = convex_type() 
 
-Return the value of `convex` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `convex` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline convex_type() = M_implementation_convexity_type.convex_type()
 
 """
     concave = concave_type() 
 
-Return the value of `concave` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `concave` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline concave_type() = M_implementation_convexity_type.concave_type()
 
 """
     unknown = unknown_type() 
 
-Return the value of `unknown` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
+Return the value `unknown` from the enumerative type `M_implementation_convexity_type.Convexity_type`.
 """
 @inline unknown_type() = M_implementation_convexity_type.unknown_type()
 
@@ -149,7 +149,7 @@ Return the value of `unknown` from the enumerative type `M_implementation_convex
     bool = is_treated(status::Convexity_type)
     bool = is_treated(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is different of `not_treated`.
+Check if `convexity` or `status` is equal to different of `not_treated`.
 """
 @inline is_treated(convexity_status) = M_implementation_convexity_type.is_treated(convexity_status)
 
@@ -157,7 +157,7 @@ Check if `convexity_status` is different of `not_treated`.
     bool = is_not_treated(status::Convexity_type)
     bool = is_not_treated(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is `not_treated`.
+Check if `convexity` or `status` is equal to `not_treated`.
 """
 @inline is_not_treated(convexity_status) =
   M_implementation_convexity_type.is_not_treated(convexity_status)
@@ -166,7 +166,7 @@ Check if `convexity_status` is `not_treated`.
     bool = is_constant(status::Convexity_type)
     bool = is_constant(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is `constant`.
+Check if `convexity` or `status` is equal to `constant`.
 """
 @inline is_constant(convexity_status) =
   M_implementation_convexity_type.is_constant(convexity_status)
@@ -175,7 +175,7 @@ Check if `convexity_status` is `constant`.
     bool = is_linear(status::Convexity_type)
     bool = is_linear(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is `linear`.
+Check if `convexity` or `status` is equal to `linear`.
 """
 @inline is_linear(convexity_status) = M_implementation_convexity_type.is_linear(convexity_status)
 
@@ -183,7 +183,7 @@ Check if `convexity_status` is `linear`.
     bool = is_convex(status::Convexity_type)
     bool = is_convex(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is `convex`.
+Check if `convexity` or `status` is equal to `convex`.
 """
 @inline is_convex(convexity_status) = M_implementation_convexity_type.is_convex(convexity_status)
 
@@ -191,7 +191,7 @@ Check if `convexity_status` is `convex`.
     bool = is_concave(status::Convexity_type)
     bool = is_concave(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is `concave`.
+Check if `convexity` or `status` is equal to `concave`.
 """
 @inline is_concave(convexity_status) = M_implementation_convexity_type.is_concave(convexity_status)
 
@@ -199,7 +199,7 @@ Check if `convexity_status` is `concave`.
     bool = is_unknown(status::Convexity_type)
     bool = is_unknown(convexity::Convexity_wrapper)
 
-Check if `convexity_status` is `unknown`.
+Check if `convexity` or `status` is equal to `unknown`.
 """
 @inline is_unknown(convexity_status) = M_implementation_convexity_type.is_unknown(convexity_status)
 
@@ -213,35 +213,35 @@ Create a `complete_tree::Complete_expr_tree` from `expression_tree`.
 """
     bool = is_constant(type::Type_calculus_tree)
 
-Check if `type` have the value `constant` from the enumerative type `Type_calculus_tree`.
+Check if `type` values `constant` from the enumerative type `Type_calculus_tree`.
 """
 @inline is_constant(type::Type_calculus_tree) = type == Type_calculus_tree(0)
 
 """
     bool = is_linear(type::Type_calculus_tree)
 
-Check if `type` have the value `linear` from the enumerative type `Type_calculus_tree`.
+Check if `type` values `linear` from the enumerative type `Type_calculus_tree`.
 """
 @inline is_linear(type::Type_calculus_tree) = type == Type_calculus_tree(1)
 
 """
     bool = is_quadratic(type::Type_calculus_tree)
 
-Check if `type` have the value `quadratic` from the enumerative type `Type_calculus_tree`.
+Check if `type` values `quadratic` from the enumerative type `Type_calculus_tree`.
 """
 @inline is_quadratic(type::Type_calculus_tree) = type == Type_calculus_tree(2)
 
 """
     bool = is_cubic(type::Type_calculus_tree)
 
-Check if `type` have the value `cubic` from the enumerative type `Type_calculus_tree`.
+Check if `type` values `cubic` from the enumerative type `Type_calculus_tree`.
 """
 @inline is_cubic(type::Type_calculus_tree) = type == Type_calculus_tree(3)
 
 """
     bool = is_more(type::Type_calculus_tree)
 
-Check if `type` have the value `more` from the enumerative type `Type_calculus_tree`.
+Check if `type` values `more` from the enumerative type `Type_calculus_tree`.
 """
 @inline is_more(type::Type_calculus_tree) = type == Type_calculus_tree(4)
 
@@ -257,7 +257,7 @@ Print a tree as long as it satisfies the interface `M_interface_tree`.
 
 Transform `expr_tree` into an `Expr`.
 `expr_tree` may be a `Type_expr_tree` or a `Complete_expr_tree`.
-Warning: This function return an `Expr` with variables as `MathOptInterface.VariableIndex`.
+**Warning**: This function return an `Expr` with variables as `MathOptInterface.VariableIndex`.
 In order to get an standard `Expr` use `transform_to_Expr_julia`.
 """
 @inline transform_to_Expr(e::Any) = M_trait_expr_tree.transform_to_Expr(e::Any)
@@ -288,12 +288,12 @@ Transform `expr` into an `expr_tree::Type_expr_tree`.
 """
     separated_terms = extract_element_functions(expr_tree)
 
-Return the element functions of `expr_tree` as a vector of its subexpression.
+Return the element functions of `expr_tree` as a vector of its subexpressions.
 `expr_tree` may be an `Expr`, a `Type_expr_tree` or a `Complete_expr_tree`.
 
 Example:
 ```julia
-julia> extract_element_functions(:(x[1] + x[2] + x[3]*x[4] ) )
+julia> extract_element_functions(:(x[1] + x[2] + x[3]*x[4]))
 3-element Vector{Expr}:
  :(x[1])
  :(x[2])
@@ -341,7 +341,7 @@ julia> get_elemental_variables(:(x[1]^2 + x[6] + x[2]) )
 """
     Ui = get_Ui(indices::Vector{Int}, n::Int)
 
-Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variables`.
+Create a `SparseMatrix` `Ui` from `indices` computed by `get_elemental_variables`.
 Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
 @inline get_Ui(indices::Vector{Int}, n::Int) = M_algo_expr_tree.get_Ui(indices, n)
@@ -349,8 +349,8 @@ Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Eucli
 """
     normalize_indices!(expr_tree, vector_indices::Vector{Int})
 
-Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
-It it paired with `get_elemental_variables` to define the elemental element functions expression tree.
+Change the indices of the variables from `expr_tree` to follow the order given by `vector_indices`.
+It is paired with `get_elemental_variables` to define the elemental element function expression tree.
 `expr_tree` may be an `Expr`, a `Type_expr_tree` or a `Complete_expr_tree`.
 
 Example:
@@ -375,7 +375,7 @@ Cast to `type` the constants of `expr_tree`.
 Return a `MathOptInterface.Nonlinear.Model` and its initialized evaluator for any `expr_tree` supported.
 `variables` informs the indices of the variables appearing in `expr_tree`.
 If `variables` is not provided, it is determined automatically through `sort!(get_elemental_variables(expr_tree))`.
-Warning: `variables` must be sorted!
+**Warning**: `variables` must be sorted!
 Example:
 ```julia
 expr_tree = :(x[1]^2 + x[3]^3)
@@ -389,7 +389,7 @@ MOI.eval_objective(evaluator, x)
 grad = similar(x)
 MOI.eval_objective_gradient(evaluator, grad, x)
 ```
-Warning: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
+**Warning**: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
 """
 @inline non_linear_JuMP_model_evaluator(ex::Any; kwargs...) = M_algo_expr_tree.non_linear_JuMP_model_evaluator(ex; kwargs...)
 
@@ -398,7 +398,7 @@ Warning: The size of `x` depends on the number of variables of `expr_tree` and n
 
 Return the evaluator of a `MathOptInterface.Nonlinear.Model` defined by `expr_tree`, as long as it is supported.
 The `evaluator` considers the objective function as the sum of `expr_trees` and a constraint for each `expr_tree` contained in `expr_trees`.
-If the expression trees in `expr_trees` depend on a subset of variables, the constraint Jacobian will be sparse.
+If the expression trees in `expr_trees` depend on a subset of variables, the Jacobian of the constraints will be sparse.
 """
 @inline sparse_jacobian_JuMP_model(expr_trees::Any) = M_algo_expr_tree.sparse_jacobian_JuMP_model(expr_trees)
 
@@ -427,7 +427,7 @@ julia> evaluate_expr_tree(:(x[1] + x[2]), ones(2))
     evaluate_expr_tree_multiple_points(expression_tree::Any, x::AbstractVector{AbstractVector}})
     evaluate_expr_tree_multiple_points(expression_tree::Any)
 
-Evaluate the `expression_tree` with several points, represented as `x`.
+Evaluate the `expression_tree` for several points, represented as `x`.
 """
 @inline evaluate_expr_tree_multiple_points(expression_tree::Any, x::AbstractVector) =
   M_evaluation_expr_tree.evaluate_expr_tree_multiple_points(expression_tree, x)
@@ -461,7 +461,7 @@ julia> gradient_reverse(:(x[1] + x[2]), rand(2))
 """
     hess = hessian(expr_tree, x)
 
-Evaluate the Hessian of `expr_tree` at the point `x` with forward automatic differentiation.
+Evaluate the Hessian of `expr_tree` at the point `x` with a forward automatic differentiation.
 
 Example:
 ```julia

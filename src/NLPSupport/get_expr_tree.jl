@@ -7,7 +7,7 @@ using NLPModelsJuMP, ADNLPModels
     expr = get_expression_tree(adnlp::ADNLPModel)
     expr = get_expression_tree(model::JuMP.Model)
 
-Return the objective function as a `Type_expr_tree` for a: `MathOptNLPModel`, `ADNLPModel `JuMP.Model`.
+Return the objective function as a `Type_expr_tree` for: a `MathOptNLPModel`, a `ADNLPModel` or a `JuMP.Model`.
 """
 get_expression_tree(nlp::MathOptNLPModel) = get_expression_tree(nlp.eval.model)
 function get_expression_tree(model::JuMP.Model)

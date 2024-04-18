@@ -19,7 +19,7 @@ Convexity_tree{T} =
 """
     convex_tree = create_convex_tree(tree::Type_node)
 
-Return a `similar` expression tree to `tree`, where each node has an undefined convexity status.
+Return bounds' tree with the same shaped  than `tree`, where each node has an undefined convexity status.
 """
 @inline create_convex_tree(tree::M_implementation_tree.Type_node) = Convexity_tree(
   M_implementation_convexity_type.init_conv_status(),
@@ -30,10 +30,10 @@ Return a `similar` expression tree to `tree`, where each node has an undefined c
   Convexity_tree(M_implementation_convexity_type.init_conv_status(), [])
 
 """
-  convexity_status = get_convexity_status(convexity_tree::M_convexity_detection.Convexity_tree)
-  convexity_status = get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree)
+    convexity_status = get_convexity_status(convexity_tree::M_convexity_detection.Convexity_tree)
+    convexity_status = get_convexity_status(complete_tree::M_implementation_complete_expr_tree.Complete_expr_tree)
 
-Return the convexity status of either `convexity_tree` or `complete_tree`.
+Return the convexity status of either a `convexity_tree` or a `complete_tree`.
 The status can be:
 * `constant`
 * `linear`
@@ -88,8 +88,8 @@ Return the value `unknown` from the enumerative type `M_implementation_convexity
     set_convexity!(complete_tree)
 
 Deduce from elementary rules the convexity status of `tree` nodes or `complete_tree` nodes.
-`complete_tree` integrate a bounds tree and can run alone the convexity detection whereas `tree`
-require the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
+`complete_tree` stores a bounds tree and can run the convexity detection standalone whereas `tree`
+ requires the `bound_tree` (see `create_bounds_tree`) and `convexity_tree` (see `create_convex_tree`).
 """
 function set_convexity!(
   tree::M_implementation_tree.Type_node,

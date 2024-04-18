@@ -108,7 +108,7 @@ end
     indices = get_elemental_variables(expr_tree)
 
 Return the `indices` of the variable appearing in `expr_tree`.
-This function find the elemental variables from the expression tree of an element function.
+This function finds the elemental variables from the expression tree of an element function.
 
 Example:
 ```julia
@@ -146,7 +146,7 @@ end
 """
     Ui = get_Ui(indices::Vector{Int}, n::Int)
 
-Create a sparse matrix `Ui` from `indices` computed by `get_elemental_variables`.
+Create a `SparseMatrix` `Ui` from `indices` computed by `get_elemental_variables`.
 Every index `i` (of `indices`) form a line of `Ui` corresponding to `i`-th Euclidian vector.
 """
 function get_Ui(index_vars::Vector{Int}, n::Int)
@@ -164,8 +164,8 @@ end
 """
     normalize_indices!(expr_tree, vector_indices; initial_index=0)
 
-Change the indices of the variables of `expr_tree` given the order given by `vector_indices`.
-It it paired with `get_elemental_variables` to define the elemental element functions expression tree.
+Change the indices of the variables from `expr_tree` to follow the order given by `vector_indices`.
+It is paired with `get_elemental_variables` to define the elemental element function expression tree.
 
 Example:
 ```julia
@@ -311,7 +311,7 @@ end
 Return the evaluator of a `MOI.Nonlinear.Model` defined by `expr_tree`, as long as it is supported.
 `variables` informs the indices of the variables appearing in `expr_tree`.
 If `variables` is not provided, it is determined automatically through `sort!(get_elemental_variables(expr_tree))`.
-Warning: `variables` must be sorted!
+**Warning**: `variables` must be sorted!
 Example:
 ```julia
 expr_tree = :(x[1]^2 + x[3]^3)
@@ -325,7 +325,7 @@ MOI.eval_objective(evaluator, x)
 grad = similar(x)
 MOI.eval_objective_gradient(evaluator, grad, x)
 ```
-Warning: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
+**Warning**: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
 """
 function non_linear_JuMP_model_evaluator(expr_tree; variables=sort!(get_elemental_variables(expr_tree)))
   model = MOI.Nonlinear.Model()
@@ -345,7 +345,7 @@ end
 
 Return the evaluator of a `MOI.Nonlinear.Model` defined by `expr_tree`, as long as it is supported.
 The `evaluator` considers the objective function as the sum of `expr_trees` and a constraint for each `expr_tree` contained in `expr_trees`.
-If the expression trees in `expr_trees` depend on a subset of variables, the constraint Jacobian will be sparse.
+If the expression trees in `expr_trees` depend on a subset of variables, the Jacobian of the constraints will be sparse.
 """
 function sparse_jacobian_JuMP_model(expr_trees)
   model = MOI.Nonlinear.Model()

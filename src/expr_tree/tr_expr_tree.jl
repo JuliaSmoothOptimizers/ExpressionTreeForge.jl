@@ -11,9 +11,9 @@ import Base.==
 
 export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree, sum_expr_trees
 
-"""Type instantiated dynamically checking that an argument is an expression tree."""
+"""Type instantiated dynamically representeing that an argument is an expression tree."""
 struct Is_expr_tree end
-"""Type instantiated dynamically checking that an argument is not an expression tree."""
+"""Type instantiated dynamically representeing that an argument is not an expression tree."""
 struct Is_not_expr_tree end
 
 """
@@ -35,7 +35,7 @@ Return `Is_expr_tree ` if `arg` is considered as an implementation of an express
 """
     node = get_expr_node(tree::AbstractExprTree)
 
-Return the `node` being the `root` of the `tree`.
+Return the root `node` of `tree`.
 """
 @inline get_expr_node(a) = _get_expr_node(a, is_expr_tree(a))
 @inline _get_expr_node(a, ::Is_not_expr_tree) = error(" This is not an expr tree")
@@ -44,7 +44,7 @@ Return the `node` being the `root` of the `tree`.
 """
     children = get_expr_children(tree::AbstractExprTree)
 
-Return the `children` of the `root` of `tree`.
+Return the `children` from the `root` of `tree`.
 """
 @inline get_expr_children(a) = _get_expr_children(a, is_expr_tree(a))
 @inline _get_expr_children(a, ::Is_not_expr_tree) = error("This is not an expr tree")
@@ -68,7 +68,7 @@ end
 """
     minus_tree = inverse_expr_tree(tree::AbstractExprTree)
 
-Apply a unary minus on `tree`.
+Return `minus_tree` which apply a unary minus onto `tree`.
 """
 @inline inverse_expr_tree(a) = _inverse_expr_tree(a, is_expr_tree(a))
 @inline _inverse_expr_tree(a, ::Is_not_expr_tree) = error("This is not an expr tree")
@@ -77,7 +77,7 @@ Apply a unary minus on `tree`.
 """
     bool = expr_tree_equal(expr_tree1, expr_tree2, eq::Atomic{Bool} = Atomic{Bool}(true))
 
-Check if `expr_tree1` and `expr_tree2` valued the same, by checking recursively their respective nodes. 
+Check if both `expr_tree1` and `expr_tree2` represent the same expression tree.
 """
 @inline expr_tree_equal(a, b, eq::Atomic{Bool} = Atomic{Bool}(true)) =
   hand_expr_tree_equal(a, b, is_expr_tree(a), is_expr_tree(b), eq)
