@@ -6,7 +6,8 @@ using ..M_abstract_expr_tree, ..M_implementation_expr_tree, ..M_implementation_c
 import ..M_interface_expr_tree:
   _get_expr_node, _get_expr_children, _inverse_expr_tree, _sum_expr_trees
 import ..M_implementation_expr_tree: Type_expr_tree, _get_real_node
-import ..M_interface_expr_tree: _transform_to_expr_tree, _expr_tree_to_create, _transform_to_Expr_JuMP
+import ..M_interface_expr_tree:
+  _transform_to_expr_tree, _expr_tree_to_create, _transform_to_Expr_JuMP
 import Base.==
 
 export is_expr_tree, get_expr_node, get_expr_children, inverse_expr_tree, sum_expr_trees

@@ -359,7 +359,8 @@ julia> normalize_indices!(:(x[4] + x[5]), [4,5])
 :(x[1] + x[2])
 ```
 """
-@inline normalize_indices!(a::Any, v::AbstractVector{Int}; kwargs...) = M_algo_expr_tree.normalize_indices!(a, v; kwargs...)
+@inline normalize_indices!(a::Any, v::AbstractVector{Int}; kwargs...) =
+  M_algo_expr_tree.normalize_indices!(a, v; kwargs...)
 
 """
     cast_type_of_constant(expr_tree, type::DataType)
@@ -391,7 +392,8 @@ MOI.eval_objective_gradient(evaluator, grad, x)
 ```
 **Warning**: The size of `x` depends on the number of variables of `expr_tree` and not from the highest variable's index.
 """
-@inline non_linear_JuMP_model_evaluator(ex::Any; kwargs...) = M_algo_expr_tree.non_linear_JuMP_model_evaluator(ex; kwargs...)
+@inline non_linear_JuMP_model_evaluator(ex::Any; kwargs...) =
+  M_algo_expr_tree.non_linear_JuMP_model_evaluator(ex; kwargs...)
 
 """
     evaluator = sparse_jacobian_JuMP_model(expr_trees)
@@ -400,8 +402,8 @@ Return the evaluator of a `MathOptInterface.Nonlinear.Model` defined by `expr_tr
 The `evaluator` considers the objective function as the sum of `expr_trees` and a constraint for each `expr_tree` contained in `expr_trees`.
 If the expression trees in `expr_trees` depend on a subset of variables, the Jacobian of the constraints will be sparse.
 """
-@inline sparse_jacobian_JuMP_model(expr_trees::Any) = M_algo_expr_tree.sparse_jacobian_JuMP_model(expr_trees)
-
+@inline sparse_jacobian_JuMP_model(expr_trees::Any) =
+  M_algo_expr_tree.sparse_jacobian_JuMP_model(expr_trees)
 
 """
     evaluate_expr_tree(expr_tree::Type_expr_tree, x::AbstractVector)
