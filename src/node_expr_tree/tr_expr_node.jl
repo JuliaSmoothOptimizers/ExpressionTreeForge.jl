@@ -313,7 +313,8 @@ A `constant` node returns its value.
 """
 @inline node_to_Expr_JuMP(a) = _node_to_Expr_JuMP(a, is_expr_node(a))
 @inline _node_to_Expr_JuMP(a, ::Type_expr_node) = _node_to_Expr_JuMP(a)
-@inline _node_to_Expr_JuMP(a, ::Type_not_expr_node) = error("This node is not a expression tree node")
+@inline _node_to_Expr_JuMP(a, ::Type_not_expr_node) =
+  error("This node is not a expression tree node")
 
 """
     bool = cast_constant!(node::Abstract_expr_node, type::Datatype)
