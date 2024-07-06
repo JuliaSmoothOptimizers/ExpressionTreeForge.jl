@@ -15,11 +15,11 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [compat]
-ADNLPModels = "0.4.0 - 0.7"
+ADNLPModels = "0.4.0 - 0.8"
 ForwardDiff = "0.10"
 JuMP = "1.1.1 - 1.8"
 MathOptInterface = "1.7 - 1.27"
-NLPModelsJuMP = "0.11.1 - 0.12.5"
+NLPModelsJuMP = "0.11.1 - 0.13.0"
 ReverseDiff = "1.14"
 Symbolics = "4.10.4 - 5.1"
 julia = "^1.6.0"
