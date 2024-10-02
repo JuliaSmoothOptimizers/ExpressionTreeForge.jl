@@ -37,6 +37,6 @@
   @test isapprox(
     mapreduce(x -> ExpressionTreeForge.evaluate_expr_tree(expr_tree, x), +, all_x),
     mapreduce(x -> MathOptInterface.eval_objective(evaluator, x), +, all_x),
-    atol = 1e-5  
+    atol = 1e-5,
   )
 end

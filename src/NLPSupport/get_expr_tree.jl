@@ -11,23 +11,24 @@ using NLPModelsJuMP, ADNLPModels
 Return the objective function as a `Type_expr_tree` for: a `MathOptNLPModel`, a `ADNLPModel`, a `JuMP.Model` or a `MOI.Nonlinear.Evaluator`.
 """
 function get_expression_tree(model::JuMP.Model)
-  nlp = JuMP.nonlinear_model(model; force=true)
+  nlp = JuMP.nonlinear_model(model; force = true)
   evaluator = MOI.Nonlinear.Evaluator(nlp)
   F = MOI.get(model, MOI.ObjectiveFunctionType())
   MOI.get(model, MOI.ObjectiveFunction{F}())
   if F <: MOI.ScalarNonlinearFunction
-      MOI.Nonlinear.set_objective(nlp, MOI.get(model, MOI.ObjectiveFunction{F}()))
+    MOI.Nonlinear.set_objective(nlp, MOI.get(model, MOI.ObjectiveFunction{F}()))
   end
   return get_expression_tree(evaluator)
 end
 
 get_expression_tree(nlp::MathOptNLPModel) = get_expression_tree(nlp.eval)
-get_expression_tree(model::MathOptInterface.Nonlinear.Model) = get_expression_tree(MathOptInterface.Nonlinear.Evaluator(model))
+get_expression_tree(model::MathOptInterface.Nonlinear.Model) =
+  get_expression_tree(MathOptInterface.Nonlinear.Evaluator(model))
 
 function get_expression_tree(evaluator::MOI.Nonlinear.Evaluator)
   MathOptInterface.initialize(evaluator, [:ExprGraph])
   obj_Expr = MathOptInterface.objective_expr(evaluator)::Expr
-  expr_tree = 
+  expr_tree =
     ExpressionTreeForge.transform_to_expr_tree(obj_Expr)::ExpressionTreeForge.Type_expr_tree
   return expr_tree
 end
