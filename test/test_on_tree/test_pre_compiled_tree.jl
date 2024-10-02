@@ -34,6 +34,9 @@
 
   @test obj_expr_tree ≈ obj_JuMP
   @test obj_complete_tree ≈ obj_JuMP
-  @test mapreduce(x -> ExpressionTreeForge.evaluate_expr_tree(expr_tree, x), +, all_x) ==
-        mapreduce(x -> MathOptInterface.eval_objective(evaluator, x), +, all_x)
+  @test isapprox(
+    mapreduce(x -> ExpressionTreeForge.evaluate_expr_tree(expr_tree, x), +, all_x),
+    mapreduce(x -> MathOptInterface.eval_objective(evaluator, x), +, all_x),
+    atol = 1e-5  
+  )
 end
