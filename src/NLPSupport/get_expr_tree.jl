@@ -17,7 +17,6 @@ function get_expression_tree(model::JuMP.Model)
   MOI.get(model, MOI.ObjectiveFunction{F}())
   if F <: MOI.ScalarNonlinearFunction
       MOI.Nonlinear.set_objective(nlp, MOI.get(model, MOI.ObjectiveFunction{F}()))
-      # has_nonlinear = true
   end
   return get_expression_tree(evaluator)
 end
