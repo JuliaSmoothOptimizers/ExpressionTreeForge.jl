@@ -79,10 +79,10 @@ makedocs(
   ],
   doctest = true,
   # linkcheck = true,
-  strict = true,
+  # strict = true,
   format = Documenter.HTML(
     assets = ["assets/style.css"],
-    prettyurls = get(ENV, "CI", nothing) == "true",
+    prettyurls = get(ENV, "CI", nothing) == "true"; size_threshold=1000000
   ),
   sitename = "ExpressionTreeForge.jl",
   pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
