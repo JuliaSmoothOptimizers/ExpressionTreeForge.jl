@@ -70,11 +70,12 @@ function set_bounds!(
   else
     ch = M_trait_tree.get_children(tree)
     set_bounds!.(ch)
-    son_bounds =
-      (
-        x::M_implementation_complete_expr_tree.Complete_expr_tree{T} ->
-          M_implementation_complete_expr_tree.get_bounds(M_trait_tree.get_node(x))
-      ).(ch)
+    son_bounds = (
+      x::M_implementation_complete_expr_tree.Complete_expr_tree{T} ->
+        M_implementation_complete_expr_tree.get_bounds(M_trait_tree.get_node(x))
+    ).(
+      ch,
+    )
     (inf_bound_node, sup_bound_node) = M_trait_expr_node.node_bound(op, son_bounds, T)
     M_implementation_complete_expr_tree.set_bound!(node, inf_bound_node, sup_bound_node)
   end
