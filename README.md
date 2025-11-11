@@ -30,7 +30,7 @@ It supports several expression tree implementations and defines methods to analy
 - convexity detection.
 
 ## Compatibility
-Julia ≥ 1.6.
+Julia ≥ 1.10.
 
 ## How to install
 ```
