@@ -55,7 +55,7 @@ function _node_bound(
   op::Exp_operator,
   son_bound::AbstractVector{Tuple{T, T}},
   t::DataType,
-) where {Y <: Number} where {T <: Number}
+) where {T <: Number}
   vector_inf_bound = [p[1] for p in son_bound]
   vector_sup_bound = [p[2] for p in son_bound]
   length(vector_inf_bound) == 1 || error("more than one argument")

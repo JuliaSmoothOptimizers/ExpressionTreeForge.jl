@@ -171,7 +171,7 @@ end
 
 @inline _evaluate_node(op::Power_operator{Z}, value_ch::T) where {T <: Number} where {Z <: Number} =
   (T)(value_ch^(op.index))::T
-@inline _evaluate_node(op::Power_operator{T}, value_ch::T) where {T <: Number} where {Z <: Number} =
+@inline _evaluate_node(op::Power_operator{T}, value_ch::T) where {T <: Number} =
   value_ch^(op.index)::T
 
 @inline _node_to_Expr(op::Power_operator{T}) where {T <: Number} = [:^, op.index]
