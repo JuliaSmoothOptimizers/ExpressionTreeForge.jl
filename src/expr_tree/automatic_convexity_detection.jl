@@ -113,11 +113,12 @@ function set_convexity!(
     for i = 1:n
       set_convexity!(children_tree[i], children_convex_tree[i], children_bounds_tree[i])
     end
-    son_cvxs =
-      (
-        x::Convexity_tree ->
-          M_implementation_convexity_type.get_convexity_wrapper(M_trait_tree.get_node(x))
-      ).(children_convex_tree)
+    son_cvxs = (
+      x::Convexity_tree ->
+        M_implementation_convexity_type.get_convexity_wrapper(M_trait_tree.get_node(x))
+    ).(
+      children_convex_tree,
+    )
     convex_wrapper = M_trait_tree.get_node(cvx_tree)
     son_bounds =
       (x -> M_bound_propagations.bound_to_tuple(M_trait_tree.get_node(x))).(children_bounds_tree)
@@ -138,9 +139,9 @@ function set_convexity!(
     children = M_trait_tree.get_children(tree)
     set_convexity!.(children)
     son_cvxs =
-      (
-        x -> M_implementation_complete_expr_tree.get_convexity_status(M_trait_tree.get_node(x))
-      ).(children)
+      (x -> M_implementation_complete_expr_tree.get_convexity_status(M_trait_tree.get_node(x))).(
+        children,
+      )
     son_bounds =
       (x -> M_implementation_complete_expr_tree.get_bounds(M_trait_tree.get_node(x))).(children)
     status = M_trait_expr_node.node_convexity(op, son_cvxs, son_bounds)

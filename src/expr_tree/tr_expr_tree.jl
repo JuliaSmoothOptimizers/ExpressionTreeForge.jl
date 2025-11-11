@@ -55,10 +55,9 @@ Return the `children` from the `root` of `tree`.
 Sum every `trees`.
 """
 function sum_expr_trees(a::Vector)
-  trait_vector =
-    (
-      is_expr_tree -> is_expr_tree == M_trait_expr_tree.Is_expr_tree()
-    ).(M_trait_expr_tree.is_expr_tree.(a))
+  trait_vector = (is_expr_tree -> is_expr_tree == M_trait_expr_tree.Is_expr_tree()).(
+    M_trait_expr_tree.is_expr_tree.(a),
+  )
   bool_every_element_is_tree = reduce(&, trait_vector)
   !bool_every_element_is_tree && error("All arguments are not expression tree")
   bool_every_element_is_tree && _sum_expr_trees(a)
