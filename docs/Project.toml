@@ -6,7 +6,7 @@ MathOptInterface = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [compat]
-Documenter = "~0.25"
+Documenter = "1"
 JuMP = "1"
 MathOptInterface = "1"
-Symbolics = "4.10.4 - 5.1"
+Symbolics = "6"
