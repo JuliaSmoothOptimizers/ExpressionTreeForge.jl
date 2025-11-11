@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Tutorial · ExpressionTreeForge.jl</title><meta name="title" content="Tutorial · ExpressionTreeForge.jl"/><meta property="og:title" content="Tutorial · ExpressionTreeForge.jl"/><meta property="twitter:title" content="Tutorial · ExpressionTreeForge.jl"/><meta name="description" content="Documentation for ExpressionTreeForge.jl."/><meta property="og:description" content="Documentation for ExpressionTreeForge.jl."/><meta property="twitter:description" content="Documentation for ExpressionTreeForge.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/style.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.png" alt="ExpressionTreeForge.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">ExpressionTreeForge.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Tutorial</a></li><li><a class="tocitem" href="../reference/">Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Tutorial</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Tutorial</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaSmoothOptimizers/ExpressionTreeForge.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaSmoothOptimizers/ExpressionTreeForge.jl/blob/master/docs/src/tutorial.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="ExpressionTreeForge.jl-Tutorial"><a class="docs-heading-anchor" href="#ExpressionTreeForge.jl-Tutorial">ExpressionTreeForge.jl Tutorial</a><a id="ExpressionTreeForge.jl-Tutorial-1"></a><a class="docs-heading-anchor-permalink" href="#ExpressionTreeForge.jl-Tutorial" title="Permalink"></a></h1><p>ExpressionTreeForge.jl analyzes and manipulates expression trees. It interfaces several implementations of expression trees to the internal type <code>Type_expr_tree</code> (with <code>transform_to_expr_tree()</code>).</p><p>The main expression trees supported are:</p><ul><li>Julia <code>Expr</code></li></ul><pre><code class="language-julia hljs">using ExpressionTreeForge
+expr_Julia = :((x[1]+x[2])^2 + (x[2]+x[3])^2)
+expr_tree_Expr = transform_to_expr_tree(expr_Julia)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">+
+  ^2
+    +
+      x[1]
+      x[2]
+  ^2
+    +
+      x[2]
+      x[3]
+</code></pre><ul><li><code>Expr</code> from <a href="https://github.com/jump-dev/JuMP.jl">JuMP</a> model (with <code>MathOptInterface</code>)</li></ul><pre><code class="language-julia hljs">using JuMP, MathOptInterface
+m = Model()
+n = 3
+@variable(m, x[1:n])
+@NLobjective(m, Min, (x[1]+x[2])^2 + (x[2]+x[3])^2)
+evaluator = JuMP.NLPEvaluator(m)
+MathOptInterface.initialize(evaluator, [:ExprGraph])
+expr_jump = MathOptInterface.objective_expr(evaluator)
+expr_tree_JuMP = transform_to_expr_tree(expr_jump)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">+
+  ^2.0
+    +
+      x[1]
+      x[2]
+  ^2.0
+    +
+      x[2]
+      x[3]
+</code></pre><ul><li>an <code>Expr</code> which is the result of <code>@variables</code> from <a href="https://github.com/JuliaSymbolics/Symbolics.jl">Symbolics.jl</a> to a Julia function:</li></ul><pre><code class="language-julia hljs">using Symbolics
+function f(y)
+  return sum((y[i] + y[i+1])^2 for i = 1:(length(y)-1))
+end
+n = 3
+Symbolics.@variables x[1:n] # must be x
+
+fun = f(x)
+mtk_tree = Symbolics._toexpr(fun)
+expr_tree_Symbolics = transform_to_expr_tree(mtk_tree)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">+
+  ^2
+    +
+      x[1]
+      x[2]
+  ^2
+    +
+      x[2]
+      x[3]
+</code></pre><p>Note that depending on the library used, the expression tree may be simplified and/or have reordered terms. However, <code>expr_tree_Expr</code>, <code>expr_tree_JuMP</code> and <code>expr_tree_Symbolics</code> share the same type <code>::Type_expr_tree</code>:</p><pre><code class="language-julia hljs">(typeof(expr_tree_Expr) == typeof(expr_tree_JuMP)) &amp;&amp; (typeof(expr_tree_Expr) == typeof(expr_tree_Symbolics))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">true</code></pre><p>With a <code>Type_expr_tree</code>, you can:</p><ul><li>detect partial separability;</li><li>evaluate the expression, and its first and second derivatives;</li><li>propagate bounds;</li><li>detect convexity.</li></ul><h3 id="Detection-of-the-partially-separable-structure"><a class="docs-heading-anchor" href="#Detection-of-the-partially-separable-structure">Detection of the partially separable structure</a><a id="Detection-of-the-partially-separable-structure-1"></a><a class="docs-heading-anchor-permalink" href="#Detection-of-the-partially-separable-structure" title="Permalink"></a></h3><p>The original purpose of <code>ExpressionTreeForge.jl</code> is to detect the partially-separable structure of a function <span>$f : \R^n \to \R$</span></p><p class="math-container">\[f(x) = \sum_{=1}^N \hat{f}_i (U_i x), \quad \hat f_i:\R^{n_i} \to \R, \quad U_i \in \R^{n_i \times n}, \quad n_i \ll n,\]</p><p>which means <code>ExpressionTreeForge.jl</code> detects that <span>$f$</span> is a sum, and returns:</p><ul><li>the element functions <span>$\hat{f}_i$</span>;</li><li>the variables appearing in <span>$\hat{f}_i$</span> (i.e. <em>elemental variables</em>), which are selected with <span>$U_i$</span>.</li></ul><p>The method <code>extract_element_functions()</code> detects the element functions and returns a vector of <code>Type_expr_tree</code>s:</p><pre><code class="language-julia hljs">expr_tree = copy(expr_tree_Expr)
+element_functions = extract_element_functions(expr_tree)
+show(element_functions[2])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">^2
+  +
+    x[2]
+    x[3]</code></pre><p><strong>Warning</strong>: the <code>element_functions</code> are pointers to nodes of <code>expr_tree</code>.  Any modification to <code>element_functions</code> will be applied to <code>expr_tree</code> !!</p><p>The elemental variables are retrieved by applying <code>get_elemental_variables()</code> to every element function expression tree</p><pre><code class="language-julia hljs">Us = get_elemental_variables.(element_functions)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">2-element Vector{Vector{Int64}}:
+ [1, 2]
+ [2, 3]</code></pre><p>Then you can replace the index variables of an element function expression tree so they stay in the range <code>1:length(Us[i])</code>, i.e. <span>$1$</span> to <span>$n_i$</span>:</p><pre><code class="language-julia hljs"># change the indices of the second element function
+normalize_indices!(element_functions[2], Us[2])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">^2
+  +
+    x[1]
+    x[2]
+</code></pre><h3 id="Evaluate-a-Type_expr_tree-and-its-derivatives"><a class="docs-heading-anchor" href="#Evaluate-a-Type_expr_tree-and-its-derivatives">Evaluate a <code>Type_expr_tree</code> and its derivatives</a><a id="Evaluate-a-Type_expr_tree-and-its-derivatives-1"></a><a class="docs-heading-anchor-permalink" href="#Evaluate-a-Type_expr_tree-and-its-derivatives" title="Permalink"></a></h3><p>ExpressionTreeForge.jl offers methods to evaluate an expression tree and its derivatives. <code>evaluate_expr_tree()</code> evaluates a <code>Type_expr_tree</code> at a point <code>y</code> of suitable size:</p><pre><code class="language-julia hljs">y = ones(n)
+fx = expr_tree_Expr(y)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8.0</code></pre><p>The gradient computation of an expression tree can either use <code>ForwardDiff</code> or <code>ReverseDiff</code></p><pre><code class="language-julia hljs">∇f_forward = gradient_forward(expr_tree_Expr, y)
+∇f_reverse = gradient_reverse(expr_tree_Expr, y)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">3-element Vector{Float64}:
+ 4.0
+ 8.0
+ 4.0</code></pre><pre><code class="language-julia hljs">∇f_forward == ∇f_reverse</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">true</code></pre><p>and the Hessian is computed with</p><pre><code class="language-julia hljs">hess = hessian(expr_tree_Expr, y)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">3×3 Matrix{Float64}:
+ 2.0  2.0  0.0
+ 2.0  4.0  2.0
+ 0.0  2.0  2.0</code></pre><p>Automatic differentiation methods can be applied directly to the element-function expression trees:</p><pre><code class="nohighlight hljs">y1 = ones(length(Us[1]))
+f1 = element_functions[1]
+f1x = evaluate_expr_tree(f1, y1)
+
+∇f1_forward = gradient_forward(f1, y1)
+∇f1_reverse = gradient_reverse(f1, y1)
+
+hess1 = hessian(f1, y1)</code></pre><p>See <a href="https://github.com/JuliaSmoothOptimizers/PartitionedStructures.jl">PartitionedStructures.jl</a> for more details about partial separability and how the partitioned derivatives of the element functions are stored.</p><h3 id="Bounds-and-convexity"><a class="docs-heading-anchor" href="#Bounds-and-convexity">Bounds and convexity</a><a id="Bounds-and-convexity-1"></a><a class="docs-heading-anchor-permalink" href="#Bounds-and-convexity" title="Permalink"></a></h3><p>To compute bounds and convexity we use a <code>Complete_expr_tree</code>, a richer structure than <code>Type_expr_tree</code>. <code>Complete_expr_tree</code> is similar to <code>Type_expr_tree</code>, but in addition it stores: the lower bound, the upper bound and the convexity status of each node. You can define a <code>Complete_expr_tree</code> for any <code>Type_expr_tree</code>:</p><pre><code class="language-julia hljs">complete_tree_from_Expr = complete_tree(expr_tree_Expr)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">+ ~(-Inf, Inf) ~not_treated
+  ^2 ~(-Inf, Inf) ~not_treated
+    + ~(-Inf, Inf) ~not_treated
+      x[1] ~(-Inf, Inf) ~not_treated
+      x[2] ~(-Inf, Inf) ~not_treated
+  ^2 ~(-Inf, Inf) ~not_treated
+    + ~(-Inf, Inf) ~not_treated
+      x[2] ~(-Inf, Inf) ~not_treated
+      x[3] ~(-Inf, Inf) ~not_treated
+</code></pre><p>The bounds and convexity status are then propagated using the methods:</p><pre><code class="language-julia hljs"># propagate the bounds from the variables
+set_bounds!(complete_tree_from_Expr)
+# deduce the convexity status of each node
+set_convexity!(complete_tree_from_Expr)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">convex::Convexity_type = 3</code></pre><pre><code class="language-julia hljs"># get the root bounds
+bounds = get_bounds(complete_tree_from_Expr)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(0.0, Inf)</code></pre><pre><code class="language-julia hljs"># get the root convexity status
+convexity_status = get_convexity_status(complete_tree_from_Expr)
+is_convex(convexity_status)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">true</code></pre><p>You can observe the bounds and convexity status of each node of <code>complete_tree_from_Expr</code> by walking the graph</p><pre><code class="language-julia hljs"># convexity statuses of the root&#39;s children
+statuses = get_convexity_status.(complete_tree_from_Expr.children)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">2-element Vector{ExpressionTreeForge.M_implementation_convexity_type.Convexity_type}:
+ convex::Convexity_type = 3
+ convex::Convexity_type = 3</code></pre><pre><code class="language-julia hljs"># bounds of the root&#39;s children
+bounds = get_bounds.(complete_tree_from_Expr.children)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">2-element Vector{Tuple{Float64, Float64}}:
+ (0.0, Inf)
+ (0.0, Inf)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../reference/">Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Tuesday 11 November 2025 03:04">Tuesday 11 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
