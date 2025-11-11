@@ -83,8 +83,8 @@ makedocs(
   format = Documenter.HTML(
     assets = ["assets/style.css"],
     prettyurls = get(ENV, "CI", nothing) == "true",
-    size_threshold = 500.0,
-    size_threshold_warn = 250.0,
+    size_threshold = 500,
+    size_threshold_warn = 250,
   ),
   sitename = "ExpressionTreeForge.jl",
   pages = Any["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
