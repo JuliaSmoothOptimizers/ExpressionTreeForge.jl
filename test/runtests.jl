@@ -1,5 +1,6 @@
 using LinearAlgebra, SparseArrays, Test
-using JuMP, MathOptInterface, Symbolics
+using JuMP, MathOptInterface
+using ADNLPModels, Symbolics
 using ExpressionTreeForge
 
 const MOI = MathOptInterface
