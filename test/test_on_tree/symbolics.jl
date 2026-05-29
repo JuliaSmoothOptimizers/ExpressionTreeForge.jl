@@ -8,7 +8,7 @@
   Symbolics.@variables x[1:n]
 
   fun_tree = f(x)
-  obj_expr = Symbolics._toexpr(fun_tree)
+  obj_expr = Symbolics.toexpr(fun_tree)
   expr_tree = transform_to_expr_tree(obj_expr)
 
   m = Model()
